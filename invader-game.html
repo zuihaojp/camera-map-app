@@ -43,14 +43,14 @@
       <li>→キー: 右に移動</li>
       <li>スペースキー: 弾を発射</li>
     </ul>
+  <h1>インベーダーゲーム</h1>
+  <a href="index.html">ゲーム選択画面に戻る</a>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
   </div>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <div class="score">スコア: <span id="score">0</span></div>
   <div class="game-over" id="gameOver" style="display: none;">ゲームオーバー！</div>
-  <body>
-  <h1>インベーダーゲーム</h1>
-  <a href="index.html">ゲーム選択画面に戻る</a>
-  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
@@ -76,6 +76,7 @@
       speed: 5,
       bullets: []
     };
+    player.image.src = "player.png"; // プレイヤーの画像
 
     // インベーダー
     const invaders = [];
