@@ -122,7 +122,10 @@
         ctx.fillRect(bullet.x, bullet.y, bulletWidth, bulletHeight);
       });
     }
-
+    
+    // サウンド
+    const fireSound = new Audio("fire.mp3"); // 弾発射音 (例: `fire.mp3` を同じフォルダに配置)
+    
     // インベーダーを描画
     function drawInvaders() {
       invaders.forEach((invader) => {
