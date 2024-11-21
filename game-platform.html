@@ -77,12 +77,15 @@
     const ctx = canvas.getContext("2d");
 
     let currentGame = null; // 現在のゲーム
+    let score = 0;
 
     // ゲームを初期化
     function initGame() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       document.getElementById("scoreContainer").style.display = "none";
       document.getElementById("gameOver").style.display = "none";
+      score = 0;
+      document.getElementById("score").textContent = score;
     }
 
     // インベーダーゲームを開始
@@ -90,7 +93,6 @@
       initGame();
       canvas.style.display = "block";
       document.getElementById("scoreContainer").style.display = "block";
-      document.getElementById("score").textContent = "0";
       currentGame = "invader";
       playInvaderGame();
     }
@@ -100,7 +102,6 @@
       initGame();
       canvas.style.display = "block";
       document.getElementById("scoreContainer").style.display = "block";
-      document.getElementById("score").textContent = "0";
       currentGame = "watermelon";
       playWatermelonGame();
     }
@@ -108,12 +109,11 @@
     // インベーダーゲームのロジック
     function playInvaderGame() {
       const player = { x: canvas.width / 2, y: canvas.height - 30, width: 50, height: 20 };
+      const bullets = [];
+      const invaders = [];
       let leftPressed = false;
       let rightPressed = false;
       let spacePressed = false;
-      let bullets = [];
-      let invaders = [];
-      let score = 0;
 
       // インベーダー生成
       const rows = 5, cols = 10, invaderWidth = 40, invaderHeight = 20;
@@ -129,6 +129,7 @@
         }
       }
 
+      // イベントリスナー
       document.addEventListener("keydown", (e) => {
         if (currentGame !== "invader") return;
         if (e.key === "ArrowLeft") leftPressed = true;
@@ -200,6 +201,13 @@
         drawBullets();
         moveBullets();
         movePlayer();
+
+        if (invaders.every((invader) => invader.destroyed)) {
+          document.getElementById("gameOver").textContent = "ゲームクリア！";
+          document.getElementById("gameOver").style.display = "block";
+          return;
+        }
+
         requestAnimationFrame(gameLoop);
       }
 
@@ -212,7 +220,6 @@
       const watermelon = { x: Math.random() * (canvas.width - 50), y: 0, width: 50, height: 50 };
       let leftPressed = false;
       let rightPressed = false;
-      let score = 0;
 
       document.addEventListener("keydown", (e) => {
         if (currentGame !== "watermelon") return;
@@ -243,34 +250,41 @@
 
       function moveWatermelon() {
         watermelon.y += 5;
-        if (watermelon.y > canvas.height) {
-          watermelon.y = 0;
+        if (
+          watermelon.y + watermelon.height > canvas.height) {
+          // スイカが下に落ちたら
+          watermelon.y = 0; // スイカをリセット
           watermelon.x = Math.random() * (canvas.width - watermelon.width);
-          score = Math.max(0, score - 10);
+          score = Math.max(0, score - 10); // スコア減少（最低0点）
         }
 
-             if (
+        // スイカをキャッチしたかチェック
+        if (
           watermelon.y + watermelon.height > player.y &&
           watermelon.x < player.x + player.width &&
           watermelon.x + watermelon.width > player.x
         ) {
-          score += 20; // スコアを増やす
-          watermelon.y = 0;
+          score += 20; // スコアを加算
+          watermelon.y = 0; // スイカをリセット
           watermelon.x = Math.random() * (canvas.width - watermelon.width);
         }
-        document.getElementById("score").textContent = score; // スコア更新
+
+        // スコアを更新
+        document.getElementById("score").textContent = score;
       }
 
       function gameLoop() {
-        if (currentGame !== "watermelon") return;
+        if (currentGame !== "watermelon") return; // 現在のゲームがスイカゲームでなければ終了
 
+        // 画面をクリア
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        drawPlayer();
-        drawWatermelon();
-        movePlayer();
-        moveWatermelon();
+        drawPlayer(); // プレイヤーを描画
+        drawWatermelon(); // スイカを描画
+        movePlayer(); // プレイヤーを移動
+        moveWatermelon(); // スイカを移動
 
+        // 再描画
         requestAnimationFrame(gameLoop);
       }
 
