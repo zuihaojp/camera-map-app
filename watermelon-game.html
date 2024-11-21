@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スイカゲーム</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    canvas {
+      border: 2px solid white;
+      display: block;
+      margin: 20px auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: yellow;
+      font-size: 20px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>スイカゲーム</h1>
+  <a href="index.html">ゲーム選択画面に戻る</a>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const player = { x: canvas.width / 2 - 25, y: canvas.height - 30, width: 50, height: 20 };
+    const watermelon = { x: Math.random() * (canvas.width - 50), y: 0, width: 50, height: 50 };
+    let leftPressed = false, rightPressed = false, score = 0;
+
+    // キー操作
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") leftPressed = true;
+      if (e.key === "ArrowRight") rightPressed = true;
+    });
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "ArrowLeft") leftPressed = false;
+      if (e.key === "ArrowRight") rightPressed = false;
+    });
+
+    // プレイヤーとスイカを描画
+    function drawPlayer() {
+      ctx.fillStyle = "white";
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+    function drawWatermelon() {
+      ctx.fillStyle = "red";
+      ctx.fillRect(watermelon.x, watermelon.y, watermelon.width, watermelon.height);
+    }
+
+    function movePlayer() {
+      if (leftPressed && player.x > 0) player.x -= 5;
+      if (rightPressed && player.x + player.width < canvas.width) player.x += 5;
+    }
+
+    function moveWatermelon() {
+      watermelon.y += 5;
+
+      // スイカが画面の下端に到達したらリセット
+      if (watermelon.y + watermelon.height > canvas.height) {
+        watermelon.y = 0;
+        watermelon.x = Math.random() * (canvas.width - watermelon.width);
+        score = Math.max(0, score - 10); // スコアを減点（最低0）
+      }
+
+      // スイカがプレイヤーに当たったか確認
+      if (
+        watermelon.y + watermelon.height > player.y &&
+        watermelon.x < player.x + player.width &&
+        watermelon.x + watermelon.width > player.x
+      ) {
+        score += 20; // スコアを加算
+        watermelon.y = 0; // スイカをリセット
+        watermelon.x = Math.random() * (canvas.width - watermelon.width);
+      }
+    }
+
+    // スコアを表示
+    function drawScore() {
+      ctx.fillStyle = "white";
+      ctx.font = "20px Arial";
+      ctx.fillText(`スコア: ${score}`, 10, 30);
+    }
+
+    // ゲームループ
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // 画面クリア
+
+      drawPlayer(); // プレイヤーを描画
+      drawWatermelon(); // スイカを描画
+      drawScore(); // スコアを表示
+      movePlayer(); // プレイヤーの移動
+      moveWatermelon(); // スイカの移動
+
+      requestAnimationFrame(gameLoop); // ゲームループ
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>
+
