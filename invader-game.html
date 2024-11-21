@@ -72,7 +72,19 @@
       speed: 5,
       bullets: []
     };
+    player.image.src = "player.png"; // プレイヤーの画像
 
+    // 敵キャラクターのデータ
+    const invaders = [];
+    const rows = 5, cols = 10, invaderWidth = 40, invaderHeight = 40;
+    const invaderImage = new Image();
+    invaderImage.src = "invader.png"; // 敵キャラクターの画像 
+
+    // サウンド
+    const fireSound = new Audio("fire.mp3"); // 弾発射音 
+
+    let leftPressed = false, rightPressed = false, spacePressed = false;
+    
     // インベーダー
     const invaders = [];
     const rows = 5;
@@ -112,24 +124,10 @@
       if (e.key === " ") spacePressed = false;
     });
 
-    // プレイヤーを描画
-    function drawPlayer() {
-      ctx.fillStyle = "white";
-      ctx.fillRect(player.x, player.y, player.width, player.height);
 
       // 弾を描画
       player.bullets.forEach((bullet) => {
         ctx.fillRect(bullet.x, bullet.y, bulletWidth, bulletHeight);
-      });
-    }
-
-    // インベーダーを描画
-    function drawInvaders() {
-      invaders.forEach((invader) => {
-        if (!invader.destroyed) {
-          ctx.fillStyle = "green";
-          ctx.fillRect(invader.x, invader.y, invader.width, invader.height);
-        }
       });
     }
 
