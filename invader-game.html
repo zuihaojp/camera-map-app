@@ -6,81 +6,61 @@
   <title>インベーダーゲーム</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 100vh;
-      background: black;
+      background-color: black;
       color: white;
+      text-align: center;
       font-family: Arial, sans-serif;
     }
 
     canvas {
       border: 2px solid white;
       display: block;
+      margin: 20px auto;
     }
 
-    .instructions, .score {
-      margin: 10px 0;
-      text-align: center;
+    a {
+      text-decoration: none;
+      color: yellow;
+      font-size: 20px;
     }
 
-    .game-over {
-      font-size: 24px;
-      color: red;
-      font-weight: bold;
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="instructions">
-    <p>操作方法:</p>
-    <ul>
-      <li>←キー: 左に移動</li>
-      <li>→キー: 右に移動</li>
-      <li>スペースキー: 弾を発射</li>
-    </ul>
-  </div>
+  <h1>インベーダーゲーム</h1>
+  <a href="index.html">ゲーム選択画面に戻る</a>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
-  <div class="score">スコア: <span id="score">0</span></div>
-  <div class="game-over" id="gameOver" style="display: none;">ゲームオーバー！</div>
-
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    // ゲームの設定
-    const playerWidth = 50;
-    const playerHeight = 20;
-    const bulletWidth = 5;
-    const bulletHeight = 10;
-    const invaderWidth = 40;
-    const invaderHeight = 20;
-
-    // プレイヤー
+    // プレイヤーのデータ
     const player = {
-      x: canvas.width / 2 - playerWidth / 2,
-      y: canvas.height - 40,
-      width: playerWidth,
-      height: playerHeight,
+      x: canvas.width / 2 - 25,
+      y: canvas.height - 50,
+      width: 50,
+      height: 50,
       speed: 5,
       bullets: [],
-    　image: new Image()
+      image: new Image()
     };
-    player.image.src = "player.png"; 
+    player.image.src = "player.png"; // プレイヤーの画像 (例: `player.png` を同じフォルダに配置)
 
-    };
-
-    // インベーダー
+    // 敵キャラクターのデータ
     const invaders = [];
-    const rows = 5;
-    const cols = 10;
-    const invaderSpeed = 1;
-    let invaderDirection = 1;
+    const rows = 5, cols = 10, invaderWidth = 40, invaderHeight = 40;
+    const invaderImage = new Image();
+    invaderImage.src = "invader.png"; // 敵キャラクターの画像 (例: `invader.png` を同じフォルダに配置)
 
+    // サウンド
+    const fireSound = new Audio("fire.mp3"); // 弾発射音 (例: `fire.mp3` を同じフォルダに配置)
+
+    let leftPressed = false, rightPressed = false, spacePressed = false;
+
+    // 敵キャラクターの初期配置
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         invaders.push({
@@ -93,14 +73,7 @@
       }
     }
 
-    // ゲーム状態
-    let leftPressed = false;
-    let rightPressed = false;
-    let spacePressed = false;
-    let score = 0;
-    let gameOver = false;
-
-    // イベントリスナー
+    // キー操作
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") leftPressed = true;
       if (e.key === "ArrowRight") rightPressed = true;
@@ -117,118 +90,79 @@
     function drawPlayer() {
       ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
     }
-      // 弾を描画
-      player.bullets.forEach((bullet) => {
-        ctx.fillRect(bullet.x, bullet.y, bulletWidth, bulletHeight);
-      });
-    }
-    
-    // サウンド
-    const fireSound = new Audio("fire.mp3"); // 弾発射音 (例: `fire.mp3` を同じフォルダに配置)
-    
-    // インベーダーを描画
-    function drawInvaders() {
-      invaders.forEach((invader) => {
-        if (!invader.destroyed) {
-          ctx.fillStyle = "green";
-          ctx.fillRect(invader.x, invader.y, invader.width, invader.height);
-        }
-      });
-    }
 
-    // 弾を移動
-    function moveBullets() {
+    // 弾を描画
+    function drawBullets() {
+      ctx.fillStyle = "red";
       player.bullets.forEach((bullet, index) => {
+        ctx.fillRect(bullet.x, bullet.y, 5, 10);
         bullet.y -= 5;
 
         // 弾が画面外に出たら削除
-        if (bullet.y + bulletHeight < 0) {
+        if (bullet.y < 0) {
           player.bullets.splice(index, 1);
         }
 
-        // インベーダーに当たったかチェック
+        // 弾が敵に当たったか確認
         invaders.forEach((invader) => {
           if (
             !invader.destroyed &&
+            bullet.x > invader.x &&
             bullet.x < invader.x + invader.width &&
-            bullet.x + bulletWidth > invader.x &&
-            bullet.y < invader.y + invader.height &&
-            bullet.y + bulletHeight > invader.y
+            bullet.y > invader.y &&
+            bullet.y < invader.y + invader.height
           ) {
             invader.destroyed = true;
             player.bullets.splice(index, 1);
-            score += 10; // スコアを加算
-            document.getElementById("score").textContent = score;
           }
         });
+      });
+    }
+
+    // 敵キャラクターを描画
+    function drawInvaders() {
+      invaders.forEach((invader) => {
+        if (!invader.destroyed) {
+          ctx.drawImage(invaderImage, invader.x, invader.y, invader.width, invader.height);
+        }
       });
     }
 
     // プレイヤーを移動
     function movePlayer() {
-      if (leftPressed && player.x > 0) {
-        player.x -= player.speed;
-      }
-      if (rightPressed && player.x + player.width < canvas.width) {
-        player.x += player.speed;
-      }
+      if (leftPressed && player.x > 0) player.x -= player.speed;
+      if (rightPressed && player.x + player.width < canvas.width) player.x += player.speed;
       if (spacePressed) {
-        // 弾を発射
-        if (player.bullets.length < 5) {
-          player.bullets.push({
-            x: player.x + player.width / 2 - bulletWidth / 2,
-            y: player.y - bulletHeight
-          });
-        }
+        fireBullet();
+        spacePressed = false; // 一回の押下で一発だけ発射
       }
     }
 
-    // インベーダーを移動
-    function moveInvaders() {
-      let moveDown = false;
-
-      invaders.forEach((invader) => {
-        if (!invader.destroyed) {
-          invader.x += invaderSpeed * invaderDirection;
-
-          // 壁に当たったら方向を反転
-          if (invader.x + invader.width > canvas.width || invader.x < 0) {
-            moveDown = true;
-          }
-        }
-      });
-
-      if (moveDown) {
-        invaderDirection *= -1;
-        invaders.forEach((invader) => {
-          if (!invader.destroyed) invader.y += 20;
-
-          // インベーダーがプレイヤーの位置に到達したらゲームオーバー
-          if (invader.y + invader.height > player.y) {
-            gameOver = true;
-            document.getElementById("gameOver").style.display = "block";
-          }
-        });
-      }
+    // 弾を発射
+    function fireBullet() {
+      player.bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y - 10 });
+      fireSound.play(); // 弾発射音を再生
     }
 
     // ゲームループ
     function gameLoop() {
-      if (gameOver) return;
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       drawPlayer();
+      drawBullets();
       drawInvaders();
-
       movePlayer();
-      moveBullets();
-      moveInvaders();
+
+      if (invaders.every((invader) => invader.destroyed)) {
+        ctx.fillStyle = "white";
+        ctx.font = "30px Arial";
+        ctx.fillText("ゲームクリア！", canvas.width / 2 - 100, canvas.height / 2);
+        return; // ゲーム終了
+      }
 
       requestAnimationFrame(gameLoop);
     }
 
-    // ゲーム開始
     gameLoop();
   </script>
 </body>
