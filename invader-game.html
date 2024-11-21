@@ -47,6 +47,13 @@
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <div class="score">スコア: <span id="score">0</span></div>
   <div class="game-over" id="gameOver" style="display: none;">ゲームオーバー！</div>
+  <body>
+  <h1>インベーダーゲーム</h1>
+  <a href="index.html">ゲーム選択画面に戻る</a>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
   <script>
     const canvas = document.getElementById("gameCanvas");
@@ -69,8 +76,7 @@
       speed: 5,
       bullets: []
     };
-    player.image.src = "player.png"; // プレイヤーの画像 (例: `player.png` を同じフォルダに配置)
-    
+
     // インベーダー
     const invaders = [];
     const rows = 5;
@@ -90,11 +96,6 @@
       }
     }
 
-    // サウンド
-    const fireSound = new Audio("fire.mp3"); // 弾発射音 (例: `fire.mp3` を同じフォルダに配置)
-
-    let leftPressed = false, rightPressed = false, spacePressed = false;
-    
     // ゲーム状態
     let leftPressed = false;
     let rightPressed = false;
