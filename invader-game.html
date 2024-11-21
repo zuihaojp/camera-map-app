@@ -69,7 +69,8 @@
       speed: 5,
       bullets: []
     };
-
+    player.image.src = "player.png"; // プレイヤーの画像 (例: `player.png` を同じフォルダに配置)
+    
     // インベーダー
     const invaders = [];
     const rows = 5;
@@ -89,6 +90,11 @@
       }
     }
 
+    // サウンド
+    const fireSound = new Audio("fire.mp3"); // 弾発射音 (例: `fire.mp3` を同じフォルダに配置)
+
+    let leftPressed = false, rightPressed = false, spacePressed = false;
+    
     // ゲーム状態
     let leftPressed = false;
     let rightPressed = false;
