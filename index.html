@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>監視カメラマップ</title>
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+  <title>Insecam対応監視カメラマップ</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script> <!-- Google Maps APIキーを設定 -->
   <style>
     #map {
       height: 500px;
@@ -13,16 +13,36 @@
   </style>
 </head>
 <body onload="initMap()">
-  <h1>監視カメラマップ</h1>
+  <h1>公開監視カメラマップ (Insecam対応)</h1>
   <div id="map"></div>
 
   <script>
-    // 公開カメラのデータ
+    // 公開カメラデータ (Insecam対応)
     const cameras = [
-      { id: 1, lat: 35.6895, lng: 139.6917, name: "Tokyo Camera 1", url: "http://example.com/stream1" },
-      { id: 2, lat: 35.6897, lng: 139.6921, name: "Tokyo Camera 2", url: "http://example.com/stream2" }
+      {
+        id: 1,
+        lat: 35.6895, // 緯度
+        lng: 139.6917, // 経度
+        name: "東京・新宿交差点 (Insecam)",
+        url: "http://www.insecam.org/en/view/123456/" // Insecamのカメラリンク
+      },
+      {
+        id: 2,
+        lat: 34.6937, // 緯度
+        lng: 135.5023, // 経度
+        name: "大阪・道頓堀 (Insecam)",
+        url: "http://www.insecam.org/en/view/234567/" // Insecamのカメラリンク
+      },
+      {
+        id: 3,
+        lat: 35.0116, // 緯度
+        lng: 135.7681, // 経度
+        name: "京都・鴨川 (Insecam)",
+        url: "http://www.insecam.org/en/view/345678/" // Insecamのカメラリンク
+      }
     ];
 
+    // Googleマップを初期化
     function initMap() {
       const mapCenter = { lat: 35.6895, lng: 139.6917 }; // 東京の中心
       const map = new google.maps.Map(document.getElementById("map"), {
@@ -30,7 +50,7 @@
         center: mapCenter,
       });
 
-      // カメラデータを地図に追加
+      // カメラデータを地図にマッピング
       cameras.forEach(camera => {
         const marker = new google.maps.Marker({
           position: { lat: camera.lat, lng: camera.lng },
@@ -38,13 +58,12 @@
           title: camera.name,
         });
 
-        // ピンをクリックすると詳細情報を表示
+        // ピンをクリックすると情報ウィンドウを表示
         marker.addListener("click", () => {
           const infoWindow = new google.maps.InfoWindow({
             content: `
               <h3>${camera.name}</h3>
-              <iframe src="${camera.url}" width="100%" height="300" frameborder="0"></iframe>
-              <p><a href="${camera.url}" target="_blank">フルスクリーンで見る</a></p>
+              <p><a href="${camera.url}" target="_blank">ライブ映像を見る (Insecam)</a></p>
             `,
           });
           infoWindow.open(map, marker);
