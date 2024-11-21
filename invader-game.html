@@ -3,150 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>インベーダーゲーム</title>
+  <title>スイカゲーム</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       background-color: black;
       color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
     }
 
     canvas {
       border: 2px solid white;
+      display: block;
+      margin: 20px auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: yellow;
+      font-size: 20px;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1>インベーダーゲーム</h1>
+  <h1>スイカゲーム</h1>
+  <a href="index.html">ゲーム選択画面に戻る</a>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
-
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const player = {
-      x: canvas.width / 2 - 25,
-      y: canvas.height - 40,
-      width: 50,
-      height: 20,
-      speed: 5,
-      bullets: []
-    };
+    const player = { x: canvas.width / 2 - 25, y: canvas.height - 30, width: 50, height: 20 };
+    const watermelon = { x: Math.random() * (canvas.width - 50), y: 0, width: 50, height: 50 };
+    let leftPressed = false, rightPressed = false, score = 0;
 
-    const invaders = [];
-    const rows = 5, cols = 10, invaderWidth = 40, invaderHeight = 20;
-    let leftPressed = false, rightPressed = false, spacePressed = false;
-
-    // 敵の配置
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        invaders.push({
-          x: col * (invaderWidth + 10) + 50,
-          y: row * (invaderHeight + 10) + 30,
-          width: invaderWidth,
-          height: invaderHeight,
-          destroyed: false
-        });
-      }
-    }
-
-    // キー入力の処理
+    // キー操作
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") leftPressed = true;
       if (e.key === "ArrowRight") rightPressed = true;
-      if (e.key === " ") spacePressed = true;
     });
 
     document.addEventListener("keyup", (e) => {
       if (e.key === "ArrowLeft") leftPressed = false;
       if (e.key === "ArrowRight") rightPressed = false;
-      if (e.key === " ") spacePressed = false;
     });
 
-    // プレイヤーを描画
+    // プレイヤーとスイカを描画
     function drawPlayer() {
       ctx.fillStyle = "white";
       ctx.fillRect(player.x, player.y, player.width, player.height);
     }
 
-    // 弾を描画
-    function drawBullets() {
+    function drawWatermelon() {
       ctx.fillStyle = "red";
-      player.bullets.forEach((bullet, index) => {
-        ctx.fillRect(bullet.x, bullet.y, 5, 10);
-        bullet.y -= 5;
-
-        // 弾が画面外に出たら削除
-        if (bullet.y < 0) {
-          player.bullets.splice(index, 1);
-        }
-
-        // 弾が敵に当たったか確認
-        invaders.forEach((invader) => {
-          if (
-            !invader.destroyed &&
-            bullet.x > invader.x &&
-            bullet.x < invader.x + invader.width &&
-            bullet.y > invader.y &&
-            bullet.y < invader.y + invader.height
-          ) {
-            invader.destroyed = true;
-            player.bullets.splice(index, 1);
-          }
-        });
-      });
+      ctx.fillRect(watermelon.x, watermelon.y, watermelon.width, watermelon.height);
     }
 
-    // 敵を描画
-    function drawInvaders() {
-      invaders.forEach((invader) => {
-        if (!invader.destroyed) {
-          ctx.fillStyle = "green";
-          ctx.fillRect(invader.x, invader.y, invader.width, invader.height);
-        }
-      });
-    }
-
-    // プレイヤーの移動
     function movePlayer() {
-      if (leftPressed && player.x > 0) player.x -= player.speed;
-      if (rightPressed && player.x + player.width < canvas.width) player.x += player.speed;
-      if (spacePressed) {
-        fireBullet();
-        spacePressed = false; // スペースキーを1回押すごとに1発のみ発射
-      }
-    }
-
-    // 弾を発射
-    function fireBullet() {
-      player.bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y - 10 });
-    }
-
-    // ゲームループ
-    function gameLoop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      drawPlayer();
-      drawBullets();
-      drawInvaders();
-      movePlayer();
-
-      if (invaders.every((invader) => invader.destroyed)) {
-        ctx.fillStyle = "white";
-        ctx.font = "30px Arial";
-        ctx.fillText("ゲームクリア！", canvas.width / 2 - 100, canvas.height / 2);
-        return; // ゲーム終了
-      }
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    gameLoop();
-  </script>
-</body>
-</html>
+      if (leftPressed && player.x > 0) player.x -= 5;
+      if (
