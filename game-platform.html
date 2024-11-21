@@ -76,10 +76,9 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    let currentGame = null; // 現在のゲーム
+    let currentGame = null;
     let score = 0;
 
-    // ゲームを初期化
     function initGame() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       document.getElementById("scoreContainer").style.display = "none";
@@ -88,7 +87,6 @@
       document.getElementById("score").textContent = score;
     }
 
-    // インベーダーゲームを開始
     function startInvaderGame() {
       initGame();
       canvas.style.display = "block";
@@ -97,7 +95,6 @@
       playInvaderGame();
     }
 
-    // スイカゲームを開始
     function startWatermelonGame() {
       initGame();
       canvas.style.display = "block";
@@ -106,16 +103,15 @@
       playWatermelonGame();
     }
 
-    // インベーダーゲームのロジック
+    // --- インベーダーゲーム ---
     function playInvaderGame() {
-      const player = { x: canvas.width / 2, y: canvas.height - 30, width: 50, height: 20 };
+      const player = { x: canvas.width / 2 - 25, y: canvas.height - 30, width: 50, height: 20 };
       const bullets = [];
       const invaders = [];
       let leftPressed = false;
       let rightPressed = false;
       let spacePressed = false;
 
-      // インベーダー生成
       const rows = 5, cols = 10, invaderWidth = 40, invaderHeight = 20;
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -157,32 +153,6 @@
         });
       }
 
-      function drawBullets() {
-        ctx.fillStyle = "red";
-        bullets.forEach((bullet) => ctx.fillRect(bullet.x, bullet.y, 5, 10));
-      }
-
-      function moveBullets() {
-        bullets.forEach((bullet, index) => {
-          bullet.y -= 5;
-          if (bullet.y < 0) bullets.splice(index, 1);
-          invaders.forEach((invader) => {
-            if (
-              !invader.destroyed &&
-              bullet.x > invader.x &&
-              bullet.x < invader.x + invader.width &&
-              bullet.y > invader.y &&
-              bullet.y < invader.y + invader.height
-            ) {
-              invader.destroyed = true;
-              bullets.splice(index, 1);
-              score += 10;
-              document.getElementById("score").textContent = score;
-            }
-          });
-        });
-      }
-
       function movePlayer() {
         if (leftPressed && player.x > 0) player.x -= 5;
         if (rightPressed && player.x + player.width < canvas.width) player.x += 5;
@@ -192,30 +162,19 @@
       }
 
       function gameLoop() {
-        if (currentGame !== "invader") return;
-
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawPlayer();
         drawInvaders();
-        drawBullets();
-        moveBullets();
         movePlayer();
-
-        if (invaders.every((invader) => invader.destroyed)) {
-          document.getElementById("gameOver").textContent = "ゲームクリア！";
-          document.getElementById("gameOver").style.display = "block";
-          return;
-        }
-
         requestAnimationFrame(gameLoop);
       }
 
       gameLoop();
     }
 
-    // スイカゲームのロジック
+    // --- スイカゲーム ---
     function playWatermelonGame() {
-      const player = { x: canvas.width / 2, y: canvas.height - 30, width: 50, height: 20 };
+      const player = { x: canvas.width / 2 - 25, y: canvas.height - 30, width: 50, height: 20 };
       const watermelon = { x: Math.random() * (canvas.width - 50), y: 0, width: 50, height: 50 };
       let leftPressed = false;
       let rightPressed = false;
@@ -252,39 +211,36 @@
 
         if (watermelon.y + watermelon.height > canvas.height) {
           watermelon.y = 0;
-          watermelon.x = Math.random() * (
-          watermelon.y = 0;
           watermelon.x = Math.random() * (canvas.width - watermelon.width);
-          score = Math.max(0, score - 10); // スコア減少（最低0点）
+          score = Math.max(0, score - 10);
         }
 
-        // スイカをキャッチした場合
         if (
           watermelon.y + watermelon.height > player.y &&
           watermelon.x < player.x + player.width &&
           watermelon.x + watermelon.width > player.x
+        )
         ) {
           score += 20; // スコアを加算
-          watermelon.y = 0;
-          watermelon.x = Math.random() * (canvas.width - watermelon.width); // 新しい位置
+          watermelon.y = 0; // スイカをリセット
+          watermelon.x = Math.random() * (canvas.width - watermelon.width); // 新しい位置に再生成
         }
 
-        // スコアを更新
+        // スコアを画面に反映
         document.getElementById("score").textContent = score;
       }
 
       function gameLoop() {
-        if (currentGame !== "watermelon") return;
+        if (currentGame !== "watermelon") return; // スイカゲームでなければ終了
 
-        // 画面をクリア
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // 画面をクリア
 
         drawPlayer(); // プレイヤーを描画
         drawWatermelon(); // スイカを描画
         movePlayer(); // プレイヤーの移動
         moveWatermelon(); // スイカの移動
 
-        requestAnimationFrame(gameLoop); // 次フレームを呼び出す
+        requestAnimationFrame(gameLoop); // ゲームループ
       }
 
       gameLoop();
@@ -292,4 +248,3 @@
   </script>
 </body>
 </html>
-
