@@ -1,113 +1,169 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>シンプルなホームページ</title>
+  <title>インベーダーゲーム</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      line-height: 1.6;
-    }
-
-    header {
-      background: #333;
-      color: #fff;
-      padding: 1rem 0;
-      text-align: center;
-    }
-
-    nav {
-      background: #444;
-      color: white;
       display: flex;
       justify-content: center;
-      padding: 0.5rem 0;
-    }
-
-    nav a {
+      align-items: center;
+      height: 100vh;
+      background: black;
       color: white;
-      margin: 0 1rem;
-      text-decoration: none;
+      font-family: Arial, sans-serif;
     }
 
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    main {
-      padding: 1rem;
-    }
-
-    section {
-      margin-bottom: 2rem;
-    }
-
-    footer {
-      background: #333;
-      color: white;
-      text-align: center;
-      padding: 1rem 0;
-      margin-top: 2rem;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
+    canvas {
+      border: 2px solid white;
+      display: block;
     }
   </style>
 </head>
 <body>
-  <!-- ヘッダー -->
-  <header>
-    <h1>ようこそ！私のホームページへ</h1>
-    <p>ここでは、私の活動や趣味について紹介します。</p>
-  </header>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
 
-  <!-- ナビゲーション -->
-  <nav>
-    <a href="#about">私について</a>
-    <a href="#portfolio">ポートフォリオ</a>
-    <a href="#contact">お問い合わせ</a>
-  </nav>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-  <!-- メインコンテンツ -->
-  <main>
-    <!-- セクション1: 私について -->
-    <section id="about">
-      <h2>私について</h2>
-      <p>
-        私はウェブ開発が大好きなデザイナーです。このホームページでは、私のスキルやプロジェクトを紹介しています。
-        コーディングやデザインについてのアイデアを共有することも楽しみにしています！
-      </p>
-      <img src="https://via.placeholder.com/800x400" alt="私の写真または趣味のイメージ">
-    </section>
+    // ゲームの設定
+    const playerWidth = 50;
+    const playerHeight = 20;
+    const bulletWidth = 5;
+    const bulletHeight = 10;
+    const invaderWidth = 40;
+    const invaderHeight = 20;
 
-    <!-- セクション2: ポートフォリオ -->
-    <section id="portfolio">
-      <h2>ポートフォリオ</h2>
-      <p>
-        以下は、これまでに制作した作品の一部です。
-        詳細については<a href="https://example.com" target="_blank">こちら</a>をご覧ください。
-      </p>
-      <img src="https://via.placeholder.com/800x400" alt="ポートフォリオのサンプル">
-    </section>
+    // プレイヤー
+    const player = {
+      x: canvas.width / 2 - playerWidth / 2,
+      y: canvas.height - 40,
+      width: playerWidth,
+      height: playerHeight,
+      speed: 5,
+      bullets: []
+    };
 
-    <!-- セクション3: お問い合わせ -->
-    <section id="contact">
-      <h2>お問い合わせ</h2>
-      <p>
-        ご質問やご意見があれば、以下のメールアドレスまでお気軽にご連絡ください：
-        <a href="mailto:example@example.com">example@example.com</a>
-      </p>
-    </section>
-  </main>
+    // インベーダー
+    const invaders = [];
+    const rows = 5;
+    const cols = 10;
 
-  <!-- フッター -->
-  <footer>
-    <p>© 2024 私のホームページ. All Rights Reserved.</p>
-  </footer>
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        invaders.push({
+          x: col * (invaderWidth + 10) + 50,
+          y: row * (invaderHeight + 10) + 30,
+          width: invaderWidth,
+          height: invaderHeight,
+          destroyed: false
+        });
+      }
+    }
+
+    // ゲーム状態
+    let leftPressed = false;
+    let rightPressed = false;
+    let spacePressed = false;
+
+    // イベントリスナー
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") leftPressed = true;
+      if (e.key === "ArrowRight") rightPressed = true;
+      if (e.key === " ") spacePressed = true;
+    });
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "ArrowLeft") leftPressed = false;
+      if (e.key === "ArrowRight") rightPressed = false;
+      if (e.key === " ") spacePressed = false;
+    });
+
+    // プレイヤーを描画
+    function drawPlayer() {
+      ctx.fillStyle = "white";
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+
+      // 弾を描画
+      player.bullets.forEach((bullet) => {
+        ctx.fillRect(bullet.x, bullet.y, bulletWidth, bulletHeight);
+      });
+    }
+
+    // インベーダーを描画
+    function drawInvaders() {
+      invaders.forEach((invader) => {
+        if (!invader.destroyed) {
+          ctx.fillStyle = "green";
+          ctx.fillRect(invader.x, invader.y, invader.width, invader.height);
+        }
+      });
+    }
+
+    // 弾を移動
+    function moveBullets() {
+      player.bullets.forEach((bullet, index) => {
+        bullet.y -= 5;
+
+        // 弾が画面外に出たら削除
+        if (bullet.y + bulletHeight < 0) {
+          player.bullets.splice(index, 1);
+        }
+
+        // インベーダーに当たったかチェック
+        invaders.forEach((invader) => {
+          if (
+            !invader.destroyed &&
+            bullet.x < invader.x + invader.width &&
+            bullet.x + bulletWidth > invader.x &&
+            bullet.y < invader.y + invader.height &&
+            bullet.y + bulletHeight > invader.y
+          ) {
+            invader.destroyed = true;
+            player.bullets.splice(index, 1);
+          }
+        });
+      });
+    }
+
+    // プレイヤーを移動
+    function movePlayer() {
+      if (leftPressed && player.x > 0) {
+        player.x -= player.speed;
+      }
+      if (rightPressed && player.x + player.width < canvas.width) {
+        player.x += player.speed;
+      }
+      if (spacePressed) {
+        // 弾を発射
+        if (player.bullets.length < 5) {
+          player.bullets.push({
+            x: player.x + player.width / 2 - bulletWidth / 2,
+            y: player.y - bulletHeight
+          });
+        }
+      }
+    }
+
+    // ゲームループ
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawPlayer();
+      drawInvaders();
+
+      movePlayer();
+      moveBullets();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    // ゲーム開始
+    gameLoop();
+  </script>
 </body>
 </html>
