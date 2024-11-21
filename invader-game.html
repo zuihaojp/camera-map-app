@@ -36,7 +36,7 @@
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-  </div>
+
   <div class="instructions">
     <p>操作方法:</p>
     <ul>
@@ -49,6 +49,9 @@
   <div class="score">スコア: <span id="score">0</span></div>
   <div class="game-over" id="gameOver" style="display: none;">ゲームオーバー！</div>
     
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
     // プレイヤーのデータ
     const player = {
       x: canvas.width / 2 - 25,
