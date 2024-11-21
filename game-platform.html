@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ゲームプラットフォーム</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    canvas {
+      border: 2px solid white;
+      display: none;
+    }
+
+    .game-buttons {
+      margin: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #444;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #666;
+    }
+
+    .instructions, .score {
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .game-over {
+      font-size: 24px;
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="instructions">
+    <p>好きなゲームを選んでプレイしてください！</p>
+    <ul>
+      <li>←キー: 左に移動</li>
+      <li>→キー: 右に移動</li>
+      <li>スペースキー: 弾を発射（インベーダーゲーム）</li>
+    </ul>
+  </div>
+  <div class="game-buttons">
+    <button onclick="startInvaderGame()">インベーダーゲーム</button>
+    <button onclick="startWatermelonGame()">スイカゲーム</button>
+  </div>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <div class="score" id="scoreContainer" style="display: none;">スコア: <span id="score">0</span></div>
+  <div class="game-over" id="gameOver" style="display: none;">ゲームオーバー！</div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let currentGame = null; // 現在のゲーム
+
+    // ゲームを初期化
+    function initGame() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById("scoreContainer").style.display = "none";
+      document.getElementById("gameOver").style.display = "none";
+    }
+
+    // インベーダーゲームを開始
+    function startInvaderGame() {
+      initGame();
+      canvas.style.display = "block";
+      document.getElementById("scoreContainer").style.display = "block";
+      document.getElementById("score").textContent = "0";
+      currentGame = "invader";
+      playInvaderGame();
+    }
+
+    // スイカゲームを開始
+    function startWatermelonGame() {
+      initGame();
+      canvas.style.display = "block";
+      document.getElementById("scoreContainer").style.display = "block";
+      document.getElementById("score").textContent = "0";
+      currentGame = "watermelon";
+      playWatermelonGame();
+    }
+
+    // インベーダーゲームのロジック
+    function playInvaderGame() {
+      const player = { x: canvas.width / 2, y: canvas.height - 30, width: 50, height: 20 };
+      let leftPressed = false;
+      let rightPressed = false;
+      let spacePressed = false;
+      let bullets = [];
+      let invaders = [];
+      let score = 0;
+
+      // インベーダー生成
+      const rows = 5, cols = 10, invaderWidth = 40, invaderHeight = 20;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          invaders.push({
+            x: col * (invaderWidth + 10) + 50,
+            y: row * (invaderHeight + 10) + 30,
+            width: invaderWidth,
+            height: invaderHeight,
+            destroyed: false
+          });
+        }
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (currentGame !== "invader") return;
+        if (e.key === "ArrowLeft") leftPressed = true;
+        if (e.key === "ArrowRight") rightPressed = true;
+        if (e.key === " ") spacePressed = true;
+      });
+
+      document.addEventListener("keyup", (e) => {
+        if (currentGame !== "invader") return;
+        if (e.key === "ArrowLeft") leftPressed = false;
+        if (e.key === "ArrowRight") rightPressed = false;
+        if (e.key === " ") spacePressed = false;
+      });
+
+      function drawPlayer() {
+        ctx.fillStyle = "white";
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+      }
+
+      function drawInvaders() {
+        invaders.forEach((invader) => {
+          if (!invader.destroyed) {
+            ctx.fillStyle = "green";
+            ctx.fillRect(invader.x, invader.y, invader.width, invader.height);
+          }
+        });
+      }
+
+      function drawBullets() {
+        ctx.fillStyle = "red";
+        bullets.forEach((bullet) => ctx.fillRect(bullet.x, bullet.y, 5, 10));
+      }
+
+      function moveBullets() {
+        bullets.forEach((bullet, index) => {
+          bullet.y -= 5;
+          if (bullet.y < 0) bullets.splice(index, 1);
+          invaders.forEach((invader) => {
+            if (
+              !invader.destroyed &&
+              bullet.x > invader.x &&
+              bullet.x < invader.x + invader.width &&
+              bullet.y > invader.y &&
+              bullet.y < invader.y + invader.height
+            ) {
+              invader.destroyed = true;
+              bullets.splice(index, 1);
+              score += 10;
+              document.getElementById("score").textContent = score;
+            }
+          });
+        });
+      }
+
+      function movePlayer() {
+        if (leftPressed && player.x > 0) player.x -= 5;
+        if (rightPressed && player.x + player.width < canvas.width) player.x += 5;
+        if (spacePressed && bullets.length < 5) {
+          bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y - 10 });
+        }
+      }
+
+      function gameLoop() {
+        if (currentGame !== "invader") return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPlayer();
+        drawInvaders();
+        drawBullets();
+        moveBullets();
+        movePlayer();
+        requestAnimationFrame(gameLoop);
+      }
+
+      gameLoop();
+    }
+
+    // スイカゲームのロジック
+    function playWatermelonGame() {
+      const player = { x: canvas.width / 2, y: canvas.height - 30, width: 50, height: 20 };
+      const watermelon = { x: Math.random() * (canvas.width - 50), y: 0, width: 50, height: 50 };
+      let leftPressed = false;
+      let rightPressed = false;
+      let score = 0;
+
+      document.addEventListener("keydown", (e) => {
+        if (currentGame !== "watermelon") return;
+        if (e.key === "ArrowLeft") leftPressed = true;
+        if (e.key === "ArrowRight") rightPressed = true;
+      });
+
+      document.addEventListener("keyup", (e) => {
+        if (currentGame !== "watermelon") return;
+        if (e.key === "ArrowLeft") leftPressed = false;
+        if (e.key === "ArrowRight") rightPressed = false;
+      });
+
+      function drawPlayer() {
+        ctx.fillStyle = "white";
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+      }
+
+      function drawWatermelon() {
+        ctx.fillStyle = "red";
+        ctx.fillRect(watermelon.x, watermelon.y, watermelon.width, watermelon.height);
+      }
+
+      function movePlayer() {
+        if (leftPressed && player.x > 0) player.x -= 5;
+        if (rightPressed && player.x + player.width < canvas.width) player.x += 5;
+      }
+
+      function moveWatermelon() {
+        watermelon.y += 5;
+        if (watermelon.y > canvas.height) {
+          watermelon.y = 0;
+          watermelon.x = Math.random() * (canvas.width - watermelon.width);
+          score = Math.max(0, score - 10);
+        }
+
+             if (
+          watermelon.y + watermelon.height > player.y &&
+          watermelon.x < player.x + player.width &&
+          watermelon.x + watermelon.width > player.x
+        ) {
+          score += 20; // スコアを増やす
+          watermelon.y = 0;
+          watermelon.x = Math.random() * (canvas.width - watermelon.width);
+        }
+        document.getElementById("score").textContent = score; // スコア更新
+      }
+
+      function gameLoop() {
+        if (currentGame !== "watermelon") return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawPlayer();
+        drawWatermelon();
+        movePlayer();
+        moveWatermelon();
+
+        requestAnimationFrame(gameLoop);
+      }
+
+      gameLoop();
+    }
+  </script>
+</body>
+</html>
