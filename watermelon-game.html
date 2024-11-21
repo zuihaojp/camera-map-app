@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>スイカゲーム</title>
+  <title>イカゲーム</title>
   <style>
     body {
       background-color: black;
@@ -30,7 +30,7 @@
   </style>
 </head>
 <body>
-  <h1>スイカゲーム</h1>
+  <h1>イカゲーム</h1>
   <a href="index.html">ゲーム選択画面に戻る</a>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <script>
@@ -52,7 +52,7 @@
       if (e.key === "ArrowRight") rightPressed = false;
     });
 
-    // プレイヤーとスイカを描画
+    // プレイヤーとイカを描画
     function drawPlayer() {
       ctx.fillStyle = "white";
       ctx.fillRect(player.x, player.y, player.width, player.height);
