@@ -111,9 +111,8 @@
 
     // プレイヤーを描画
     function drawPlayer() {
-      ctx.fillStyle = "white";
-      ctx.fillRect(player.x, player.y, player.width, player.height);
-
+      ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
+    }
       // 弾を描画
       player.bullets.forEach((bullet) => {
         ctx.fillRect(bullet.x, bullet.y, bulletWidth, bulletHeight);
