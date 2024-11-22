@@ -33,6 +33,25 @@
       left: 10px;
       font-size: 16px;
     }
+    
+    #gameSelection {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+
+    #gameSelection button {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #gameSelection button:hover {
+      background-color: yellow;
+    }
   </style>
 </head>
 <body>
@@ -41,6 +60,9 @@
   <div id="instructions">
     <p><b>操作方法:</b></p>
     <p>画面に表示される単語をタイピングして消してください。</p>
+  </div>
+  <div id="gameSelection">
+    <button onclick="window.location.href='index.html'">ゲーム選択画面に戻る</button>
   </div>
   <script>
     const canvas = document.getElementById("gameCanvas");
