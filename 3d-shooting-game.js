@@ -8,30 +8,33 @@ document.body.appendChild(renderer.domElement);
 // シーンとカメラ
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
+camera.position.z = 7;
 
-// 宇宙の背景 (CubeTextureLoader)
-const loader = new THREE.CubeTextureLoader();
-const texture = loader.load([
-  'textures/space_right.jpg',  // 右
-  'textures/space_left.jpg',   // 左
-  'textures/space_top.jpg',    // 上
-  'textures/space_bottom.jpg', // 下
-  'textures/space_front.jpg',  // 前
-  'textures/space_back.jpg'    // 後
-]);
-scene.background = texture;
+// 宇宙の背景（パーティクル）
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 500;
+const starPositions = new Float32Array(starCount * 3);
+
+for (let i = 0; i < starCount * 3; i++) {
+  starPositions[i] = (Math.random() - 0.5) * 100; // ランダムな星の配置
+}
+
+starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.2 });
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
 
 // ライト
 const light = new THREE.PointLight(0xffffff, 1);
 light.position.set(10, 10, 10);
 scene.add(light);
 
-// プレイヤー (宇宙船)
-const playerGeometry = new THREE.BoxGeometry(1, 1, 2);
-const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+// プレイヤー（宇宙船）
+const playerGeometry = new THREE.ConeGeometry(0.5, 1.5, 8);
+const playerMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 const player = new THREE.Mesh(playerGeometry, playerMaterial);
-player.position.z = 4;
+player.rotation.x = Math.PI; // 頭を上に向ける
+player.position.z = 5;
 scene.add(player);
 
 // ゲームデータ
@@ -51,7 +54,7 @@ document.addEventListener('keyup', (e) => {
   if (e.key in keys) keys[e.key] = false;
 });
 
-// プレイヤー移動 (操作範囲制限)
+// プレイヤー移動
 function movePlayer() {
   if (keys.ArrowLeft && player.position.x > -5) player.position.x -= 0.15;
   if (keys.ArrowRight && player.position.x < 5) player.position.x += 0.15;
@@ -61,9 +64,10 @@ function movePlayer() {
 function shootBullet() {
   const currentTime = Date.now();
   if (keys.Space && currentTime - lastBulletTime > 300) {
-    const bulletGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.5);
-    const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+    const bulletGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 8);
+    const bulletMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
     const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+    bullet.rotation.x = Math.PI / 2; // 弾を前方に向ける
     bullet.position.set(player.position.x, player.position.y, player.position.z - 1);
     scene.add(bullet);
     bullets.push(bullet);
@@ -74,7 +78,7 @@ function shootBullet() {
 // 弾の移動
 function moveBullets() {
   bullets.forEach((bullet, index) => {
-    bullet.position.z -= 0.2;
+    bullet.position.z -= 0.4;
     if (bullet.position.z < -10) {
       scene.remove(bullet);
       bullets.splice(index, 1);
@@ -84,10 +88,11 @@ function moveBullets() {
 
 // 敵の生成
 function spawnEnemy() {
-  const enemyGeometry = new THREE.SphereGeometry(0.5, 16, 16);
-  const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  const enemyGeometry = new THREE.TetrahedronGeometry(0.8);
+  const enemyMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
   const enemy = new THREE.Mesh(enemyGeometry, enemyMaterial);
   enemy.position.set((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 5, -10);
+  enemy.rotation.set(Math.random(), Math.random(), Math.random()); // ランダムな回転
   scene.add(enemy);
   enemies.push(enemy);
 }
@@ -95,7 +100,10 @@ function spawnEnemy() {
 // 敵の移動
 function moveEnemies() {
   enemies.forEach((enemy, index) => {
-    enemy.position.z += 0.05;
+    enemy.position.z += 0.2;
+    enemy.rotation.x += 0.01; // 敵の回転
+    enemy.rotation.y += 0.01;
+
     if (enemy.position.z > 5) {
       scene.remove(enemy);
       enemies.splice(index, 1);
@@ -122,6 +130,12 @@ function checkCollisions() {
   });
 }
 
+// 宇宙の背景を動かす
+function moveStars() {
+  stars.position.z += 0.1;
+  if (stars.position.z > 50) stars.position.z = 0;
+}
+
 // ゲームオーバー判定
 function checkGameOver() {
   if (lives <= 0) {
@@ -140,6 +154,7 @@ function animate() {
   shootBullet();
   moveBullets();
   moveEnemies();
+  moveStars();
   checkCollisions();
   checkGameOver();
 
