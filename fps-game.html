@@ -10,10 +10,14 @@
       overflow: hidden;
       font-family: Arial, sans-serif;
       background-color: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
     }
-    canvas {
-      display: block;
-      margin: auto;
+    #gameCanvas {
+      margin-top: 50px; /* ゲームキャンバスを少し下に配置 */
       border: 2px solid white;
       background: url('images/space-background.jpg') no-repeat center center;
       background-size: cover;
