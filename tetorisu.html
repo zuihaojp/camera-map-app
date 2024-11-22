@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>テトリス</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      text-align: center;
+      margin: 0;
+    }
+
+    h1 {
+      color: cyan;
+    }
+
+    canvas {
+      display: block;
+      margin: 20px auto;
+      border: 2px solid white;
+      background-color: #2b2b2b;
+    }
+
+    #instructions {
+      margin-top: 10px;
+      font-size: 16px;
+      color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>テトリスゲーム</h1>
+  <canvas id="gameCanvas" width="240" height="400"></canvas>
+  <div id="instructions">
+    <p><b>操作方法:</b></p>
+    <ul>
+      <li>←: 左に移動</li>
+      <li>→: 右に移動</li>
+      <li>↓: 下に移動</li>
+      <li>↑: 回転</li>
+    </ul>
+  </div>
+  <audio id="lineClearSound" src="sounds/line-clear.mp3"></audio>
+  <audio id="gameOverSound" src="sounds/game-over.mp3"></audio>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const blockSize = 20;
+    const rows = 20;
+    const cols = 12;
+    const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#FFC300'];
+
+    // サウンド
+    const lineClearSound = document.getElementById('lineClearSound');
+    const gameOverSound = document.getElementById('gameOverSound');
+
+    // ゲームボード
+    let board = Array.from({ length: rows }, () => Array(cols).fill(0));
+
+    // テトリミノ定義
+    const tetrominoes = [
+      [[1, 1, 1], [0, 1, 0]], // T
+      [[1, 1, 0], [0, 1, 1]], // Z
+      [[0, 1, 1], [1, 1, 0]], // S
+      [[1, 1], [1, 1]],       // O
+      [[1, 1, 1, 1]],         // I
+      [[1, 1, 1], [1, 0, 0]], // L
+      [[1, 1, 1], [0, 0, 1]], // J
+    ];
+
+    let currentTetromino = createTetromino();
+    let nextTetromino = createTetromino();
+    let gameOver = false;
+    let score = 0;
+
+    function createTetromino() {
+      const type = Math.floor(Math.random() * tetrominoes.length);
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      return { shape: tetrominoes[type], x: 4, y: 0, color };
+    }
+
+    function drawBoard() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          if (board[r][c]) {
+            ctx.fillStyle = board[r][c];
+            ctx.fillRect(c * blockSize, r * blockSize, blockSize, blockSize);
+            ctx.strokeStyle = 'black';
+            ctx.strokeRect(c * blockSize, r * blockSize, blockSize, blockSize);
+          }
+        }
+      }
+    }
+
+    function drawTetromino(tetromino) {
+      ctx.fillStyle = tetromino.color;
+      tetromino.shape.forEach((row, r) => {
+        row.forEach((cell, c) => {
+          if (cell) {
+            ctx.fillRect((tetromino.x + c) * blockSize, (tetromino.y + r) * blockSize, blockSize, blockSize);
+            ctx.strokeStyle = 'black';
+            ctx.strokeRect((tetromino.x + c) * blockSize, (tetromino.y + r) * blockSize, blockSize, blockSize);
+          }
+        });
+      });
+    }
+
+    function canMove(tetromino, dx, dy) {
+      return tetromino.shape.every((row, r) => {
+        return row.every((cell, c) => {
+          if (!cell) return true;
+          const newX = tetromino.x + c + dx;
+          const newY = tetromino.y + r + dy;
+          return (
+            newX >= 0 &&
+            newX < cols &&
+            newY < rows &&
+            (newY < 0 || !board[newY][newX])
+          );
+        });
+      });
+    }
+
+    function rotateTetromino(tetromino) {
+      const newShape = tetromino.shape[0].map((_, colIndex) =>
+        tetromino.shape.map(row => row[colIndex]).reverse()
+      );
+      if (canMove({ ...tetromino, shape: newShape }, 0, 0)) {
+        tetromino.shape = newShape;
+      }
+    }
+
+    function mergeTetromino(tetromino) {
+      tetromino.shape.forEach((row, r) => {
+        row.forEach((cell, c) => {
+          if (cell) {
+            board[tetromino.y + r][tetromino.x + c] = tetromino.color;
+          }
+        });
+      });
+    }
+
+    function clearLines() {
+      let lines = 0;
+      board = board.filter(row => {
+        if (row.every(cell => cell)) {
+          lines++;
+          return false;
+        }
+        return true;
+      });
+      while (board.length < rows) {
+        board.unshift(Array(cols).fill(0));
+      }
+      if (lines > 0) {
+        score += lines * 10;
+        lineClearSound.currentTime = 0;
+        lineClearSound.play().catch(() => {});
+      }
+    }
+
+    function gameLoop() {
+      if (gameOver) {
+        gameOverSound.play().catch(() => {});
+        alert(`ゲームオーバー！スコア: ${score}`);
+        return;
+      }
+
+      if (canMove(currentTetromino, 0, 1)) {
+        currentTetromino.y++;
+      } else {
+        mergeTetromino(currentTetromino);
+        clearLines();
+        currentTetromino = nextTetromino;
+        nextTetromino = createTetromino();
+        if (!canMove(currentTetromino, 0, 0)) {
+          gameOver = true;
+        }
+      }
+
+      drawBoard();
+      drawTetromino(currentTetromino);
+      setTimeout(gameLoop, 500);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (gameOver) return;
+      if (e.key === 'ArrowLeft' && canMove(currentTetromino, -1, 0)) {
+        currentTetromino.x--;
+      } else if (e.key === 'ArrowRight' && canMove(currentTetromino, 1, 0)) {
+        currentTetromino.x++;
+      } else if (e.key === 'ArrowDown' && canMove(currentTetromino, 0, 1)) {
+        currentTetromino.y++;
+      } else if (e.key === 'ArrowUp') {
+        rotateTetromino(currentTetromino);
+      }
+    });
+
+    gameLoop();
+  </script>
+</body>
+</html>
