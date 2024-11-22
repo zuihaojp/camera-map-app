@@ -41,6 +41,10 @@
     const watermelon = { x: Math.random() * (canvas.width - 50), y: 0, width: 50, height: 50 };
     let leftPressed = false, rightPressed = false, score = 0;
 
+    // スイカの画像を読み込み
+    const watermelonImage = new Image();
+    watermelonImage.src = "images/squid.png"; // イカの画像パス
+
     // キー操作
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") leftPressed = true;
@@ -59,8 +63,8 @@
     }
 
     function drawWatermelon() {
-      ctx.fillStyle = "red";
-      ctx.fillRect(watermelon.x, watermelon.y, watermelon.width, watermelon.height);
+      // スイカ（イカ）を画像で描画
+      ctx.drawImage(watermelonImage, watermelon.x, watermelon.y, watermelon.width, watermelon.height);
     }
 
     function movePlayer() {
@@ -114,4 +118,3 @@
   </script>
 </body>
 </html>
-
