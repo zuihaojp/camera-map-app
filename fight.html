@@ -28,9 +28,14 @@
     #stats, #enemy-stats {
       margin-top: 10px;
       font-size: 16px;
-    }    
+    }
+
+    #controls {
+      margin-top: 20px;
+      font-size: 18px;
+    }
     
-    #gameSelection {
+      #gameSelection {
       position: absolute;
       bottom: 10px;
       right: 10px;
@@ -48,6 +53,7 @@
     #gameSelection button:hover {
       background-color: yellow;
     }  
+
   </style>
 </head>
 <body>
@@ -61,7 +67,14 @@
   <div id="enemy-stats">
     <p>敵の体力: <span id="enemyHealth">50</span></p>
   </div>
-   <div id="gameSelection">
+  <div id="controls">
+    <p>操作方法:</p>
+    <ul>
+      <li>矢印キー: プレイヤーの移動</li>
+      <li>スペースキー: 弾を発射して攻撃</li>
+    </ul>
+  </div>
+  <div id="gameSelection">
     <button onclick="window.location.href='index.html'">ゲーム選択画面に戻る</button>
   </div>
   <script>
@@ -71,6 +84,7 @@
     // プレイヤーと敵のステータス
     let player = { x: 100, y: 300, width: 50, height: 50, health: 100 };
     let enemy = { x: 500, y: 300, width: 50, height: 50, health: 50 };
+    let bullets = [];
     let level = 1, exp = 0, expNeeded = 10;
 
     // キー入力
@@ -111,6 +125,41 @@
       if (keys['ArrowRight'] && player.x + player.width < canvas.width) player.x += 5;
     }
 
+    // 弾を発射
+    function shootBullet() {
+      bullets.push({ x: player.x + player.width / 2, y: player.y, width: 5, height: 10, speed: 7 });
+    }
+
+    // 弾の移動と衝突判定
+    function moveBullets() {
+      bullets.forEach((bullet, index) => {
+        bullet.y -= bullet.speed;
+
+        // 弾が敵に当たったら
+        if (
+          bullet.x > enemy.x &&
+          bullet.x < enemy.x + enemy.width &&
+          bullet.y > enemy.y &&
+          bullet.y < enemy.y + enemy.height
+        ) {
+          enemy.health -= 10;
+          bullets.splice(index, 1); // 弾を削除
+          if (enemy.health <= 0) {
+            exp += 20;
+            enemy.health = 50 + level * 10; // 敵をリセット
+            enemy.x = Math.random() * (canvas.width - enemy.width);
+            enemy.y = Math.random() * (canvas.height - enemy.height);
+            checkLevelUp();
+          }
+        }
+
+        // 弾が画面外に出たら削除
+        if (bullet.y < 0) {
+          bullets.splice(index, 1);
+        }
+      });
+    }
+
     // 敵のランダム移動
     function moveEnemy() {
       const direction = Math.floor(Math.random() * 4);
@@ -120,7 +169,7 @@
       if (direction === 3 && enemy.x + enemy.width < canvas.width) enemy.x += 2;
     }
 
-    // 戦闘判定
+    // 戦闘判定（近距離攻撃）
     function checkCombat() {
       const isColliding =
         player.x < enemy.x + enemy.width &&
@@ -129,13 +178,10 @@
         player.y + player.height > enemy.y;
 
       if (isColliding) {
-        const damageToEnemy = Math.floor(Math.random() * 20) + 10;
-        const damageToPlayer = Math.floor(Math.random() * 15) + 5;
-
-        enemy.health -= damageToEnemy;
+        const damageToPlayer = Math.floor(Math.random() * 10) + 5;
+        const damageToEnemy = Math.floor(Math.random() * 15) + 10;
         player.health -= damageToPlayer;
-
-        alert(`戦闘中！敵に${damageToEnemy}のダメージ！自分も${damageToPlayer}のダメージを受けた！`);
+        enemy.health -= damageToEnemy;
 
         if (enemy.health <= 0) {
           exp += 20;
@@ -164,19 +210,30 @@
 
       // 敵を描画
       ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
+
+      // 弾を描画
+      bullets.forEach((bullet) => {
+        ctx.fillStyle = 'yellow';
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+      });
     }
 
     // ゲームループ
     function gameLoop() {
       movePlayer();
       moveEnemy();
+      moveBullets();
       checkCombat();
       draw();
       requestAnimationFrame(gameLoop);
     }
 
     // キー入力イベント
-    document.addEventListener('keydown', (e) => (keys[e.key] = true));
+    document.addEventListener('keydown', (e) => {
+      keys[e.key] = true;
+      if (e.key === ' ') shootBullet();
+    });
+
     document.addEventListener('keyup', (e) => (keys[e.key] = false));
 
     // 初期化
