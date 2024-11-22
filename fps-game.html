@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2D FPS シューティングゲーム</title>
+  <title>シューティングゲーム</title>
   <style>
     body {
       margin: 0;
@@ -14,8 +14,9 @@
     canvas {
       display: block;
       margin: auto;
-      background: linear-gradient(to bottom, #1a1a1a, #333333);
       border: 2px solid white;
+      background: url('images/space-background.jpg') no-repeat center center;
+      background-size: cover;
     }
     #overlay {
       position: fixed;
@@ -24,18 +25,60 @@
       color: white;
       font-size: 18px;
     }
+    #instructions {
+      position: fixed;
+      bottom: 20px;
+      left: 10px;
+      color: white;
+      font-size: 16px;
+    }
+    #game-selection {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+    #game-selection button {
+      background-color: #444;
+      color: white;
+      border: 1px solid white;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    #game-selection button:hover {
+      background-color: white;
+      color: black;
+    }
   </style>
 </head>
 <body>
   <div id="overlay">
     <div id="score">スコア: 0</div>
     <div id="lives">ライフ: 3</div>
+    <div id="level">レベル: 1</div>
   </div>
+  
+  <div id="instructions">
+    <p><b>操作方法:</b></p>
+    <ul>
+      <li>矢印キー: プレイヤーを移動</li>
+      <li>スペースキー: 弾丸を発射</li>
+    </ul>
+  </div>
+
+  <div id="game-selection">
+    <button onclick="window.location.href='invader-game.html'">インベーダーゲーム</button>
+    <button onclick="window.location.href='watermelon-game.html'">スイカゲーム</button>
+    <button onclick="window.location.href='rpg-game.html'">RPGゲーム</button>
+  </div>
+
   <canvas id="gameCanvas" width="800" height="600"></canvas>
+
   <audio id="shootSound" src="sounds/shoot.mp3"></audio>
   <audio id="explosionSound" src="sounds/explosion.mp3"></audio>
-  <audio id="powerUpSound" src="sounds/powerup.mp3"></audio>
-  <audio id="gameOverSound" src="sounds/gameover.mp3"></audio>
-  <script src="fps-shooter-fixed.js"></script>
+  <audio id="levelUpSound" src="sounds/levelup.mp3"></audio>
+
+  <script src="game.js"></script>
 </body>
 </html>
