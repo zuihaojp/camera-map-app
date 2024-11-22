@@ -57,6 +57,25 @@
     #actions button:hover {
       background-color: #00bcd4;
     }
+    
+    #gameSelection {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+
+    #gameSelection button {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #gameSelection button:hover {
+      background-color: yellow;
+    }
   </style>
 </head>
 <body>
@@ -75,6 +94,9 @@
     <button onclick="train()">訓練する</button>
     <button onclick="heal()">休む</button>
     <button onclick="fight()">戦う</button>
+  </div>
+   <div id="gameSelection">
+    <button onclick="window.location.href='index.html'">ゲーム選択画面に戻る</button>
   </div>
   <script>
     // プレイヤーのステータス
