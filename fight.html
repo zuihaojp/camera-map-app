@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>キャラクター育成ゲーム</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: cyan;
+    }
+
+    #character {
+      width: 150px;
+      height: 150px;
+      margin: 20px auto;
+      background: url('images/character.png') no-repeat center center;
+      background-size: contain;
+      border: 5px solid cyan;
+      border-radius: 50%;
+    }
+
+    #enemy {
+      width: 150px;
+      height: 150px;
+      margin: 20px auto;
+      background: url('images/enemy.png') no-repeat center center;
+      background-size: contain;
+      border: 5px solid red;
+      border-radius: 50%;
+    }
+
+    #stats, #enemy-stats {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #actions button {
+      background-color: cyan;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #actions button:hover {
+      background-color: #00bcd4;
+    }
+  </style>
+</head>
+<body>
+  <h1>キャラクター育成ゲーム</h1>
+  <div id="character"></div>
+  <div id="stats">
+    <p>レベル: <span id="level">1</span></p>
+    <p>経験値: <span id="exp">0</span> / <span id="expNeeded">10</span></p>
+    <p>体力: <span id="health">100</span></p>
+  </div>
+  <div id="enemy"></div>
+  <div id="enemy-stats">
+    <p>敵の体力: <span id="enemyHealth">50</span></p>
+  </div>
+  <div id="actions">
+    <button onclick="train()">訓練する</button>
+    <button onclick="heal()">休む</button>
+    <button onclick="fight()">戦う</button>
+  </div>
+  <script>
+    // プレイヤーのステータス
+    let level = 1;
+    let exp = 0;
+    let expNeeded = 10;
+    let health = 100;
+
+    // 敵のステータス
+    let enemyHealth = 50;
+
+    // 更新関数
+    function updateStats() {
+      document.getElementById('level').textContent = level;
+      document.getElementById('exp').textContent = exp;
+      document.getElementById('expNeeded').textContent = expNeeded;
+      document.getElementById('health').textContent = health;
+      document.getElementById('enemyHealth').textContent = enemyHealth;
+    }
+
+    // 訓練する
+    function train() {
+      if (health > 10) {
+        exp += 5;
+        health -= 10;
+        checkLevelUp();
+        updateStats();
+        alert("訓練しました！経験値 +5 / 体力 -10");
+      } else {
+        alert("体力が足りません。休んで回復してください！");
+      }
+    }
+
+    // 休む
+    function heal() {
+      if (health < 100) {
+        health = Math.min(health + 20, 100);
+        updateStats();
+        alert("休んで体力を回復しました！体力 +20");
+      } else {
+        alert("体力は満タンです！");
+      }
+    }
+
+    // 戦う
+    function fight() {
+      if (health > 10) {
+        const damageToEnemy = Math.floor(Math.random() * 20) + 10; // プレイヤーの攻撃ダメージ
+        const damageToPlayer = Math.floor(Math.random() * 15) + 5; // 敵の反撃ダメージ
+        enemyHealth -= damageToEnemy;
+        health -= damageToPlayer;
+
+        if (enemyHealth <= 0) {
+          exp += 20;
+          checkLevelUp();
+          alert(`敵を倒しました！経験値 +20`);
+          enemyHealth = 50 + level * 10; // 敵の体力を次のレベルに合わせて増加
+        }
+
+        if (health <= 0) {
+          alert("あなたは倒されました！体力を回復してください！");
+          health = 10; // プレイヤーが瀕死状態になる
+        }
+
+        updateStats();
+      } else {
+        alert("体力が足りません。休んで回復してください！");
+      }
+    }
+
+    // レベルアップ判定
+    function checkLevelUp() {
+      if (exp >= expNeeded) {
+        level++;
+        exp = exp - expNeeded;
+        expNeeded = Math.ceil(expNeeded * 1.5); // 必要経験値を増加
+        health = 100; // レベルアップで体力を全回復
+        alert(`レベルアップ！現在のレベルは ${level} です！`);
+      }
+    }
+
+    // 初期ステータスを表示
+    updateStats();
+  </script>
+</body>
+</html>
