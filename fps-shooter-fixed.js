@@ -1,5 +1,46 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const shootSound = document.getElementById("shootSound");
+const explosionSound = document.getElementById("explosionSound");
+const powerUpSound = document.getElementById("powerUpSound");
+const gameOverSound = document.getElementById("gameOverSound");
+
+// サウンドを再生する関数（nullをチェック）
+function playSound(sound) {
+  if (sound) {
+    sound.currentTime = 0;
+    sound.play().catch((err) => {
+      console.error("サウンドの再生に失敗しました:", err);
+    });
+  }
+}
+
+// 弾丸を発射
+function shootBullet() {
+  const now = Date.now();
+  if (now - lastBulletTime > 300) {
+    bullets.push({
+      x: player.x + player.width / 2 - 2.5,
+      y: player.y,
+      width: 5,
+      height: 10,
+      speed: -7,
+      color: "yellow"
+    });
+    playSound(shootSound); // サウンド再生
+    lastBulletTime = now;
+  }
+}
+
+// 敵が倒されたとき
+function onEnemyDestroyed() {
+  playSound(explosionSound);
+}
+
+// パワーアップ取得時
+function onPowerUpCollected() {
+  playSound(powerUpSound);
+}
 
 // ゲームデータ
 let score = 0;
