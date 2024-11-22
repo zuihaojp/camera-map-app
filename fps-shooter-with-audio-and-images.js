@@ -12,10 +12,19 @@ let lives = 3;
 let gameOver = false;
 const bullets = [];
 const enemies = [];
+const powerUps = [];
+let isPoweredUp = false;
 
-// プレイヤー画像
-const playerImage = new Image();
-playerImage.src = "images/player.png";
+// プレイヤー情報
+const player = {
+  x: canvas.width / 2,
+  y: canvas.height - 60,
+  width: 50,
+  height: 50,
+  speed: 5,
+  image: new Image()
+};
+player.image.src = "images/player.png";
 
 // 弾丸画像
 const bulletImage = new Image();
@@ -25,41 +34,54 @@ bulletImage.src = "images/bullet.png";
 const enemyImage = new Image();
 enemyImage.src = "images/enemy.png";
 
-// マウス操作
-let mouseX = canvas.width / 2;
-let mouseY = canvas.height / 2;
+// パワーアップ画像
+const powerUpImage = new Image();
+powerUpImage.src = "images/powerup.png";
 
-canvas.addEventListener("mousemove", (e) => {
-  const rect = canvas.getBoundingClientRect();
-  mouseX = e.clientX - rect.left;
-  mouseY = e.clientY - rect.top;
+// キーボード入力
+const keys = {
+  ArrowLeft: false,
+  ArrowRight: false,
+  ArrowUp: false,
+  ArrowDown: false
+};
+
+document.addEventListener("keydown", (e) => {
+  if (e.key in keys) keys[e.key] = true;
 });
 
-// マウスクリックで射撃
-canvas.addEventListener("mousedown", () => {
-  shootBullet();
+document.addEventListener("keyup", (e) => {
+  if (e.key in keys) keys[e.key] = false;
 });
+
+// プレイヤーの移動
+function movePlayer() {
+  if (keys.ArrowLeft && player.x > 0) player.x -= player.speed;
+  if (keys.ArrowRight && player.x + player.width < canvas.width) player.x += player.speed;
+  if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
+  if (keys.ArrowDown && player.y + player.height < canvas.height) player.y += player.speed;
+}
 
 // 弾を発射
 function shootBullet() {
   shootSound.currentTime = 0;
   shootSound.play();
   bullets.push({
-    x: canvas.width / 2 - 5,
-    y: canvas.height - 60,
-    dx: (mouseX - canvas.width / 2) / 15,
-    dy: (mouseY - canvas.height) / 15,
-    radius: 5
+    x: player.x + player.width / 2 - 5,
+    y: player.y,
+    dx: 0,
+    dy: -5,
+    radius: isPoweredUp ? 10 : 5, // パワーアップ中は弾丸サイズが大きくなる
+    speed: isPoweredUp ? -7 : -5
   });
 }
 
 // 弾を移動
 function moveBullets() {
   bullets.forEach((bullet, index) => {
-    bullet.x += bullet.dx;
     bullet.y += bullet.dy;
 
-    if (bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height) {
+    if (bullet.y < 0) {
       bullets.splice(index, 1);
     }
   });
@@ -67,12 +89,15 @@ function moveBullets() {
 
 // 敵の生成
 function spawnEnemy() {
+  const type = Math.random() > 0.7 ? "fast" : "normal"; // 30%の確率で速い敵
   enemies.push({
     x: Math.random() * (canvas.width - 50),
     y: -50,
-    speed: Math.random() * 2 + 1,
     width: 50,
-    height: 50
+    height: 50,
+    speed: type === "fast" ? 4 : 2,
+    type: type,
+    health: type === "fast" ? 1 : 2 // 普通の敵は耐久値2
   });
 }
 
@@ -93,6 +118,38 @@ function moveEnemies() {
   });
 }
 
+// パワーアップの生成
+function spawnPowerUp() {
+  powerUps.push({
+    x: Math.random() * (canvas.width - 40),
+    y: -40,
+    width: 40,
+    height: 40,
+    speed: 2
+  });
+}
+
+// パワーアップを移動
+function movePowerUps() {
+  powerUps.forEach((powerUp, index) => {
+    powerUp.y += powerUp.speed;
+
+    if (
+      powerUp.y + powerUp.height > player.y &&
+      powerUp.x < player.x + player.width &&
+      powerUp.x + powerUp.width > player.x
+    ) {
+      powerUps.splice(index, 1);
+      isPoweredUp = true;
+      setTimeout(() => (isPoweredUp = false), 10000); // パワーアップは10秒間持続
+    }
+
+    if (powerUp.y > canvas.height) {
+      powerUps.splice(index, 1);
+    }
+  });
+}
+
 // 衝突判定
 function checkCollisions() {
   bullets.forEach((bullet, bulletIndex) => {
@@ -105,8 +162,9 @@ function checkCollisions() {
       ) {
         explosionSound.currentTime = 0;
         explosionSound.play();
+        enemy.health--;
+        if (enemy.health <= 0) enemies.splice(enemyIndex, 1);
         bullets.splice(bulletIndex, 1);
-        enemies.splice(enemyIndex, 1);
         score += 10;
         updateHUD();
       }
@@ -122,13 +180,13 @@ function updateHUD() {
 
 // プレイヤーを描画
 function drawPlayer() {
-  ctx.drawImage(playerImage, canvas.width / 2 - 25, canvas.height - 60, 50, 50);
+  ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
 }
 
 // 弾を描画
 function drawBullets() {
   bullets.forEach((bullet) => {
-    ctx.drawImage(bulletImage, bullet.x, bullet.y, 10, 10);
+    ctx.drawImage(bulletImage, bullet.x, bullet.y, bullet.radius * 2, bullet.radius * 2);
   });
 }
 
@@ -139,6 +197,13 @@ function drawEnemies() {
   });
 }
 
+// パワーアップを描画
+function drawPowerUps() {
+  powerUps.forEach((powerUp) => {
+    ctx.drawImage(powerUpImage, powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+  });
+}
+
 // ゲームの描画
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -146,6 +211,7 @@ function draw() {
   drawPlayer();
   drawBullets();
   drawEnemies();
+  drawPowerUps();
 
   if (gameOver) {
     ctx.fillStyle = "white";
@@ -157,17 +223,22 @@ function draw() {
 // ゲームループ
 function gameLoop() {
   if (!gameOver) {
+    movePlayer();
     moveBullets();
     moveEnemies();
+    movePowerUps();
     checkCollisions();
     draw();
     requestAnimationFrame(gameLoop);
   }
 }
 
-// 敵の生成を一定間隔で実行
+// 敵とパワーアップの生成ループ
 setInterval(() => {
-  if (!gameOver) spawnEnemy();
+  if (!gameOver) {
+    spawnEnemy();
+    if (Math.random() < 0.2) spawnPowerUp(); // 20%の確率でパワーアップ生成
+  }
 }, 1000);
 
 // ゲーム開始
