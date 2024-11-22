@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>改良版 2Dシューティングゲーム</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: black;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background: linear-gradient(to bottom, #1a1a1a, #333333);
+      border: 2px solid white;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">
+    <div id="score">スコア: 0</div>
+    <div id="lives">ライフ: 3</div>
+  </div>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <audio id="shootSound" src="sounds/shoot.mp3"></audio>
+  <audio id="explosionSound" src="sounds/explosion.mp3"></audio>
+  <audio id="powerUpSound" src="sounds/powerup.mp3"></audio>
+  <script src="fps-shooter-improved.js"></script>
+</body>
+</html>
