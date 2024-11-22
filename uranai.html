@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水晶占い</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: cyan;
+    }
+
+    #crystal {
+      width: 150px;
+      height: 150px;
+      background: url('images/crystal.png') no-repeat center center;
+      background-size: cover;
+      margin: 20px auto;
+      cursor: pointer;
+      border: 5px solid cyan;
+      border-radius: 50%;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>水晶占い</h1>
+  <p>水晶を押して今日の運勢と今年の運勢を占ってみましょう！</p>
+  <div id="crystal"></div>
+  <div id="result"></div>
+  <script>
+    const results = [
+      "大吉: 今日の運勢は最高！今年も良いことばかり！",
+      "吉: 穏やかで素敵な一日。努力が報われる一年。",
+      "中吉: 運気はまずまず。今年は努力がカギ。",
+      "小吉: 小さな幸せが訪れる日。今年は挑戦が必要。",
+      "末吉: 運気は控えめ。無理せず穏やかに。",
+      "凶: 注意が必要な日。今年は慎重に進めて。",
+      "大凶: 困難が予想される一日。今年は忍耐の一年。",
+      "吉: 思いがけない幸運が訪れる可能性あり！",
+      "中吉: 新しい出会いが期待できる日。",
+      "小吉: 少し控えめだけど心が穏やかになる日。",
+      "大吉: 周りからの助けでチャンス到来。",
+      "末吉: 忘れていた目標を思い出すのに良い日。",
+      "凶: 計画を再確認して慎重に進むべき。",
+      "中吉: 趣味に打ち込むと良い日。",
+      "吉: 身近な人から嬉しい言葉をもらえる。",
+      "小吉: コツコツ積み重ねが運気を上げる鍵。",
+      "末吉: 無理をしないで体を休めるのが大切。",
+      "大凶: 忙しい日々でも冷静さを忘れずに。",
+      "大吉: 幸運が連鎖する最高の一日！",
+      "中吉: 積極的に行動することでチャンスを掴める。",
+      "末吉: 小さな目標をクリアして自信をつける。",
+      "凶: トラブル回避のためには落ち着いて行動。",
+      "吉: 健康運が上昇中！新しい運動を始めるのも吉。",
+      "中吉: 金運に恵まれる一日。",
+      "小吉: 過去の努力が認められる瞬間が訪れる。",
+      "大吉: 新しい趣味を見つける良いチャンス！",
+      "末吉: 人の意見を取り入れると良い結果に。",
+      "凶: 信頼関係を築くために慎重に動くべき。",
+      "中吉: 旅行や遠出の計画が良い影響をもたらす。",
+      "吉: 家族や友人と過ごす時間を大切に。",
+      "大吉: 目標に向けて思い切って行動すると吉。",
+      "末吉: 笑顔を忘れないことが幸運を引き寄せる。",
+      "凶: 環境を整えると運気が好転する。",
+      "吉: 小さな努力が大きな成果を生む一日。",
+      "中吉: 貯金や計画的な投資が成功の鍵に。",
+      "小吉: 好きな映画や音楽でリフレッシュしよう。",
+      "末吉: 周りに感謝の気持ちを伝えると良い。",
+      "大凶: 誘惑に注意して冷静さを保つべき日。",
+      "大吉: 長年の夢に一歩近づける絶好のタイミング。",
+      "中吉: 散歩や軽い運動で気分をリフレッシュ。",
+      "小吉: 無駄遣いを避けて堅実に行動すると良い。",
+      "吉: 人からの信頼が厚くなる一日。",
+      "中吉: 自然に触れると心が癒される日。",
+      "末吉: 無理な約束をせず自分のペースを守る。",
+      "凶: 安全第一を心掛けて慎重に行動する。",
+      "大吉: 勇気を持って行動すると周りが応援してくれる。",
+      "中吉: 新しい勉強やスキルに挑戦すると良い結果が。",
+      "小吉: 目標設定を見直してやる気を高めよう。",
+      "末吉: ネガティブな気持ちをポジティブに変えるチャンス。",
+      "大凶: 気配りを忘れず、慎重に一日を過ごそう。"
+    ];
+
+    document.getElementById("crystal").addEventListener("click", () => {
+      const todayIndex = Math.floor(Math.random() * results.length);
+      const yearIndex = Math.floor(Math.random() * results.length);
+
+      const todayFortune = results[todayIndex];
+      const yearFortune = results[yearIndex];
+
+      document.getElementById("result").innerHTML = `
+        今日の運勢: ${todayFortune}<br>
+        今年の運勢: ${yearFortune}
+      `;
+    });
+  </script>
+</body>
+</html>
