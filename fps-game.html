@@ -21,11 +21,6 @@
       background-size: cover;
     }
 
-    #gameInfo {
-      text-align: center;
-      margin: 10px 0;
-    }
-
     #scoreBoard {
       position: absolute;
       top: 10px;
@@ -84,6 +79,7 @@
 
     let score = 0;
     let gameOver = false;
+    let lastBulletTime = 0; // 最後に弾丸を発射した時間を記録
 
     const keys = {
       ArrowLeft: false,
@@ -108,18 +104,22 @@
 
     // 弾丸発射
     function shootBullet() {
-      bullets.push({
-        x: player.x + player.width / 2 - 2.5,
-        y: player.y,
-        width: 5,
-        height: 10,
-        speed: -7
-      });
-      try {
-        shootSound.currentTime = 0;
-        shootSound.play();
-      } catch (error) {
-        console.log("サウンド再生エラー:", error);
+      const now = Date.now();
+      if (now - lastBulletTime > 300) { // 300msごとに発射可能
+        bullets.push({
+          x: player.x + player.width / 2 - 2.5,
+          y: player.y,
+          width: 5,
+          height: 10,
+          speed: -7
+        });
+        try {
+          shootSound.currentTime = 0;
+          shootSound.play();
+        } catch (error) {
+          console.log("サウンド再生エラー:", error);
+        }
+        lastBulletTime = now;
       }
     }
 
