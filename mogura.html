@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>モグラたたきゲーム</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+    }
+
+    #gameCanvas {
+      display: block;
+      margin: 20px auto;
+      border: 2px solid white;
+      background-color: #2b2b2b;
+    }
+
+    #scoreBoard {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 18px;
+    }
+
+    #instructions {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      font-size: 16px;
+    }
+    
+    #gameSelection {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+
+    #gameSelection button {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #gameSelection button:hover {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <div id="scoreBoard">スコア: 0 | ライフ: 3 | レベル: 1</div>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <div id="instructions">
+    <p><b>操作方法:</b></p>
+    <ul>
+      <li>クリック: モグラをたたく</li>
+    </ul>
+  </div>
+   <div id="gameSelection">
+    <button onclick="window.location.href='index.html'">ゲーム選択画面に戻る</button>
+  </div>
+  <audio id="hitSound" src="sounds/hit.mp3"></audio>
+  <audio id="missSound" src="sounds/miss.mp3"></audio>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // サウンド
+    const hitSound = document.getElementById("hitSound");
+    const missSound = document.getElementById("missSound");
+
+    // ゲームデータ
+    let score = 0;
+    let lives = 3;
+    let level = 1;
+    let moleSpeed = 2000; // モグラの初期スピード
+    let gameOver = false;
+
+    // モグラ
+    const mole = {
+      x: Math.random() * (canvas.width - 50),
+      y: Math.random() * (canvas.height - 50),
+      width: 50,
+      height: 50,
+      image: new Image()
+    };
+    mole.image.src = "images/mole.png"; // モグラ画像
+
+    // ハンマー
+    const hammer = {
+      x: 0,
+      y: 0,
+      width: 50,
+      height: 50,
+      image: new Image()
+    };
+    hammer.image.src = "images/hammer.png"; // ハンマー画像
+
+    // モグラの再配置
+    function repositionMole() {
+      mole.x = Math.random() * (canvas.width - mole.width);
+      mole.y = Math.random() * (canvas.height - mole.height);
+    }
+
+    // スコアとライフの更新
+    function updateScoreBoard() {
+      document.getElementById("scoreBoard").textContent = `スコア: ${score} | ライフ: ${lives} | レベル: ${level}`;
+    }
+
+    // レベルアップ
+    function levelUp() {
+      if (score >= level * 50) { // スコア50ごとにレベルアップ
+        level++;
+        moleSpeed = Math.max(500, moleSpeed - 200); // モグラのスピードを速く
+        clearInterval(moleTimer); // 既存のモグラタイマーをクリア
+        moleTimer = setInterval(repositionMole, moleSpeed); // 新しいスピードでモグラタイマーを再設定
+      }
+    }
+
+    // クリックイベント
+    canvas.addEventListener("mousedown", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      // モグラをたたいたかチェック
+      if (
+        mouseX > mole.x &&
+        mouseX < mole.x + mole.width &&
+        mouseY > mole.y &&
+        mouseY < mole.y + mole.height
+      ) {
+        score += 10; // スコア加算
+        hitSound.currentTime = 0;
+        hitSound.play().catch(() => {}); // サウンド再生エラー回避
+        repositionMole();
+        levelUp(); // レベルアップ判定
+      } else {
+        lives--;
+        missSound.currentTime = 0;
+        missSound.play().catch(() => {}); // サウンド再生エラー回避
+        if (lives <= 0) gameOver = true;
+      }
+      updateScoreBoard();
+    });
+
+    // ゲーム描画
+    function drawGame() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // モグラを描画
+      ctx.drawImage(mole.image, mole.x, mole.y, mole.width, mole.height);
+
+      // ハンマーを描画
+      ctx.drawImage(hammer.image, hammer.x, hammer.y, hammer.width, hammer.height);
+
+      if (!gameOver) {
+        requestAnimationFrame(drawGame);
+      } else {
+        ctx.fillStyle = "white";
+        ctx.font = "30px Arial";
+        ctx.fillText("ゲームオーバー", canvas.width / 2 - 100, canvas.height / 2);
+      }
+    }
+
+    // ハンマーの追従
+    canvas.addEventListener("mousemove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      hammer.x = e.clientX - rect.left - hammer.width / 2;
+      hammer.y = e.clientY - rect.top - hammer.height / 2;
+    });
+
+    // モグラの再配置タイマー
+    let moleTimer = setInterval(repositionMole, moleSpeed);
+
+    // ゲーム開始
+    updateScoreBoard();
+    drawGame();
+  </script>
+</body>
+</html>
