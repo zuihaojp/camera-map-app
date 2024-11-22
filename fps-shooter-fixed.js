@@ -60,63 +60,43 @@ function movePlayer() {
   if (keys.ArrowDown && player.y + player.height < canvas.height) player.y += player.speed;
 }
 
-// 弾丸データ
-const bullets = []; // 弾丸の配列
-let lastBulletTime = 0; // 最後に弾丸を発射した時間
-
-// 弾丸を発射する関数
+// 弾丸を発射
 function shootBullet() {
   const now = Date.now();
-  if (now - lastBulletTime > 300) { // 300ms間隔で発射可能
+  if (now - lastBulletTime > 300) {
     bullets.push({
-      x: player.x + player.width / 2 - 2.5, // 弾丸の初期位置（プレイヤーの中心）
-      y: player.y, // 弾丸の初期位置（プレイヤーの上）
-      width: 5, // 弾丸の幅
-      height: 10, // 弾丸の高さ
-      speed: -7 // 弾丸の移動速度（上方向）
+      x: player.x + player.width / 2 - 2.5,
+      y: player.y,
+      width: 5,
+      height: 10,
+      speed: -7
     });
     if (shootSound) {
-      shootSound.currentTime = 0; // サウンドをリセット
-      shootSound.play(); // 発射音を再生
+      shootSound.currentTime = 0;
+      shootSound.play().catch((error) => {
+        console.error("サウンド再生エラー:", error);
+      });
     }
-    lastBulletTime = now; // 最後に発射した時間を記録
+    lastBulletTime = now;
   }
 }
 
-// 弾丸を移動する関数
+// 弾丸を移動
 function moveBullets() {
   bullets.forEach((bullet, index) => {
-    bullet.y += bullet.speed; // 弾丸を上方向に移動
+    bullet.y += bullet.speed;
     if (bullet.y < 0) {
-      bullets.splice(index, 1); // 画面外に出た弾丸を削除
+      bullets.splice(index, 1);
     }
   });
 }
 
-// 弾丸を描画する関数
+// 弾丸を描画
 function drawBullets() {
   bullets.forEach((bullet) => {
-    ctx.fillStyle = "yellow"; // 弾丸の色
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); // 弾丸を描画
+    ctx.drawImage(bulletImage, bullet.x, bullet.y, bullet.width, bullet.height);
   });
 }
-
-
-// 描画関数に弾丸描画を追加
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // キャンバスをクリア
-  drawPlayer(); // プレイヤーを描画
-  drawBullets(); // 弾丸を描画
-  drawEnemies(); // 敵を描画
-
-  // ゲームオーバー時の表示
-  if (gameOver) {
-    ctx.fillStyle = "white";
-    ctx.font = "40px Arial";
-    ctx.fillText("ゲームオーバー", canvas.width / 2 - 100, canvas.height / 2);
-  }
-}
-
 
 // 敵を生成
 function spawnEnemy() {
@@ -173,7 +153,11 @@ function checkCollisions() {
 // レベルアップ処理
 function levelUp() {
   level++;
-  levelUpSound.play();
+  if (levelUpSound) {
+    levelUpSound.play().catch((error) => {
+      console.error("レベルアップサウンド再生エラー:", error);
+    });
+  }
   updateHUD();
 }
 
@@ -203,19 +187,18 @@ function draw() {
   }
 }
 
-// ゲームループ内で弾丸関連の処理を呼び出す
+// ゲームループ
 function gameLoop() {
   if (!gameOver) {
-    movePlayer(); // プレイヤーを移動
-    if (keys.Space) shootBullet(); // スペースキーで弾丸を発射
-    moveBullets(); // 弾丸を移動
-    moveEnemies(); // 敵を移動
-    checkCollisions(); // 衝突判定
-    draw(); // 全てを描画
-    requestAnimationFrame(gameLoop); // 次のフレームをリクエスト
+    movePlayer();
+    if (keys.Space) shootBullet();
+    moveBullets();
+    moveEnemies();
+    checkCollisions();
+    draw();
+    requestAnimationFrame(gameLoop);
   }
 }
-
 
 // 敵の生成を一定間隔で実行
 setInterval(() => {
@@ -224,4 +207,3 @@ setInterval(() => {
 
 // ゲーム開始
 gameLoop();
-
