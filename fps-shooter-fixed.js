@@ -1,54 +1,19 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+
+// サウンド
 const shootSound = document.getElementById("shootSound");
 const explosionSound = document.getElementById("explosionSound");
-const powerUpSound = document.getElementById("powerUpSound");
-const gameOverSound = document.getElementById("gameOverSound");
-
-// サウンドを再生する関数（nullをチェック）
-function playSound(sound) {
-  if (sound) {
-    sound.currentTime = 0;
-    sound.play().catch((err) => {
-      console.error("サウンドの再生に失敗しました:", err);
-    });
-  }
-}
-
-// 弾丸を発射
-function shootBullet() {
-  const now = Date.now();
-  if (now - lastBulletTime > 300) {
-    bullets.push({
-      x: player.x + player.width / 2 - 2.5,
-      y: player.y,
-      width: 5,
-      height: 10,
-      speed: -7,
-      color: "yellow"
-    });
-    playSound(shootSound); // サウンド再生
-    lastBulletTime = now;
-  }
-}
-
-// 敵が倒されたとき
-function onEnemyDestroyed() {
-  playSound(explosionSound);
-}
-
-// パワーアップ取得時
-function onPowerUpCollected() {
-  playSound(powerUpSound);
-}
+const levelUpSound = document.getElementById("levelUpSound");
 
 // ゲームデータ
 let score = 0;
 let lives = 3;
+let level = 1;
 let gameOver = false;
 const bullets = [];
 const enemies = [];
-let lastBulletTime = 0; // 弾発射のタイミング管理
+let lastBulletTime = 0;
 
 // プレイヤー情報
 const player = {
@@ -57,8 +22,17 @@ const player = {
   width: 50,
   height: 50,
   speed: 5,
-  color: "blue"
+  image: new Image()
 };
+player.image.src = "images/player.png";
+
+// 敵画像
+const enemyImage = new Image();
+enemyImage.src = "images/enemy.png";
+
+// 弾丸画像
+const bulletImage = new Image();
+bulletImage.src = "images/bullet.png";
 
 // キーボード入力状態
 const keys = {
@@ -66,7 +40,7 @@ const keys = {
   ArrowRight: false,
   ArrowUp: false,
   ArrowDown: false,
-  Space: false // スペースキーで弾を撃つ
+  Space: false
 };
 
 // キーボード入力イベント
@@ -89,15 +63,16 @@ function movePlayer() {
 // 弾丸を発射
 function shootBullet() {
   const now = Date.now();
-  if (now - lastBulletTime > 300) { // 弾発射のクールダウン
+  if (now - lastBulletTime > 300) {
     bullets.push({
-      x: player.x + player.width / 2 - 2.5,
+      x: player.x + player.width / 2 - 5,
       y: player.y,
-      width: 5,
-      height: 10,
-      speed: -7,
-      color: "yellow"
+      width: 10,
+      height: 20,
+      speed: -7
     });
+    shootSound.currentTime = 0;
+    shootSound.play();
     lastBulletTime = now;
   }
 }
@@ -106,15 +81,14 @@ function shootBullet() {
 function moveBullets() {
   bullets.forEach((bullet, index) => {
     bullet.y += bullet.speed;
-    if (bullet.y < 0) bullets.splice(index, 1); // 画面外の弾を削除
+    if (bullet.y < 0) bullets.splice(index, 1);
   });
 }
 
 // 弾丸を描画
 function drawBullets() {
   bullets.forEach((bullet) => {
-    ctx.fillStyle = bullet.color;
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    ctx.drawImage(bulletImage, bullet.x, bullet.y, bullet.width, bullet.height);
   });
 }
 
@@ -126,8 +100,7 @@ function spawnEnemy() {
     y: -size,
     width: size,
     height: size,
-    speed: Math.random() * 2 + 1,
-    color: "red"
+    speed: Math.random() * 2 + 1 + level * 0.5
   });
 }
 
@@ -137,7 +110,7 @@ function moveEnemies() {
     enemy.y += enemy.speed;
     if (enemy.y > canvas.height) {
       enemies.splice(index, 1);
-      lives--; // 敵が通過したらライフを減少
+      lives--;
       updateHUD();
       if (lives <= 0) gameOver = true;
     }
@@ -147,8 +120,7 @@ function moveEnemies() {
 // 敵を描画
 function drawEnemies() {
   enemies.forEach((enemy) => {
-    ctx.fillStyle = enemy.color;
-    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
   });
 }
 
@@ -162,25 +134,33 @@ function checkCollisions() {
         bullet.y < enemy.y + enemy.height &&
         bullet.y + bullet.height > enemy.y
       ) {
-        bullets.splice(bulletIndex, 1); // 弾丸を削除
-        enemies.splice(enemyIndex, 1); // 敵を削除
+        bullets.splice(bulletIndex, 1);
+        enemies.splice(enemyIndex, 1);
         score += 10;
         updateHUD();
+        if (score % 100 === 0) levelUp(); // レベルアップ条件
       }
     });
   });
+}
+
+// レベルアップ処理
+function levelUp() {
+  level++;
+  levelUpSound.play();
+  updateHUD();
 }
 
 // スコアとライフを更新
 function updateHUD() {
   document.getElementById("score").textContent = `スコア: ${score}`;
   document.getElementById("lives").textContent = `ライフ: ${lives}`;
+  document.getElementById("level").textContent = `レベル: ${level}`;
 }
 
 // プレイヤーを描画
 function drawPlayer() {
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
 }
 
 // ゲームの描画
@@ -201,7 +181,7 @@ function draw() {
 function gameLoop() {
   if (!gameOver) {
     movePlayer();
-    if (keys.Space) shootBullet(); // スペースキーで弾を撃つ
+    if (keys.Space) shootBullet();
     moveBullets();
     moveEnemies();
     checkCollisions();
