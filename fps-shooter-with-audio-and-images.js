@@ -7,6 +7,7 @@ let lives = 3;
 let gameOver = false;
 const bullets = [];
 const enemies = [];
+let lastBulletTime = 0; // 弾発射のタイミング管理
 
 // プレイヤー情報
 const player = {
@@ -46,14 +47,18 @@ function movePlayer() {
 
 // 弾丸を発射
 function shootBullet() {
-  bullets.push({
-    x: player.x + player.width / 2 - 2.5,
-    y: player.y,
-    width: 5,
-    height: 10,
-    speed: -7,
-    color: "yellow"
-  });
+  const now = Date.now();
+  if (now - lastBulletTime > 300) { // 弾発射のクールダウン
+    bullets.push({
+      x: player.x + player.width / 2 - 2.5,
+      y: player.y,
+      width: 5,
+      height: 10,
+      speed: -7,
+      color: "yellow"
+    });
+    lastBulletTime = now;
+  }
 }
 
 // 弾丸を移動
@@ -93,6 +98,7 @@ function moveEnemies() {
       enemies.splice(index, 1);
       lives--; // 敵が通過したらライフを減少
       updateHUD();
+      if (lives <= 0) gameOver = true;
     }
   });
 }
@@ -128,9 +134,6 @@ function checkCollisions() {
 function updateHUD() {
   document.getElementById("score").textContent = `スコア: ${score}`;
   document.getElementById("lives").textContent = `ライフ: ${lives}`;
-  if (lives <= 0) {
-    gameOver = true;
-  }
 }
 
 // プレイヤーを描画
