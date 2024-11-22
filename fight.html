@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>育成ゲーム</title>
+  <title>キャラクター育成ゲーム</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,45 +18,17 @@
       color: cyan;
     }
 
-    #character {
-      width: 150px;
-      height: 150px;
+    canvas {
+      border: 2px solid white;
+      display: block;
       margin: 20px auto;
-      background: url('images/character.png') no-repeat center center;
-      background-size: contain;
-      border: 5px solid cyan;
-      border-radius: 50%;
-    }
-
-    #enemy {
-      width: 150px;
-      height: 150px;
-      margin: 20px auto;
-      background: url('images/buuenemy.png') no-repeat center center;
-      background-size: contain;
-      border: 5px solid red;
-      border-radius: 50%;
+      background-color: #34495e;
     }
 
     #stats, #enemy-stats {
-      margin-top: 20px;
-      font-size: 18px;
-    }
-
-    #actions button {
-      background-color: cyan;
-      color: black;
-      border: none;
-      padding: 10px 20px;
-      margin: 10px;
+      margin-top: 10px;
       font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    #actions button:hover {
-      background-color: #00bcd4;
-    }
+    }    
     
     #gameSelection {
       position: absolute;
@@ -75,96 +47,49 @@
 
     #gameSelection button:hover {
       background-color: yellow;
-    }
+    }  
   </style>
 </head>
 <body>
-  <h1>育成ゲーム</h1>
-  <div id="character"></div>
+  <h1>キャラクター育成ゲーム</h1>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
   <div id="stats">
     <p>レベル: <span id="level">1</span></p>
     <p>経験値: <span id="exp">0</span> / <span id="expNeeded">10</span></p>
     <p>体力: <span id="health">100</span></p>
   </div>
-  <div id="enemy"></div>
   <div id="enemy-stats">
     <p>敵の体力: <span id="enemyHealth">50</span></p>
-  </div>
-  <div id="actions">
-    <button onclick="train()">訓練する</button>
-    <button onclick="heal()">休む</button>
-    <button onclick="fight()">戦う</button>
   </div>
    <div id="gameSelection">
     <button onclick="window.location.href='index.html'">ゲーム選択画面に戻る</button>
   </div>
   <script>
-    // プレイヤーのステータス
-    let level = 1;
-    let exp = 0;
-    let expNeeded = 10;
-    let health = 100;
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-    // 敵のステータス
-    let enemyHealth = 50;
+    // プレイヤーと敵のステータス
+    let player = { x: 100, y: 300, width: 50, height: 50, health: 100 };
+    let enemy = { x: 500, y: 300, width: 50, height: 50, health: 50 };
+    let level = 1, exp = 0, expNeeded = 10;
+
+    // キー入力
+    let keys = {};
+
+    // プレイヤー画像と敵画像
+    const playerImage = new Image();
+    playerImage.src = 'images/character.png';
+
+    const enemyImage = new Image();
+    enemyImage.src = 'images/enemy.png';
 
     // 更新関数
     function updateStats() {
       document.getElementById('level').textContent = level;
       document.getElementById('exp').textContent = exp;
       document.getElementById('expNeeded').textContent = expNeeded;
-      document.getElementById('health').textContent = health;
-      document.getElementById('enemyHealth').textContent = enemyHealth;
-    }
-
-    // 訓練する
-    function train() {
-      if (health > 10) {
-        exp += 5;
-        health -= 10;
-        checkLevelUp();
-        updateStats();
-        alert("訓練しました！経験値 +5 / 体力 -10");
-      } else {
-        alert("体力が足りません。休んで回復してください！");
-      }
-    }
-
-    // 休む
-    function heal() {
-      if (health < 100) {
-        health = Math.min(health + 20, 100);
-        updateStats();
-        alert("休んで体力を回復しました！体力 +20");
-      } else {
-        alert("体力は満タンです！");
-      }
-    }
-
-    // 戦う
-    function fight() {
-      if (health > 10) {
-        const damageToEnemy = Math.floor(Math.random() * 20) + 10; // プレイヤーの攻撃ダメージ
-        const damageToPlayer = Math.floor(Math.random() * 15) + 5; // 敵の反撃ダメージ
-        enemyHealth -= damageToEnemy;
-        health -= damageToPlayer;
-
-        if (enemyHealth <= 0) {
-          exp += 20;
-          checkLevelUp();
-          alert(`敵を倒しました！経験値 +20`);
-          enemyHealth = 50 + level * 10; // 敵の体力を次のレベルに合わせて増加
-        }
-
-        if (health <= 0) {
-          alert("あなたは倒されました！体力を回復してください！");
-          health = 10; // プレイヤーが瀕死状態になる
-        }
-
-        updateStats();
-      } else {
-        alert("体力が足りません。休んで回復してください！");
-      }
+      document.getElementById('health').textContent = player.health;
+      document.getElementById('enemyHealth').textContent = enemy.health;
     }
 
     // レベルアップ判定
@@ -172,14 +97,91 @@
       if (exp >= expNeeded) {
         level++;
         exp = exp - expNeeded;
-        expNeeded = Math.ceil(expNeeded * 1.5); // 必要経験値を増加
-        health = 100; // レベルアップで体力を全回復
+        expNeeded = Math.ceil(expNeeded * 1.5);
+        player.health = 100; // 体力全回復
         alert(`レベルアップ！現在のレベルは ${level} です！`);
       }
     }
 
-    // 初期ステータスを表示
+    // プレイヤーの移動
+    function movePlayer() {
+      if (keys['ArrowUp'] && player.y > 0) player.y -= 5;
+      if (keys['ArrowDown'] && player.y + player.height < canvas.height) player.y += 5;
+      if (keys['ArrowLeft'] && player.x > 0) player.x -= 5;
+      if (keys['ArrowRight'] && player.x + player.width < canvas.width) player.x += 5;
+    }
+
+    // 敵のランダム移動
+    function moveEnemy() {
+      const direction = Math.floor(Math.random() * 4);
+      if (direction === 0 && enemy.y > 0) enemy.y -= 2;
+      if (direction === 1 && enemy.y + enemy.height < canvas.height) enemy.y += 2;
+      if (direction === 2 && enemy.x > 0) enemy.x -= 2;
+      if (direction === 3 && enemy.x + enemy.width < canvas.width) enemy.x += 2;
+    }
+
+    // 戦闘判定
+    function checkCombat() {
+      const isColliding =
+        player.x < enemy.x + enemy.width &&
+        player.x + player.width > enemy.x &&
+        player.y < enemy.y + enemy.height &&
+        player.y + player.height > enemy.y;
+
+      if (isColliding) {
+        const damageToEnemy = Math.floor(Math.random() * 20) + 10;
+        const damageToPlayer = Math.floor(Math.random() * 15) + 5;
+
+        enemy.health -= damageToEnemy;
+        player.health -= damageToPlayer;
+
+        alert(`戦闘中！敵に${damageToEnemy}のダメージ！自分も${damageToPlayer}のダメージを受けた！`);
+
+        if (enemy.health <= 0) {
+          exp += 20;
+          alert('敵を倒しました！経験値 +20');
+          enemy.health = 50 + level * 10; // 敵をリセット
+          enemy.x = Math.random() * (canvas.width - enemy.width);
+          enemy.y = Math.random() * (canvas.height - enemy.height);
+          checkLevelUp();
+        }
+
+        if (player.health <= 0) {
+          alert('あなたは倒されました！体力を回復してください！');
+          player.health = 10; // 瀕死状態
+        }
+
+        updateStats();
+      }
+    }
+
+    // 描画
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // プレイヤーを描画
+      ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
+
+      // 敵を描画
+      ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
+    }
+
+    // ゲームループ
+    function gameLoop() {
+      movePlayer();
+      moveEnemy();
+      checkCombat();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    // キー入力イベント
+    document.addEventListener('keydown', (e) => (keys[e.key] = true));
+    document.addEventListener('keyup', (e) => (keys[e.key] = false));
+
+    // 初期化
     updateStats();
+    gameLoop();
   </script>
 </body>
 </html>
