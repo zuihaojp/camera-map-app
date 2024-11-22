@@ -3,82 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>簡易RPGゲーム</title>
+  <title>動くRPGゲーム</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
       text-align: center;
-      background-color: #333;
-      color: white;
+      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      overflow: hidden;
     }
-    #game {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #444;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-    .character {
-      display: inline-block;
-      margin: 10px;
-    }
-    .character img {
-      width: 100px;
-      height: 100px;
+
+    canvas {
+      display: block;
+      margin: 0 auto;
       border: 2px solid white;
-      border-radius: 10px;
-    }
-    #actions button {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 5px;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #actions button:hover {
-      background-color: #218838;
-    }
-    #instructions {
-      margin-top: 20px;
       background-color: #222;
+    }
+
+    #instructions {
+      margin: 10px auto;
+      width: 80%;
+      background-color: #444;
       padding: 10px;
       border-radius: 5px;
     }
   </style>
 </head>
 <body>
-  <h1>簡易RPGゲーム</h1>
-  <div id="game">
-    <div class="character">
-      <h2>プレイヤー</h2>
-      <img id="player-img" src="player.png" alt="プレイヤー">
-      <p id="player-hp">HP: 100</p>
-    </div>
-    <div class="character">
-      <h2>敵</h2>
-      <img id="enemy-img" src="enemy.png" alt="敵">
-      <p id="enemy-hp">HP: 100</p>
-    </div>
-    <div id="actions">
-      <button id="attack-btn">攻撃する</button>
-      <button id="heal-btn">回復する</button>
-    </div>
-    <p id="message"></p>
-    <div id="instructions">
-      <h3>操作方法</h3>
-      <p>
-        - <strong>攻撃する:</strong> 敵にダメージを与えます。<br>
-        - <strong>回復する:</strong> プレイヤーのHPをランダムに回復します。<br>
-        - プレイヤーと敵のどちらかのHPが0になるとゲーム終了です。
-      </p>
-    </div>
+  <h1>動くRPGゲーム</h1>
+  <div id="instructions">
+    <p><strong>操作方法:</strong> 矢印キーで移動し、敵を倒して食べ物を回復します。</p>
+    <p>敵に触れるとHPが減少、食べ物に触れるとHPが回復します。</p>
   </div>
-  <script src="rpg.js"></script>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <script src="rpg-game.js"></script>
 </body>
 </html>
