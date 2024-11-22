@@ -23,7 +23,8 @@ const keys = {
   ArrowLeft: false,
   ArrowRight: false,
   ArrowUp: false,
-  ArrowDown: false
+  ArrowDown: false,
+  Space: false // スペースキーで弾を撃つ
 };
 
 // キーボード入力イベント
@@ -43,12 +44,6 @@ function movePlayer() {
   if (keys.ArrowDown && player.y + player.height < canvas.height) player.y += player.speed;
 }
 
-// プレイヤーを描画
-function drawPlayer() {
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.width, player.height);
-}
-
 // 弾丸を発射
 function shootBullet() {
   bullets.push({
@@ -56,7 +51,7 @@ function shootBullet() {
     y: player.y,
     width: 5,
     height: 10,
-    speed: -5,
+    speed: -7,
     color: "yellow"
   });
 }
@@ -138,6 +133,12 @@ function updateHUD() {
   }
 }
 
+// プレイヤーを描画
+function drawPlayer() {
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
 // ゲームの描画
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -156,6 +157,7 @@ function draw() {
 function gameLoop() {
   if (!gameOver) {
     movePlayer();
+    if (keys.Space) shootBullet(); // スペースキーで弾を撃つ
     moveBullets();
     moveEnemies();
     checkCollisions();
