@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>タイピングゲーム</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      overflow: hidden;
+    }
+
+    #gameCanvas {
+      display: block;
+      margin: 20px auto;
+      border: 2px solid white;
+      background-color: #222;
+    }
+
+    #scoreBoard {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 18px;
+    }
+
+    #instructions {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="scoreBoard">スコア: 0 | ライフ: 3 | レベル: 1</div>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <div id="instructions">
+    <p><b>操作方法:</b></p>
+    <p>画面に表示される単語をタイピングして消してください。</p>
+  </div>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // ゲームデータ
+    let score = 0;
+    let lives = 3;
+    let level = 1;
+    let gameOver = false;
+    const words = [
+      "apple", "banana", "cherry", "date", "elderberry", "fig", "grape", "kiwi",
+      "lemon", "mango", "nectarine", "orange", "peach", "pear", "plum", "quince",
+      "raspberry", "strawberry", "tangerine", "watermelon"
+    ];
+    const activeWords = [];
+    let wordSpeed = 1; // 単語の初期速度
+
+    // ランダムな単語を生成
+    function getRandomWord() {
+      return words[Math.floor(Math.random() * words.length)];
+    }
+
+    // 新しい単語を追加
+    function addWord() {
+      const word = {
+        text: getRandomWord(),
+        x: Math.random() * (canvas.width - 100),
+        y: 0,
+        speed: wordSpeed
+      };
+      activeWords.push(word);
+    }
+
+    // 単語を移動
+    function moveWords() {
+      activeWords.forEach((word, index) => {
+        word.y += word.speed;
+        if (word.y > canvas.height) {
+          activeWords.splice(index, 1);
+          lives--; // ライフを減らす
+          if (lives <= 0) gameOver = true;
+          updateScoreBoard();
+        }
+      });
+    }
+
+    // 単語を描画
+    function drawWords() {
+      ctx.fillStyle = "white";
+      ctx.font = "20px Arial";
+      activeWords.forEach((word) => {
+        ctx.fillText(word.text, word.x, word.y);
+      });
+    }
+
+    // キー入力の処理
+    let currentInput = "";
+    document.addEventListener("keydown", (e) => {
+      if (gameOver) return;
+
+      if (e.key === "Backspace") {
+        currentInput = currentInput.slice(0, -1);
+      } else if (e.key.length === 1) {
+        currentInput += e.key;
+      }
+
+      // 入力が一致する単語を削除
+      activeWords.forEach((word, index) => {
+        if (word.text === currentInput) {
+          activeWords.splice(index, 1);
+          score += 10; // スコア加算
+          if (score % 50 === 0) {
+            level++; // レベルアップ
+            wordSpeed += 0.5; // 速度上昇
+          }
+          currentInput = ""; // 入力をリセット
+          updateScoreBoard();
+        }
+      });
+    });
+
+    // スコアとライフを更新
+    function updateScoreBoard() {
+      document.getElementById("scoreBoard").textContent = `スコア: ${score} | ライフ: ${lives} | レベル: ${level}`;
+    }
+
+    // ゲームループ
+    function gameLoop() {
+      if (!gameOver) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        moveWords();
+        drawWords();
+
+        // 現在の入力を表示
+        ctx.fillStyle = "yellow";
+        ctx.font = "20px Arial";
+        ctx.fillText(`入力: ${currentInput}`, 10, canvas.height - 20);
+
+        requestAnimationFrame(gameLoop);
+      } else {
+        ctx.fillStyle = "white";
+        ctx.font = "30px Arial";
+        ctx.fillText("ゲームオーバー", canvas.width / 2 - 100, canvas.height / 2);
+      }
+    }
+
+    // 新しい単語を一定間隔で追加
+    setInterval(() => {
+      if (!gameOver) addWord();
+    }, 2000);
+
+    // ゲーム開始
+    updateScoreBoard();
+    gameLoop();
+  </script>
+</body>
+</html>
