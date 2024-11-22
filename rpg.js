@@ -1,60 +1,121 @@
-// 初期ステータス
-let playerHP = 100;
-let enemyHP = 100;
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-// HTML要素を取得
-const playerHpElement = document.getElementById("player-hp");
-const enemyHpElement = document.getElementById("enemy-hp");
-const messageElement = document.getElementById("message");
-const attackBtn = document.getElementById("attack-btn");
-const healBtn = document.getElementById("heal-btn");
+// ゲームデータ
+const player = { x: 400, y: 300, width: 30, height: 30, color: "blue", hp: 100 };
+const enemies = [];
+const foods = [];
+let gameOver = false;
 
-// プレイヤーの攻撃
-function attackEnemy() {
-  const damage = Math.floor(Math.random() * 20) + 10; // 10〜30のランダムなダメージ
-  enemyHP -= damage;
-  if (enemyHP < 0) enemyHP = 0;
-  enemyHpElement.textContent = `HP: ${enemyHP}`;
-  messageElement.textContent = `プレイヤーは敵に${damage}のダメージを与えた！`;
-  checkWin();
-  enemyAttack();
+// 敵と食べ物をランダム生成
+for (let i = 0; i < 5; i++) {
+  enemies.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, width: 30, height: 30, color: "red" });
+  foods.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, width: 20, height: 20, color: "green" });
 }
 
-// プレイヤーの回復
-function healPlayer() {
-  const healAmount = Math.floor(Math.random() * 15) + 10; // 10〜25のランダム回復
-  playerHP += healAmount;
-  if (playerHP > 100) playerHP = 100; // 最大HPは100
-  playerHpElement.textContent = `HP: ${playerHP}`;
-  messageElement.textContent = `プレイヤーは${healAmount}回復した！`;
-  enemyAttack();
+// キー入力
+const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+document.addEventListener("keydown", (e) => (keys[e.key] = true));
+document.addEventListener("keyup", (e) => (keys[e.key] = false));
+
+// 衝突判定
+function isColliding(a, b) {
+  return (
+    a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
+  );
 }
 
-// 敵の攻撃
-function enemyAttack() {
-  setTimeout(() => {
-    const damage = Math.floor(Math.random() * 20) + 5; // 5〜25のランダムダメージ
-    playerHP -= damage;
-    if (playerHP < 0) playerHP = 0;
-    playerHpElement.textContent = `HP: ${playerHP}`;
-    messageElement.textContent = `敵はプレイヤーに${damage}のダメージを与えた！`;
-    checkWin();
-  }, 1000); // 敵の攻撃は1秒後
+// プレイヤーの移動
+function movePlayer() {
+  if (keys.ArrowUp && player.y > 0) player.y -= 5;
+  if (keys.ArrowDown && player.y + player.height < canvas.height) player.y += 5;
+  if (keys.ArrowLeft && player.x > 0) player.x -= 5;
+  if (keys.ArrowRight && player.x + player.width < canvas.width) player.x += 5;
 }
 
-// 勝敗判定
-function checkWin() {
-  if (enemyHP <= 0) {
-    messageElement.textContent = "プレイヤーの勝利！";
-    attackBtn.disabled = true;
-    healBtn.disabled = true;
-  } else if (playerHP <= 0) {
-    messageElement.textContent = "敵の勝利…";
-    attackBtn.disabled = true;
-    healBtn.disabled = true;
+// 敵の動き
+function moveEnemies() {
+  enemies.forEach((enemy) => {
+    const dx = player.x - enemy.x;
+    const dy = player.y - enemy.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > 0) {
+      enemy.x += (dx / dist) * 2; // プレイヤーに向かって移動
+      enemy.y += (dy / dist) * 2;
+    }
+  });
+}
+
+// ゲームの更新
+function updateGame() {
+  if (gameOver) return;
+
+  // プレイヤーと敵の衝突チェック
+  enemies.forEach((enemy, index) => {
+    if (isColliding(player, enemy)) {
+      player.hp -= 10;
+      enemies.splice(index, 1); // 敵を削除
+    }
+  });
+
+  // プレイヤーと食べ物の衝突チェック
+  foods.forEach((food, index) => {
+    if (isColliding(player, food)) {
+      player.hp = Math.min(player.hp + 20, 100); // HPを最大100まで回復
+      foods.splice(index, 1); // 食べ物を削除
+    }
+  });
+
+  // HPが0以下でゲームオーバー
+  if (player.hp <= 0) {
+    player.hp = 0;
+    gameOver = true;
   }
 }
 
-// ボタンイベント
-attackBtn.addEventListener("click", attackEnemy);
-healBtn.addEventListener("click", healPlayer);
+// ゲームの描画
+function drawGame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // プレイヤーを描画
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.width, player.height);
+
+  // 敵を描画
+  enemies.forEach((enemy) => {
+    ctx.fillStyle = enemy.color;
+    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+  });
+
+  // 食べ物を描画
+  foods.forEach((food) => {
+    ctx.fillStyle = food.color;
+    ctx.fillRect(food.x, food.y, food.width, food.height);
+  });
+
+  // HPを表示
+  ctx.fillStyle = "white";
+  ctx.font = "20px Arial";
+  ctx.fillText(`HP: ${player.hp}`, 10, 30);
+
+  // ゲームオーバー表示
+  if (gameOver) {
+    ctx.fillStyle = "red";
+    ctx.font = "40px Arial";
+    ctx.fillText("ゲームオーバー", canvas.width / 2 - 100, canvas.height / 2);
+  }
+}
+
+// ゲームループ
+function gameLoop() {
+  movePlayer();
+  moveEnemies();
+  updateGame();
+  drawGame();
+  if (!gameOver) requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
