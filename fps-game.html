@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>改良版 2Dシューティングゲーム</title>
+  <title>2D FPS シューティングゲーム</title>
   <style>
     body {
       margin: 0;
@@ -11,14 +11,12 @@
       font-family: Arial, sans-serif;
       background-color: black;
     }
-
     canvas {
       display: block;
-      margin: 0 auto;
+      margin: auto;
       background: linear-gradient(to bottom, #1a1a1a, #333333);
       border: 2px solid white;
     }
-
     #overlay {
       position: fixed;
       top: 10px;
@@ -37,6 +35,7 @@
   <audio id="shootSound" src="sounds/shoot.mp3"></audio>
   <audio id="explosionSound" src="sounds/explosion.mp3"></audio>
   <audio id="powerUpSound" src="sounds/powerup.mp3"></audio>
-  <script src="fps-shooter-with-audio-and-images.js"></script>
+  <audio id="gameOverSound" src="sounds/gameover.mp3"></audio>
+  <script src="fps-shooter-fixed.js"></script>
 </body>
 </html>
