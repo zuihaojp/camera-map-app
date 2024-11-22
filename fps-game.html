@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FPSシューティングゲーム</title>
+  <title>シューティングゲーム</title>
   <style>
     body {
       margin: 0;
@@ -21,9 +21,11 @@
       background-size: cover;
     }
 
-    #infoPanel {
-      text-align: center;
-      margin: 10px 0;
+    #scoreBoard {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 18px;
     }
 
     #instructions {
@@ -32,17 +34,10 @@
       left: 10px;
       font-size: 16px;
     }
-
-    #scoreBoard {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      font-size: 18px;
-    }
   </style>
 </head>
 <body>
-  <div id="scoreBoard">スコア: 0 | ライフ: 3</div>
+  <div id="scoreBoard">スコア: 0 | ライフ: 3 | レベル: 1</div>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <div id="instructions">
     <p><b>操作方法:</b></p>
@@ -82,6 +77,7 @@
 
     let score = 0;
     let lives = 3;
+    let level = 1;
     let gameOver = false;
     let lastBulletTime = 0;
 
@@ -91,13 +87,17 @@
       Space: false
     };
 
-    // キーボード入力の管理
+    // キーボード入力管理
     document.addEventListener("keydown", (e) => {
-      if (e.key in keys) keys[e.key] = true;
+      if (e.code === "ArrowLeft") keys.ArrowLeft = true;
+      if (e.code === "ArrowRight") keys.ArrowRight = true;
+      if (e.code === "Space") keys.Space = true;
     });
 
     document.addEventListener("keyup", (e) => {
-      if (e.key in keys) keys[e.key] = false;
+      if (e.code === "ArrowLeft") keys.ArrowLeft = false;
+      if (e.code === "ArrowRight") keys.ArrowRight = false;
+      if (e.code === "Space") keys.Space = false;
     });
 
     // プレイヤーを描画
@@ -106,30 +106,21 @@
     }
 
     // 弾丸を発射
-    function gameLoop() {
-  if (!gameOver) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    movePlayer(); // プレイヤーを移動
-    moveBullets(); // 弾丸を移動
-    moveEnemies(); // 敵を移動
-
-    drawPlayer(); // プレイヤーを描画
-    drawBullets(); // 弾丸を描画
-    drawEnemies(); // 敵を描画
-
-    checkCollisions(); // 衝突判定
-
-    // スペースキーで弾丸を発射
-    if (spacePressed) shootBullet();
-
-    requestAnimationFrame(gameLoop);
-  } else {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Arial";
-    ctx.fillText("ゲームオーバー", canvas.width / 2 - 100, canvas.height / 2);
-  }
-}
+    function shootBullet() {
+      const now = Date.now();
+      if (now - lastBulletTime > 300) {
+        bullets.push({
+          x: player.x + player.width / 2 - 5,
+          y: player.y,
+          width: 10,
+          height: 20,
+          speed: -7
+        });
+        shootSound.currentTime = 0;
+        shootSound.play().catch(() => {}); // サウンド再生エラー回避
+        lastBulletTime = now;
+      }
+    }
 
     // 弾丸を移動
     function moveBullets() {
@@ -156,7 +147,7 @@
         y: -size,
         width: size,
         height: size,
-        speed: Math.random() * 2 + 1
+        speed: Math.random() * 2 + level
       });
     }
 
@@ -195,6 +186,7 @@
             explosionSound.currentTime = 0;
             explosionSound.play().catch(() => {}); // サウンド再生エラー回避
             score += 10;
+            if (score % 50 === 0) level++;
             updateScoreBoard();
           }
         });
@@ -203,7 +195,7 @@
 
     // スコアとライフを更新
     function updateScoreBoard() {
-      document.getElementById("scoreBoard").textContent = `スコア: ${score} | ライフ: ${lives}`;
+      document.getElementById("scoreBoard").textContent = `スコア: ${score} | ライフ: ${lives} | レベル: ${level}`;
     }
 
     // プレイヤーを移動
