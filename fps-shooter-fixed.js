@@ -197,3 +197,4 @@ setInterval(() => {
 
 // ゲーム開始
 gameLoop();
+
