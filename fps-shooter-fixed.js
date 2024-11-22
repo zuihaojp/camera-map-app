@@ -101,18 +101,6 @@ function drawBullets() {
   });
 }
 
-// ゲームループ内で弾丸関連の処理を呼び出す
-function gameLoop() {
-  if (!gameOver) {
-    movePlayer(); // プレイヤーを移動
-    if (keys.Space) shootBullet(); // スペースキーで弾丸を発射
-    moveBullets(); // 弾丸を移動
-    moveEnemies(); // 敵を移動
-    checkCollisions(); // 衝突判定
-    draw(); // 全てを描画
-    requestAnimationFrame(gameLoop); // 次のフレームをリクエスト
-  }
-}
 
 // 描画関数に弾丸描画を追加
 function draw() {
@@ -215,18 +203,19 @@ function draw() {
   }
 }
 
-// ゲームループ
+// ゲームループ内で弾丸関連の処理を呼び出す
 function gameLoop() {
   if (!gameOver) {
-    movePlayer();
-    if (keys.Space) shootBullet();
-    moveBullets();
-    moveEnemies();
-    checkCollisions();
-    draw();
-    requestAnimationFrame(gameLoop);
+    movePlayer(); // プレイヤーを移動
+    if (keys.Space) shootBullet(); // スペースキーで弾丸を発射
+    moveBullets(); // 弾丸を移動
+    moveEnemies(); // 敵を移動
+    checkCollisions(); // 衝突判定
+    draw(); // 全てを描画
+    requestAnimationFrame(gameLoop); // 次のフレームをリクエスト
   }
 }
+
 
 // 敵の生成を一定間隔で実行
 setInterval(() => {
