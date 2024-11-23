@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高級オークションサイト</title>
+    <style>
+        /* 全体スタイル */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        .auction-item {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+
+        .auction-item img {
+            max-width: 200px;
+            border-radius: 8px;
+            margin-right: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .auction-info {
+            flex: 1;
+        }
+
+        .auction-info h3 {
+            margin: 0 0 10px;
+            color: #34495e;
+        }
+
+        .auction-info p {
+            margin: 5px 0;
+        }
+
+        .auction-info .current-bid {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .bid-form {
+            margin-top: 10px;
+        }
+
+        .bid-form input[type="text"] {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .bid-form button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .bid-form button:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .auction-item {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .auction-item img {
+                margin-bottom: 10px;
+            }
+
+            .auction-info {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        高級オークションサイト
+    </header>
+
+    <div class="container">
+        <h1>出品中のオークション</h1>
+
+        <!-- オークションアイテム -->
+        <div class="auction-item">
+            <img src="https://via.placeholder.com/200" alt="商品画像">
+            <div class="auction-info">
+                <h3>ヴィンテージ時計</h3>
+                <p>説明: 希少なヴィンテージ時計。状態は非常に良好。</p>
+                <p class="current-bid">現在の入札: 500,000円</p>
+                <form class="bid-form" onsubmit="placeBid(event, '500000')">
+                    <input type="text" placeholder="入札金額を入力">
+                    <button type="submit">入札する</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="auction-item">
+            <img src="https://via.placeholder.com/200" alt="商品画像">
+            <div class="auction-info">
+                <h3>高級絵画</h3>
+                <p>説明: 世界的に評価の高いアート作品。</p>
+                <p class="current-bid">現在の入札: 3,000,000円</p>
+                <form class="bid-form" onsubmit="placeBid(event, '3000000')">
+                    <input type="text" placeholder="入札金額を入力">
+                    <button type="submit">入札する</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 高級オークションサイト
+    </footer>
+
+    <script>
+        // 入札フォームの動作
+        function placeBid(event, currentBid) {
+            event.preventDefault();
+            const form = event.target;
+            const bidInput = form.querySelector('input[type="text"]');
+            const newBid = parseInt(bidInput.value, 10);
+
+            if (isNaN(newBid) || newBid <= parseInt(currentBid, 10)) {
+                alert("現在の入札額より高い金額を入力してください。");
+            } else {
+                alert(`新しい入札額: ${newBid}円で入札されました！`);
+                bidInput.value = ''; // 入力フィールドをクリア
+            }
+        }
+    </script>
+</body>
+</html>
