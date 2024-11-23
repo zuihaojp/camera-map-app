@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オブジェクトマージゲーム</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #2f3640;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        #score-display {
+            font-size: 24px;
+            margin: 20px;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 2px solid white;
+            background-color: #dcdde1;
+        }
+        #instructions {
+            font-size: 18px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>オブジェクトマージゲーム</h1>
+    <div id="score-display">スコア: <span id="score">0</span></div>
+    <div id="instructions">
+        <p>操作方法:</p>
+        <ul>
+            <li>矢印キー: 左右に移動</li>
+            <li>スペースキー: オブジェクトを落下</li>
+        </ul>
+    </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        // Matter.js のモジュールを取り込む
+        const { Engine, Render, World, Bodies, Body, Events } = Matter;
+
+        // スコア変数
+        let totalScore = 0;
+
+        // オブジェクトの定義
+        const objectDefinitions = [
+            {
+                texture: "https://via.placeholder.com/32x32/FF0000/FFFFFF?text=A",
+                size: 25,
+                label: "objectA",
+                score: 10
+            },
+            {
+                texture: "https://via.placeholder.com/32x32/00FF00/FFFFFF?text=B",
+                size: 30,
+                label: "objectB",
+                score: 20
+            },
+            {
+                texture: "https://via.placeholder.com/32x32/0000FF/FFFFFF?text=C",
+                size: 35,
+                label: "objectC",
+                score: 30
+            }
+        ];
+
+        // 次に落とすオブジェクトをランダムに選択して作成する関数
+        function createRandomFallingObject(x, y) {
+            const randomIndex = Math.floor(Math.random() * objectDefinitions.length);
+            const objectDef = objectDefinitions[randomIndex];
+
+            return Bodies.circle(x, y, objectDef.size, {
+                label: objectDef.label,
+                isStatic: true,
+                render: {
+                    sprite: {
+                        texture: objectDef.texture,
+                        xScale: 1,
+                        yScale: 1
+                    }
+                }
+            });
+        }
+
+        // Matter.js のエンジンとレンダラーを作成
+        const engine = Engine.create();
+        const render = Render.create({
+            element: document.body,
+            canvas: document.getElementById("gameCanvas"),
+            engine: engine,
+            options: {
+                width: 800,
+                height: 600,
+                wireframes: false
+            }
+        });
+
+        // 床と壁を作成
+        const ground = Bodies.rectangle(400, 590, 810, 20, { isStatic: true });
+        const leftWall = Bodies.rectangle(0, 300, 20, 600, { isStatic: true });
+        const rightWall = Bodies.rectangle(800, 300, 20, 600, { isStatic: true });
+        World.add(engine.world, [ground, leftWall, rightWall]);
+
+        // 次のオブジェクトを作成
+        let nextObject = createRandomFallingObject(400, 50);
+        World.add(engine.world, nextObject);
+
+        let isFalling = false; // オブジェクトが落下中かどうか
+
+        // スコアを更新する関数
+        function updateScore(points) {
+            totalScore += points;
+            document.getElementById("score").textContent = totalScore;
+        }
+
+        // 衝突イベント
+        Events.on(engine, "collisionStart", (event) => {
+            const pairs = event.pairs;
+            pairs.forEach((pair) => {
+                if ((pair.bodyA === nextObject && pair.bodyB === ground) || 
+                    (pair.bodyB === nextObject && pair.bodyA === ground)) {
+                    updateScore(10);
+                    World.remove(engine.world, nextObject);
+                    nextObject = createRandomFallingObject(400, 50);
+                    isFalling = false;
+                    World.add(engine.world, nextObject);
+                }
+            });
+        });
+
+        // キーボードイベント
+        window.addEventListener("keydown", (event) => {
+            if (event.code === "ArrowLeft" && !isFalling) {
+                Body.translate(nextObject, { x: -20, y: 0 });
+            } else if (event.code === "ArrowRight" && !isFalling) {
+                Body.translate(nextObject, { x: 20, y: 0 });
+            } else if (event.code === "Space" && !isFalling) {
+                isFalling = true;
+                Body.setStatic(nextObject, false);
+            }
+        });
+
+        // エンジンとレンダラーを実行
+        Render.run(render);
+        Engine.run(engine);
+    </script>
+</body>
+</html>
