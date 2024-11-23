@@ -54,10 +54,10 @@
         World.add(engine.world, ground);
 
         const fruits = [
-            { name: "small", radius: 15, score: 10, next: "medium", color: "yellow" },
-            { name: "medium", radius: 30, score: 20, next: "large", color: "orange" },
-            { name: "large", radius: 45, score: 50, next: "xlarge", color: "red" },
-            { name: "xlarge", radius: 60, score: 100, next: null, color: "purple" }
+            { name: "small", radius: 15, score: 10, next: "medium", color: "yellow", mass: 0.5 },
+            { name: "medium", radius: 30, score: 20, next: "large", color: "orange", mass: 1 },
+            { name: "large", radius: 45, score: 50, next: "xlarge", color: "red", mass: 1.5 },
+            { name: "xlarge", radius: 60, score: 100, next: null, color: "purple", mass: 2 }
         ];
 
         let score = 0;
@@ -73,7 +73,9 @@
             const fruit = fruits.find(f => f.name === type);
             return Bodies.circle(x, y, fruit.radius, {
                 label: fruit.name,
-                isStatic: true,
+                mass: fruit.mass,
+                friction: 0.005,
+                restitution: 0.7, // バウンド係数
                 render: { fillStyle: fruit.color }
             });
         }
@@ -86,7 +88,11 @@
                 if (bodyA.label === bodyB.label) {
                     const nextFruit = fruits.find(f => f.name === bodyA.label).next;
                     if (nextFruit) {
-                        const merged = createFruit((bodyA.position.x + bodyB.position.x) / 2, bodyA.position.y, nextFruit);
+                        const merged = createFruit(
+                            (bodyA.position.x + bodyB.position.x) / 2,
+                            bodyA.position.y,
+                            nextFruit
+                        );
                         World.add(engine.world, merged);
                         World.remove(engine.world, [bodyA, bodyB]);
 
@@ -111,6 +117,7 @@
             } else if (event.key === " " && !isFalling) {
                 isFalling = true;
                 Body.setStatic(fallingFruit, false);
+                Body.setVelocity(fallingFruit, { x: Math.random() * 2 - 1, y: 0 }); // 転がり方向
                 setTimeout(() => {
                     fallingFruit = createFruit(200, 50, "small");
                     World.add(engine.world, fallingFruit);
