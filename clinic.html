@@ -69,14 +69,6 @@
             color: #555;
         }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #2c3e50;
-            color: white;
-            font-size: 14px;
-        }
-
         .form-container {
             display: none;
             flex-direction: column;
@@ -203,14 +195,8 @@
         </div>
 
         <div class="social-icons">
-            <!-- LINE追加ボタン -->
-            <a class="line" href="https://line.me/R/ti/p/%40YOUR-LINE-ID" target="_blank">
-                L
-            </a>
-            <!-- Instagramアイコン -->
-            <a class="instagram" href="https://instagram.com/YOUR-INSTAGRAM-USERNAME" target="_blank">
-                I
-            </a>
+            <a class="line" href="https://line.me/R/ti/p/%40YOUR-LINE-ID" target="_blank">L</a>
+            <a class="instagram" href="https://instagram.com/YOUR-INSTAGRAM-USERNAME" target="_blank">I</a>
         </div>
     </div>
     <footer>
@@ -218,13 +204,13 @@
     </footer>
 
     <script>
-        // 選択された診療科目のフォームを表示
+        // 診療科目クリックでフォーム表示
         function showForm(department) {
             document.getElementById('form-title').textContent = `${department} - オンライン予約`;
             document.getElementById('form-container').classList.add('active');
         }
 
-        // 予約フォーム送信処理
+        // フォーム送信
         function submitReservation(event) {
             event.preventDefault();
             const form = document.getElementById('reservation-form');
