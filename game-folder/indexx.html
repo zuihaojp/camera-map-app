@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>判例タイピングゲーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>判例タイピングゲーム</h1>
+    <div id="instructions">
+        <p>操作方法:</p>
+        <ul>
+            <li>タイピングボックスに表示された判例文を正確に入力してください。</li>
+            <li>1分間で可能な限り多く正解を目指しましょう！</li>
+            <li>正解するたびに次の問題が表示され、スコアが加算されます。</li>
+        </ul>
+    </div>
+    <div id="game-container">
+        <div id="timer">残り時間: <span id="time">60</span> 秒</div>
+        <div id="score">スコア: <span id="score-value">0</span></div>
+        <div id="question">読み込み中...</div>
+        <input type="text" id="input" placeholder="ここにタイピング..." disabled />
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
