@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>判例/定義タイピングゲーム</title>
+  <title>判例タイピングゲーム</title>
   <style>
     body {
       background-color: #f4f4f4;
@@ -65,18 +65,6 @@
       font-size: 20px;
       color: #333;
     }
-    .link {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #007bff;
-      text-decoration: none;
-    }
-    .link:hover {
-      text-decoration: underline;
-    }
-    .hidden {
-      background-color: yellow;
-    }
     .back-button {
       margin-top: 20px;
       display: block;
@@ -104,14 +92,14 @@
     <a href="#" class="category" data-category="刑法">刑法</a>
     <a href="#" class="category" data-category="刑事訴訟法">刑事訴訟法</a>
     <a href="#" class="category" data-category="労働基準法">労働基準法</a>
-    <p>操作説明: 科目を選択し、タイピングで隠れた単語を入力してください。制限時間は1分です。</p>
+    <p>操作説明: 科目を選択し、完全な文章をタイピングしてください。制限時間は1分です。</p>
   </div>
 
   <div id="game" style="display: none;">
     <div class="question" id="question">
       判例の文がここに表示されます。
     </div>
-    <input type="text" id="answer" placeholder="入力してください">
+    <input type="text" id="answer" placeholder="完全な文章を入力してください">
     <button class="button" id="submit-answer">判定</button>
     <div class="score">スコア: <span id="score">0</span></div>
     <div class="timer">残り時間: <span id="timer">60</span>秒</div>
@@ -122,21 +110,17 @@
     const data = {
       憲法: [
         {
-          text: "憲法第XX条はXXXX権を保障する。この条文はXXXXXである。",
-          hidden: ["XX", "XXXX", "XXXXX"]
+          text: "日本国憲法第XX条は重要な条文である。この条文はXXXXXである。",
         },
         {
           text: "憲法に基づきXXの原則が制定された。この原則はXXXXX。",
-          hidden: ["XX", "XXXXX", "原則"]
         }
       ],
       民法: [
         {
           text: "民法第XX条ではXXXXXの規定がある。この法律は契約の基本。",
-          hidden: ["XX", "XXXXX", "契約"]
         }
-      ],
-      // 他の科目のデータもここに追加
+      ]
     };
 
     let currentCategory = "";
@@ -183,14 +167,7 @@
     function loadQuestion() {
       const questions = data[currentCategory];
       currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-      const questionText = currentQuestion.text;
-
-      const formattedText = currentQuestion.hidden.reduce((text, hiddenWord) => {
-        const regex = new RegExp(hiddenWord, "g");
-        return text.replace(regex, `<span class="hidden">${hiddenWord}</span>`);
-      }, questionText);
-
-      document.getElementById("question").innerHTML = formattedText;
+      document.getElementById("question").innerHTML = currentQuestion.text;
     }
 
     // スコア更新
@@ -198,23 +175,29 @@
       document.getElementById("score").textContent = score;
     }
 
-    // 判定ボタンイベント
-    document.getElementById("submit-answer").addEventListener("click", () => {
+    // 判定処理
+    function checkAnswer() {
       const userAnswer = document.getElementById("answer").value.trim();
-      const hiddenWords = currentQuestion.hidden;
-      const isCorrect = hiddenWords.includes(userAnswer);
-
-      if (isCorrect) {
+      if (userAnswer === currentQuestion.text) {
         score += 10;
         alert("正解です！");
       } else {
-        alert("不正解です。");
+        alert(`不正解です。\n正解: ${currentQuestion.text}\n入力: ${userAnswer}`);
       }
-
       updateScore();
       document.getElementById("answer").value = "";
       loadQuestion();
+    }
+
+    // エンターキーで回答送信
+    document.getElementById("answer").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        checkAnswer();
+      }
     });
+
+    // 判定ボタンイベント
+    document.getElementById("submit-answer").addEventListener("click", checkAnswer);
 
     // 科目選択に戻る
     document.getElementById("back-to-category").addEventListener("click", (e) => {
