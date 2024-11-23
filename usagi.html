@@ -32,7 +32,7 @@
 <body>
   <h1>うさぎゲーム</h1>
   <a href="index.html">ゲーム選択画面に戻る</a>
-  <p>ライフ: <span id="life">10</span> | スコア: <span id="score">0</span> | レベル: <span id="level">1</span></p>
+  <p>ライフ: <span id="life">20</span> | スコア: <span id="score">0</span> | レベル: <span id="level">1</span></p>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <p>操作方法: 矢印キーで移動 | スペースキーで弾を発射</p>
   <script>
@@ -41,7 +41,7 @@
 
     // ゲームデータ
     let score = 0;
-    let life = 10;
+    let life = 20; // ライフを増加
     let level = 1;
     let levelThreshold = 100; // レベルアップのスコア閾値
 
@@ -68,7 +68,7 @@
 
     // 敵の弾
     const enemyBullets = [];
-    let enemyFireRate = 0.005; // 弾発射確率を低く設定（半分以下）
+    let enemyFireRate = 0.003; // 弾発射確率をさらに減らす（1/3）
 
     // キー操作
     let upPressed = false, downPressed = false, leftPressed = false, rightPressed = false, spacePressed = false;
@@ -154,7 +154,7 @@
               cols++;
               invaderWidth -= 5;
               invaderHeight -= 5;
-              enemyFireRate += 0.002; // 弾の発射頻度アップ
+              enemyFireRate += 0.001; // 弾の発射頻度を少し増加（レベルアップ時のみ）
               initializeInvaders();
             }
           }
