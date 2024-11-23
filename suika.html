@@ -38,6 +38,11 @@
         #nextFruitCanvas {
             background-color: transparent;
         }
+        #gameOver {
+            font-size: 36px;
+            color: red;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -49,6 +54,7 @@
         <canvas id="nextFruitCanvas" width="50" height="50"></canvas>
     </div>
     <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div id="gameOver">ゲームオーバー</div>
     <script>
         const { Engine, Render, World, Bodies, Body, Events } = Matter;
 
@@ -75,12 +81,12 @@
             { name: "apple", radius: 25, score: 20, next: "orange", color: "red", restitution: 0.7 },
             { name: "orange", radius: 35, score: 30, next: "banana", color: "orange", restitution: 0.6 },
             { name: "banana", radius: 45, score: 50, next: "grape", color: "yellow", restitution: 0.5 },
-            { name: "grape", radius: 55, score: 70, next: "watermelon", color: "purple", restitution: 0.4 },
-            { name: "watermelon", radius: 65, score: 100, next: "pineapple", color: "green", restitution: 0.3 },
-            { name: "pineapple", radius: 75, score: 150, next: null, color: "lightgreen", restitution: 0.2 }
+            { name: "grape", radius: 55, score: 70, next: null, color: "purple", restitution: 0.4 }
         ];
 
         let score = 0;
+        let nextFruit = "strawberry";
+        let currentFruit = createFruit(200, 100, nextFruit);
 
         // スコア更新
         function updateScore(points) {
@@ -88,14 +94,26 @@
             document.getElementById("scoreValue").textContent = score;
         }
 
+        // ゲームオーバー判定
+        function checkGameOver() {
+            const bodies = Matter.Composite.allBodies(engine.world);
+            for (let body of bodies) {
+                if (body.position.y < 50 && body.isStatic) {
+                    document.getElementById("gameOver").style.display = "block";
+                    Render.stop(render);
+                    Engine.clear(engine);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // フルーツ生成
         function createFruit(x, y, type) {
             const fruit = fruits.find(f => f.name === type);
             return Bodies.circle(x, y, fruit.radius, {
                 label: fruit.name,
-                isStatic: true,
                 restitution: fruit.restitution,
-                friction: 0.005,
                 render: {
                     fillStyle: fruit.color
                 }
@@ -110,66 +128,58 @@
             const fruit = fruits.find(f => f.name === fruitName);
             ctx.fillStyle = fruit.color;
             ctx.beginPath();
-            ctx.arc(25, 25, fruit.radius / 2, 0, Math.PI * 2);
+            ctx.arc(25, 25, fruit.radius, 0, Math.PI * 2);
             ctx.fill();
         }
 
-        // 合体処理
-        Events.on(engine, "collisionStart", function (event) {
+        // 次のフルーツをセット
+        function setNextFruit() {
+            nextFruit = fruits[Math.floor(Math.random() * 4)].name; // grapeまでに制限
+            drawNextFruit(nextFruit);
+        }
+
+        // フルーツが衝突した時に進化
+        Events.on(engine, "collisionStart", event => {
             event.pairs.forEach(pair => {
-                const [bodyA, bodyB] = [pair.bodyA, pair.bodyB];
+                const bodyA = pair.bodyA;
+                const bodyB = pair.bodyB;
 
                 if (bodyA.label === bodyB.label) {
-                    const nextFruit = fruits.find(f => f.name === bodyA.label).next;
-                    if (nextFruit) {
-                        const merged = createFruit(
+                    const fruit = fruits.find(f => f.name === bodyA.label);
+                    if (fruit && fruit.next) {
+                        const newFruit = createFruit(
                             (bodyA.position.x + bodyB.position.x) / 2,
-                            bodyA.position.y,
-                            nextFruit
+                            (bodyA.position.y + bodyB.position.y) / 2,
+                            fruit.next
                         );
-                        World.add(engine.world, merged);
                         World.remove(engine.world, [bodyA, bodyB]);
-
-                        const points = fruits.find(f => f.name === nextFruit).score;
-                        updateScore(points);
+                        World.add(engine.world, newFruit);
+                        updateScore(fruit.score);
                     }
                 }
             });
         });
 
-        // 落下中のフルーツ
-        let fallingFruit = createFruit(200, 50, "strawberry");
-        World.add(engine.world, fallingFruit);
-        let nextFruitType = "apple"; // 最初の次のフルーツ
-        drawNextFruit(nextFruitType);
+        // 初期設定
+        World.add(engine.world, currentFruit);
+        setNextFruit();
 
-        let isFalling = false;
-
-        // フルーツの操作
+        // キーボード入力で操作
         window.addEventListener("keydown", event => {
-            if (event.key === "ArrowLeft" && !isFalling) {
-                const leftEdge = fallingFruit.position.x - fruits.find(f => f.name === fallingFruit.label).radius;
-                if (leftEdge > 20) {
-                    Body.translate(fallingFruit, { x: -20, y: 0 });
-                }
-            } else if (event.key === "ArrowRight" && !isFalling) {
-                const rightEdge = fallingFruit.position.x + fruits.find(f => f.name === fallingFruit.label).radius;
-                if (rightEdge < 380) {
-                    Body.translate(fallingFruit, { x: 20, y: 0 });
-                }
-            } else if (event.key === " " && !isFalling) {
-                isFalling = true;
-                Body.setStatic(fallingFruit, false);
-                setTimeout(() => {
-                    fallingFruit = createFruit(200, 50, nextFruitType);
-                    nextFruitType = fruits.find(f => f.name === fallingFruit.label).next || "strawberry";
-                    drawNextFruit(nextFruitType);
-                    World.add(engine.world, fallingFruit);
-                    isFalling = false;
-                }, 1000);
+            if (event.code === "ArrowLeft") {
+                Body.translate(currentFruit, { x: -10, y: 0 });
+            } else if (event.code === "ArrowRight") {
+                Body.translate(currentFruit, { x: 10, y: 0 });
+            } else if (event.code === "Space") {
+                Body.setStatic(currentFruit, false);
+                currentFruit = createFruit(200, 100, nextFruit);
+                setNextFruit();
+                World.add(engine.world, currentFruit);
+                if (checkGameOver()) return;
             }
         });
 
+        // ゲームの実行
         Render.run(render);
         Engine.run(engine);
     </script>
