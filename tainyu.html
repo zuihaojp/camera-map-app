@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美容師体験入店サイト</title>
+    <link rel="manifest" href="manifest1.json">
+    <meta name="theme-color" content="#2c3e50">
+    <style>
+        /* 基本スタイル */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        nav {
+            background-color: #34495e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        nav a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        .job-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .job-card {
+            flex: 1 1 calc(33% - 15px);
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .job-card h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .job-card p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .job-card button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .job-card button:hover {
+            background-color: #2980b9;
+        }
+
+        .form-container {
+            display: none;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-container input,
+        .form-container textarea {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .form-container button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .job-card {
+                flex: 1 1 calc(50% - 15px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .job-card {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>美容師体験入店サイト</header>
+    <nav>
+        <a href="index.html">ホーム</a>
+        <a href="#jobs">求人リスト</a>
+        <a href="#mypage">マイページ</a>
+        <a href="#admin">管理画面</a>
+    </nav>
+    <div class="container">
+        <h1 id="jobs">求人リスト</h1>
+        <div class="job-list">
+            <div class="job-card">
+                <h3>銀座サロン - スタイリスト募集</h3>
+                <p>時給: 1,500円〜 / 即日体験可能</p>
+                <button onclick="showForm('銀座サロン')">体験入店を申し込む</button>
+            </div>
+            <div class="job-card">
+                <h3>渋谷サロン - アシスタント募集</h3>
+                <p>時給: 1,200円〜 / 未経験歓迎</p>
+                <button onclick="showForm('渋谷サロン')">体験入店を申し込む</button>
+            </div>
+        </div>
+
+        <div class="form-container" id="application-form">
+            <h2 id="form-title">体験入店申し込み</h2>
+            <form onsubmit="submitForm(event)">
+                <label for="name">お名前</label>
+                <input type="text" id="name" name="name" required>
+                <label for="phone">電話番号</label>
+                <input type="tel" id="phone" name="phone" required>
+                <label for="email">メールアドレス</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">メッセージ</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <button type="submit">送信</button>
+            </form>
+        </div>
+
+        <h1 id="mypage">マイページ</h1>
+        <p>※ここにユーザーの申し込み履歴などを表示する予定</p>
+
+        <h1 id="admin">管理画面</h1>
+        <p>※ここに管理者用の求人管理や応募管理を表示する予定</p>
+    </div>
+    <footer>
+        © 2024 美容師体験入店サイト
+    </footer>
+
+    <script>
+        function showForm(jobTitle) {
+            document.getElementById('form-title').textContent = `${jobTitle} - 体験入店申し込み`;
+            document.getElementById('application-form').classList.add('active');
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+            alert('申し込みが送信されました！');
+            document.getElementById('application-form').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
