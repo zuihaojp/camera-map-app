@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美容師体験入店サイト</title>
-    <link rel="manifest" href="manifest1.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff6f61">
     <style>
         /* 高級感のあるフォント */
@@ -47,199 +47,104 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 600px;
             margin: 20px auto;
             padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         h1, h2 {
             color: #ff6f61;
+            text-align: center;
         }
 
-        /* 求人リスト */
-        .job-list {
+        form {
             display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .job-card {
-            flex: 1 1 calc(50% - 30px);
-            background-color: #ffffff;
-            border: 2px solid #ffb8a4;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, background-color 0.3s;
-        }
-
-        .job-card:hover {
-            transform: translateY(-5px);
-            background-color: #ffebde;
-        }
-
-        .job-card h3 {
-            margin: 0 0 10px;
-            color: #ff6f61;
-        }
-
-        .job-card p {
+        form label {
             font-size: 14px;
-            color: #555;
         }
 
-        /* スライドショー */
-        .slideshow-container {
-            position: relative;
-            max-width: 100%;
-            margin-top: 20px;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .slides {
-            display: none;
-            width: 100%;
-        }
-
-        .slideshow-container img {
-            width: 100%;
-            display: block;
-        }
-
-        .prev, .next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+        form input {
             padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px;
+            background-color: #ff6f61;
             color: white;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-            background-color: rgba(0, 0, 0, 0.5);
             border: none;
-            border-radius: 50%;
-        }
-
-        .prev {
-            left: 10px;
-        }
-
-        .next {
-            right: 10px;
-        }
-
-        .dots {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .dots span {
+            border-radius: 5px;
             cursor: pointer;
-            height: 10px;
-            width: 10px;
-            margin: 0 5px;
-            background-color: #ccc;
-            border-radius: 50%;
-            display: inline-block;
         }
 
-        .dots .active {
-            background-color: #ff6f61;
+        form button:hover {
+            background-color: #ff3b28;
         }
 
-        footer {
+        .message {
             text-align: center;
-            padding: 20px;
-            background-color: #ff6f61;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .job-card {
-                flex: 1 1 calc(100% - 30px);
-            }
+            margin-top: 15px;
+            font-size: 14px;
+            color: green;
         }
     </style>
 </head>
 <body>
     <header>美容師体験入店サイト</header>
     <nav>
-        <a href="#jobs">求人リスト</a>
         <a href="#login">ログイン</a>
+        <a href="#jobs">求人リスト</a>
     </nav>
     <div class="container">
-        <!-- 求人リスト -->
-        <h1 id="jobs">求人リスト</h1>
-        <div class="job-list">
-            <!-- 店舗1 -->
-            <div class="job-card">
-                <h3>銀座サロン - スタイリスト募集</h3>
-                <p>時給: 1,500円〜 / 即日体験可能</p>
-                <div class="slideshow-container">
-                    <img class="slides" src="https://via.placeholder.com/400x200?text=銀座サロン+1" alt="銀座サロン写真1">
-                    <img class="slides" src="https://via.placeholder.com/400x200?text=銀座サロン+2" alt="銀座サロン写真2">
-                    <img class="slides" src="https://via.placeholder.com/400x200?text=銀座サロン+3" alt="銀座サロン写真3">
-                    <button class="prev" onclick="plusSlides(-1, 0)">&#10094;</button>
-                    <button class="next" onclick="plusSlides(1, 0)">&#10095;</button>
-                </div>
-                <div class="dots">
-                    <span onclick="currentSlide(1, 0)"></span>
-                    <span onclick="currentSlide(2, 0)"></span>
-                    <span onclick="currentSlide(3, 0)"></span>
-                </div>
-            </div>
-            <!-- 店舗2 -->
-            <div class="job-card">
-                <h3>渋谷サロン - アシスタント募集</h3>
-                <p>時給: 1,200円〜 / 未経験歓迎</p>
-                <div class="slideshow-container">
-                    <img class="slides" src="https://via.placeholder.com/400x200?text=渋谷サロン+1" alt="渋谷サロン写真1">
-                    <img class="slides" src="https://via.placeholder.com/400x200?text=渋谷サロン+2" alt="渋谷サロン写真2">
-                    <img class="slides" src="https://via.placeholder.com/400x200?text=渋谷サロン+3" alt="渋谷サロン写真3">
-                    <button class="prev" onclick="plusSlides(-1, 1)">&#10094;</button>
-                    <button class="next" onclick="plusSlides(1, 1)">&#10095;</button>
-                </div>
-                <div class="dots">
-                    <span onclick="currentSlide(1, 1)"></span>
-                    <span onclick="currentSlide(2, 1)"></span>
-                    <span onclick="currentSlide(3, 1)"></span>
-                </div>
-            </div>
-        </div>
+        <h1>ログイン</h1>
+        <form id="login-form">
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" name="email" placeholder="例: user@example.com" required>
+            <label for="password">パスワード</label>
+            <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
+            <button type="submit">ログイン</button>
+        </form>
+        <div class="message" id="login-message"></div>
     </div>
-    <footer>
-        © 2024 美容師体験入店サイト
-    </footer>
 
     <script>
-        const slideIndices = [1, 1];
-        const slideElements = [
-            document.querySelectorAll(".job-card:nth-of-type(1) .slides"),
-            document.querySelectorAll(".job-card:nth-of-type(2) .slides")
+        // ユーザー情報を保存（デモ用）
+        const users = [
+            { email: "user1@example.com", password: "password123" },
+            { email: "user2@example.com", password: "password456" }
         ];
 
-        function showSlides(n, group) {
-            let slides = slideElements[group];
-            if (n > slides.length) slideIndices[group] = 1;
-            if (n < 1) slideIndices[group] = slides.length;
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // 入力情報を取得
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // ユーザー情報を確認
+            const user = users.find(user => user.email === email && user.password === password);
+
+            const messageElement = document.getElementById('login-message');
+
+            if (user) {
+                messageElement.textContent = "ログイン成功！";
+                messageElement.style.color = "green";
+                // ログイン成功後の処理（例: ページリダイレクト）
+                setTimeout(() => {
+                    window.location.href = "#jobs";
+                }, 1500);
+            } else {
+                messageElement.textContent = "メールアドレスまたはパスワードが間違っています。";
+                messageElement.style.color = "red";
             }
-            slides[slideIndices[group] - 1].style.display = "block";
-        }
-
-        function plusSlides(n, group) {
-            showSlides(slideIndices[group] += n, group);
-        }
-
-        function currentSlide(n, group) {
-            showSlides(slideIndices[group] = n, group);
-        }
-
-        slideElements.forEach((slides, index) => {
-            showSlides(1, index);
         });
     </script>
 </body>
