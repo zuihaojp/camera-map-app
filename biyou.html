@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美容師予約サイト</title>
+    <!-- PWA対応 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* スタイル */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        .stylist {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .stylist img {
+            max-width: 150px;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .stylist-info {
+            flex: 1;
+            padding: 15px;
+        }
+
+        .stylist-info h3 {
+            margin: 0 0 10px;
+            color: #34495e;
+        }
+
+        .stylist-info p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .stylist-info button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .stylist-info button:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .stylist {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stylist img {
+                max-width: 100%;
+            }
+
+            .stylist-info {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        美容師予約サイト
+    </header>
+    <div class="container">
+        <h1>おすすめ美容師</h1>
+        <!-- 美容師リスト -->
+        <div class="stylist">
+            <img src="https://via.placeholder.com/150" alt="美容師画像">
+            <div class="stylist-info">
+                <h3>山田 太郎</h3>
+                <p>カット & カラーが得意です。経験10年。</p>
+                <button onclick="bookStylist('山田 太郎')">予約する</button>
+            </div>
+        </div>
+        <div class="stylist">
+            <img src="https://via.placeholder.com/150" alt="美容師画像">
+            <div class="stylist-info">
+                <h3>佐藤 花子</h3>
+                <p>パーマやヘアアレンジが得意です。</p>
+                <button onclick="bookStylist('佐藤 花子')">予約する</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        © 2024 美容師予約サイト
+    </footer>
+
+    <script>
+        // PWA対応用サービスワーカー登録
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch(function(error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+
+        // 予約ボタンのクリック処理
+        function bookStylist(name) {
+            alert(`${name}さんの予約を承りました！`);
+        }
+    </script>
+</body>
+</html>
