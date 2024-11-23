@@ -7,9 +7,11 @@
     <link rel="manifest" href="manifest1.json">
     <meta name="theme-color" content="#ff6f61">
     <style>
-        /* 基本スタイル */
+        /* 高級感のあるフォント */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Playfair Display', serif;
             margin: 0;
             padding: 0;
             background-color: #fff7f0;
@@ -54,11 +56,43 @@
             color: #ff6f61;
         }
 
+        /* 求人リスト */
+        .job-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .job-card {
+            flex: 1 1 calc(50% - 30px);
+            background-color: #ffffff;
+            border: 2px solid #ffb8a4;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            background-color: #ffebde;
+        }
+
+        .job-card h3 {
+            margin: 0 0 10px;
+            color: #ff6f61;
+        }
+
+        .job-card p {
+            font-size: 14px;
+            color: #555;
+        }
+
         /* スライドショー */
         .slideshow-container {
             position: relative;
             max-width: 100%;
-            margin: 20px auto;
+            margin-top: 20px;
             overflow: hidden;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -115,53 +149,6 @@
             background-color: #ff6f61;
         }
 
-        /* 求人カード */
-        .job-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .job-card {
-            flex: 1 1 calc(33% - 15px);
-            background-color: #ffffff;
-            border: 2px solid #ffb8a4;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, background-color 0.3s;
-        }
-
-        .job-card:hover {
-            transform: translateY(-5px);
-            background-color: #ffebde;
-        }
-
-        .job-card h3 {
-            margin: 0;
-            color: #ff6f61;
-        }
-
-        .job-card p {
-            font-size: 14px;
-            color: #555;
-        }
-
-        .job-card button {
-            padding: 10px 15px;
-            background-color: #ff6f61;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .job-card button:hover {
-            background-color: #ff3b28;
-        }
-
         footer {
             text-align: center;
             padding: 20px;
@@ -171,13 +158,7 @@
 
         @media (max-width: 768px) {
             .job-card {
-                flex: 1 1 calc(50% - 15px);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .job-card {
-                flex: 1 1 100%;
+                flex: 1 1 calc(100% - 30px);
             }
         }
     </style>
@@ -185,38 +166,46 @@
 <body>
     <header>美容師体験入店サイト</header>
     <nav>
-        <a href="#slideshow">ギャラリー</a>
         <a href="#jobs">求人リスト</a>
         <a href="#login">ログイン</a>
     </nav>
     <div class="container">
-        <!-- スライドショー -->
-        <h1 id="slideshow">美容院ギャラリー</h1>
-        <div class="slideshow-container">
-            <img class="slides" src="https://via.placeholder.com/1200x400?text=Salon+1" alt="美容院写真1">
-            <img class="slides" src="https://via.placeholder.com/1200x400?text=Salon+2" alt="美容院写真2">
-            <img class="slides" src="https://via.placeholder.com/1200x400?text=Salon+3" alt="美容院写真3">
-            <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
-            <button class="next" onclick="plusSlides(1)">&#10095;</button>
-        </div>
-        <div class="dots">
-            <span onclick="currentSlide(1)"></span>
-            <span onclick="currentSlide(2)"></span>
-            <span onclick="currentSlide(3)"></span>
-        </div>
-
         <!-- 求人リスト -->
         <h1 id="jobs">求人リスト</h1>
         <div class="job-list">
+            <!-- 店舗1 -->
             <div class="job-card">
                 <h3>銀座サロン - スタイリスト募集</h3>
                 <p>時給: 1,500円〜 / 即日体験可能</p>
-                <button>詳細を見る</button>
+                <div class="slideshow-container">
+                    <img class="slides" src="https://via.placeholder.com/400x200?text=銀座サロン+1" alt="銀座サロン写真1">
+                    <img class="slides" src="https://via.placeholder.com/400x200?text=銀座サロン+2" alt="銀座サロン写真2">
+                    <img class="slides" src="https://via.placeholder.com/400x200?text=銀座サロン+3" alt="銀座サロン写真3">
+                    <button class="prev" onclick="plusSlides(-1, 0)">&#10094;</button>
+                    <button class="next" onclick="plusSlides(1, 0)">&#10095;</button>
+                </div>
+                <div class="dots">
+                    <span onclick="currentSlide(1, 0)"></span>
+                    <span onclick="currentSlide(2, 0)"></span>
+                    <span onclick="currentSlide(3, 0)"></span>
+                </div>
             </div>
+            <!-- 店舗2 -->
             <div class="job-card">
                 <h3>渋谷サロン - アシスタント募集</h3>
                 <p>時給: 1,200円〜 / 未経験歓迎</p>
-                <button>詳細を見る</button>
+                <div class="slideshow-container">
+                    <img class="slides" src="https://via.placeholder.com/400x200?text=渋谷サロン+1" alt="渋谷サロン写真1">
+                    <img class="slides" src="https://via.placeholder.com/400x200?text=渋谷サロン+2" alt="渋谷サロン写真2">
+                    <img class="slides" src="https://via.placeholder.com/400x200?text=渋谷サロン+3" alt="渋谷サロン写真3">
+                    <button class="prev" onclick="plusSlides(-1, 1)">&#10094;</button>
+                    <button class="next" onclick="plusSlides(1, 1)">&#10095;</button>
+                </div>
+                <div class="dots">
+                    <span onclick="currentSlide(1, 1)"></span>
+                    <span onclick="currentSlide(2, 1)"></span>
+                    <span onclick="currentSlide(3, 1)"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -225,35 +214,33 @@
     </footer>
 
     <script>
-        let slideIndex = 1;
-        showSlides(slideIndex);
+        const slideIndices = [1, 1];
+        const slideElements = [
+            document.querySelectorAll(".job-card:nth-of-type(1) .slides"),
+            document.querySelectorAll(".job-card:nth-of-type(2) .slides")
+        ];
 
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
-        }
-
-        function currentSlide(n) {
-            showSlides(slideIndex = n);
-        }
-
-        function showSlides(n) {
-            let i;
-            const slides = document.getElementsByClassName("slides");
-            const dots = document.getElementsByClassName("dots")[0].children;
-
-            if (n > slides.length) slideIndex = 1;
-            if (n < 1) slideIndex = slides.length;
-
-            for (i = 0; i < slides.length; i++) {
+        function showSlides(n, group) {
+            let slides = slideElements[group];
+            if (n > slides.length) slideIndices[group] = 1;
+            if (n < 1) slideIndices[group] = slides.length;
+            for (let i = 0; i < slides.length; i++) {
                 slides[i].style.display = "none";
             }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-
-            slides[slideIndex - 1].style.display = "block";
-            dots[slideIndex - 1].className += " active";
+            slides[slideIndices[group] - 1].style.display = "block";
         }
+
+        function plusSlides(n, group) {
+            showSlides(slideIndices[group] += n, group);
+        }
+
+        function currentSlide(n, group) {
+            showSlides(slideIndices[group] = n, group);
+        }
+
+        slideElements.forEach((slides, index) => {
+            showSlides(1, index);
+        });
     </script>
 </body>
 </html>
