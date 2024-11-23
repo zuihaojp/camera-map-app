@@ -32,11 +32,12 @@
 <body>
   <h1>うさぎゲーム</h1>
   <a href="index.html">ゲーム選択画面に戻る</a>
+  <p>ライフ: <span id="life">10</span> | スコア: <span id="score">0</span></p>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-    
+
     // プレイヤーのデータ
     const player = {
       x: canvas.width / 2 - 25,
@@ -45,20 +46,26 @@
       height: 50,
       speed: 5,
       bullets: [],
-      image: new Image()
+      image: new Image(),
     };
-    player.image.src = "player.png"; // プレイヤーの画像 (例: `player.png` を同じフォルダに配置)
+    player.image.src = "player.png";
 
     // 敵キャラクターのデータ
     const invaders = [];
-    const rows = 10, cols = 15, invaderWidth = 30, invaderHeight = 30;
+    const rows = 4, cols = 8, invaderWidth = 30, invaderHeight = 30;
     const invaderImage = new Image();
-    invaderImage.src = "invader.png"; // 敵キャラクターの画像 (例: `invader.png` を同じフォルダに配置)
+    invaderImage.src = "invader.png";
+
+    // 敵の弾
+    const enemyBullets = [];
+    let score = 0;
+    let life = 10;
 
     // サウンド
-    const fireSound = new Audio("fire.mp3"); // 弾発射音 (例: `fire.mp3` を同じフォルダに配置)
+    const fireSound = new Audio("fire.mp3");
+    const enemyFireSound = new Audio("enemy_fire.mp3");
 
-    let leftPressed = false, rightPressed = false, spacePressed = false;
+    let upPressed = false, downPressed = false, leftPressed = false, rightPressed = false, spacePressed = false;
 
     // 敵キャラクターの初期配置
     for (let row = 0; row < rows; row++) {
@@ -77,12 +84,16 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") leftPressed = true;
       if (e.key === "ArrowRight") rightPressed = true;
+      if (e.key === "ArrowUp") upPressed = true;
+      if (e.key === "ArrowDown") downPressed = true;
       if (e.key === " ") spacePressed = true;
     });
 
     document.addEventListener("keyup", (e) => {
       if (e.key === "ArrowLeft") leftPressed = false;
       if (e.key === "ArrowRight") rightPressed = false;
+      if (e.key === "ArrowUp") upPressed = false;
+      if (e.key === "ArrowDown") downPressed = false;
       if (e.key === " ") spacePressed = false;
     });
 
@@ -96,7 +107,7 @@
       ctx.fillStyle = "red";
       player.bullets.forEach((bullet, index) => {
         ctx.fillRect(bullet.x, bullet.y, 5, 10);
-        bullet.y -= 5;
+        bullet.y -= 7;
 
         // 弾が画面外に出たら削除
         if (bullet.y < 0) {
@@ -114,6 +125,8 @@
           ) {
             invader.destroyed = true;
             player.bullets.splice(index, 1);
+            score += 10;
+            document.getElementById("score").textContent = score;
           }
         });
       });
@@ -124,6 +137,54 @@
       invaders.forEach((invader) => {
         if (!invader.destroyed) {
           ctx.drawImage(invaderImage, invader.x, invader.y, invader.width, invader.height);
+
+          // 敵がランダムに弾を発射
+          if (Math.random() < 0.01) {
+            fireEnemyBullet(invader);
+          }
+        }
+      });
+    }
+
+    // 敵の弾を発射
+    function fireEnemyBullet(invader) {
+      enemyBullets.push({
+        x: invader.x + invader.width / 2 - 2.5,
+        y: invader.y + invader.height,
+        width: 5,
+        height: 10,
+      });
+      enemyFireSound.play();
+    }
+
+    // 敵の弾を描画
+    function drawEnemyBullets() {
+      ctx.fillStyle = "yellow";
+      enemyBullets.forEach((bullet, index) => {
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        bullet.y += 5;
+
+        // 弾がプレイヤーに当たったか確認
+        if (
+          bullet.x > player.x &&
+          bullet.x < player.x + player.width &&
+          bullet.y > player.y &&
+          bullet.y < player.y + player.height
+        ) {
+          enemyBullets.splice(index, 1);
+          life -= 1;
+          document.getElementById("life").textContent = life;
+
+          // ゲームオーバー
+          if (life <= 0) {
+            alert("ゲームオーバー！スコア: " + score);
+            document.location.reload();
+          }
+        }
+
+        // 弾が画面外に出たら削除
+        if (bullet.y > canvas.height) {
+          enemyBullets.splice(index, 1);
         }
       });
     }
@@ -132,16 +193,18 @@
     function movePlayer() {
       if (leftPressed && player.x > 0) player.x -= player.speed;
       if (rightPressed && player.x + player.width < canvas.width) player.x += player.speed;
+      if (upPressed && player.y > 0) player.y -= player.speed;
+      if (downPressed && player.y + player.height < canvas.height) player.y += player.speed;
       if (spacePressed) {
         fireBullet();
-        spacePressed = false; // 一回の押下で一発だけ発射
+        spacePressed = false;
       }
     }
 
     // 弾を発射
     function fireBullet() {
-      player.bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y - 10 });
-      fireSound.play(); // 弾発射音を再生
+      player.bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y });
+      fireSound.play();
     }
 
     // ゲームループ
@@ -150,15 +213,9 @@
 
       drawPlayer();
       drawBullets();
+      drawEnemyBullets();
       drawInvaders();
       movePlayer();
-
-      if (invaders.every((invader) => invader.destroyed)) {
-        ctx.fillStyle = "white";
-        ctx.font = "30px Arial";
-        ctx.fillText("ゲームクリア！", canvas.width / 2 - 100, canvas.height / 2);
-        return; // ゲーム終了
-      }
 
       requestAnimationFrame(gameLoop);
     }
