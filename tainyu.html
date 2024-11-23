@@ -5,27 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美容師体験入店サイト</title>
     <link rel="manifest" href="manifest1.json">
-    <meta name="theme-color" content="#2c3e50">
+    <meta name="theme-color" content="#ff6f61">
     <style>
         /* 基本スタイル */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #fff7f0;
+            color: #333;
         }
 
         header {
-            background-color: #2c3e50;
+            background-color: #ff6f61;
             color: white;
             padding: 20px;
             text-align: center;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: bold;
         }
 
         nav {
-            background-color: #34495e;
-            color: white;
+            background-color: #ffb8a4;
             display: flex;
             justify-content: center;
             padding: 10px;
@@ -36,6 +37,7 @@
             color: white;
             text-decoration: none;
             font-size: 16px;
+            font-weight: bold;
         }
 
         nav a:hover {
@@ -49,9 +51,71 @@
         }
 
         h1, h2 {
-            color: #2c3e50;
+            color: #ff6f61;
         }
 
+        /* スライドショー */
+        .slideshow-container {
+            position: relative;
+            max-width: 100%;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .slides {
+            display: none;
+            width: 100%;
+        }
+
+        .slideshow-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 50%;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .dots {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .dots span {
+            cursor: pointer;
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: #ccc;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dots .active {
+            background-color: #ff6f61;
+        }
+
+        /* 求人カード */
         .job-list {
             display: flex;
             flex-wrap: wrap;
@@ -61,20 +125,22 @@
         .job-card {
             flex: 1 1 calc(33% - 15px);
             background-color: #ffffff;
-            border: 1px solid #ddd;
+            border: 2px solid #ffb8a4;
             border-radius: 8px;
             padding: 15px;
+            text-align: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
+            transition: transform 0.2s, background-color 0.3s;
         }
 
         .job-card:hover {
             transform: translateY(-5px);
+            background-color: #ffebde;
         }
 
         .job-card h3 {
             margin: 0;
-            color: #2c3e50;
+            color: #ff6f61;
         }
 
         .job-card p {
@@ -84,7 +150,7 @@
 
         .job-card button {
             padding: 10px 15px;
-            background-color: #3498db;
+            background-color: #ff6f61;
             color: white;
             border: none;
             border-radius: 5px;
@@ -93,53 +159,13 @@
         }
 
         .job-card button:hover {
-            background-color: #2980b9;
-        }
-
-        .form-container {
-            display: none;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-container.active {
-            display: block;
-        }
-
-        .form-container label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-
-        .form-container input,
-        .form-container textarea {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 100%;
-        }
-
-        .form-container button {
-            padding: 10px 15px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .form-container button:hover {
-            background-color: #2980b9;
+            background-color: #ff3b28;
         }
 
         footer {
             text-align: center;
             padding: 20px;
-            background-color: #2c3e50;
+            background-color: #ff6f61;
             color: white;
         }
 
@@ -159,61 +185,74 @@
 <body>
     <header>美容師体験入店サイト</header>
     <nav>
-        <a href="index.html">ホーム</a>
+        <a href="#slideshow">ギャラリー</a>
         <a href="#jobs">求人リスト</a>
-        <a href="#mypage">マイページ</a>
-        <a href="#admin">管理画面</a>
+        <a href="#login">ログイン</a>
     </nav>
     <div class="container">
+        <!-- スライドショー -->
+        <h1 id="slideshow">美容院ギャラリー</h1>
+        <div class="slideshow-container">
+            <img class="slides" src="https://via.placeholder.com/1200x400?text=Salon+1" alt="美容院写真1">
+            <img class="slides" src="https://via.placeholder.com/1200x400?text=Salon+2" alt="美容院写真2">
+            <img class="slides" src="https://via.placeholder.com/1200x400?text=Salon+3" alt="美容院写真3">
+            <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
+            <button class="next" onclick="plusSlides(1)">&#10095;</button>
+        </div>
+        <div class="dots">
+            <span onclick="currentSlide(1)"></span>
+            <span onclick="currentSlide(2)"></span>
+            <span onclick="currentSlide(3)"></span>
+        </div>
+
+        <!-- 求人リスト -->
         <h1 id="jobs">求人リスト</h1>
         <div class="job-list">
             <div class="job-card">
                 <h3>銀座サロン - スタイリスト募集</h3>
                 <p>時給: 1,500円〜 / 即日体験可能</p>
-                <button onclick="showForm('銀座サロン')">体験入店を申し込む</button>
+                <button>詳細を見る</button>
             </div>
             <div class="job-card">
                 <h3>渋谷サロン - アシスタント募集</h3>
                 <p>時給: 1,200円〜 / 未経験歓迎</p>
-                <button onclick="showForm('渋谷サロン')">体験入店を申し込む</button>
+                <button>詳細を見る</button>
             </div>
         </div>
-
-        <div class="form-container" id="application-form">
-            <h2 id="form-title">体験入店申し込み</h2>
-            <form onsubmit="submitForm(event)">
-                <label for="name">お名前</label>
-                <input type="text" id="name" name="name" required>
-                <label for="phone">電話番号</label>
-                <input type="tel" id="phone" name="phone" required>
-                <label for="email">メールアドレス</label>
-                <input type="email" id="email" name="email" required>
-                <label for="message">メッセージ</label>
-                <textarea id="message" name="message" rows="4" required></textarea>
-                <button type="submit">送信</button>
-            </form>
-        </div>
-
-        <h1 id="mypage">マイページ</h1>
-        <p>※ここにユーザーの申し込み履歴などを表示する予定</p>
-
-        <h1 id="admin">管理画面</h1>
-        <p>※ここに管理者用の求人管理や応募管理を表示する予定</p>
     </div>
     <footer>
         © 2024 美容師体験入店サイト
     </footer>
 
     <script>
-        function showForm(jobTitle) {
-            document.getElementById('form-title').textContent = `${jobTitle} - 体験入店申し込み`;
-            document.getElementById('application-form').classList.add('active');
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
         }
 
-        function submitForm(event) {
-            event.preventDefault();
-            alert('申し込みが送信されました！');
-            document.getElementById('application-form').classList.remove('active');
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            const slides = document.getElementsByClassName("slides");
+            const dots = document.getElementsByClassName("dots")[0].children;
+
+            if (n > slides.length) slideIndex = 1;
+            if (n < 1) slideIndex = slides.length;
+
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
         }
     </script>
 </body>
