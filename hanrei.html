@@ -78,6 +78,21 @@
     .back-button:hover {
       background-color: #bd2130;
     }
+    .hidden {
+      background-color: yellow;
+    }
+    .external-link {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #17a2b8;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 18px;
+    }
+    .external-link:hover {
+      background-color: #138496;
+    }
   </style>
 </head>
 <body>
@@ -92,7 +107,8 @@
     <a href="#" class="category" data-category="刑法">刑法</a>
     <a href="#" class="category" data-category="刑事訴訟法">刑事訴訟法</a>
     <a href="#" class="category" data-category="労働基準法">労働基準法</a>
-    <p>操作説明: 科目を選択し、完全な文章をタイピングしてください。制限時間は1分です。</p>
+    <p>操作説明: 科目を選択し、タイピングで隠れた部分を含む全文を入力してください。制限時間は1分です。</p>
+    <a href="https://www.courts.go.jp/app/hanrei_jp/search2" target="_blank" class="external-link">裁判所の判例検索ページに移動</a>
   </div>
 
   <div id="game" style="display: none;">
@@ -111,14 +127,17 @@
       憲法: [
         {
           text: "日本国憲法第XX条は重要な条文である。この条文はXXXXXである。",
+          hidden: ["XX", "XXXXX"]
         },
         {
           text: "憲法に基づきXXの原則が制定された。この原則はXXXXX。",
+          hidden: ["XX", "XXXXX"]
         }
       ],
       民法: [
         {
           text: "民法第XX条ではXXXXXの規定がある。この法律は契約の基本。",
+          hidden: ["XX", "XXXXX"]
         }
       ]
     };
@@ -167,7 +186,14 @@
     function loadQuestion() {
       const questions = data[currentCategory];
       currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-      document.getElementById("question").innerHTML = currentQuestion.text;
+      const questionText = currentQuestion.text;
+
+      const formattedText = currentQuestion.hidden.reduce((text, hiddenWord) => {
+        const regex = new RegExp(hiddenWord, "g");
+        return text.replace(regex, `<span class="hidden">${hiddenWord}</span>`);
+      }, questionText);
+
+      document.getElementById("question").innerHTML = formattedText;
     }
 
     // スコア更新
@@ -188,13 +214,6 @@
       document.getElementById("answer").value = "";
       loadQuestion();
     }
-
-    // エンターキーで回答送信
-    document.getElementById("answer").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        checkAnswer();
-      }
-    });
 
     // 判定ボタンイベント
     document.getElementById("submit-answer").addEventListener("click", checkAnswer);
