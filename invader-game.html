@@ -58,8 +58,8 @@
     player.image.src = "player.png";
 
     // 敵キャラクター
-    const invaders = [];
-    const rows = 4, cols = 8, invaderWidth = 30, invaderHeight = 30;
+    let invaders = [];
+    let rows = 4, cols = 8, invaderWidth = 30, invaderHeight = 30;
     const invaderImage = new Image();
     invaderImage.src = "invader.png";
 
@@ -68,23 +68,27 @@
 
     // 敵の弾
     const enemyBullets = [];
-    let enemyFireRate = 0.01; // 弾発射確率（レベルに応じて変更）
+    let enemyFireRate = 0.005; // 弾発射確率を低く設定（半分以下）
 
     // キー操作
     let upPressed = false, downPressed = false, leftPressed = false, rightPressed = false, spacePressed = false;
 
     // 敵キャラクターの初期配置
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        invaders.push({
-          x: col * (invaderWidth + 10) + 50,
-          y: row * (invaderHeight + 10) + 30,
-          width: invaderWidth,
-          height: invaderHeight,
-          destroyed: false
-        });
+    function initializeInvaders() {
+      invaders = [];
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          invaders.push({
+            x: col * (invaderWidth + 10) + 50,
+            y: row * (invaderHeight + 10) + 30,
+            width: invaderWidth,
+            height: invaderHeight,
+            destroyed: false
+          });
+        }
       }
     }
+    initializeInvaders();
 
     // キーイベント
     document.addEventListener("keydown", (e) => {
@@ -144,7 +148,14 @@
             if (score >= level * levelThreshold) {
               level++;
               document.getElementById("level").textContent = level;
-              enemyFireRate += 0.005; // 弾の発射頻度アップ
+
+              // 敵のサイズを小さくして数を増やす
+              rows++;
+              cols++;
+              invaderWidth -= 5;
+              invaderHeight -= 5;
+              enemyFireRate += 0.002; // 弾の発射頻度アップ
+              initializeInvaders();
             }
           }
         });
