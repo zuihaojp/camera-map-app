@@ -26,6 +26,15 @@
       font-size: 20px;
       margin: 10px 0;
     }
+    #input-box {
+      margin-top: 20px;
+      font-size: 18px;
+      padding: 10px;
+      width: 50%;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
@@ -33,6 +42,7 @@
   <p class="scoreboard">スコア: <span id="score">0</span></p>
   <p class="scoreboard">ミス: <span id="miss">0</span></p>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <input type="text" id="input-box" placeholder="ここに入力してエンターキーを押してください">
   <script>
     // キャンバス設定
     const canvas = document.getElementById('gameCanvas');
@@ -40,8 +50,8 @@
 
     // ゲームデータ
     let words = [
-      "契約", "債務", "債権", "代理", "民事訴訟", "刑事責任", "契約解除", 
-      "所有権", "抵当権", "過失相殺", "不法行為", "相続", "信託", "譲渡", 
+      "契約", "債務", "債権", "代理", "民事訴訟", "刑事責任", "契約解除",
+      "所有権", "抵当権", "過失相殺", "不法行為", "相続", "信託", "譲渡",
       "憲法", "行政訴訟", "会社法", "労働基準法", "条文"
     ];
     let activeWords = [];
@@ -56,7 +66,6 @@
         this.x = x;
         this.y = y;
         this.speed = speed;
-        this.width = ctx.measureText(text).width;
       }
       draw() {
         ctx.fillStyle = 'white';
@@ -76,27 +85,37 @@
       return new Word(text, x, 0, speed);
     }
 
-    // タイピング処理
-    function handleTyping(e) {
-      const input = e.key;
-      for (let i = 0; i < activeWords.length; i++) {
-        if (activeWords[i].text.startsWith(input)) {
-          activeWords[i].text = activeWords[i].text.slice(1);
-          if (activeWords[i].text === "") {
-            score += 10;
-            activeWords.splice(i, 1);
+    // プレイヤー入力の処理
+    const inputBox = document.getElementById('input-box');
+    inputBox.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const userInput = inputBox.value.trim();
+        let foundIndex = -1;
+
+        for (let i = 0; i < activeWords.length; i++) {
+          if (activeWords[i].text === userInput) {
+            foundIndex = i;
+            break;
           }
-          document.getElementById('score').textContent = score;
-          return;
+        }
+
+        if (foundIndex !== -1) {
+          score += 10;
+          activeWords.splice(foundIndex, 1);
+        } else {
+          misses++;
+        }
+
+        document.getElementById('score').textContent = score;
+        document.getElementById('miss').textContent = misses;
+        inputBox.value = '';
+
+        if (misses >= maxMisses) {
+          alert('ゲームオーバー！スコア: ' + score);
+          resetGame();
         }
       }
-      misses++;
-      document.getElementById('miss').textContent = misses;
-      if (misses >= maxMisses) {
-        alert('ゲームオーバー！スコア: ' + score);
-        resetGame();
-      }
-    }
+    });
 
     // ゲームリセット
     function resetGame() {
@@ -135,7 +154,6 @@
     }
 
     // 初期化
-    document.addEventListener('keydown', handleTyping);
     gameLoop();
   </script>
 </body>
