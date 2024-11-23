@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>suikaゲーム</title>
+    <title>フルーツ進化ゲーム</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.min.js"></script>
     <style>
         body {
@@ -28,12 +28,26 @@
             font-size: 24px;
             margin: 10px;
         }
+        #nextFruitContainer {
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid white;
+            background-color: #001F3F;
+            display: inline-block;
+        }
+        #nextFruitCanvas {
+            background-color: transparent;
+        }
     </style>
 </head>
 <body>
-    <h1>suika進化ゲーム</h1>
+    <h1>フルーツ進化ゲーム</h1>
     <div id="score">スコア: <span id="scoreValue">0</span></div>
     <div id="info">操作方法: 矢印キーで左右移動、スペースキーでフルーツを落下</div>
+    <div id="nextFruitContainer">
+        次のフルーツ:
+        <canvas id="nextFruitCanvas" width="50" height="50"></canvas>
+    </div>
     <canvas id="gameCanvas" width="400" height="600"></canvas>
     <script>
         const { Engine, Render, World, Bodies, Body, Events } = Matter;
@@ -51,17 +65,19 @@
         });
 
         const ground = Bodies.rectangle(200, 590, 400, 20, { isStatic: true });
-        World.add(engine.world, ground);
+        const leftWall = Bodies.rectangle(0, 300, 20, 600, { isStatic: true });
+        const rightWall = Bodies.rectangle(400, 300, 20, 600, { isStatic: true });
+        World.add(engine.world, [ground, leftWall, rightWall]);
 
         // フルーツの定義
         const fruits = [
-            { name: "strawberry", radius: 15, score: 10, next: "apple", color: "pink", shape: "circle" },
-            { name: "apple", radius: 25, score: 20, next: "orange", color: "red", shape: "circle" },
-            { name: "orange", radius: 35, score: 30, next: "banana", color: "orange", shape: "circle" },
-            { name: "banana", radius: 45, score: 50, next: "grape", color: "yellow", shape: "ellipse" },
-            { name: "grape", radius: 55, score: 70, next: "watermelon", color: "purple", shape: "circle" },
-            { name: "watermelon", radius: 65, score: 100, next: "pineapple", color: "green", shape: "ellipse" },
-            { name: "pineapple", radius: 75, score: 150, next: null, color: "lightgreen", shape: "rectangle" }
+            { name: "strawberry", radius: 15, score: 10, next: "apple", color: "pink", restitution: 0.8 },
+            { name: "apple", radius: 25, score: 20, next: "orange", color: "red", restitution: 0.7 },
+            { name: "orange", radius: 35, score: 30, next: "banana", color: "orange", restitution: 0.6 },
+            { name: "banana", radius: 45, score: 50, next: "grape", color: "yellow", restitution: 0.5 },
+            { name: "grape", radius: 55, score: 70, next: "watermelon", color: "purple", restitution: 0.4 },
+            { name: "watermelon", radius: 65, score: 100, next: "pineapple", color: "green", restitution: 0.3 },
+            { name: "pineapple", radius: 75, score: 150, next: null, color: "lightgreen", restitution: 0.2 }
         ];
 
         let score = 0;
@@ -77,10 +93,24 @@
             const fruit = fruits.find(f => f.name === type);
             return Bodies.circle(x, y, fruit.radius, {
                 label: fruit.name,
+                restitution: fruit.restitution,
+                friction: 0.005,
                 render: {
                     fillStyle: fruit.color
                 }
             });
+        }
+
+        // 次のフルーツを描画する関数
+        function drawNextFruit(fruitName) {
+            const nextFruitCanvas = document.getElementById("nextFruitCanvas");
+            const ctx = nextFruitCanvas.getContext("2d");
+            ctx.clearRect(0, 0, nextFruitCanvas.width, nextFruitCanvas.height); // キャンバスをクリア
+            const fruit = fruits.find(f => f.name === fruitName);
+            ctx.fillStyle = fruit.color;
+            ctx.beginPath();
+            ctx.arc(25, 25, fruit.radius / 2, 0, Math.PI * 2);
+            ctx.fill();
         }
 
         // 合体処理
@@ -109,19 +139,30 @@
         // 落下中のフルーツ
         let fallingFruit = createFruit(200, 50, "strawberry");
         World.add(engine.world, fallingFruit);
+        let nextFruitType = "apple"; // 最初の次のフルーツ
+        drawNextFruit(nextFruitType);
+
         let isFalling = false;
 
         // フルーツの操作
         window.addEventListener("keydown", event => {
             if (event.key === "ArrowLeft" && !isFalling) {
-                Body.translate(fallingFruit, { x: -20, y: 0 });
+                const leftEdge = fallingFruit.position.x - fruits.find(f => f.name === fallingFruit.label).radius;
+                if (leftEdge > 20) {
+                    Body.translate(fallingFruit, { x: -20, y: 0 });
+                }
             } else if (event.key === "ArrowRight" && !isFalling) {
-                Body.translate(fallingFruit, { x: 20, y: 0 });
+                const rightEdge = fallingFruit.position.x + fruits.find(f => f.name === fallingFruit.label).radius;
+                if (rightEdge < 380) {
+                    Body.translate(fallingFruit, { x: 20, y: 0 });
+                }
             } else if (event.key === " " && !isFalling) {
                 isFalling = true;
                 Body.setStatic(fallingFruit, false);
                 setTimeout(() => {
-                    fallingFruit = createFruit(200, 50, "strawberry");
+                    fallingFruit = createFruit(200, 50, nextFruitType);
+                    nextFruitType = fruits.find(f => f.name === fallingFruit.label).next || "strawberry";
+                    drawNextFruit(nextFruitType);
                     World.add(engine.world, fallingFruit);
                     isFalling = false;
                 }, 1000);
