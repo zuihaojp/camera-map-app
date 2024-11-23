@@ -41,6 +41,7 @@
   <h1>法律用語タイピングゲーム</h1>
   <p class="scoreboard">スコア: <span id="score">0</span></p>
   <p class="scoreboard">ミス: <span id="miss">0</span></p>
+  <p class="scoreboard">レベル: <span id="level">1</span></p>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <input type="text" id="input-box" placeholder="ここに入力してエンターキーを押してください">
   <script>
@@ -58,6 +59,8 @@
     let score = 0;
     let misses = 0;
     const maxMisses = 5;
+    let level = 1;
+    let dropSpeedMultiplier = 1; // 文字の落下速度にかかる倍率
 
     // Word クラス
     class Word {
@@ -73,7 +76,7 @@
         ctx.fillText(this.text, this.x, this.y);
       }
       update() {
-        this.y += this.speed;
+        this.y += this.speed * dropSpeedMultiplier; // レベルに応じてスピードを加速
       }
     }
 
@@ -102,6 +105,9 @@
         if (foundIndex !== -1) {
           score += 10;
           activeWords.splice(foundIndex, 1);
+
+          // レベルアップチェック
+          checkLevelUp();
         } else {
           misses++;
         }
@@ -117,13 +123,25 @@
       }
     });
 
+    // レベルアップ判定
+    function checkLevelUp() {
+      if (score % 50 === 0 && level < 10) { // スコア50ごとにレベルアップ
+        level++;
+        dropSpeedMultiplier += 0.2; // スピードを少しずつ速くする
+        document.getElementById('level').textContent = level;
+      }
+    }
+
     // ゲームリセット
     function resetGame() {
       activeWords = [];
       score = 0;
       misses = 0;
+      level = 1;
+      dropSpeedMultiplier = 1;
       document.getElementById('score').textContent = score;
       document.getElementById('miss').textContent = misses;
+      document.getElementById('level').textContent = level;
     }
 
     // ゲームループ
