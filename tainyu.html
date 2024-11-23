@@ -4,22 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美容師体験入店サイト</title>
-    <link rel="manifest" href="manifest1.json">
-    <meta name="theme-color" content="#ff6f61">
     <style>
         /* フォントと基本デザイン */
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap');
 
         body {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Fredoka', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #fff7f0;
+            background-color: #fef8e8;
             color: #333;
         }
 
         header {
-            background-color: #ff6f61;
+            background-color: #ffd1dc;
             color: white;
             padding: 20px;
             text-align: center;
@@ -47,65 +45,129 @@
         }
 
         .container {
-            max-width: 800px;
-            margin: 20px auto;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            background-color: white;
-            border-radius: 8px;
+        }
+
+        .hero {
+            background-color: #fff0f5;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2 {
+        .hero img {
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
             color: #ff6f61;
+            margin: 20px 0;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
-        form input, form button {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .card img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
-        form button {
+        .card h3 {
+            font-size: 18px;
+            color: #ff6f61;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .card button {
+            padding: 10px 20px;
             background-color: #ff6f61;
             color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
             cursor: pointer;
         }
 
-        form button:hover {
+        .card button:hover {
             background-color: #ff3b28;
         }
 
-        .message {
+        footer {
+            background-color: #ffd1dc;
+            color: white;
             text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
+            padding: 15px;
+            margin-top: 20px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
     </style>
 </head>
 <body>
     <header>美容師体験入店サイト</header>
     <nav>
+        <a href="#home">ホーム</a>
         <a href="#jobs">求人リスト</a>
         <a href="#login">ログイン</a>
-        <a href="#register">新規登録</a>
         <a href="#history">応募履歴</a>
     </nav>
-    <div class="container" id="jobs">
+
+    <div id="home" class="container">
+        <!-- ホームセクション -->
+        <div class="hero">
+            <img src="https://via.placeholder.com/1200x400?text=Welcome+to+the+Salon+Job+Site" alt="Welcome">
+            <h1>美容師の新しい働き方を応援します！</h1>
+            <p>体験入店で自分にぴったりのサロンを見つけてみませんか？</p>
+        </div>
+    </div>
+
+    <div id="jobs" class="container">
+        <!-- 求人リスト -->
         <h1>求人リスト</h1>
-        <div class="job-list">
-            <div class="job-card">
+        <div class="grid">
+            <div class="card">
+                <img src="https://via.placeholder.com/250x250?text=銀座サロン" alt="銀座サロン">
                 <h3>銀座サロン - スタイリスト募集</h3>
                 <p>時給: 1,500円〜 / 即日体験可能</p>
                 <button onclick="applyForJob('銀座サロン')">応募する</button>
             </div>
-            <div class="job-card">
+            <div class="card">
+                <img src="https://via.placeholder.com/250x250?text=渋谷サロン" alt="渋谷サロン">
                 <h3>渋谷サロン - アシスタント募集</h3>
                 <p>時給: 1,200円〜 / 未経験歓迎</p>
                 <button onclick="applyForJob('渋谷サロン')">応募する</button>
@@ -113,110 +175,19 @@
         </div>
     </div>
 
-    <div class="container" id="login" style="display: none;">
-        <h1>ログイン</h1>
-        <form id="login-form">
-            <label for="email">メールアドレス</label>
-            <input type="email" id="login-email" placeholder="例: user@example.com" required>
-            <label for="password">パスワード</label>
-            <input type="password" id="login-password" placeholder="パスワードを入力" required>
-            <button type="submit">ログイン</button>
-        </form>
-        <div class="message" id="login-message"></div>
-    </div>
-
-    <div class="container" id="register" style="display: none;">
-        <h1>新規登録</h1>
-        <form id="register-form">
-            <label for="register-email">メールアドレス</label>
-            <input type="email" id="register-email" placeholder="例: user@example.com" required>
-            <label for="register-password">パスワード</label>
-            <input type="password" id="register-password" placeholder="パスワードを設定" required>
-            <label for="id-proof">身分証明書の添付</label>
-            <input type="file" id="id-proof" accept="image/*" required>
-            <button type="submit">登録</button>
-        </form>
-        <div class="message" id="register-message"></div>
-    </div>
-
-    <div class="container" id="history" style="display: none;">
+    <div id="history" class="container" style="display: none;">
         <h1>応募履歴</h1>
         <ul id="application-history"></ul>
     </div>
 
     <script>
-        // ログイン・登録情報を管理
-        const users = JSON.parse(localStorage.getItem("users")) || [];
-        let applicationHistory = JSON.parse(localStorage.getItem("applicationHistory")) || [];
-
         function applyForJob(jobTitle) {
-            const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-            if (!isLoggedIn) {
-                alert("応募するにはログインまたは新規登録が必要です。");
-                showSection("register");
-            } else {
-                alert(`${jobTitle} に応募しました！`);
-                applicationHistory.push({ job: jobTitle, date: new Date().toLocaleString() });
-                localStorage.setItem("applicationHistory", JSON.stringify(applicationHistory));
-                showSection("history");
-                updateHistory();
-            }
+            alert(`${jobTitle}に応募しました！`);
         }
-
-        document.getElementById("login-form").addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const email = document.getElementById("login-email").value;
-            const password = document.getElementById("login-password").value;
-            const user = users.find((u) => u.email === email && u.password === password);
-
-            const message = document.getElementById("login-message");
-
-            if (user) {
-                localStorage.setItem("isLoggedIn", true);
-                message.textContent = "ログイン成功！";
-                message.style.color = "green";
-                setTimeout(() => {
-                    showSection("jobs");
-                }, 1500);
-            } else {
-                message.textContent = "メールアドレスまたはパスワードが間違っています。";
-                message.style.color = "red";
-            }
-        });
-
-        document.getElementById("register-form").addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const email = document.getElementById("register-email").value;
-            const password = document.getElementById("register-password").value;
-
-            users.push({ email, password });
-            localStorage.setItem("users", JSON.stringify(users));
-
-            document.getElementById("register-message").textContent = "登録が完了しました！";
-            document.getElementById("register-message").style.color = "green";
-            setTimeout(() => {
-                showSection("login");
-            }, 1500);
-        });
-
-        function showSection(sectionId) {
-            document.querySelectorAll(".container").forEach((section) => {
-                section.style.display = "none";
-            });
-            document.getElementById(sectionId).style.display = "block";
-        }
-
-        function updateHistory() {
-            const historyElement = document.getElementById("application-history");
-            historyElement.innerHTML = applicationHistory
-                .map((entry) => `<li>${entry.job} - ${entry.date}</li>`)
-                .join("");
-        }
-
-        updateHistory();
     </script>
+
+    <footer>
+        © 2024 美容師体験入店サイト
+    </footer>
 </body>
 </html>
