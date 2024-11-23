@@ -18,7 +18,11 @@
             display: block;
             margin: 20px auto;
             border: 2px solid white;
-            background-color: #dff7e1;
+            background-color: #001F3F;
+        }
+        #info {
+            font-size: 18px;
+            margin: 10px;
         }
         #score {
             font-size: 24px;
@@ -29,6 +33,7 @@
 <body>
     <h1>スイカゲーム</h1>
     <div id="score">スコア: <span id="scoreValue">0</span></div>
+    <div id="info">操作方法: 矢印キーで左右移動、スペースキーでフルーツを落下</div>
     <canvas id="gameCanvas" width="400" height="600"></canvas>
     <script>
         const { Engine, Render, World, Bodies, Body, Events } = Matter;
@@ -68,6 +73,7 @@
             const fruit = fruits.find(f => f.name === type);
             return Bodies.circle(x, y, fruit.radius, {
                 label: fruit.name,
+                isStatic: true,
                 render: { fillStyle: fruit.color }
             });
         }
@@ -94,18 +100,21 @@
         // 落下中のフルーツ
         let fallingFruit = createFruit(200, 50, "small");
         World.add(engine.world, fallingFruit);
+        let isFalling = false;
 
-        // フルーツの落下操作
+        // フルーツの操作
         window.addEventListener("keydown", event => {
-            if (event.key === "ArrowLeft") {
+            if (event.key === "ArrowLeft" && !isFalling) {
                 Body.translate(fallingFruit, { x: -20, y: 0 });
-            } else if (event.key === "ArrowRight") {
+            } else if (event.key === "ArrowRight" && !isFalling) {
                 Body.translate(fallingFruit, { x: 20, y: 0 });
-            } else if (event.key === " ") {
+            } else if (event.key === " " && !isFalling) {
+                isFalling = true;
                 Body.setStatic(fallingFruit, false);
                 setTimeout(() => {
                     fallingFruit = createFruit(200, 50, "small");
                     World.add(engine.world, fallingFruit);
+                    isFalling = false;
                 }, 1000);
             }
         });
