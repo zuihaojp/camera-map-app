@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スイカゲーム</title>
+    <title>フルーツ進化ゲーム</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.min.js"></script>
     <style>
         body {
@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-    <h1>スイカゲーム</h1>
+    <h1>フルーツ進化ゲーム</h1>
     <div id="score">スコア: <span id="scoreValue">0</span></div>
     <div id="info">操作方法: 矢印キーで左右移動、スペースキーでフルーツを落下</div>
     <canvas id="gameCanvas" width="400" height="600"></canvas>
@@ -53,11 +53,15 @@
         const ground = Bodies.rectangle(200, 590, 400, 20, { isStatic: true });
         World.add(engine.world, ground);
 
+        // フルーツの定義
         const fruits = [
-            { name: "small", radius: 15, score: 10, next: "medium", color: "yellow", mass: 0.5 },
-            { name: "medium", radius: 30, score: 20, next: "large", color: "orange", mass: 1 },
-            { name: "large", radius: 45, score: 50, next: "xlarge", color: "red", mass: 1.5 },
-            { name: "xlarge", radius: 60, score: 100, next: null, color: "purple", mass: 2 }
+            { name: "strawberry", radius: 15, score: 10, next: "apple", color: "pink", shape: "circle" },
+            { name: "apple", radius: 25, score: 20, next: "orange", color: "red", shape: "circle" },
+            { name: "orange", radius: 35, score: 30, next: "banana", color: "orange", shape: "circle" },
+            { name: "banana", radius: 45, score: 50, next: "grape", color: "yellow", shape: "ellipse" },
+            { name: "grape", radius: 55, score: 70, next: "watermelon", color: "purple", shape: "circle" },
+            { name: "watermelon", radius: 65, score: 100, next: "pineapple", color: "green", shape: "ellipse" },
+            { name: "pineapple", radius: 75, score: 150, next: null, color: "lightgreen", shape: "rectangle" }
         ];
 
         let score = 0;
@@ -68,19 +72,18 @@
             document.getElementById("scoreValue").textContent = score;
         }
 
-        // ランダムなフルーツを作成
+        // フルーツ生成
         function createFruit(x, y, type) {
             const fruit = fruits.find(f => f.name === type);
             return Bodies.circle(x, y, fruit.radius, {
                 label: fruit.name,
-                mass: fruit.mass,
-                friction: 0.005,
-                restitution: 0.7, // バウンド係数
-                render: { fillStyle: fruit.color }
+                render: {
+                    fillStyle: fruit.color
+                }
             });
         }
 
-        // 衝突時のマージ処理
+        // 合体処理
         Events.on(engine, "collisionStart", function (event) {
             event.pairs.forEach(pair => {
                 const [bodyA, bodyB] = [pair.bodyA, pair.bodyB];
@@ -104,7 +107,7 @@
         });
 
         // 落下中のフルーツ
-        let fallingFruit = createFruit(200, 50, "small");
+        let fallingFruit = createFruit(200, 50, "strawberry");
         World.add(engine.world, fallingFruit);
         let isFalling = false;
 
@@ -117,9 +120,8 @@
             } else if (event.key === " " && !isFalling) {
                 isFalling = true;
                 Body.setStatic(fallingFruit, false);
-                Body.setVelocity(fallingFruit, { x: Math.random() * 2 - 1, y: 0 }); // 転がり方向
                 setTimeout(() => {
-                    fallingFruit = createFruit(200, 50, "small");
+                    fallingFruit = createFruit(200, 50, "strawberry");
                     World.add(engine.world, fallingFruit);
                     isFalling = false;
                 }, 1000);
