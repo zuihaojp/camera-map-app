@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>判例タイピングゲーム - 憲法</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>判例タイピングゲーム - 憲法</h1>
+  <div id="game">
+    <div class="question" id="question">
+    公務員の就任権は、日本国民主権に関連しその性質上に日本国民に限られる。
+    </div>
+    <input type="text" id="answer" placeholder="入力してください">
+    <button class="button" id="submit-answer">判定</button>
+    <div class="score">スコア: <span id="score">0</span></div>
+    <div class="timer">残り時間: <span id="timer">60</span>秒</div>
+    <a href="index.html" class="back-button">科目選択に戻る</a>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    const questions = [
+      {
+        text: "法の支配とは、「人」の支配を排斥し、権力を「法」で拘束することによって国民の自由を保障する原理である。",
+        hidden: ["人", "法"]
+      },
+      {
+        text: "未成年は国民であり、未成年の人権享有主体性は「認められる」。未成年の人権の根拠は、他者加害のほかに未成熟な未成年自身の健全な育成保護を図ることも含まれる。",
+        hidden: ["認められる"]
+      }
+    ];
+    startGame(questions);
+  </script>
+</body>
+</html>
