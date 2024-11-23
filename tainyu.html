@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美容師体験入店サイト</title>
-    <link rel="manifest" href="manifest1.json">
-    <meta name="theme-color" content="#ff6f61">
     <style>
-        /* 高級感のあるフォント */
+        /* フォントと基本デザイン */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
 
         body {
@@ -47,7 +45,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background-color: white;
@@ -60,14 +58,46 @@
             text-align: center;
         }
 
-        form {
+        .job-list {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        form label {
-            font-size: 14px;
+        .job-card {
+            background-color: #fff;
+            border: 1px solid #ffb8a4;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-card h3 {
+            color: #ff6f61;
+            margin: 0 0 10px;
+        }
+
+        .job-card p {
+            margin: 0 0 15px;
+        }
+
+        .job-card button {
+            padding: 10px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .job-card button:hover {
+            background-color: #ff3b28;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         form input {
@@ -93,59 +123,111 @@
             text-align: center;
             margin-top: 15px;
             font-size: 14px;
-            color: green;
         }
     </style>
 </head>
 <body>
     <header>美容師体験入店サイト</header>
     <nav>
-        <a href="#login">ログイン</a>
         <a href="#jobs">求人リスト</a>
+        <a href="#login">ログイン</a>
+        <a href="#history">応募履歴</a>
     </nav>
-    <div class="container">
+    <div class="container" id="jobs">
+        <h1>求人リスト</h1>
+        <div class="job-list">
+            <div class="job-card">
+                <h3>銀座サロン - スタイリスト募集</h3>
+                <p>時給: 1,500円〜 / 即日体験可能</p>
+                <button onclick="applyForJob('銀座サロン')">応募する</button>
+            </div>
+            <div class="job-card">
+                <h3>渋谷サロン - アシスタント募集</h3>
+                <p>時給: 1,200円〜 / 未経験歓迎</p>
+                <button onclick="applyForJob('渋谷サロン')">応募する</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="login" style="display: none;">
         <h1>ログイン</h1>
         <form id="login-form">
             <label for="email">メールアドレス</label>
-            <input type="email" id="email" name="email" placeholder="例: user@example.com" required>
+            <input type="email" id="email" placeholder="例: user@example.com" required>
             <label for="password">パスワード</label>
-            <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
+            <input type="password" id="password" placeholder="パスワードを入力" required>
             <button type="submit">ログイン</button>
         </form>
         <div class="message" id="login-message"></div>
     </div>
 
+    <div class="container" id="history" style="display: none;">
+        <h1>応募履歴</h1>
+        <ul id="application-history"></ul>
+    </div>
+
     <script>
         // ユーザー情報を保存（デモ用）
         const users = [
-            { email: "user1@example.com", password: "password123" },
-            { email: "user2@example.com", password: "password456" }
+            { email: "user1@example.com", password: "password123" }
         ];
 
-        document.getElementById('login-form').addEventListener('submit', function(event) {
+        // 応募履歴を管理
+        let applicationHistory = JSON.parse(localStorage.getItem("applicationHistory")) || [];
+
+        function applyForJob(jobTitle) {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+            if (!isLoggedIn) {
+                alert("応募するにはログインが必要です。");
+                showSection("login");
+            } else {
+                alert(`${jobTitle} に応募しました！`);
+                applicationHistory.push({ job: jobTitle, date: new Date().toLocaleString() });
+                localStorage.setItem("applicationHistory", JSON.stringify(applicationHistory));
+                showSection("history");
+                updateHistory();
+            }
+        }
+
+        document.getElementById("login-form").addEventListener("submit", function (event) {
             event.preventDefault();
 
-            // 入力情報を取得
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const user = users.find((u) => u.email === email && u.password === password);
 
-            // ユーザー情報を確認
-            const user = users.find(user => user.email === email && user.password === password);
-
-            const messageElement = document.getElementById('login-message');
+            const message = document.getElementById("login-message");
 
             if (user) {
-                messageElement.textContent = "ログイン成功！";
-                messageElement.style.color = "green";
-                // ログイン成功後の処理（例: ページリダイレクト）
+                localStorage.setItem("isLoggedIn", true);
+                message.textContent = "ログイン成功！";
+                message.style.color = "green";
                 setTimeout(() => {
-                    window.location.href = "#jobs";
+                    showSection("jobs");
                 }, 1500);
             } else {
-                messageElement.textContent = "メールアドレスまたはパスワードが間違っています。";
-                messageElement.style.color = "red";
+                message.textContent = "メールアドレスまたはパスワードが間違っています。";
+                message.style.color = "red";
             }
         });
+
+        function showSection(sectionId) {
+            document.querySelectorAll(".container").forEach((section) => {
+                section.style.display = "none";
+            });
+            document.getElementById(sectionId).style.display = "block";
+        }
+
+        function updateHistory() {
+            const historyElement = document.getElementById("application-history");
+            historyElement.innerHTML = applicationHistory
+                .map((entry) => `<li>${entry.job} - ${entry.date}</li>`)
+                .join("");
+        }
+
+        // ページ読み込み時に履歴を更新
+        updateHistory();
     </script>
 </body>
 </html>
