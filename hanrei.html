@@ -1,171 +1,185 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>判例タイピングゲーム</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        #instructions {
-            margin-bottom: 20px;
-        }
-        #game-container {
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            background: white;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        #question {
-            font-size: 16px;
-            margin: 20px 0;
-            line-height: 1.6;
-        }
-        #input {
-            width: 90%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-        #score, #timer {
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        #next-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: block;
-            margin: 10px auto;
-        }
-        #next-button:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>判例タイピングゲーム</title>
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .category {
+      margin: 10px;
+      padding: 10px;
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 18px;
+    }
+    .category:hover {
+      background-color: #0056b3;
+    }
+    .question {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 18px;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #218838;
+    }
+    .score {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #333;
+    }
+    .link {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+    .hidden {
+      background-color: yellow;
+    }
+  </style>
 </head>
 <body>
-    <h1>判例タイピングゲーム</h1>
-    <div id="instructions">
-        <p>操作方法:</p>
-        <ul>
-            <li>タイピングボックスに表示された判例文を正確に入力してください。</li>
-            <li>入力後、エンターキーを押して解答を送信してください。</li>
-            <li>1分間で可能な限り多く正解を目指しましょう！</li>
-        </ul>
+  <h1>判例タイピングゲーム</h1>
+  <div id="category-selection">
+    <h3>科目を選択してください</h3>
+    <a href="#" class="category" data-category="憲法">憲法</a>
+    <a href="#" class="category" data-category="行政法">行政法</a>
+    <a href="#" class="category" data-category="民法">民法</a>
+    <a href="#" class="category" data-category="民事訴訟法">民事訴訟法</a>
+    <a href="#" class="category" data-category="会社法">会社法</a>
+    <a href="#" class="category" data-category="刑法">刑法</a>
+    <a href="#" class="category" data-category="刑事訴訟法">刑事訴訟法</a>
+    <a href="#" class="category" data-category="労働基準法">労働基準法</a>
+  </div>
+
+  <div id="game" style="display: none;">
+    <div class="question" id="question">
+      判例の文がここに表示されます。
     </div>
-    <div id="game-container">
-        <div id="timer">残り時間: <span id="time">60</span> 秒</div>
-        <div id="score">スコア: <span id="score-value">0</span></div>
-        <div id="question">読み込み中...</div>
-        <input type="text" id="input" placeholder="ここにタイピング..." disabled />
-        <button id="next-button" style="display: none;">もう一度プレイ</button>
-    </div>
-    <script>
-        // 判例データ
-        const gameData = [
-            {
-                "original": "表現の自由は民主主義の基盤である。この自由がなければ情報交換が制限され、社会的発展が阻害される可能性がある。",
-                "problem": "表現の自由は_______の基盤である。この自由がなければ情報交換が制限され、社会的発展が阻害される可能性がある。",
-                "link": "https://www.courts.go.jp/app/hanrei_jp/detail?id=12345"
-            },
-            {
-                "original": "思想・良心の自由は個人の内心を守るものであり、他者の権利や自由と衝突する場合、その調整が必要とされる。",
-                "problem": "思想・_______の自由は個人の内心を守るものであり、他者の権利や自由と衝突する場合、その調整が必要とされる。",
-                "link": "https://www.courts.go.jp/app/hanrei_jp/detail?id=67890"
-            },
-            {
-                "original": "契約自由の原則は市場経済を支える基盤であり、契約当事者間の合意を最大限尊重するものである。",
-                "problem": "契約自由の______は市場経済を支える基盤であり、契約当事者間の合意を最大限尊重するものである。",
-                "link": "https://www.courts.go.jp/app/hanrei_jp/detail?id=11223"
-            }
-        ];
+    <input type="text" id="answer" placeholder="入力してください">
+    <button class="button" id="submit-answer">判定</button>
+    <div class="score" id="score">スコア: 0</div>
+    <a href="#" class="link" id="source-link" target="_blank">判例を確認する</a>
+  </div>
 
-        // ゲームロジック
-        document.addEventListener("DOMContentLoaded", () => {
-            const questionElement = document.getElementById("question");
-            const inputElement = document.getElementById("input");
-            const scoreElement = document.getElementById("score-value");
-            const timerElement = document.getElementById("time");
-            const nextButton = document.getElementById("next-button");
+  <script>
+    const data = {
+      憲法: [
+        {
+          text: "日本国憲法第XX条は重要な条文である。この条文はXXXXXである。",
+          hidden: ["XX", "XXXXX"],
+          link: "https://example.com/kenpo_case1"
+        },
+        {
+          text: "憲法において重要なXXが制定された。この条文の意義はXXXXX。",
+          hidden: ["XX", "XXXXX"],
+          link: "https://example.com/kenpo_case2"
+        }
+      ],
+      民法: [
+        {
+          text: "民法第XX条ではXXXXXを規定している。これが契約の基本である。",
+          hidden: ["XX", "XXXXX"],
+          link: "https://example.com/minpo_case1"
+        },
+        {
+          text: "民法のXXによりXXXXXが保障されている。",
+          hidden: ["XX", "XXXXX"],
+          link: "https://example.com/minpo_case2"
+        }
+      ],
+      // 他の科目のデータもここに追加
+    };
 
-            let cases = [...gameData]; // gameDataをコピーして利用
-            let currentCase = null;
-            let score = 0;
-            let timeLeft = 60;
-            let interval;
+    let currentCategory = "";
+    let currentQuestion = {};
+    let score = 0;
 
-            function startGame() {
-                nextCase();
-                inputElement.disabled = false;
-                inputElement.focus();
-                interval = setInterval(updateTimer, 1000);
-            }
+    document.querySelectorAll(".category").forEach(category => {
+      category.addEventListener("click", (e) => {
+        e.preventDefault();
+        currentCategory = e.target.getAttribute("data-category");
+        startGame();
+      });
+    });
 
-            function updateTimer() {
-                timeLeft--;
-                timerElement.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    endGame();
-                }
-            }
+    function startGame() {
+      document.getElementById("category-selection").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      loadQuestion();
+    }
 
-            function endGame() {
-                clearInterval(interval);
-                inputElement.disabled = true;
-                questionElement.textContent = "ゲーム終了！お疲れ様でした！";
-                nextButton.style.display = "block";
-            }
+    function loadQuestion() {
+      const questions = data[currentCategory];
+      currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+      const questionText = currentQuestion.text;
 
-            function nextCase() {
-                if (cases.length === 0) {
-                    endGame();
-                    return;
-                }
-                currentCase = cases.pop();
-                questionElement.textContent = currentCase.problem;
-                inputElement.value = "";
-            }
+      // 隠し部分をマーク
+      const formattedText = currentQuestion.hidden.reduce((text, hiddenWord) => {
+        const regex = new RegExp(hiddenWord, "g");
+        return text.replace(regex, `<span class="hidden">${hiddenWord}</span>`);
+      }, questionText);
 
-            function checkAnswer() {
-                if (inputElement.value.trim() === currentCase.original) {
-                    score += currentCase.original.length; // 判例文の長さに応じてスコア加算
-                    scoreElement.textContent = score;
-                    nextCase();
-                }
-            }
+      document.getElementById("question").innerHTML = formattedText;
+      document.getElementById("source-link").href = currentQuestion.link;
+    }
 
-            inputElement.addEventListener("keydown", (event) => {
-                if (event.key === "Enter") {
-                    checkAnswer();
-                }
-            });
+    document.getElementById("submit-answer").addEventListener("click", () => {
+      const userAnswer = document.getElementById("answer").value.trim();
+      const hiddenWords = currentQuestion.hidden;
+      const isCorrect = hiddenWords.includes(userAnswer);
 
-            nextButton.addEventListener("click", () => {
-                // リセットして再スタート
-                timeLeft = 60;
-                score = 0;
-                scoreElement.textContent = score;
-                timerElement.textContent = timeLeft;
-                cases = [...gameData];
-                nextButton.style.display = "none";
-                startGame();
-            });
+      if (isCorrect) {
+        score += 10;
+        alert("正解です！");
+      } else {
+        alert("不正解です。");
+      }
 
-            startGame();
-        });
-    </script>
+      document.getElementById("score").textContent = `スコア: ${score}`;
+      document.getElementById("answer").value = "";
+      loadQuestion();
+    });
+  </script>
 </body>
 </html>
