@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高級不動産仲介サイト</title>
+    <style>
+        /* 高級感のあるデザイン */
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #222;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1, h2 {
+            font-family: 'Georgia', serif;
+            color: #444;
+        }
+
+        .property {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+
+        .property img {
+            max-width: 250px;
+            border-radius: 10px;
+            margin-right: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .property-info {
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .property-info h3 {
+            margin: 0 0 10px;
+            color: #000;
+            font-size: 20px;
+        }
+
+        .property-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .filter {
+            margin-bottom: 30px;
+        }
+
+        .filter h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .filter label {
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .filter select, .filter input[type="text"] {
+            padding: 10px;
+            margin-right: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        button {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #222;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #222;
+            color: white;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        高級不動産仲介サイト
+    </header>
+    <div class="container">
+        <div class="filter">
+            <h2>物件検索</h2>
+            <label for="location">場所:</label>
+            <input type="text" id="location" placeholder="例: 東京">
+            <label for="price">価格:</label>
+            <select id="price">
+                <option value="">すべて</option>
+                <option value="50000">50,000円以下</option>
+                <option value="100000">100,000円以下</option>
+                <option value="200000">200,000円以下</option>
+            </select>
+            <button onclick="filterProperties()">検索</button>
+        </div>
+        <div id="properties">
+            <!-- 物件リスト -->
+            <div class="property" data-location="東京" data-price="150000">
+                <img src="https://via.placeholder.com/250" alt="物件画像">
+                <div class="property-info">
+                    <h3>豪華マンション（東京）</h3>
+                    <p>価格: 150,000円</p>
+                    <p>場所: 東京</p>
+                    <p>詳細: 都心の中心に位置し、最高の利便性を提供。</p>
+                </div>
+            </div>
+            <div class="property" data-location="大阪" data-price="80000">
+                <img src="https://via.placeholder.com/250" alt="物件画像">
+                <div class="property-info">
+                    <h3>スタイリッシュアパート（大阪）</h3>
+                    <p>価格: 80,000円</p>
+                    <p>場所: 大阪</p>
+                    <p>詳細: 静かな住宅街にあるモダンなデザイン。</p>
+                </div>
+            </div>
+            <div class="property" data-location="名古屋" data-price="60000">
+                <img src="https://via.placeholder.com/250" alt="物件画像">
+                <div class="property-info">
+                    <h3>快適ワンルーム（名古屋）</h3>
+                    <p>価格: 60,000円</p>
+                    <p>場所: 名古屋</p>
+                    <p>詳細: 交通の便が良く、学生や単身者に最適。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        © 2024 高級不動産仲介サイト
+    </footer>
+
+    <script>
+        // JavaScript
+        function filterProperties() {
+            const locationInput = document.getElementById('location').value.toLowerCase();
+            const priceInput = document.getElementById('price').value;
+
+            const properties = document.querySelectorAll('.property');
+
+            properties.forEach(property => {
+                const location = property.getAttribute('data-location').toLowerCase();
+                const price = parseInt(property.getAttribute('data-price'), 10);
+
+                const matchesLocation = location.includes(locationInput);
+                const matchesPrice = !priceInput || price <= parseInt(priceInput, 10);
+
+                if (matchesLocation && matchesPrice) {
+                    property.style.display = 'flex';
+                } else {
+                    property.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
