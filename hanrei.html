@@ -78,9 +78,6 @@
     .back-button:hover {
       background-color: #bd2130;
     }
-    .hidden {
-      background-color: yellow;
-    }
     .external-link {
       margin-top: 20px;
       padding: 10px 20px;
@@ -107,8 +104,10 @@
     <a href="#" class="category" data-category="刑法">刑法</a>
     <a href="#" class="category" data-category="刑事訴訟法">刑事訴訟法</a>
     <a href="#" class="category" data-category="労働基準法">労働基準法</a>
-    <p>操作説明: 科目を選択し、タイピングで隠れた部分を含む全文を入力してください。制限時間は1分です。</p>
-    <a href="https://www.courts.go.jp/app/hanrei_jp/search2" target="_blank" class="external-link">裁判所の判例検索ページに移動</a>
+    <p>操作説明: 科目を選択し、タイピングで全文を入力してください。制限時間は1分です。</p>
+    <a href="https://www.courts.go.jp/app/hanrei_jp/search2" target="_blank" class="external-link">
+      裁判所の判例検索ページに移動
+    </a>
   </div>
 
   <div id="game" style="display: none;">
@@ -126,18 +125,15 @@
     const data = {
       憲法: [
         {
-          text: "日本国憲法第「　9　」条は重要な条文である。。",
-          hidden: ["9"]
+          text: "日本国憲法第XX条は重要な条文である。この条文はXXXXXである。"
         },
         {
-          text: "憲法は通常の法律と同様に改正「できない」。",
-          hidden: ["できない"]
+          text: "憲法に基づきXXの原則が制定された。この原則はXXXXX。"
         }
       ],
       民法: [
         {
-          text: "民法第XX条ではXXXXXの規定がある。この法律は契約の基本。",
-          hidden: ["XX", "XXXXX"]
+          text: "民法第XX条ではXXXXXの規定がある。この法律は契約の基本。"
         }
       ]
     };
@@ -147,6 +143,10 @@
     let score = 0;
     let timer;
     let timeRemaining = 60;
+
+    // 音声の設定
+    const correctSound = new Audio("correct.mp3"); // 正解音
+    const incorrectSound = new Audio("incorrect.mp3"); // 不正解音
 
     // 科目選択イベント
     document.querySelectorAll(".category").forEach(category => {
@@ -186,14 +186,7 @@
     function loadQuestion() {
       const questions = data[currentCategory];
       currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-      const questionText = currentQuestion.text;
-
-      const formattedText = currentQuestion.hidden.reduce((text, hiddenWord) => {
-        const regex = new RegExp(hiddenWord, "g");
-        return text.replace(regex, `<span class="hidden">${hiddenWord}</span>`);
-      }, questionText);
-
-      document.getElementById("question").innerHTML = formattedText;
+      document.getElementById("question").innerHTML = currentQuestion.text;
     }
 
     // スコア更新
@@ -206,8 +199,10 @@
       const userAnswer = document.getElementById("answer").value.trim();
       if (userAnswer === currentQuestion.text) {
         score += 10;
+        correctSound.play(); // 正解音を再生
         alert("正解です！");
       } else {
+        incorrectSound.play(); // 不正解音を再生
         alert(`不正解です。\n正解: ${currentQuestion.text}\n入力: ${userAnswer}`);
       }
       updateScore();
@@ -232,3 +227,4 @@
   </script>
 </body>
 </html>
+
