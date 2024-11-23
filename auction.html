@@ -94,6 +94,24 @@
             background-color: #2980b9;
         }
 
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-modal h2 {
+            text-align: center;
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -124,6 +142,18 @@
         高級オークションサイト
     </header>
 
+    <!-- ログインモーダル -->
+    <div class="login-modal" id="login-modal">
+        <h2>ログイン</h2>
+        <form id="login-form" onsubmit="login(event)">
+            <label for="username">ユーザー名:</label>
+            <input type="text" id="username" required><br><br>
+            <label for="password">パスワード:</label>
+            <input type="password" id="password" required><br><br>
+            <button type="submit">ログイン</button>
+        </form>
+    </div>
+
     <div class="container">
         <h1>出品中のオークション</h1>
 
@@ -140,19 +170,6 @@
                 </form>
             </div>
         </div>
-
-        <div class="auction-item">
-            <img src="https://via.placeholder.com/200" alt="商品画像">
-            <div class="auction-info">
-                <h3>高級絵画</h3>
-                <p>説明: 世界的に評価の高いアート作品。</p>
-                <p class="current-bid">現在の入札: 3,000,000円</p>
-                <form class="bid-form" onsubmit="placeBid(event, '3000000')">
-                    <input type="text" placeholder="入札金額を入力">
-                    <button type="submit">入札する</button>
-                </form>
-            </div>
-        </div>
     </div>
 
     <footer>
@@ -160,9 +177,32 @@
     </footer>
 
     <script>
-        // 入札フォームの動作
+        let isLoggedIn = false;
+
+        // ログイン処理
+        function login(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === "user" && password === "password") {
+                alert("ログイン成功！");
+                isLoggedIn = true;
+                document.getElementById('login-modal').style.display = 'none';
+            } else {
+                alert("ログイン情報が正しくありません。");
+            }
+        }
+
+        // 入札処理
         function placeBid(event, currentBid) {
             event.preventDefault();
+            if (!isLoggedIn) {
+                alert("入札するにはログインが必要です。");
+                document.getElementById('login-modal').style.display = 'block';
+                return;
+            }
+
             const form = event.target;
             const bidInput = form.querySelector('input[type="text"]');
             const newBid = parseInt(bidInput.value, 10);
