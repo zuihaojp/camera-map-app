@@ -93,6 +93,7 @@
             const fruit = fruits.find(f => f.name === type);
             return Bodies.circle(x, y, fruit.radius, {
                 label: fruit.name,
+                isStatic: true,
                 restitution: fruit.restitution,
                 friction: 0.005,
                 render: {
