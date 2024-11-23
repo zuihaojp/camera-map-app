@@ -56,6 +56,9 @@
     const invaderImage = new Image();
     invaderImage.src = "invader.png";
 
+    let invaderDirection = 1; // 1:右方向, -1:左方向
+    let invaderSpeed = 1; // 敵の移動速度
+
     // 敵の弾
     const enemyBullets = [];
     let score = 0;
@@ -106,11 +109,17 @@
     function drawBullets() {
       ctx.fillStyle = "red";
       player.bullets.forEach((bullet, index) => {
-        ctx.fillRect(bullet.x, bullet.y, 5, 10);
-        bullet.y -= 7;
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+
+        // 弾の移動
+        bullet.x += bullet.vx;
+        bullet.y += bullet.vy;
 
         // 弾が画面外に出たら削除
-        if (bullet.y < 0) {
+        if (
+          bullet.x < 0 || bullet.x > canvas.width ||
+          bullet.y < 0 || bullet.y > canvas.height
+        ) {
           player.bullets.splice(index, 1);
         }
 
@@ -134,9 +143,15 @@
 
     // 敵キャラクターを描画
     function drawInvaders() {
+      let edgeReached = false;
       invaders.forEach((invader) => {
         if (!invader.destroyed) {
           ctx.drawImage(invaderImage, invader.x, invader.y, invader.width, invader.height);
+          invader.x += invaderSpeed * invaderDirection;
+
+          if (invader.x + invader.width > canvas.width || invader.x < 0) {
+            edgeReached = true;
+          }
 
           // 敵がランダムに弾を発射
           if (Math.random() < 0.01) {
@@ -144,6 +159,12 @@
           }
         }
       });
+
+      // 端に到達した場合、移動方向を反転し、少し下に移動
+      if (edgeReached) {
+        invaderDirection *= -1;
+        invaders.forEach((invader) => invader.y += 10);
+      }
     }
 
     // 敵の弾を発射
@@ -153,6 +174,8 @@
         y: invader.y + invader.height,
         width: 5,
         height: 10,
+        vx: 0,
+        vy: 5,
       });
       enemyFireSound.play();
     }
@@ -162,7 +185,8 @@
       ctx.fillStyle = "yellow";
       enemyBullets.forEach((bullet, index) => {
         ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-        bullet.y += 5;
+        bullet.x += bullet.vx;
+        bullet.y += bullet.vy;
 
         // 弾がプレイヤーに当たったか確認
         if (
@@ -195,16 +219,27 @@
       if (rightPressed && player.x + player.width < canvas.width) player.x += player.speed;
       if (upPressed && player.y > 0) player.y -= player.speed;
       if (downPressed && player.y + player.height < canvas.height) player.y += player.speed;
-      if (spacePressed) {
-        fireBullet();
-        spacePressed = false;
-      }
     }
 
     // 弾を発射
     function fireBullet() {
-      player.bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y });
-      fireSound.play();
+      const directions = [];
+      if (upPressed) directions.push({ vx: 0, vy: -7 });
+      if (downPressed) directions.push({ vx: 0, vy: 7 });
+      if (leftPressed) directions.push({ vx: -7, vy: 0 });
+      if (rightPressed) directions.push({ vx: 7, vy: 0 });
+
+      directions.forEach((dir) => {
+        player.bullets.push({
+          x: player.x + player.width / 2 - 2.5,
+          y: player.y + player.height / 2 - 2.5,
+          width: 5,
+          height: 5,
+          vx: dir.vx,
+          vy: dir.vy,
+        });
+        fireSound.play();
+      });
     }
 
     // ゲームループ
@@ -213,14 +248,4 @@
 
       drawPlayer();
       drawBullets();
-      drawEnemyBullets();
-      drawInvaders();
-      movePlayer();
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    gameLoop();
-  </script>
-</body>
-</html>
+      drawEnemyBul
