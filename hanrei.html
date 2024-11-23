@@ -26,13 +26,14 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         #question {
-            font-size: 20px;
+            font-size: 16px;
             margin: 20px 0;
+            line-height: 1.6;
         }
         #input {
             width: 90%;
             padding: 10px;
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 20px;
         }
         #score, #timer {
@@ -61,8 +62,8 @@
         <p>操作方法:</p>
         <ul>
             <li>タイピングボックスに表示された判例文を正確に入力してください。</li>
+            <li>入力後、エンターキーを押して解答を送信してください。</li>
             <li>1分間で可能な限り多く正解を目指しましょう！</li>
-            <li>正解するたびに次の問題が表示され、スコアが加算されます。</li>
         </ul>
     </div>
     <div id="game-container">
@@ -76,18 +77,18 @@
         // 判例データ
         const gameData = [
             {
-                "original": "表現の自由は民主主義の基盤である。",
-                "problem": "表現の自由は_______の基盤である。",
+                "original": "表現の自由は民主主義の基盤である。この自由がなければ情報交換が制限され、社会的発展が阻害される可能性がある。",
+                "problem": "表現の自由は_______の基盤である。この自由がなければ情報交換が制限され、社会的発展が阻害される可能性がある。",
                 "link": "https://www.courts.go.jp/app/hanrei_jp/detail?id=12345"
             },
             {
-                "original": "思想・良心の自由は個人の内心を守る。",
-                "problem": "思想・_______の自由は個人の内心を守る。",
+                "original": "思想・良心の自由は個人の内心を守るものであり、他者の権利や自由と衝突する場合、その調整が必要とされる。",
+                "problem": "思想・_______の自由は個人の内心を守るものであり、他者の権利や自由と衝突する場合、その調整が必要とされる。",
                 "link": "https://www.courts.go.jp/app/hanrei_jp/detail?id=67890"
             },
             {
-                "original": "契約自由の原則は重要である。",
-                "problem": "契約自由の______は重要である。",
+                "original": "契約自由の原則は市場経済を支える基盤であり、契約当事者間の合意を最大限尊重するものである。",
+                "problem": "契約自由の______は市場経済を支える基盤であり、契約当事者間の合意を最大限尊重するものである。",
                 "link": "https://www.courts.go.jp/app/hanrei_jp/detail?id=11223"
             }
         ];
@@ -138,11 +139,17 @@
                 inputElement.value = "";
             }
 
-            inputElement.addEventListener("input", () => {
+            function checkAnswer() {
                 if (inputElement.value.trim() === currentCase.original) {
-                    score += 10;
+                    score += currentCase.original.length; // 判例文の長さに応じてスコア加算
                     scoreElement.textContent = score;
                     nextCase();
+                }
+            }
+
+            inputElement.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    checkAnswer();
                 }
             });
 
