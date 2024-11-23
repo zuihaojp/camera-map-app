@@ -56,8 +56,8 @@
     const invaderImage = new Image();
     invaderImage.src = "invader.png";
 
-    let invaderDirection = 1; // 1:右方向, -1:左方向
-    let invaderSpeed = 1; // 敵の移動速度
+    let invaderSpeed = 1;
+    let invaderDirection = 1; // 1: 右方向, -1: 左方向
 
     // 敵の弾
     const enemyBullets = [];
@@ -109,16 +109,17 @@
     function drawBullets() {
       ctx.fillStyle = "red";
       player.bullets.forEach((bullet, index) => {
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        if (bullet.direction === "up") bullet.y -= 7;
+        if (bullet.direction === "down") bullet.y += 7;
+        if (bullet.direction === "left") bullet.x -= 7;
+        if (bullet.direction === "right") bullet.x += 7;
 
-        // 弾の移動
-        bullet.x += bullet.vx;
-        bullet.y += bullet.vy;
+        ctx.fillRect(bullet.x, bullet.y, 5, 10);
 
         // 弾が画面外に出たら削除
         if (
-          bullet.x < 0 || bullet.x > canvas.width ||
-          bullet.y < 0 || bullet.y > canvas.height
+          bullet.y < 0 || bullet.y > canvas.height ||
+          bullet.x < 0 || bullet.x > canvas.width
         ) {
           player.bullets.splice(index, 1);
         }
@@ -143,15 +144,17 @@
 
     // 敵キャラクターを描画
     function drawInvaders() {
-      let edgeReached = false;
       invaders.forEach((invader) => {
         if (!invader.destroyed) {
-          ctx.drawImage(invaderImage, invader.x, invader.y, invader.width, invader.height);
           invader.x += invaderSpeed * invaderDirection;
 
-          if (invader.x + invader.width > canvas.width || invader.x < 0) {
-            edgeReached = true;
+          // 壁に到達したら方向を変える
+          if (invader.x <= 0 || invader.x + invader.width >= canvas.width) {
+            invaderDirection *= -1;
+            invader.y += 10; // 一段下がる
           }
+
+          ctx.drawImage(invaderImage, invader.x, invader.y, invader.width, invader.height);
 
           // 敵がランダムに弾を発射
           if (Math.random() < 0.01) {
@@ -159,12 +162,6 @@
           }
         }
       });
-
-      // 端に到達した場合、移動方向を反転し、少し下に移動
-      if (edgeReached) {
-        invaderDirection *= -1;
-        invaders.forEach((invader) => invader.y += 10);
-      }
     }
 
     // 敵の弾を発射
@@ -174,8 +171,6 @@
         y: invader.y + invader.height,
         width: 5,
         height: 10,
-        vx: 0,
-        vy: 5,
       });
       enemyFireSound.play();
     }
@@ -185,8 +180,7 @@
       ctx.fillStyle = "yellow";
       enemyBullets.forEach((bullet, index) => {
         ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-        bullet.x += bullet.vx;
-        bullet.y += bullet.vy;
+        bullet.y += 5;
 
         // 弾がプレイヤーに当たったか確認
         if (
@@ -223,23 +217,18 @@
 
     // 弾を発射
     function fireBullet() {
-      const directions = [];
-      if (upPressed) directions.push({ vx: 0, vy: -7 });
-      if (downPressed) directions.push({ vx: 0, vy: 7 });
-      if (leftPressed) directions.push({ vx: -7, vy: 0 });
-      if (rightPressed) directions.push({ vx: 7, vy: 0 });
-
-      directions.forEach((dir) => {
-        player.bullets.push({
-          x: player.x + player.width / 2 - 2.5,
-          y: player.y + player.height / 2 - 2.5,
-          width: 5,
-          height: 5,
-          vx: dir.vx,
-          vy: dir.vy,
-        });
+      if (spacePressed) {
+        if (upPressed) {
+          player.bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y, direction: "up" });
+        } else if (downPressed) {
+          player.bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y + player.height, direction: "down" });
+        } else if (leftPressed) {
+          player.bullets.push({ x: player.x, y: player.y + player.height / 2 - 2.5, direction: "left" });
+        } else if (rightPressed) {
+          player.bullets.push({ x: player.x + player.width, y: player.y + player.height / 2 - 2.5, direction: "right" });
+        }
         fireSound.play();
-      });
+      }
     }
 
     // ゲームループ
@@ -248,4 +237,15 @@
 
       drawPlayer();
       drawBullets();
-      drawEnemyBul
+      drawEnemyBullets();
+      drawInvaders();
+      movePlayer();
+      fireBullet();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>
