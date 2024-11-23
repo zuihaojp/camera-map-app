@@ -3,221 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>判例タイピングゲーム</title>
+  <title>法律用語タイピングゲーム</title>
   <style>
     body {
-      background-color: #f4f4f4;
+      background-color: #282c34;
+      color: white;
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 20px;
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background-color: black;
     }
     h1 {
-      color: #333;
-    }
-    .category {
-      margin: 10px;
-      padding: 10px;
-      display: inline-block;
-      background-color: #007bff;
-      color: white;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 18px;
-    }
-    .category:hover {
-      background-color: #0056b3;
-    }
-    .question {
       margin-top: 20px;
-      padding: 20px;
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 18px;
-      text-align: left;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.8;
+      font-size: 24px;
     }
-    input {
-      width: 80%;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 16px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-    .button {
-      padding: 10px 20px;
-      margin-top: 10px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .button:hover {
-      background-color: #218838;
-    }
-    .score, .timer {
-      margin-top: 20px;
+    .scoreboard {
       font-size: 20px;
-      color: #333;
-    }
-    .back-button {
-      margin-top: 20px;
-      display: block;
-      color: white;
-      background-color: #dc3545;
-      padding: 10px 20px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .back-button:hover {
-      background-color: #bd2130;
-    }
-    .external-link {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #17a2b8;
-      color: white;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 18px;
-    }
-    .external-link:hover {
-      background-color: #138496;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-  <h1>判例タイピングゲーム</h1>
-  <div id="category-selection">
-    <h3>科目を選択してください</h3>
-    <a href="#" class="category" data-category="憲法">憲法</a>
-    <a href="#" class="category" data-category="行政法">行政法</a>
-    <a href="#" class="category" data-category="民法">民法</a>
-    <a href="#" class="category" data-category="民事訴訟法">民事訴訟法</a>
-    <a href="#" class="category" data-category="会社法">会社法</a>
-    <a href="#" class="category" data-category="刑法">刑法</a>
-    <a href="#" class="category" data-category="刑事訴訟法">刑事訴訟法</a>
-    <a href="#" class="category" data-category="労働基準法">労働基準法</a>
-    <p>操作説明: 科目を選択し、タイピングで全文を入力してください。制限時間は1分です。</p>
-    <a href="https://www.courts.go.jp/app/hanrei_jp/search2" target="_blank" class="external-link">
-      裁判所の判例検索ページに移動
-    </a>
-  </div>
-
-  <div id="game" style="display: none;">
-    <div class="question" id="question">
-      判例の文がここに表示されます。
-    </div>
-    <input type="text" id="answer" placeholder="完全な文章を入力してください">
-    <button class="button" id="submit-answer">判定</button>
-    <div class="score">スコア: <span id="score">0</span></div>
-    <div class="timer">残り時間: <span id="timer">60</span>秒</div>
-    <a href="#" class="back-button" id="back-to-category">科目選択に戻る</a>
-  </div>
-
+  <h1>法律用語タイピングゲーム</h1>
+  <p class="scoreboard">スコア: <span id="score">0</span></p>
+  <p class="scoreboard">ミス: <span id="miss">0</span></p>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
   <script>
-    const data = {
-      憲法: [
-        {
-          text:"前文の2項3項の規定は、法的効力を有すると言えても、国民主権代表制民主制と異なり、理念としての平和の内容について具体的かつ特定的に規定しているわけでなく、崇高な理念目的にとどまることが明らかで前文中「平和のうちに生存する権利」も裁判規範として現実的個別的内容を持つものとして具体化されているものではない。"
-        },
-        {
-          text: "憲法に基づきXXの原則が制定された。この原則はXXXXX。"
-        }
-      ],
-      民法: [
-        {
-          text: "民法第XX条ではXXXXXの規定がある。この法律は契約の基本。"
-        }
-      ]
-    };
+    // キャンバス設定
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-    let currentCategory = "";
-    let currentQuestion = {};
+    // ゲームデータ
+    let words = [
+      "契約", "債務", "債権", "代理", "民事訴訟", "刑事責任", "契約解除", 
+      "所有権", "抵当権", "過失相殺", "不法行為", "相続", "信託", "譲渡", 
+      "憲法", "行政訴訟", "会社法", "労働基準法", "条文"
+    ];
+    let activeWords = [];
     let score = 0;
-    let timer;
-    let timeRemaining = 60;
+    let misses = 0;
+    const maxMisses = 5;
 
-    // 科目選択イベント
-    document.querySelectorAll(".category").forEach(category => {
-      category.addEventListener("click", (e) => {
-        e.preventDefault();
-        currentCategory = e.target.getAttribute("data-category");
-        startGame();
-      });
-    });
-
-    // ゲーム開始
-    function startGame() {
-      document.getElementById("category-selection").style.display = "none";
-      document.getElementById("game").style.display = "block";
-      score = 0;
-      timeRemaining = 60;
-      updateScore();
-      startTimer();
-      loadQuestion();
-    }
-
-    // タイマー
-    function startTimer() {
-      clearInterval(timer);
-      timer = setInterval(() => {
-        timeRemaining--;
-        document.getElementById("timer").textContent = timeRemaining;
-        if (timeRemaining <= 0) {
-          clearInterval(timer);
-          alert("時間切れ！スコア: " + score);
-          backToCategory();
-        }
-      }, 1000);
-    }
-
-    // 問題をロード
-    function loadQuestion() {
-      const questions = data[currentCategory];
-      currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-      document.getElementById("question").innerHTML = currentQuestion.text;
-    }
-
-    // スコア更新
-    function updateScore() {
-      document.getElementById("score").textContent = score;
-    }
-
-    // 判定処理
-    function checkAnswer() {
-      const userAnswer = document.getElementById("answer").value.trim();
-      if (userAnswer === currentQuestion.text) {
-        score += 10;
-        alert("正解です！");
-      } else {
-        alert(`不正解です。\n正解: ${currentQuestion.text}\n入力: ${userAnswer}`);
+    // Word クラス
+    class Word {
+      constructor(text, x, y, speed) {
+        this.text = text;
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.width = ctx.measureText(text).width;
       }
-      updateScore();
-      document.getElementById("answer").value = "";
-      loadQuestion();
+      draw() {
+        ctx.fillStyle = 'white';
+        ctx.font = '20px Arial';
+        ctx.fillText(this.text, this.x, this.y);
+      }
+      update() {
+        this.y += this.speed;
+      }
     }
 
-    // 判定ボタンイベント
-    document.getElementById("submit-answer").addEventListener("click", checkAnswer);
-
-    // 科目選択に戻る
-    document.getElementById("back-to-category").addEventListener("click", (e) => {
-      e.preventDefault();
-      backToCategory();
-    });
-
-    function backToCategory() {
-      clearInterval(timer);
-      document.getElementById("game").style.display = "none";
-      document.getElementById("category-selection").style.display = "block";
+    // ランダムな単語を生成
+    function generateWord() {
+      const text = words[Math.floor(Math.random() * words.length)];
+      const x = Math.random() * (canvas.width - 100);
+      const speed = Math.random() * 1.5 + 1; // スピード範囲
+      return new Word(text, x, 0, speed);
     }
+
+    // タイピング処理
+    function handleTyping(e) {
+      const input = e.key;
+      for (let i = 0; i < activeWords.length; i++) {
+        if (activeWords[i].text.startsWith(input)) {
+          activeWords[i].text = activeWords[i].text.slice(1);
+          if (activeWords[i].text === "") {
+            score += 10;
+            activeWords.splice(i, 1);
+          }
+          document.getElementById('score').textContent = score;
+          return;
+        }
+      }
+      misses++;
+      document.getElementById('miss').textContent = misses;
+      if (misses >= maxMisses) {
+        alert('ゲームオーバー！スコア: ' + score);
+        resetGame();
+      }
+    }
+
+    // ゲームリセット
+    function resetGame() {
+      activeWords = [];
+      score = 0;
+      misses = 0;
+      document.getElementById('score').textContent = score;
+      document.getElementById('miss').textContent = misses;
+    }
+
+    // ゲームループ
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 単語を描画・更新
+      activeWords.forEach(word => {
+        word.update();
+        word.draw();
+        if (word.y > canvas.height) {
+          activeWords.splice(activeWords.indexOf(word), 1);
+          misses++;
+          document.getElementById('miss').textContent = misses;
+          if (misses >= maxMisses) {
+            alert('ゲームオーバー！スコア: ' + score);
+            resetGame();
+          }
+        }
+      });
+
+      // 一定確率で新しい単語を生成
+      if (Math.random() < 0.02) {
+        activeWords.push(generateWord());
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    // 初期化
+    document.addEventListener('keydown', handleTyping);
+    gameLoop();
   </script>
 </body>
 </html>
