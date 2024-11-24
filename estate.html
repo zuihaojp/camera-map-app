@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luxury Real Estate</title>
     <style>
-        /* 高級感のある紺と金のテーマ */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -15,7 +14,7 @@
         }
 
         header {
-            background-color: #2A2A4D; /* 濃紺色 */
+            background-color: #2A2A4D;
             color: #FFD700;
             padding: 1rem;
             display: flex;
@@ -61,31 +60,43 @@
             cursor: pointer;
         }
 
+        .description {
+            padding: 1rem 2rem;
+            text-align: center;
+            background-color: #2A2A4D;
+            color: #FFD700;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
         .property-list {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3列表示 */
             gap: 1.5rem;
             padding: 2rem;
         }
 
         .property-card {
             background-color: #2A2A4D;
-            border-radius: 10px;
+            border-radius: 15px; /* 丸みを追加 */
             overflow: hidden;
-            width: calc(33.33% - 1rem);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             color: #FFD700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
         .slider {
             position: relative;
             overflow: hidden;
-            height: 200px;
+            height: 150px;
         }
 
         .slider img {
             width: 100%;
-            height: 200px;
+            height: 150px;
             object-fit: cover;
             display: none;
             transition: opacity 0.5s ease;
@@ -114,17 +125,18 @@
         }
 
         .property-card h3, .property-card p {
-            padding: 0.5rem 1rem;
+            margin: 0.5rem;
         }
 
         .property-card button {
-            margin: 1rem;
+            margin-top: auto;
+            margin-bottom: 1rem;
             padding: 0.5rem;
-            width: calc(100% - 2rem);
+            width: 90%;
             background-color: #FFD700;
             color: #1C1C3C;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -147,6 +159,18 @@
             width: 40px;
             height: 40px;
         }
+
+        @media (max-width: 768px) {
+            .property-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .property-list {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -165,7 +189,13 @@
             <input type="text" placeholder="Search by location, price, or keywords..." />
             <button>Search</button>
         </div>
-        <h2>Featured Properties</h2>
+        <div class="description">
+            私たちは高級不動産のオンライン仲介サービスを提供しております。<br>
+            不動産の詳細なご説明はオンライン上で行い、契約書の作成、お支払い、<br>
+            そして契約成立に至るまで、すべてのプロセスをオンラインで完結します。<br>
+            卓越した利便性とプライバシーをお届けします。
+        </div>
+        <h2 style="text-align: center; color: #FFD700;">Featured Properties</h2>
         <div class="property-list" id="property-list"></div>
     </main>
         <footer>
@@ -229,6 +259,7 @@
                 const card = document.createElement("div");
                 card.className = "property-card";
 
+                // スライダーの作成
                 const slider = document.createElement("div");
                 slider.className = "slider";
                 property.images.forEach((imgSrc, index) => {
@@ -238,6 +269,7 @@
                     slider.appendChild(img);
                 });
 
+                // スライダーのコントロールボタン
                 const controls = document.createElement("div");
                 controls.className = "slider-controls";
                 const prevBtn = document.createElement("button");
@@ -249,6 +281,7 @@
 
                 slider.appendChild(controls);
 
+                // スライダーの切り替え機能
                 let currentIndex = 0;
                 const images = slider.querySelectorAll("img");
                 prevBtn.addEventListener("click", () => {
@@ -262,6 +295,7 @@
                     images[currentIndex].classList.add("active");
                 });
 
+                // カードの内容を追加
                 card.innerHTML = `
                     <h3>${property.title}</h3>
                     <p>${property.location}</p>
