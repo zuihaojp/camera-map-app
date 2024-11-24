@@ -47,16 +47,34 @@
         }
 
         .container {
-            max-width: 800px;
-            margin: 20px auto;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            background-color: white;
-            border-radius: 8px;
+        }
+
+        .hero {
+            background-color: #fff0f5;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .hidden {
-            display: none;
+        .hero img {
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            color: #ff6f61;
+            margin: 20px 0;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: #555;
         }
 
         .grid {
@@ -66,27 +84,63 @@
         }
 
         .card {
-            background-color: #fff;
+            background-color: white;
+            border-radius: 15px;
             padding: 15px;
-            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            color: #ff6f61;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
         }
 
         .card button {
+            padding: 10px 20px;
             background-color: #ff6f61;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 25px;
+            font-size: 14px;
             cursor: pointer;
         }
 
+        .card button:hover {
+            background-color: #ff3b28;
+        }
+
         footer {
-            text-align: center;
-            padding: 15px;
             background-color: #ffd1dc;
             color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -99,15 +153,27 @@
         <a href="#history">応募履歴</a>
     </nav>
 
+    <!-- ホームセクション -->
+    <div id="home" class="container">
+        <div class="hero">
+            <img src="https://via.placeholder.com/1200x400?text=Welcome+to+the+Salon+Job+Site" alt="Welcome">
+            <h1>美容師の新しい働き方を応援します！</h1>
+            <p>体験入店で自分にぴったりのサロンを見つけてみませんか？</p>
+        </div>
+    </div>
+
+    <!-- 求人一覧 -->
     <div id="jobs" class="container">
         <h1>求人一覧</h1>
         <div class="grid">
             <div class="card">
+                <img src="https://via.placeholder.com/250x250?text=銀座サロン" alt="銀座サロン">
                 <h3>銀座サロン - スタイリスト募集</h3>
                 <p>時給: 1,500円〜</p>
                 <button onclick="applyJob('銀座サロン')">応募する</button>
             </div>
             <div class="card">
+                <img src="https://via.placeholder.com/250x250?text=渋谷サロン" alt="渋谷サロン">
                 <h3>渋谷サロン - アシスタント募集</h3>
                 <p>時給: 1,200円〜</p>
                 <button onclick="applyJob('渋谷サロン')">応募する</button>
@@ -115,6 +181,7 @@
         </div>
     </div>
 
+    <!-- ログイン -->
     <div id="login" class="container hidden">
         <h1>ログイン</h1>
         <form id="login-form">
@@ -127,6 +194,7 @@
         <div id="login-message"></div>
     </div>
 
+    <!-- 新規登録 -->
     <div id="register" class="container hidden">
         <h1>新規登録</h1>
         <form id="register-form">
@@ -139,6 +207,7 @@
         <div id="register-message"></div>
     </div>
 
+    <!-- 応募履歴 -->
     <div id="history" class="container hidden">
         <h1>応募履歴</h1>
         <ul id="application-history"></ul>
@@ -184,13 +253,13 @@
             e.preventDefault();
             const email = document.getElementById("login-email").value;
             const password = document.getElementById("login-password").value;
-            const user = users.find(u => u.email === email && u.password === password);
+                        const user = users.find(u => u.email === email && u.password === password);
             if (user) {
                 localStorage.setItem("isLoggedIn", true);
                 alert("ログイン成功！");
                 showSection("jobs");
             } else {
-                alert("メールまたはパスワードが間違っています。");
+                alert("メールアドレスまたはパスワードが間違っています。");
             }
         });
 
@@ -203,6 +272,9 @@
             alert("登録完了！ログインしてください。");
             showSection("login");
         });
+
+        // ページ読み込み時に履歴を表示
+        showHistory();
     </script>
 </body>
 </html>
