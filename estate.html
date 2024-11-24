@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate Platform</title>
+    <title>Luxury Real Estate</title>
     <style>
+        /* 高級感のある紺と金のテーマ */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            background-color: #1C1C3C; /* 紺色背景 */
+            color: #FFD700; /* 金色テキスト */
         }
 
         header {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #2A2A4D; /* 濃紺色 */
+            color: #FFD700;
             padding: 1rem;
             display: flex;
             justify-content: space-between;
@@ -22,114 +24,116 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
         }
 
         .language-switch select {
             padding: 0.5rem;
+            background-color: #FFD700;
+            color: #1C1C3C;
+            border: none;
+            border-radius: 5px;
         }
 
         .search-bar {
             display: flex;
             justify-content: center;
             padding: 1rem;
-            background-color: #fff;
+            background-color: #2A2A4D;
         }
 
         .search-bar input {
             width: 70%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
+            padding: 0.8rem;
+            border: 1px solid #FFD700;
             border-radius: 5px;
             margin-right: 0.5rem;
         }
 
         .search-bar button {
-            padding: 0.5rem 1rem;
-            background-color: #4CAF50;
-            color: white;
+            padding: 0.8rem 1.5rem;
+            background-color: #FFD700;
+            color: #1C1C3C;
             border: none;
             border-radius: 5px;
+            font-weight: bold;
             cursor: pointer;
         }
 
         .property-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
-            padding: 1rem;
+            gap: 1.5rem;
+            padding: 2rem;
         }
 
         .property-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            background-color: #2A2A4D;
+            border-radius: 10px;
+            overflow: hidden;
             width: calc(33.33% - 1rem);
-            padding: 1rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            color: #FFD700;
         }
 
-        .property-card h3 {
-            margin: 0.5rem 0;
+        .slider {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
         }
 
-        .property-card p {
-            margin: 0.5rem 0;
-            color: #555;
+        .slider img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .slider img.active {
+            display: block;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .slider-controls button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #FFD700;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .property-card h3, .property-card p {
+            padding: 0.5rem 1rem;
         }
 
         .property-card button {
+            margin: 1rem;
             padding: 0.5rem;
-            background-color: #4CAF50;
-            color: white;
+            width: calc(100% - 2rem);
+            background-color: #FFD700;
+            color: #1C1C3C;
             border: none;
             border-radius: 5px;
+            font-weight: bold;
             cursor: pointer;
-            margin-top: 0.5rem;
-        }
-
-        .contact-form {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-
-        .contact-form input, .contact-form textarea, .contact-form select {
-            width: 100%;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .contact-form button {
-            padding: 0.5rem;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .contact-form .close-btn {
-            background-color: red;
-            margin-top: 0.5rem;
         }
 
         footer {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #2A2A4D;
+            color: #FFD700;
             text-align: center;
-            padding: 1rem;
-            position: relative;
+            padding: 2rem;
         }
 
         .social-icons {
@@ -144,53 +148,10 @@
             height: 40px;
         }
     </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const properties = [
-                { id: 1, title: "Modern Apartment in Tokyo", location: "Shibuya, Tokyo", price: "¥120,000,000" },
-                { id: 2, title: "Luxury Condo in Osaka", location: "Namba, Osaka", price: "¥95,000,000" },
-                { id: 3, title: "Cozy House in Kyoto", location: "Gion, Kyoto", price: "¥75,000,000" },
-            ];
-
-            const propertyList = document.getElementById("property-list");
-            const contactForm = document.getElementById("contact-form");
-            const closeFormBtn = document.getElementById("close-form-btn");
-            const formTitle = document.getElementById("form-title");
-
-            let currentPropertyId = null;
-
-            properties.forEach((property) => {
-                const card = document.createElement("div");
-                card.className = "property-card";
-                card.innerHTML = `
-                    <h3>${property.title}</h3>
-                    <p>${property.location}</p>
-                    <p>${property.price}</p>
-                    <button onclick="openContactForm(${property.id}, '${property.title}')">問い合わせ</button>
-                `;
-                propertyList.appendChild(card);
-            });
-
-            window.openContactForm = (id, title) => {
-                currentPropertyId = id;
-                formTitle.innerText = `物件: ${title}`;
-                contactForm.style.display = "block";
-            };
-
-            closeFormBtn.addEventListener("click", () => {
-                contactForm.style.display = "none";
-            });
-
-            document.getElementById("contact-form-submit").addEventListener("click", () => {
-                alert("お問い合わせ内容が送信されました！");
-                contactForm.style.display = "none";
-            });
-        });
-    </script>
 </head>
 <body>
     <header>
-        <div class="logo">RealEstate+</div>
+        <div class="logo">Luxury Real Estate</div>
         <div class="language-switch">
             <select id="language-select">
                 <option value="en">English</option>
@@ -207,29 +168,111 @@
         <h2>Featured Properties</h2>
         <div class="property-list" id="property-list"></div>
     </main>
-    <div id="contact-form" class="contact-form">
-        <h3 id="form-title"></h3>
-        <input type="text" placeholder="名前" required />
-        <input type="text" placeholder="電話番号" required />
-        <input type="text" placeholder="住所" required />
-        <input type="email" placeholder="メールアドレス" required />
-        <select required>
-            <option value="">支払い方法を選択</option>
-            <option value="credit">クレジットカード</option>
-            <option value="bank">銀行振込</option>
-        </select>
-        <textarea placeholder="問い合わせ内容" rows="5" required></textarea>
-        <button id="contact-form-submit">送信</button>
-        <button id="close-form-btn" class="close-btn">閉じる</button>
-    </div>
-    <footer>
-        <p>&copy; 2024 RealEstate+ | Designed for a global audience</p>
+        <footer>
+        <p>&copy; 2024 Luxury Real Estate | Experience Exclusivity</p>
         <div class="social-icons">
-            <a href="https://line.me/R/"><img src="https://via.placeholder.com/40?text=LINE" alt="LINE"></a>
-            <a href="https://www.wechat.com/"><img src="https://via.placeholder.com/40?text=WeChat" alt="WeChat"></a>
-            <a href="https://www.instagram.com/"><img src="https://via.placeholder.com/40?text=Insta" alt="Instagram"></a>
-            <a href="https://www.whatsapp.com/"><img src="https://via.placeholder.com/40?text=WhatsApp" alt="WhatsApp"></a>
+            <a href="https://line.me/R/" target="_blank">
+                <img src="https://via.placeholder.com/40/FFD700/1C1C3C?text=LINE" alt="LINE">
+            </a>
+            <a href="https://www.wechat.com/" target="_blank">
+                <img src="https://via.placeholder.com/40/FFD700/1C1C3C?text=WeChat" alt="WeChat">
+            </a>
+            <a href="https://www.instagram.com/" target="_blank">
+                <img src="https://via.placeholder.com/40/FFD700/1C1C3C?text=Instagram" alt="Instagram">
+            </a>
+            <a href="https://www.whatsapp.com/" target="_blank">
+                <img src="https://via.placeholder.com/40/FFD700/1C1C3C?text=WhatsApp" alt="WhatsApp">
+            </a>
         </div>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const properties = [
+                {
+                    id: 1,
+                    title: "Luxury Apartment in Tokyo",
+                    location: "Shibuya, Tokyo",
+                    price: "¥120,000,000",
+                    images: [
+                        "https://via.placeholder.com/300x200?text=Tokyo+1",
+                        "https://via.placeholder.com/300x200?text=Tokyo+2",
+                        "https://via.placeholder.com/300x200?text=Tokyo+3"
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "High-end Condo in Osaka",
+                    location: "Namba, Osaka",
+                    price: "¥95,000,000",
+                    images: [
+                        "https://via.placeholder.com/300x200?text=Osaka+1",
+                        "https://via.placeholder.com/300x200?text=Osaka+2",
+                        "https://via.placeholder.com/300x200?text=Osaka+3"
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Elegant House in Kyoto",
+                    location: "Gion, Kyoto",
+                    price: "¥75,000,000",
+                    images: [
+                        "https://via.placeholder.com/300x200?text=Kyoto+1",
+                        "https://via.placeholder.com/300x200?text=Kyoto+2",
+                        "https://via.placeholder.com/300x200?text=Kyoto+3"
+                    ]
+                },
+            ];
+
+            const propertyList = document.getElementById("property-list");
+
+            properties.forEach((property) => {
+                const card = document.createElement("div");
+                card.className = "property-card";
+
+                const slider = document.createElement("div");
+                slider.className = "slider";
+                property.images.forEach((imgSrc, index) => {
+                    const img = document.createElement("img");
+                    img.src = imgSrc;
+                    if (index === 0) img.classList.add("active");
+                    slider.appendChild(img);
+                });
+
+                const controls = document.createElement("div");
+                controls.className = "slider-controls";
+                const prevBtn = document.createElement("button");
+                prevBtn.innerHTML = "&#9664;";
+                const nextBtn = document.createElement("button");
+                nextBtn.innerHTML = "&#9654;";
+                controls.appendChild(prevBtn);
+                controls.appendChild(nextBtn);
+
+                slider.appendChild(controls);
+
+                let currentIndex = 0;
+                const images = slider.querySelectorAll("img");
+                prevBtn.addEventListener("click", () => {
+                    images[currentIndex].classList.remove("active");
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    images[currentIndex].classList.add("active");
+                });
+                nextBtn.addEventListener("click", () => {
+                    images[currentIndex].classList.remove("active");
+                    currentIndex = (currentIndex + 1) % images.length;
+                    images[currentIndex].classList.add("active");
+                });
+
+                card.innerHTML = `
+                    <h3>${property.title}</h3>
+                    <p>${property.location}</p>
+                    <p>${property.price}</p>
+                    <button>問い合わせ</button>
+                `;
+
+                card.prepend(slider);
+                propertyList.appendChild(card);
+            });
+        });
+    </script>
 </body>
 </html>
