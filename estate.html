@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luxury Real Estate</title>
     <style>
+        /* 高級感のある紺と金のテーマ */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -107,21 +108,24 @@
         }
 
         .slider-controls {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
             display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
+            justify-content: center;
+            gap: 5px;
+            margin-top: 10px;
         }
 
         .slider-controls button {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #FFD700;
+            width: 10px;
+            height: 10px;
+            background-color: #FFD700;
             border: none;
-            padding: 0.5rem;
+            border-radius: 50%;
             cursor: pointer;
+        }
+
+        .slider-controls button.active {
+            background-color: #1C1C3C;
+            border: 2px solid #FFD700;
         }
 
         .property-card h3, .property-card p {
@@ -175,7 +179,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">Luxury Real Estate</div>
+        <div class="logo" id="logo">Luxury Real Estate</div>
         <div class="language-switch">
             <select id="language-select">
                 <option value="en">English</option>
@@ -187,15 +191,12 @@
     <main>
         <div class="search-bar">
             <input type="text" placeholder="Search by location, price, or keywords..." />
-            <button>Search</button>
+            <button id="search-button">Search</button>
         </div>
-        <div class="description">
-            私たちは高級不動産のオンライン仲介サービスを提供しております。<br>
-            不動産の詳細なご説明はオンライン上で行い、契約書の作成、お支払い、<br>
-            そして契約成立に至るまで、すべてのプロセスをオンラインで完結します。<br>
-            卓越した利便性とプライバシーをお届けします。
+        <div class="description" id="description">
+            Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.
         </div>
-        <h2 style="text-align: center; color: #FFD700;">Featured Properties</h2>
+        <h2 style="text-align: center; color: #FFD700;" id="featured-properties-title">Featured Properties</h2>
         <div class="property-list" id="property-list"></div>
     </main>
         <footer>
@@ -217,6 +218,41 @@
     </footer>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            const languages = {
+                en: {
+                    logo: "Luxury Real Estate",
+                    search: "Search",
+                    description: "Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.",
+                    featuredProperties: "Featured Properties"
+                },
+                zh: {
+                    logo: "豪华房地产",
+                    search: "搜索",
+                    description: "欢迎来到我们的豪华房地产服务。我们提供在线房产参观、合同签订以及安全支付，一切都在您家中完成。",
+                    featuredProperties: "精选房源"
+                },
+                ja: {
+                    logo: "高級不動産",
+                    search: "検索",
+                    description: "私たちの高級不動産サービスへようこそ。オンラインで物件ツアー、契約、支払いをすべて完結できます。",
+                    featuredProperties: "おすすめ物件"
+                }
+            };
+
+            const languageSelect = document.getElementById("language-select");
+            const logo = document.getElementById("logo");
+            const searchButton = document.getElementById("search-button");
+            const description = document.getElementById("description");
+            const featuredPropertiesTitle = document.getElementById("featured-properties-title");
+
+            languageSelect.addEventListener("change", (e) => {
+                const lang = e.target.value;
+                logo.textContent = languages[lang].logo;
+                searchButton.textContent = languages[lang].search;
+                description.textContent = languages[lang].description;
+                featuredPropertiesTitle.textContent = languages[lang].featuredProperties;
+            });
+
             const properties = [
                 {
                     id: 1,
@@ -250,7 +286,7 @@
                         "https://via.placeholder.com/300x200?text=Kyoto+2",
                         "https://via.placeholder.com/300x200?text=Kyoto+3"
                     ]
-                },
+                }
             ];
 
             const propertyList = document.getElementById("property-list");
@@ -259,43 +295,33 @@
                 const card = document.createElement("div");
                 card.className = "property-card";
 
-                // スライダーの作成
                 const slider = document.createElement("div");
                 slider.className = "slider";
+                const controls = document.createElement("div");
+                controls.className = "slider-controls";
+
                 property.images.forEach((imgSrc, index) => {
                     const img = document.createElement("img");
                     img.src = imgSrc;
                     if (index === 0) img.classList.add("active");
                     slider.appendChild(img);
-                });
 
-                // スライダーのコントロールボタン
-                const controls = document.createElement("div");
-                controls.className = "slider-controls";
-                const prevBtn = document.createElement("button");
-                prevBtn.innerHTML = "&#9664;";
-                const nextBtn = document.createElement("button");
-                nextBtn.innerHTML = "&#9654;";
-                controls.appendChild(prevBtn);
-                controls.appendChild(nextBtn);
+                    const button = document.createElement("button");
+                    button.dataset.index = index;
+                    if (index === 0) button.classList.add("active");
+                    button.addEventListener("click", () => {
+                        slider.querySelectorAll("img").forEach((img, i) => {
+                            img.classList.toggle("active", i === index);
+                        });
+                        controls.querySelectorAll("button").forEach((btn, i) => {
+                            btn.classList.toggle("active", i === index);
+                        });
+                    });
+                    controls.appendChild(button);
+                });
 
                 slider.appendChild(controls);
 
-                // スライダーの切り替え機能
-                let currentIndex = 0;
-                const images = slider.querySelectorAll("img");
-                prevBtn.addEventListener("click", () => {
-                    images[currentIndex].classList.remove("active");
-                    currentIndex = (currentIndex - 1 + images.length) % images.length;
-                    images[currentIndex].classList.add("active");
-                });
-                nextBtn.addEventListener("click", () => {
-                    images[currentIndex].classList.remove("active");
-                    currentIndex = (currentIndex + 1) % images.length;
-                    images[currentIndex].classList.add("active");
-                });
-
-                // カードの内容を追加
                 card.innerHTML = `
                     <h3>${property.title}</h3>
                     <p>${property.location}</p>
