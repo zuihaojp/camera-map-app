@@ -57,12 +57,24 @@
                 <!-- 特許情報がここに追加されます -->
             </div>
         </div>
-        <div id="login-section">
-            <h2>ログインして操作</h2>
+        <div id="login-section" style="display: none;">
+            <h2>ログインまたは新規登録</h2>
             <form class="login-form" id="login-form">
                 <input type="text" id="username" placeholder="ユーザー名" required>
                 <input type="password" id="password" placeholder="パスワード" required>
                 <button type="submit">ログイン</button>
+            </form>
+        </div>
+        <div id="rental-section" style="display: none;">
+            <h2>レンタル画面</h2>
+            <p>この特許のレンタル料: <span id="rental-fee"></span>円</p>
+            <button onclick="confirmRental()">レンタル確定</button>
+        </div>
+        <div id="auction-section" style="display: none;">
+            <h2>オークション入札画面</h2>
+            <form id="bid-form">
+                <input type="number" id="bid-amount" placeholder="入札額を入力" required>
+                <button type="submit">入札</button>
             </form>
         </div>
     </div>
@@ -70,10 +82,13 @@
     <script>
         // 仮の特許データ
         const patents = [
-            { id: 1, title: "特許A", description: "これは特許Aの説明です。" },
-            { id: 2, title: "特許B", description: "これは特許Bの説明です。" },
-            { id: 3, title: "特許C", description: "これは特許Cの説明です。" },
+            { id: 1, title: "特許A", description: "これは特許Aの説明です。", rentalFee: 10000 },
+            { id: 2, title: "特許B", description: "これは特許Bの説明です。", rentalFee: 15000 },
+            { id: 3, title: "特許C", description: "これは特許Cの説明です。", rentalFee: 20000 },
         ];
+
+        // ログイン状態管理
+        let loggedInUser = null;
 
         // 特許一覧を表示
         const patentList = document.getElementById("patent-list");
@@ -85,38 +100,75 @@
                 card.innerHTML = `
                     <h3>${patent.title}</h3>
                     <p>${patent.description}</p>
-                    <button onclick="handleAction(${patent.id})">操作</button>
+                    <p>レンタル料: ${patent.rentalFee}円</p>
+                    <button onclick="startRental(${patent.id})">レンタル</button>
+                    <button onclick="startAuction(${patent.id})">オークション</button>
                 `;
                 patentList.appendChild(card);
             });
         }
 
-        // 操作時にログイン確認
-        function handleAction(patentId) {
-            const username = localStorage.getItem("username");
-            if (username) {
-                alert(`特許ID ${patentId} に対する操作を開始します（ユーザー: ${username}）`);
+        // レンタル処理
+        function startRental(patentId) {
+            if (!loggedInUser) {
+                showLogin();
             } else {
-                alert("操作を実行するにはログインが必要です！");
+                const patent = patents.find((p) => p.id === patentId);
+                document.getElementById("rental-fee").innerText = patent.rentalFee;
+                document.getElementById("rental-section").style.display = "block";
+                document.getElementById("patent-list-section").style.display = "none";
             }
         }
 
-        // ログインフォーム処理
+        function confirmRental() {
+            alert("レンタルが確定しました！");
+            document.getElementById("rental-section").style.display = "none";
+            document.getElementById("patent-list-section").style.display = "block";
+        }
+
+        // オークション処理
+        function startAuction(patentId) {
+            if (!loggedInUser) {
+                showLogin();
+            } else {
+                document.getElementById("auction-section").style.display = "block";
+                document.getElementById("patent-list-section").style.display = "none";
+            }
+        }
+
+        const bidForm = document.getElementById("bid-form");
+        bidForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const bidAmount = document.getElementById("bid-amount").value;
+            alert(`入札額 ${bidAmount}円 が送信されました！`);
+            document.getElementById("auction-section").style.display = "none";
+            document.getElementById("patent-list-section").style.display = "block";
+        });
+
+        // ログイン処理
         const loginForm = document.getElementById("login-form");
         loginForm.addEventListener("submit", (e) => {
             e.preventDefault();
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
-
-            // 簡易ログイン処理 (実際はサーバーで認証)
             if (username === "user" && password === "password") {
+                loggedInUser = username;
                 alert("ログイン成功！");
-                localStorage.setItem("username", username); // ログイン状態を保存
-                document.getElementById("login-section").style.display = "none";
+                hideLogin();
             } else {
-                alert("ユーザー名またはパスワードが違います！");
+                alert("ログイン情報が正しくありません！");
             }
         });
+
+        function showLogin() {
+            document.getElementById("login-section").style.display = "block";
+            document.getElementById("patent-list-section").style.display = "none";
+        }
+
+        function hideLogin() {
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("patent-list-section").style.display = "block";
+        }
 
         // 初期化処理
         displayPatents();
