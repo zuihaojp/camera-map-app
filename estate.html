@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .language-switch select {
+            padding: 0.5rem;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+            background-color: #fff;
+        }
+
+        .search-bar input {
+            width: 70%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 0.5rem;
+        }
+
+        .search-bar button {
+            padding: 0.5rem 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .property-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .property-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: calc(33.33% - 1rem);
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .property-card h3 {
+            margin: 0.5rem 0;
+        }
+
+        .property-card p {
+            margin: 0.5rem 0;
+            color: #555;
+        }
+
+        .property-card button {
+            padding: 0.5rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .contact-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .contact-form input, .contact-form textarea, .contact-form select {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .contact-form button {
+            padding: 0.5rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .contact-form .close-btn {
+            background-color: red;
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+            gap: 1rem;
+        }
+
+        .social-icons a img {
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const properties = [
+                { id: 1, title: "Modern Apartment in Tokyo", location: "Shibuya, Tokyo", price: "¥120,000,000" },
+                { id: 2, title: "Luxury Condo in Osaka", location: "Namba, Osaka", price: "¥95,000,000" },
+                { id: 3, title: "Cozy House in Kyoto", location: "Gion, Kyoto", price: "¥75,000,000" },
+            ];
+
+            const propertyList = document.getElementById("property-list");
+            const contactForm = document.getElementById("contact-form");
+            const closeFormBtn = document.getElementById("close-form-btn");
+            const formTitle = document.getElementById("form-title");
+
+            let currentPropertyId = null;
+
+            properties.forEach((property) => {
+                const card = document.createElement("div");
+                card.className = "property-card";
+                card.innerHTML = `
+                    <h3>${property.title}</h3>
+                    <p>${property.location}</p>
+                    <p>${property.price}</p>
+                    <button onclick="openContactForm(${property.id}, '${property.title}')">問い合わせ</button>
+                `;
+                propertyList.appendChild(card);
+            });
+
+            window.openContactForm = (id, title) => {
+                currentPropertyId = id;
+                formTitle.innerText = `物件: ${title}`;
+                contactForm.style.display = "block";
+            };
+
+            closeFormBtn.addEventListener("click", () => {
+                contactForm.style.display = "none";
+            });
+
+            document.getElementById("contact-form-submit").addEventListener("click", () => {
+                alert("お問い合わせ内容が送信されました！");
+                contactForm.style.display = "none";
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">RealEstate+</div>
+        <div class="language-switch">
+            <select id="language-select">
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+                <option value="ja">日本語</option>
+            </select>
+        </div>
+    </header>
+    <main>
+        <div class="search-bar">
+            <input type="text" placeholder="Search by location, price, or keywords..." />
+            <button>Search</button>
+        </div>
+        <h2>Featured Properties</h2>
+        <div class="property-list" id="property-list"></div>
+    </main>
+    <div id="contact-form" class="contact-form">
+        <h3 id="form-title"></h3>
+        <input type="text" placeholder="名前" required />
+        <input type="text" placeholder="電話番号" required />
+        <input type="text" placeholder="住所" required />
+        <input type="email" placeholder="メールアドレス" required />
+        <select required>
+            <option value="">支払い方法を選択</option>
+            <option value="credit">クレジットカード</option>
+            <option value="bank">銀行振込</option>
+        </select>
+        <textarea placeholder="問い合わせ内容" rows="5" required></textarea>
+        <button id="contact-form-submit">送信</button>
+        <button id="close-form-btn" class="close-btn">閉じる</button>
+    </div>
+    <footer>
+        <p>&copy; 2024 RealEstate+ | Designed for a global audience</p>
+        <div class="social-icons">
+            <a href="https://line.me/R/"><img src="https://via.placeholder.com/40?text=LINE" alt="LINE"></a>
+            <a href="https://www.wechat.com/"><img src="https://via.placeholder.com/40?text=WeChat" alt="WeChat"></a>
+            <a href="https://www.instagram.com/"><img src="https://via.placeholder.com/40?text=Insta" alt="Instagram"></a>
+            <a href="https://www.whatsapp.com/"><img src="https://via.placeholder.com/40?text=WhatsApp" alt="WhatsApp"></a>
+        </div>
+    </footer>
+</body>
+</html>
