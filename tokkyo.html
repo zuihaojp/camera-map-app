@@ -51,19 +51,19 @@
         <h1>特許プラットフォーム</h1>
     </header>
     <div class="container">
+        <div id="patent-list-section">
+            <h2>特許一覧</h2>
+            <div id="patent-list">
+                <!-- 特許情報がここに追加されます -->
+            </div>
+        </div>
         <div id="login-section">
-            <h2>ログイン</h2>
+            <h2>ログインして操作</h2>
             <form class="login-form" id="login-form">
                 <input type="text" id="username" placeholder="ユーザー名" required>
                 <input type="password" id="password" placeholder="パスワード" required>
                 <button type="submit">ログイン</button>
             </form>
-        </div>
-        <div id="patent-list-section" style="display: none;">
-            <h2>特許一覧</h2>
-            <div id="patent-list">
-                <!-- 特許情報がここに追加されます -->
-            </div>
         </div>
     </div>
 
@@ -75,29 +75,8 @@
             { id: 3, title: "特許C", description: "これは特許Cの説明です。" },
         ];
 
-        // ログインフォーム処理
-        const loginForm = document.getElementById("login-form");
-        const loginSection = document.getElementById("login-section");
-        const patentListSection = document.getElementById("patent-list-section");
-        const patentList = document.getElementById("patent-list");
-
-        loginForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            // 簡易ログイン処理 (実際はサーバーで認証)
-            if (username === "user" && password === "password") {
-                alert("ログイン成功！");
-                loginSection.style.display = "none";
-                patentListSection.style.display = "block";
-                displayPatents();
-            } else {
-                alert("ユーザー名またはパスワードが違います！");
-            }
-        });
-
         // 特許一覧を表示
+        const patentList = document.getElementById("patent-list");
         function displayPatents() {
             patentList.innerHTML = ""; // 初期化
             patents.forEach((patent) => {
@@ -106,10 +85,41 @@
                 card.innerHTML = `
                     <h3>${patent.title}</h3>
                     <p>${patent.description}</p>
+                    <button onclick="handleAction(${patent.id})">操作</button>
                 `;
                 patentList.appendChild(card);
             });
         }
+
+        // 操作時にログイン確認
+        function handleAction(patentId) {
+            const username = localStorage.getItem("username");
+            if (username) {
+                alert(`特許ID ${patentId} に対する操作を開始します（ユーザー: ${username}）`);
+            } else {
+                alert("操作を実行するにはログインが必要です！");
+            }
+        }
+
+        // ログインフォーム処理
+        const loginForm = document.getElementById("login-form");
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // 簡易ログイン処理 (実際はサーバーで認証)
+            if (username === "user" && password === "password") {
+                alert("ログイン成功！");
+                localStorage.setItem("username", username); // ログイン状態を保存
+                document.getElementById("login-section").style.display = "none";
+            } else {
+                alert("ユーザー名またはパスワードが違います！");
+            }
+        });
+
+        // 初期化処理
+        displayPatents();
     </script>
 </body>
 </html>
