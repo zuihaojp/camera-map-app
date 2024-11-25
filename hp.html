@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オンラインサービス専門会社</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #1C1C3C; /* 紺色背景 */
+            color: #FFD700; /* 金色テキスト */
+        }
+
+        header {
+            background-color: #2A2A4D; /* ヘッダーの紺色 */
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #FFD700;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #FFD700;
+            color: #1C1C3C;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(to bottom, #1C1C3C, #2A2A4D);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .service-card {
+            background-color: #2A2A4D;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .service-card a {
+            text-decoration: none;
+            color: #FFD700;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+        }
+
+        .service-card a:hover {
+            background-color: #FFD700;
+            color: #1C1C3C;
+        }
+
+        footer {
+            background-color: #2A2A4D;
+            color: #FFD700;
+            text-align: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">オンラインサービス専門会社</div>
+        <nav>
+            <ul>
+                <li><a href="#services">サービス</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="hero">
+        <h1>すべてオンラインで完結する高品質なサービス</h1>
+        <p>オンライン診療、法律相談、不動産仲介、日本写真家の写真オークションを提供しています。<br>
+            自宅にいながら快適で便利なサービスをご利用いただけます。</p>
+    </div>
+    <section class="services" id="services">
+        <div class="service-card">
+            <h2>オンライン診療</h2>
+            <p>経験豊富な医師によるオンライン診療。健康相談から処方箋の発行まで対応します。</p>
+            <a href="./service-1/index.html">詳しく見る</a>
+        </div>
+        <div class="service-card">
+            <h2>オンライン法律相談</h2>
+            <p>弁護士と直接オンラインで相談可能。契約書作成、トラブル解決をスムーズにサポート。</p>
+            <a href="./service-2/index.html">詳しく見る</a>
+        </div>
+        <div class="service-card">
+            <h2>不動産仲介</h2>
+            <p>物件探しから契約締結まで、すべてオンラインで完結。安心して不動産取引を行えます。</p>
+            <a href="./service-3/index.html">詳しく見る</a>
+        </div>
+        <div class="service-card">
+            <h2>写真オークション</h2>
+            <p>日本写真家の作品をオンラインでオークション形式で販売。魅力的なアートを手に入れる機会を提供。</p>
+            <a href="./service-4/index.html">詳しく見る</a>
+        </div>
+    </section>
+    <footer id="contact">
+        <p>&copy; 2024 オンラインサービス専門会社</p>
+        <p>お問い合わせ: info@example.com</p>
+    </footer>
+</body>
+</html>
