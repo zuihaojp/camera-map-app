@@ -9,13 +9,14 @@
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
-            background-color: #1C1C3C; /* 高級感のある背景 */
-            color: #FFD700; /* ゴールドの文字色 */
+            background-color: #f4f4f9; /* 高級感のある背景 */
+            color: #1C1C3C; /* ダークブルー */
         }
 
         /* ヘッダー */
         header {
-            background-color: #2A2A4D;
+            background-color: #1C1C3C; /* ダークブルー */
+            color: #FFD700; /* ゴールド */
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
@@ -25,7 +26,6 @@
         .logo {
             font-size: 2rem;
             font-weight: bold;
-            color: #FFD700;
         }
 
         .language-switch button {
@@ -47,49 +47,70 @@
         .hero {
             text-align: center;
             padding: 3rem;
-            background: linear-gradient(135deg, #1C1C3C, #2A2A4D);
+            background: linear-gradient(135deg, #f4f4f9, #FFD700);
         }
 
         .hero h1 {
             font-size: 2.5rem;
+            color: #1C1C3C;
             margin-bottom: 1rem;
         }
 
         .hero p {
             font-size: 1.2rem;
-            line-height: 1.8;
+            color: #333;
         }
 
-        /* スケジュール表示 */
-        .schedule {
+        /* カレンダー */
+        .calendar {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(7, 1fr);
             gap: 1rem;
             padding: 2rem;
         }
 
-        .day {
-            background-color: #2A2A4D;
-            padding: 1rem;
-            border-radius: 10px;
-            text-align: center;
+        .calendar-header {
+            grid-column: span 7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
         }
 
-        .time-slot {
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 5px;
-        }
-
-        .time-slot.open {
+        .calendar-header button {
             background-color: #FFD700;
+            color: #1C1C3C;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .calendar-header h2 {
+            margin: 0;
             color: #1C1C3C;
         }
 
-        .time-slot.booked {
-            background-color: #444;
-            color: #999;
+        .calendar-day {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #1C1C3C;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .calendar-day.booked {
+            background-color: #999;
+            color: #fff;
+            cursor: not-allowed;
+        }
+
+        .calendar-day:hover:not(.booked) {
+            background-color: #FFD700;
+            color: #1C1C3C;
         }
 
         /* 予約フォーム */
@@ -99,11 +120,14 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #2A2A4D;
-            color: #FFD700;
+            background-color: #fff;
+            color: #1C1C3C;
             padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
         }
 
         .form-popup input,
@@ -113,8 +137,7 @@
             padding: 0.8rem;
             border: 1px solid #FFD700;
             border-radius: 5px;
-            background-color: #1C1C3C;
-            color: #FFD700;
+            background-color: #f4f4f9;
         }
 
         .form-popup button {
@@ -123,33 +146,20 @@
             border: none;
             padding: 0.8rem 1rem;
             border-radius: 5px;
-            font-weight: bold;
             cursor: pointer;
+            font-weight: bold;
         }
 
         .form-popup .close-btn {
             background-color: red;
+            color: #fff;
             margin-top: 1rem;
         }
 
-        /* フッター */
         footer {
-            background-color: #2A2A4D;
             text-align: center;
             padding: 1rem;
-        }
-
-        .social-icons a {
-            text-decoration: none;
-            background-color: #FFD700;
-            color: #1C1C3C;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        .social-icons a:hover {
-            background-color: #333;
+            background-color: #1C1C3C;
             color: #FFD700;
         }
     </style>
@@ -167,10 +177,12 @@
         <div class="hero">
             <h1 id="hero-title">高品質な宅建士サービスをオンラインで</h1>
             <p id="hero-description">
-                空いている時間を選んで、オンラインで予約を完了しましょう。シンプルで安心です。
+                カレンダーから空き日を選び、予約を完了してください。
             </p>
         </div>
-        <div class="schedule" id="schedule"></div>
+        <div class="calendar" id="calendar">
+            <!-- カレンダーがここに表示されます -->
+        </div>
     </main>
     <div class="form-popup" id="form-popup">
         <h3 id="form-title">予約フォーム</h3>
@@ -183,66 +195,60 @@
     </div>
     <footer>
         <p>&copy; 2024 オンライン宅建士予約</p>
-        <div class="social-icons">
-            <a href="https://line.me/R/" target="_blank">LINE追加</a>
-        </div>
     </footer>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const schedule = document.getElementById("schedule");
+            const calendar = document.getElementById("calendar");
             const formPopup = document.getElementById("form-popup");
             const closeFormButton = document.getElementById("close-form");
             const submitFormButton = document.getElementById("submit-form");
 
-            const translations = {
-                ja: {
-                    heroTitle: "高品質な宅建士サービスをオンラインで",
-                    heroDescription: "空いている時間を選んで、オンラインで予約を完了しましょう。シンプルで安心です。",
-                    formTitle: "予約フォーム"
-                },
-                en: {
-                    heroTitle: "High-quality Real Estate Consulting Online",
-                    heroDescription: "Select an available time and complete your booking online. It's simple and secure.",
-                    formTitle: "Reservation Form"
-                },
-                zh: {
-                    heroTitle: "高质量房地产咨询服务在线",
-                    heroDescription: "选择可用时间并在线完成预订。简单又安全。",
-                    formTitle: "预订表"
-                }
-            };
+            const bookedDates = ["2024-12-15", "2024-12-16", "2024-12-20"]; // 予約済みの日付
 
-            document.querySelectorAll(".language-switch button").forEach(button => {
-                button.addEventListener("click", () => {
-                    const lang = button.dataset.lang;
-                    document.getElementById("hero-title").textContent = translations[lang].heroTitle;
-                    document.getElementById("hero-description").textContent = translations[lang].heroDescription;
-                    document.getElementById("form-title").textContent = translations[lang].formTitle;
-                });
-            });
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth();
 
-            const days = ["月", "火", "水", "木", "金", "土", "日"];
-            const times = ["10:00", "11:00", "14:00", "15:00", "16:00"];
-            const bookedSlots = ["月-10:00", "火-11:00", "木-15:00"];
+            function renderCalendar(year, month) {
+                calendar.innerHTML = ""; // カレンダーをクリア
 
-            days.forEach(day => {
-                const dayDiv = document.createElement("div");
-                dayDiv.className = "day";
-                dayDiv.innerHTML = `<h3>${day}曜日</h3>`;
-                times.forEach(time => {
-                    const slotKey = `${day}-${time}`;
-                    const timeSlot = document.createElement("div");
-                    timeSlot.className = `time-slot ${bookedSlots.includes(slotKey) ? "booked" : "open"}`;
-                    timeSlot.textContent = time;
-                    if (!bookedSlots.includes(slotKey)) {
-                        timeSlot.addEventListener("click", () => {
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+
+                const header = document.createElement("div");
+                header.className = "calendar-header";
+                header.innerHTML = `
+                    <button id="prev-month">←</button>
+                    <h2>${year}年 ${month + 1}月</h2>
+                    <button id="next-month">→</button>
+                `;
+                calendar.appendChild(header);
+
+                for (let i = 1; i <= lastDay.getDate(); i++) {
+                    const dateKey = `${year}-${String(month + 1).padStart(2, "0")}-${String(i).padStart(2, "0")}`;
+                    const dayDiv = document.createElement("div");
+                    dayDiv.className = "calendar-day";
+                    if (bookedDates.includes(dateKey)) {
+                        dayDiv.classList.add("booked");
+                    }
+                    dayDiv.textContent = i;
+                    if (!dayDiv.classList.contains("booked")) {
+                        dayDiv.addEventListener("click", () => {
                             formPopup.style.display = "block";
                         });
                     }
-                    dayDiv.appendChild(timeSlot);
+                    calendar.appendChild(dayDiv);
+                }
+
+                document.getElementById("prev-month").addEventListener("click", () => {
+                    renderCalendar(year, month - 1);
                 });
-                schedule.appendChild(dayDiv);
-            });
+                document.getElementById("next-month").addEventListener("click", () => {
+                    renderCalendar(year, month + 1);
+                });
+            }
+
+            renderCalendar(currentYear, currentMonth);
 
             closeFormButton.addEventListener("click", () => {
                 formPopup.style.display = "none";
