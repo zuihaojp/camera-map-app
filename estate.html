@@ -133,16 +133,45 @@
             padding: 2rem;
         }
 
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-            gap: 1rem;
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #2A2A4D;
+            color: #FFD700;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 90%;
+            max-width: 500px;
         }
 
-        .social-icons a img {
-            width: 40px;
-            height: 40px;
+        .form-popup input, .form-popup textarea, .form-popup select {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            background-color: #1C1C3C;
+            color: #FFD700;
+        }
+
+        .form-popup button {
+            background-color: #FFD700;
+            color: #1C1C3C;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-popup .close-btn {
+            background-color: red;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -179,23 +208,10 @@
     </div>
     <footer>
         <p>&copy; 2024 Luxury Real Estate</p>
-        <div class="social-icons">
-            <a href="https://line.me/R/" target="_blank">
-                <img src="https://via.placeholder.com/40/FFD700/1C1C3C?text=LINE" alt="LINE">
-            </a>
-            <a href="https://www.wechat.com/" target="_blank">
-                <img src="https://via.placeholder.com/40/FFD700/1C1C3C?text=WeChat" alt="WeChat">
-            </a>
-            <a href="https://www.instagram.com/" target="_blank">
-                <img src="https://via.placeholder.com/40/FFD700/1C1C3C?text=Instagram" alt="Instagram">
-            </a>
-            <a href="https://www.whatsapp.com/" target="_blank">
-                <img src="https://via.placeholder.com/40/FFD700/1C1C3C?text=WhatsApp" alt="WhatsApp">
-            </a>
-        </div>
     </footer>
         <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // 言語対応
             const translations = {
                 en: {
                     logo: "Luxury Real Estate",
@@ -226,10 +242,10 @@
                         { title: "大阪の高級マンション", location: "難波, 大阪", price: "¥95,000,000" },
                         { title: "京都のエレガントな住宅", location: "祇園, 京都", price: "¥75,000,000" }
                     ]
-                }
+                               }
             };
 
-                        const languageSwitchButtons = document.querySelectorAll(".language-switch button");
+            const languageSwitchButtons = document.querySelectorAll(".language-switch button");
             const logoElement = document.getElementById("logo");
             const descriptionElement = document.getElementById("description");
             const featuredPropertiesTitleElement = document.getElementById("featured-properties-title");
