@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オンライン宅建士予約サイト</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #1C1C3C; /* 紺色背景 */
+            color: #FFD700; /* 金色テキスト */
+        }
+
+        header {
+            background-color: #2A2A4D;
+            color: #FFD700;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .schedule {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .day {
+            background-color: #2A2A4D;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .day h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .time-slot {
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .time-slot.open {
+            background-color: #FFD700;
+            color: #1C1C3C;
+        }
+
+        .time-slot.booked {
+            background-color: #444;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #2A2A4D;
+            color: #FFD700;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .form-popup input, .form-popup textarea {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            background-color: #1C1C3C;
+            color: #FFD700;
+        }
+
+        .form-popup button {
+            background-color: #FFD700;
+            color: #1C1C3C;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-popup .close-btn {
+            background-color: red;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>オンライン宅建士予約サイト</h1>
+    </header>
+    <div class="hero">
+        <h1>高品質な宅建士サービスをオンラインで</h1>
+        <p>簡単なステップで空いている時間を選び、オンラインで相談予約を完了しましょう。</p>
+    </div>
+    <div class="schedule" id="schedule">
+        <!-- 予約スケジュールがここに表示されます -->
+    </div>
+
+    <div class="form-popup" id="form-popup">
+        <h3>予約フォーム</h3>
+        <input type="text" id="company" placeholder="不動産会社名" required>
+        <input type="text" id="name" placeholder="担当者の名前" required>
+        <input type="tel" id="phone" placeholder="電話番号" required>
+        <textarea id="details" rows="4" placeholder="相談内容" required></textarea>
+        <button id="submit-form">送信</button>
+        <button class="close-btn" id="close-form">閉じる</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const schedule = document.getElementById("schedule");
+            const formPopup = document.getElementById("form-popup");
+            const closeFormButton = document.getElementById("close-form");
+            const submitFormButton = document.getElementById("submit-form");
+
+            // サンプルのスケジュールデータ
+            const days = ["月", "火", "水", "木", "金", "土", "日"];
+            const times = ["10:00", "11:00", "14:00", "15:00", "16:00"];
+            const bookedSlots = ["月-10:00", "火-11:00", "木-15:00"]; // 埋まっている時間帯
+
+            // スケジュールの表示
+            days.forEach((day) => {
+                const dayDiv = document.createElement("div");
+                dayDiv.className = "day";
+                dayDiv.innerHTML = `<h3>${day}曜日</h3>`;
+
+                times.forEach((time) => {
+                    const timeSlot = document.createElement("div");
+                    const slotKey = `${day}-${time}`;
+                    timeSlot.className = `time-slot ${
+                        bookedSlots.includes(slotKey) ? "booked" : "open"
+                    }`;
+                    timeSlot.textContent = time;
+
+                    // 空いている時間をクリックするとフォーム表示
+                    if (!bookedSlots.includes(slotKey)) {
+                        timeSlot.addEventListener("click", () => {
+                            formPopup.style.display = "block";
+                        });
+                    }
+
+                    dayDiv.appendChild(timeSlot);
+                });
+
+                schedule.appendChild(dayDiv);
+            });
+
+            // フォームの閉じるボタン
+            closeFormButton.addEventListener("click", () => {
+                formPopup.style.display = "none";
+            });
+
+            // フォーム送信
+            submitFormButton.addEventListener("click", () => {
+                const company = document.getElementById("company").value;
+                const name = document.getElementById("name").value;
+                const phone = document.getElementById("phone").value;
+                const details = document.getElementById("details").value;
+
+                if (company && name && phone && details) {
+                    alert("予約が完了しました！");
+                    formPopup.style.display = "none";
+                } else {
+                    alert("すべての項目を入力してください。");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
