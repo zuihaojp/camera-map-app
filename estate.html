@@ -74,6 +74,7 @@
             position: relative;
             overflow: hidden;
             height: 150px;
+            width: 100%;
         }
 
         .slider img {
@@ -81,7 +82,6 @@
             height: 150px;
             object-fit: cover;
             display: none;
-            transition: opacity 0.5s ease;
         }
 
         .slider img.active {
@@ -91,7 +91,7 @@
         .slider-controls {
             display: flex;
             justify-content: center;
-            gap: 5px;
+            gap: 10px;
             margin-top: 10px;
         }
 
@@ -132,52 +132,11 @@
             text-align: center;
             padding: 2rem;
         }
-
-        .form-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #2A2A4D;
-            color: #FFD700;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            width: 90%;
-            max-width: 500px;
-        }
-
-        .form-popup input, .form-popup textarea, .form-popup select {
-            width: 100%;
-            margin-bottom: 1rem;
-            padding: 0.8rem;
-            border: 1px solid #FFD700;
-            border-radius: 5px;
-            background-color: #1C1C3C;
-            color: #FFD700;
-        }
-
-        .form-popup button {
-            background-color: #FFD700;
-            color: #1C1C3C;
-            border: none;
-            padding: 0.8rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .form-popup .close-btn {
-            background-color: red;
-            margin-top: 1rem;
-        }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo" id="logo">Luxury Real Estate</div>
+        <div class="logo">Luxury Real Estate</div>
         <div class="language-switch">
             <button data-lang="en">English</button>
             <button data-lang="zh">中文</button>
@@ -185,172 +144,52 @@
         </div>
     </header>
     <main>
-        <div class="description" id="description">
+        <div class="description">
             Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.
         </div>
-        <h2 style="text-align: center; color: #FFD700;" id="featured-properties-title">Featured Properties</h2>
-        <div class="property-list" id="property-list"></div>
+        <h2 style="text-align: center; color: #FFD700;">Featured Properties</h2>
+        <div class="property-list">
+            <div class="property-card">
+                <div class="slider">
+                    <img src="https://via.placeholder.com/300x200?text=Image+1" class="active" alt="Image 1">
+                    <img src="https://via.placeholder.com/300x200?text=Image+2" alt="Image 2">
+                    <img src="https://via.placeholder.com/300x200?text=Image+3" alt="Image 3">
+                    <div class="slider-controls">
+                        <button data-index="0" class="active"></button>
+                        <button data-index="1"></button>
+                        <button data-index="2"></button>
+                    </div>
+                </div>
+                <h3>Luxury Apartment in Tokyo</h3>
+                <p>Shibuya, Tokyo</p>
+                <p>¥120,000,000</p>
+                <button>Contact Us</button>
+            </div>
+        </div>
     </main>
-    <div class="form-popup" id="form-popup">
-        <h3>お問い合わせフォーム</h3>
-        <input type="text" id="name" placeholder="お名前" required>
-        <input type="email" id="email" placeholder="メールアドレス" required>
-        <input type="text" id="phone" placeholder="電話番号" required>
-        <input type="text" id="address" placeholder="住所" required>
-        <select id="payment-method" required>
-            <option value="">支払い方法を選択</option>
-            <option value="credit-card">クレジットカード</option>
-            <option value="bank-transfer">銀行振込</option>
-        </select>
-        <textarea id="message" placeholder="お問い合わせ内容" rows="4" required></textarea>
-        <button id="submit-form">送信</button>
-        <button class="close-btn" id="close-form">閉じる</button>
-    </div>
     <footer>
         <p>&copy; 2024 Luxury Real Estate</p>
     </footer>
-        <script>
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // 言語対応
-            const translations = {
-                en: {
-                    logo: "Luxury Real Estate",
-                    description: "Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.",
-                    featuredPropertiesTitle: "Featured Properties",
-                    properties: [
-                        { title: "Luxury Apartment in Tokyo", location: "Shibuya, Tokyo", price: "¥120,000,000" },
-                        { title: "High-end Condo in Osaka", location: "Namba, Osaka", price: "¥95,000,000" },
-                        { title: "Elegant House in Kyoto", location: "Gion, Kyoto", price: "¥75,000,000" }
-                    ]
-                },
-                zh: {
-                    logo: "豪华房地产",
-                    description: "欢迎来到我们的豪华房地产服务。我们提供在线房产参观、合同签订以及安全支付，一切都在您家中完成。",
-                    featuredPropertiesTitle: "精选房源",
-                    properties: [
-                        { title: "东京豪华公寓", location: "东京涩谷", price: "¥120,000,000" },
-                        { title: "大阪高端公寓", location: "大阪难波", price: "¥95,000,000" },
-                        { title: "京都优雅住宅", location: "京都祇园", price: "¥75,000,000" }
-                    ]
-                },
-                ja: {
-                    logo: "高級不動産",
-                    description: "当社は高級不動産のオンライン仲介サービスを提供しています。物件ツアー、契約書の作成、支払いがすべてオンラインで完結します。",
-                    featuredPropertiesTitle: "おすすめ物件",
-                    properties: [
-                        { title: "東京の高級アパート", location: "渋谷, 東京", price: "¥120,000,000" },
-                        { title: "大阪の高級マンション", location: "難波, 大阪", price: "¥95,000,000" },
-                        { title: "京都のエレガントな住宅", location: "祇園, 京都", price: "¥75,000,000" }
-                    ]
-                               }
-            };
+            // スライダー機能
+            const sliders = document.querySelectorAll(".slider");
+            sliders.forEach((slider) => {
+                const images = slider.querySelectorAll("img");
+                const controls = slider.querySelectorAll(".slider-controls button");
 
-            const languageSwitchButtons = document.querySelectorAll(".language-switch button");
-            const logoElement = document.getElementById("logo");
-            const descriptionElement = document.getElementById("description");
-            const featuredPropertiesTitleElement = document.getElementById("featured-properties-title");
-            const propertyListElement = document.getElementById("property-list");
+                controls.forEach((control, index) => {
+                    control.addEventListener("click", () => {
+                        // 全ての画像を非表示
+                        images.forEach((img) => img.classList.remove("active"));
+                        controls.forEach((btn) => btn.classList.remove("active"));
 
-            // 言語切り替え処理
-            languageSwitchButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const lang = button.dataset.lang;
-                    const translation = translations[lang];
-
-                    // 各要素を翻訳
-                    logoElement.textContent = translation.logo;
-                    descriptionElement.textContent = translation.description;
-                    featuredPropertiesTitleElement.textContent = translation.featuredPropertiesTitle;
-
-                    // 物件リストの翻訳と再生成
-                    propertyListElement.innerHTML = ""; // 既存リストをクリア
-                    translation.properties.forEach((property) => {
-                        const card = document.createElement("div");
-                        card.className = "property-card";
-
-                        const slider = document.createElement("div");
-                        slider.className = "slider";
-                        const controls = document.createElement("div");
-                        controls.className = "slider-controls";
-
-                        const images = [
-                            "https://via.placeholder.com/300x200?text=Image+1",
-                            "https://via.placeholder.com/300x200?text=Image+2",
-                            "https://via.placeholder.com/300x200?text=Image+3"
-                        ];
-
-                        images.forEach((imgSrc, index) => {
-                            const img = document.createElement("img");
-                            img.src = imgSrc;
-                            if (index === 0) img.classList.add("active");
-                            slider.appendChild(img);
-
-                            const button = document.createElement("button");
-                            button.dataset.index = index;
-                            if (index === 0) button.classList.add("active");
-                            button.addEventListener("click", () => {
-                                slider.querySelectorAll("img").forEach((img, i) => {
-                                    img.classList.toggle("active", i === index);
-                                });
-                                controls.querySelectorAll("button").forEach((btn, i) => {
-                                    btn.classList.toggle("active", i === index);
-                                });
-                            });
-                            controls.appendChild(button);
-                        });
-
-                        slider.appendChild(controls);
-
-                        card.innerHTML = `
-                            <h3>${property.title}</h3>
-                            <p>${property.location}</p>
-                            <p>${property.price}</p>
-                            <button class="contact-btn">問い合わせ</button>
-                        `;
-                        card.prepend(slider);
-                        propertyListElement.appendChild(card);
-                    });
-
-                    // 問い合わせボタンの動作
-                    attachContactButtonListeners();
-                });
-            });
-
-            // 問い合わせフォーム処理
-            const formPopup = document.getElementById("form-popup");
-            const closeFormButton = document.getElementById("close-form");
-            const submitFormButton = document.getElementById("submit-form");
-
-            function attachContactButtonListeners() {
-                document.querySelectorAll(".contact-btn").forEach((button) => {
-                    button.addEventListener("click", () => {
-                        formPopup.style.display = "block";
+                        // 対応する画像を表示
+                        images[index].classList.add("active");
+                        control.classList.add("active");
                     });
                 });
-            }
-
-            closeFormButton.addEventListener("click", () => {
-                formPopup.style.display = "none";
             });
-
-            submitFormButton.addEventListener("click", () => {
-                const name = document.getElementById("name").value;
-                const email = document.getElementById("email").value;
-                const phone = document.getElementById("phone").value;
-                const address = document.getElementById("address").value;
-                const paymentMethod = document.getElementById("payment-method").value;
-                const message = document.getElementById("message").value;
-
-                if (name && email && phone && address && paymentMethod && message) {
-                    alert(`お問い合わせ内容を送信しました。\n名前: ${name}\nメール: ${email}`);
-                    formPopup.style.display = "none";
-                } else {
-                    alert("すべてのフィールドを入力してください。");
-                }
-            });
-
-            // 初期化
-            languageSwitchButtons[0].click(); // デフォルト言語を英語に設定
         });
     </script>
 </body>
