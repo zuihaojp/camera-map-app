@@ -179,21 +179,108 @@
             const closeFormButton = document.getElementById("close-form");
             const submitFormButton = document.getElementById("submit-form");
             const contactButtons = document.querySelectorAll(".contact-btn");
+            const languageSwitchButtons = document.querySelectorAll(".language-switch button");
 
+            const translations = {
+                en: {
+                    logo: "Luxury Real Estate",
+                    description: "Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.",
+                    featuredPropertiesTitle: "Featured Properties",
+                    contactButton: "Contact Us",
+                    formTitle: "Contact Form",
+                    propertyPlaceholder: "Select Property ID",
+                    namePlaceholder: "Your Name",
+                    emailPlaceholder: "Email Address",
+                    phonePlaceholder: "Phone Number",
+                    messagePlaceholder: "Your Message",
+                    submitButton: "Submit",
+                    closeButton: "Close"
+                },
+                zh: {
+                    logo: "豪华房地产",
+                    description: "欢迎来到我们的豪华房地产服务。我们提供在线房产参观、合同签订以及安全支付，一切都在您家中完成。",
+                    featuredPropertiesTitle: "精选房源",
+                    contactButton: "联系我们",
+                    formTitle: "联系表格",
+                    propertyPlaceholder: "选择物业ID",
+                    namePlaceholder: "您的姓名",
+                    emailPlaceholder: "电子邮件地址",
+                    phonePlaceholder: "电话号码",
+                    messagePlaceholder: "您的留言",
+                    submitButton: "提交",
+                    closeButton: "关闭"
+                },
+                ja: {
+                    logo: "高級不動産",
+                    description: "当社は高級不動産のオンライン仲介サービスを提供しています。物件ツアー、契約書の作成、支払いがすべてオンラインで完結します。",
+                    featuredPropertiesTitle: "おすすめ物件",
+                    contactButton: "問い合わせ",
+                    formTitle: "お問い合わせフォーム",
+                    propertyPlaceholder: "物件IDを選択",
+                    namePlaceholder: "お名前",
+                    emailPlaceholder: "メールアドレス",
+                    phonePlaceholder: "電話番号",
+                    messagePlaceholder: "お問い合わせ内容",
+                    submitButton: "送信",
+                    closeButton: "閉じる"
+                }
+            };
+
+            function applyTranslation(lang) {
+                const translation = translations[lang];
+
+                document.getElementById("logo").textContent = translation.logo;
+                document.getElementById("description").textContent = translation.description;
+                document.getElementById("featured-properties-title").textContent = translation.featuredPropertiesTitle;
+                document.querySelectorAll(".contact-btn").forEach(btn => btn.textContent = translation.contactButton);
+                document.getElementById("form-title").textContent = translation.formTitle;
+                document.getElementById("property-id").options[0].textContent =                 translation.propertyPlaceholder;
+                document.getElementById("name").placeholder = translation.namePlaceholder;
+                document.getElementById("email").placeholder = translation.emailPlaceholder;
+                document.getElementById("phone").placeholder = translation.phonePlaceholder;
+                document.getElementById("message").placeholder = translation.messagePlaceholder;
+                document.getElementById("submit-form").textContent = translation.submitButton;
+                document.getElementById("close-form").textContent = translation.closeButton;
+            }
+
+            // 言語切り替えボタンの動作
+            languageSwitchButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const lang = button.dataset.lang;
+                    applyTranslation(lang);
+                });
+            });
+
+            // 問い合わせボタンの動作
             contactButtons.forEach(button => {
                 button.addEventListener("click", () => {
                     formPopup.style.display = "block";
                 });
             });
 
+            // フォームの閉じるボタン
             closeFormButton.addEventListener("click", () => {
                 formPopup.style.display = "none";
             });
 
+            // フォーム送信ボタンの動作
             submitFormButton.addEventListener("click", () => {
-                alert("Your inquiry has been submitted!");
-                formPopup.style.display = "none";
+                const selectedProperty = document.getElementById("property-id").value;
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                const phone = document.getElementById("phone").value;
+                const message = document.getElementById("message").value;
+
+                if (selectedProperty && name && email && phone && message) {
+                    alert(`Inquiry submitted successfully!\n\nProperty ID: ${selectedProperty}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`);
+                    formPopup.style.display = "none";
+                } else {
+                    alert("Please fill in all required fields.");
+                }
             });
+
+            // 初期言語を英語に設定
+            applyTranslation("en");
         });
     </script>
 </body>
