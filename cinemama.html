@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Notification with Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            color: #fff;
+        }
+
+        header {
+            background-color: #444;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        main {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .movie {
+            background: #333;
+            border-radius: 10px;
+            margin: 10px 0;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .movie img {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .movie h3 {
+            margin: 0;
+        }
+
+        .movie p {
+            margin: 5px 0;
+        }
+
+        .movie button {
+            margin: 5px 5px 0 0;
+            padding: 10px;
+            border: none;
+            background: #f90;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #444;
+            color: #ccc;
+            text-align: center;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>Movie Notification App</header>
+    <main>
+        <div class="movie">
+            <img src="https://via.placeholder.com/200x300?text=The+Marvels" alt="The Marvels">
+            <h3>The Marvels</h3>
+            <p>Release Date: 2024-12-05</p>
+            <p>A thrilling new adventure in the Marvel universe.</p>
+            <button onclick="addToCalendar('The Marvels', '2024-12-05', 'An epic Marvel adventure.')">Add to Calendar</button>
+        </div>
+    </main>
+    <footer>&copy; 2024 Movie Notification App</footer>
+
+    <script>
+        function addToCalendar(title, date, description) {
+            // カレンダーイベント情報
+            const event = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:${title}
+DESCRIPTION:${description}
+DTSTART:${date.replace(/-/g, '')}T120000Z
+DTEND:${date.replace(/-/g, '')}T140000Z
+END:VEVENT
+END:VCALENDAR`;
+
+            // Blobを作成し、ICSファイルを生成
+            const blob = new Blob([event], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+
+            // ダウンロードリンクを作成
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title.replace(/\s+/g, '_')}.ics`;
+            a.click();
+
+            // リソースを解放
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
