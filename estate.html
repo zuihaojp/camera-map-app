@@ -210,149 +210,154 @@
         <p>&copy; 2024 Luxury Real Estate</p>
     </footer>
         <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // 言語対応
-            const translations = {
-                en: {
-                    logo: "Luxury Real Estate",
-                    description: "Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.",
-                    featuredPropertiesTitle: "Featured Properties",
-                    properties: [
-                        { title: "Luxury Apartment in Tokyo", location: "Shibuya, Tokyo", price: "¥120,000,000" },
-                        { title: "High-end Condo in Osaka", location: "Namba, Osaka", price: "¥95,000,000" },
-                        { title: "Elegant House in Kyoto", location: "Gion, Kyoto", price: "¥75,000,000" }
-                    ]
-                },
-                zh: {
-                    logo: "豪华房地产",
-                    description: "欢迎来到我们的豪华房地产服务。我们提供在线房产参观、合同签订以及安全支付，一切都在您家中完成。",
-                    featuredPropertiesTitle: "精选房源",
-                    properties: [
-                        { title: "东京豪华公寓", location: "东京涩谷", price: "¥120,000,000" },
-                        { title: "大阪高端公寓", location: "大阪难波", price: "¥95,000,000" },
-                        { title: "京都优雅住宅", location: "京都祇园", price: "¥75,000,000" }
-                    ]
-                },
-                ja: {
-                    logo: "高級不動産",
-                    description: "当社は高級不動産のオンライン仲介サービスを提供しています。物件ツアー、契約書の作成、支払いがすべてオンラインで完結します。",
-                    featuredPropertiesTitle: "おすすめ物件",
-                    properties: [
-                        { title: "東京の高級アパート", location: "渋谷, 東京", price: "¥120,000,000" },
-                        { title: "大阪の高級マンション", location: "難波, 大阪", price: "¥95,000,000" },
-                        { title: "京都のエレガントな住宅", location: "祇園, 京都", price: "¥75,000,000" }
-                    ]
-                               }
-            };
-
-            const languageSwitchButtons = document.querySelectorAll(".language-switch button");
-            const logoElement = document.getElementById("logo");
-            const descriptionElement = document.getElementById("description");
-            const featuredPropertiesTitleElement = document.getElementById("featured-properties-title");
-            const propertyListElement = document.getElementById("property-list");
-
-            // 言語切り替え処理
-            languageSwitchButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const lang = button.dataset.lang;
-                    const translation = translations[lang];
-
-                    // 各要素を翻訳
-                    logoElement.textContent = translation.logo;
-                    descriptionElement.textContent = translation.description;
-                    featuredPropertiesTitleElement.textContent = translation.featuredPropertiesTitle;
-
-                    // 物件リストの翻訳と再生成
-                    propertyListElement.innerHTML = ""; // 既存リストをクリア
-                    translation.properties.forEach((property) => {
-                        const card = document.createElement("div");
-                        card.className = "property-card";
-
-                        const slider = document.createElement("div");
-                        slider.className = "slider";
-                        const controls = document.createElement("div");
-                        controls.className = "slider-controls";
-
-                        const images = [
-                            "https://via.placeholder.com/300x200?text=Image+1",
-                            "https://via.placeholder.com/300x200?text=Image+2",
-                            "https://via.placeholder.com/300x200?text=Image+3"
-                        ];
-
-                        images.forEach((imgSrc, index) => {
-                            const img = document.createElement("img");
-                            img.src = imgSrc;
-                            if (index === 0) img.classList.add("active");
-                            slider.appendChild(img);
-
-                            const button = document.createElement("button");
-                            button.dataset.index = index;
-                            if (index === 0) button.classList.add("active");
-                            button.addEventListener("click", () => {
-                                slider.querySelectorAll("img").forEach((img, i) => {
-                                    img.classList.toggle("active", i === index);
-                                });
-                                controls.querySelectorAll("button").forEach((btn, i) => {
-                                    btn.classList.toggle("active", i === index);
-                                });
-                            });
-                            controls.appendChild(button);
-                        });
-
-                        slider.appendChild(controls);
-
-                        card.innerHTML = `
-                            <h3>${property.title}</h3>
-                            <p>${property.location}</p>
-                            <p>${property.price}</p>
-                            <button class="contact-btn">問い合わせ</button>
-                        `;
-                        card.prepend(slider);
-                        propertyListElement.appendChild(card);
-                    });
-
-                    // 問い合わせボタンの動作
-                    attachContactButtonListeners();
-                });
-            });
-
-            // 問い合わせフォーム処理
-            const formPopup = document.getElementById("form-popup");
-            const closeFormButton = document.getElementById("close-form");
-            const submitFormButton = document.getElementById("submit-form");
-
-            function attachContactButtonListeners() {
-                document.querySelectorAll(".contact-btn").forEach((button) => {
-                    button.addEventListener("click", () => {
-                        formPopup.style.display = "block";
-                    });
-                });
+        <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // 言語対応
+        const translations = {
+            en: {
+                logo: "Luxury Real Estate",
+                description: "Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.",
+                featuredPropertiesTitle: "Featured Properties",
+                contactButtonText: "Contact Us",
+                properties: [
+                    { title: "Luxury Apartment in Tokyo", location: "Shibuya, Tokyo", price: "¥120,000,000" },
+                    { title: "High-end Condo in Osaka", location: "Namba, Osaka", price: "¥95,000,000" },
+                    { title: "Elegant House in Kyoto", location: "Gion, Kyoto", price: "¥75,000,000" }
+                ]
+            },
+            zh: {
+                logo: "豪华房地产",
+                description: "欢迎来到我们的豪华房地产服务。我们提供在线房产参观、合同签订以及安全支付，一切都在您家中完成。",
+                featuredPropertiesTitle: "精选房源",
+                contactButtonText: "联系我们",
+                properties: [
+                    { title: "东京豪华公寓", location: "东京涩谷", price: "¥120,000,000" },
+                    { title: "大阪高端公寓", location: "大阪难波", price: "¥95,000,000" },
+                    { title: "京都优雅住宅", location: "京都祇园", price: "¥75,000,000" }
+                ]
+            },
+            ja: {
+                logo: "高級不動産",
+                description: "当社は高級不動産のオンライン仲介サービスを提供しています。物件ツアー、契約書の作成、支払いがすべてオンラインで完結します。",
+                featuredPropertiesTitle: "おすすめ物件",
+                contactButtonText: "問い合わせ",
+                properties: [
+                    { title: "東京の高級アパート", location: "渋谷, 東京", price: "¥120,000,000" },
+                    { title: "大阪の高級マンション", location: "難波, 大阪", price: "¥95,000,000" },
+                    { title: "京都のエレガントな住宅", location: "祇園, 京都", price: "¥75,000,000" }
+                ]
             }
+        };
 
-            closeFormButton.addEventListener("click", () => {
-                formPopup.style.display = "none";
+        const languageSwitchButtons = document.querySelectorAll(".language-switch button");
+        const logoElement = document.getElementById("logo");
+        const descriptionElement = document.getElementById("description");
+        const featuredPropertiesTitleElement = document.getElementById("featured-properties-title");
+        const propertyListElement = document.getElementById("property-list");
+
+        // 言語切り替え処理
+        languageSwitchButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const lang = button.dataset.lang;
+                const translation = translations[lang];
+
+                // 各要素を翻訳
+                logoElement.textContent = translation.logo;
+                descriptionElement.textContent = translation.description;
+                featuredPropertiesTitleElement.textContent = translation.featuredPropertiesTitle;
+
+                // 物件リストの翻訳と再生成
+                propertyListElement.innerHTML = ""; // 既存リストをクリア
+                translation.properties.forEach((property) => {
+                    const card = document.createElement("div");
+                    card.className = "property-card";
+
+                    const slider = document.createElement("div");
+                    slider.className = "slider";
+                    const controls = document.createElement("div");
+                    controls.className = "slider-controls";
+
+                    const images = [
+                        "https://via.placeholder.com/300x200?text=Image+1",
+                        "https://via.placeholder.com/300x200?text=Image+2",
+                        "https://via.placeholder.com/300x200?text=Image+3"
+                    ];
+
+                    images.forEach((imgSrc, index) => {
+                        const img = document.createElement("img");
+                        img.src = imgSrc;
+                        if (index === 0) img.classList.add("active");
+                        slider.appendChild(img);
+
+                        const button = document.createElement("button");
+                        button.dataset.index = index;
+                        if (index === 0) button.classList.add("active");
+                        button.addEventListener("click", () => {
+                            slider.querySelectorAll("img").forEach((img, i) => {
+                                img.classList.toggle("active", i === index);
+                            });
+                            controls.querySelectorAll("button").forEach((btn, i) => {
+                                btn.classList.toggle("active", i === index);
+                            });
+                        });
+                        controls.appendChild(button);
+                    });
+
+                    slider.appendChild(controls);
+
+                    card.innerHTML = `
+                        <h3>${property.title}</h3>
+                        <p>${property.location}</p>
+                        <p>${property.price}</p>
+                        <button class="contact-btn">${translation.contactButtonText}</button>
+                    `;
+                    card.prepend(slider);
+                    propertyListElement.appendChild(card);
+                });
+
+                // 問い合わせボタンの動作を再アタッチ
+                attachContactButtonListeners(translation.contactButtonText);
             });
-
-            submitFormButton.addEventListener("click", () => {
-                const name = document.getElementById("name").value;
-                const email = document.getElementById("email").value;
-                const phone = document.getElementById("phone").value;
-                const address = document.getElementById("address").value;
-                const paymentMethod = document.getElementById("payment-method").value;
-                const message = document.getElementById("message").value;
-
-                if (name && email && phone && address && paymentMethod && message) {
-                    alert(`お問い合わせ内容を送信しました。\n名前: ${name}\nメール: ${email}`);
-                    formPopup.style.display = "none";
-                } else {
-                    alert("すべてのフィールドを入力してください。");
-                }
-            });
-
-            // 初期化
-            languageSwitchButtons[0].click(); // デフォルト言語を英語に設定
         });
-    </script>
+
+        // 問い合わせフォーム処理
+        const formPopup = document.getElementById("form-popup");
+        const closeFormButton = document.getElementById("close-form");
+        const submitFormButton = document.getElementById("submit-form");
+
+        function attachContactButtonListeners(contactButtonText) {
+            document.querySelectorAll(".contact-btn").forEach((button) => {
+                button.textContent = contactButtonText; // ボタンのテキストを設定
+                button.addEventListener("click", () => {
+                    formPopup.style.display = "block";
+                });
+            });
+        }
+
+        closeFormButton.addEventListener("click", () => {
+            formPopup.style.display = "none";
+        });
+
+        submitFormButton.addEventListener("click", () => {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const address = document.getElementById("address").value;
+            const paymentMethod = document.getElementById("payment-method").value;
+            const message = document.getElementById("message").value;
+
+            if (name && email && phone && address && paymentMethod && message) {
+                alert(`お問い合わせ内容を送信しました。\n名前: ${name}\nメール: ${email}`);
+                formPopup.style.display = "none";
+            } else {
+                alert("すべてのフィールドを入力してください。");
+            }
+        });
+
+        // 初期化
+        languageSwitchButtons[0].click(); // デフォルト言語を英語に設定
+    });
+</script>
 </body>
 </html>
 
