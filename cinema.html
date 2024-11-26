@@ -78,6 +78,16 @@
             border-radius: 10px;
             margin: 10px 0;
             padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .movie img {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
 
         .movie h3 {
@@ -86,6 +96,7 @@
 
         .movie p {
             margin: 5px 0;
+            text-align: center;
         }
 
         .movie button {
@@ -122,84 +133,89 @@
     </div>
     <main>
         <div id="movies" class="content active">
-            <!-- Movies content here -->
+            <div class="movie">
+                <img src="https://via.placeholder.com/200x300?text=The+Marvels" alt="The Marvels">
+                <h3>The Marvels</h3>
+                <p>Release Date: 2024-12-05</p>
+                <p>A thrilling new adventure in the Marvel universe.</p>
+                <button onclick="notifyMe('The Marvels', '2024-12-05')">Remind Me</button>
+            </div>
         </div>
         <div id="netflix" class="content">
-            <!-- Netflix content here -->
+            <div class="movie">
+                <img src="https://via.placeholder.com/200x300?text=Netflix+Show" alt="Netflix Show">
+                <h3>Netflix Exclusive</h3>
+                <p>Release Date: 2024-11-20</p>
+                <p>A brand new Netflix original series coming soon!</p>
+                <button onclick="notifyMe('Netflix Exclusive', '2024-11-20')">Remind Me</button>
+            </div>
         </div>
         <div id="hulu" class="content">
-            <!-- Hulu content here -->
+            <div class="movie">
+                <img src="https://via.placeholder.com/200x300?text=Hulu+Show" alt="Hulu Show">
+                <h3>Hulu Original</h3>
+                <p>Release Date: 2024-11-25</p>
+                <p>Don't miss the next hit show on Hulu!</p>
+                <button onclick="notifyMe('Hulu Original', '2024-11-25')">Remind Me</button>
+            </div>
         </div>
         <div id="disney" class="content">
-            <!-- Disney+ content here -->
+            <div class="movie">
+                <img src="https://via.placeholder.com/200x300?text=Disney+Show" alt="Disney+ Show">
+                <h3>Disney+ Adventure</h3>
+                <p>Release Date: 2024-12-01</p>
+                <p>An enchanting new story awaits on Disney+.</p>
+                <button onclick="notifyMe('Disney+ Adventure', '2024-12-01')">Remind Me</button>
+            </div>
         </div>
         <div id="unext" class="content">
-            <!-- U-NEXT content here -->
+            <div class="movie">
+                <img src="https://via.placeholder.com/200x300?text=U-NEXT+Movie" alt="U-NEXT Movie">
+                <h3>U-NEXT Hit</h3>
+                <p>Release Date: 2024-12-10</p>
+                <p>Enjoy the latest blockbuster on U-NEXT.</p>
+                <button onclick="notifyMe('U-NEXT Hit', '2024-12-10')">Remind Me</button>
+            </div>
         </div>
     </main>
     <footer>&copy; 2024 Movie Notification App</footer>
 
     <script>
-        const translations = {
-            en: {
-                appTitle: "Movie Notification App",
-                tabs: ["Movies", "Netflix", "Hulu", "Disney+", "U-NEXT"],
-                remindMe: "Remind Me",
-                releaseDate: "Release Date",
-            },
-            ja: {
-                appTitle: "映画通知アプリ",
-                tabs: ["映画", "Netflix", "Hulu", "Disney+", "U-NEXT"],
-                remindMe: "通知する",
-                releaseDate: "公開日",
-            },
-            zh: {
-                appTitle: "电影通知应用",
-                tabs: ["电影", "Netflix", "Hulu", "Disney+", "U-NEXT"],
-                remindMe: "提醒我",
-                releaseDate: "上映日期",
-            }
-        };
-
-        const appTitle = document.getElementById("app-title");
         const tabs = document.querySelectorAll(".tab");
         const contents = document.querySelectorAll(".content");
-        const languageButtons = document.querySelectorAll(".language-switch button");
-
-        function switchTab(tabName) {
-            tabs.forEach(tab => tab.classList.remove("active"));
-            contents.forEach(content => content.classList.remove("active"));
-
-            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add("active");
-            document.getElementById(tabName).classList.add("active");
-        }
 
         tabs.forEach(tab => {
             tab.addEventListener("click", () => {
-                switchTab(tab.getAttribute("data-tab"));
+                tabs.forEach(t => t.classList.remove("active"));
+                contents.forEach(content => content.classList.remove("active"));
+
+                tab.classList.add("active");
+                document.getElementById(tab.getAttribute("data-tab")).classList.add("active");
             });
         });
 
-        function applyTranslations(language) {
-            const translation = translations[language];
+        function notifyMe(title, releaseDate) {
+            if (!("Notification" in window)) {
+                alert("This browser does not support notifications.");
+                return;
+            }
 
-            appTitle.textContent = translation.appTitle;
-
-            tabs.forEach((tab, index) => {
-                tab.textContent = translation.tabs[index];
-            });
-
-            // コンテンツも翻訳可能（必要に応じて追加）
+            if (Notification.permission === "granted") {
+                new Notification("Movie Alert", {
+                    body: `${title} is releasing on ${releaseDate}!`,
+                    icon: "https://via.placeholder.com/100",
+                });
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification("Movie Alert", {
+                            body: `${title} is releasing on ${releaseDate}!`,
+                            icon: "https://via.placeholder.com/100",
+                        });
+                    }
+                });
+            }
         }
-
-        languageButtons.forEach(button => {
-            button.addEventListener("click", () => {
-                applyTranslations(button.getAttribute("data-lang"));
-            });
-        });
-
-        // デフォルトで英語を表示
-        applyTranslations("en");
     </script>
 </body>
 </html>
