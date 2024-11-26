@@ -25,6 +25,22 @@
             font-weight: bold;
         }
 
+        .language-switch {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .language-switch button {
+            padding: 10px;
+            border: none;
+            background-color: #f90;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
         main {
             width: 90%;
             max-width: 600px;
@@ -76,54 +92,83 @@
     </style>
 </head>
 <body>
-    <header>
-        New Movie Alerts
-    </header>
+    <header id="app-title">New Movie Alerts</header>
+    <div class="language-switch">
+        <button data-lang="en">English</button>
+        <button data-lang="ja">日本語</button>
+        <button data-lang="zh">中文</button>
+    </div>
     <main id="movie-list">
         <!-- 映画リストがここに表示されます -->
     </main>
-    <footer>
-        &copy; 2024 Movie Alert App
-    </footer>
+    <footer>&copy; 2024 Movie Alert App</footer>
 
     <script>
-        // 映画データ (仮のデータ)
-        const movies = [
-            {
-                title: "The Marvels",
-                releaseDate: "2024-12-05",
-                description: "A thrilling new adventure in the Marvel universe.",
+        const translations = {
+            en: {
+                appTitle: "New Movie Alerts",
+                movieList: [
+                    { title: "The Marvels", releaseDate: "2024-12-05", description: "A thrilling new adventure in the Marvel universe." },
+                    { title: "Avatar: The Way of Water", releaseDate: "2024-11-30", description: "James Cameron returns with an epic underwater journey." },
+                    { title: "The Batman: Rebirth", releaseDate: "2024-12-15", description: "The Dark Knight faces new challenges in Gotham." },
+                ],
+                buttons: {
+                    remindMe: "Remind Me",
+                    releaseDate: "Release Date",
+                }
             },
-            {
-                title: "Avatar: The Way of Water",
-                releaseDate: "2024-11-30",
-                description: "James Cameron returns with an epic underwater journey.",
+            ja: {
+                appTitle: "新作映画アラート",
+                movieList: [
+                    { title: "ザ・マーベルズ", releaseDate: "2024-12-05", description: "マーベルユニバースの新たな冒険が始まる。" },
+                    { title: "アバター: ウェイ・オブ・ウォーター", releaseDate: "2024-11-30", description: "ジェームズ・キャメロンが贈る壮大な水中の旅。" },
+                    { title: "ザ・バットマン: リバース", releaseDate: "2024-12-15", description: "ゴッサムで新たな挑戦に直面するダークナイト。" },
+                ],
+                buttons: {
+                    remindMe: "通知する",
+                    releaseDate: "公開日",
+                }
             },
-            {
-                title: "The Batman: Rebirth",
-                releaseDate: "2024-12-15",
-                description: "The Dark Knight faces new challenges in Gotham.",
-            },
-        ];
+            zh: {
+                appTitle: "新电影提醒",
+                movieList: [
+                    { title: "惊奇队长", releaseDate: "2024-12-05", description: "漫威宇宙的全新冒险故事。" },
+                    { title: "阿凡达：水之道", releaseDate: "2024-11-30", description: "詹姆斯·卡梅隆带来一场史诗般的水下旅程。" },
+                    { title: "蝙蝠侠：重生", releaseDate: "2024-12-15", description: "黑暗骑士在哥谭市面临新的挑战。" },
+                ],
+                buttons: {
+                    remindMe: "提醒我",
+                    releaseDate: "上映日期",
+                }
+            }
+        };
 
-        // 映画リストを表示
+        const appTitle = document.getElementById("app-title");
         const movieList = document.getElementById("movie-list");
+        const languageButtons = document.querySelectorAll(".language-switch button");
 
-        movies.forEach((movie) => {
-            const movieCard = document.createElement("div");
-            movieCard.className = "movie";
+        // 映画リストを表示する関数
+        function renderMovies(language) {
+            const translation = translations[language];
+            appTitle.textContent = translation.appTitle;
+            movieList.innerHTML = "";
 
-            movieCard.innerHTML = `
-                <h3>${movie.title}</h3>
-                <p>Release Date: ${movie.releaseDate}</p>
-                <p>${movie.description}</p>
-                <button onclick="notifyMe('${movie.title}', '${movie.releaseDate}')">Remind Me</button>
-            `;
+            translation.movieList.forEach((movie) => {
+                const movieCard = document.createElement("div");
+                movieCard.className = "movie";
 
-            movieList.appendChild(movieCard);
-        });
+                movieCard.innerHTML = `
+                    <h3>${movie.title}</h3>
+                    <p>${translation.buttons.releaseDate}: ${movie.releaseDate}</p>
+                    <p>${movie.description}</p>
+                    <button onclick="notifyMe('${movie.title}', '${movie.releaseDate}')">${translation.buttons.remindMe}</button>
+                `;
 
-        // 通知をリクエストする関数
+                movieList.appendChild(movieCard);
+            });
+        }
+
+        // 通知機能
         function notifyMe(title, releaseDate) {
             if (!("Notification" in window)) {
                 alert("This browser does not support notifications.");
@@ -141,18 +186,27 @@
             }
         }
 
-        // 通知を表示する関数
+        // 通知を表示
         function showNotification(title, releaseDate) {
             const notification = new Notification("New Movie Alert!", {
                 body: `${title} is releasing on ${releaseDate}!`,
-                icon: "https://via.placeholder.com/100", // アイコンを必要に応じて変更
+                icon: "https://via.placeholder.com/100",
             });
-
-            // 通知クリック時のアクション
             notification.onclick = () => {
                 window.focus();
             };
         }
+
+        // 言語切り替えボタンの設定
+        languageButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const lang = button.getAttribute("data-lang");
+                renderMovies(lang);
+            });
+        });
+
+        // デフォルト言語で表示
+        renderMovies("en");
     </script>
 </body>
 </html>
