@@ -9,8 +9,8 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1C1C3C; /* 紺色背景 */
-            color: #FFD700; /* 金色テキスト */
+            background-color: #1C1C3C;
+            color: #FFD700;
         }
 
         header {
@@ -42,6 +42,14 @@
             font-weight: bold;
         }
 
+        .description {
+            text-align: center;
+            padding: 2rem;
+            background-color: #2A2A4D;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
         .property-list {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -63,19 +71,6 @@
 
         .property-card h3, .property-card p {
             margin: 0.5rem;
-        }
-
-        .property-card button {
-            margin-top: auto;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            width: 90%;
-            background-color: #FFD700;
-            color: #1C1C3C;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
         }
 
         .form-popup {
@@ -122,7 +117,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">Luxury Real Estate</div>
+        <div class="logo" id="logo">Luxury Real Estate</div>
         <div class="language-switch">
             <button data-lang="en">English</button>
             <button data-lang="zh">中文</button>
@@ -130,29 +125,35 @@
         </div>
     </header>
     <main>
-        <!-- 物件一覧 -->
+        <section class="description" id="description">
+            Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.
+        </section>
+
+        <h2 style="text-align: center; color: #FFD700;" id="featured-properties-title">Featured Properties</h2>
         <section class="property-list" id="property-list">
             <div class="property-card">
                 <h3>Luxury Apartment in Tokyo</h3>
                 <p>Shibuya, Tokyo</p>
                 <p>Property ID: 001</p>
                 <p>¥120,000,000</p>
+                <button class="contact-btn">Contact Us</button>
             </div>
             <div class="property-card">
                 <h3>High-end Condo in Osaka</h3>
                 <p>Namba, Osaka</p>
                 <p>Property ID: 002</p>
                 <p>¥95,000,000</p>
+                <button class="contact-btn">Contact Us</button>
             </div>
             <div class="property-card">
                 <h3>Elegant House in Kyoto</h3>
                 <p>Gion, Kyoto</p>
                 <p>Property ID: 003</p>
                 <p>¥75,000,000</p>
+                <button class="contact-btn">Contact Us</button>
             </div>
         </section>
 
-        <!-- 問い合わせフォーム -->
         <div class="form-popup" id="form-popup">
             <h3 id="form-title">Contact Form</h3>
             <select id="property-id" required>
@@ -177,54 +178,11 @@
             const formPopup = document.getElementById("form-popup");
             const closeFormButton = document.getElementById("close-form");
             const submitFormButton = document.getElementById("submit-form");
-            const languageSwitchButtons = document.querySelectorAll(".language-switch button");
+            const contactButtons = document.querySelectorAll(".contact-btn");
 
-            const translations = {
-                en: {
-                    formTitle: "Contact Form",
-                    propertyPlaceholder: "Select Property ID",
-                    namePlaceholder: "Your Name",
-                    emailPlaceholder: "Email Address",
-                    phonePlaceholder: "Phone Number",
-                    messagePlaceholder: "Your Message",
-                    submitButton: "Submit",
-                    closeButton: "Close"
-                },
-                zh: {
-                    formTitle: "联系表格",
-                    propertyPlaceholder: "选择物业ID",
-                    namePlaceholder: "您的姓名",
-                    emailPlaceholder: "电子邮件地址",
-                    phonePlaceholder: "电话号码",
-                    messagePlaceholder: "您的留言",
-                    submitButton: "提交",
-                    closeButton: "关闭"
-                },
-                ja: {
-                    formTitle: "お問い合わせフォーム",
-                    propertyPlaceholder: "物件IDを選択",
-                    namePlaceholder: "お名前",
-                    emailPlaceholder: "メールアドレス",
-                    phonePlaceholder: "電話番号",
-                    messagePlaceholder: "お問い合わせ内容",
-                    submitButton: "送信",
-                    closeButton: "閉じる"
-                }
-            };
-
-            languageSwitchButtons.forEach(button => {
+            contactButtons.forEach(button => {
                 button.addEventListener("click", () => {
-                    const lang = button.dataset.lang;
-                    const translation = translations[lang];
-
-                    document.getElementById("form-title").textContent = translation.formTitle;
-                    document.getElementById("property-id").options[0].textContent = translation.propertyPlaceholder;
-                    document.getElementById("name").placeholder = translation.namePlaceholder;
-                    document.getElementById("email").placeholder = translation.emailPlaceholder;
-                    document.getElementById("phone").placeholder = translation.phonePlaceholder;
-                    document.getElementById("message").placeholder = translation.messagePlaceholder;
-                    submitFormButton.textContent = translation.submitButton;
-                    closeFormButton.textContent = translation.closeButton;
+                    formPopup.style.display = "block";
                 });
             });
 
@@ -233,11 +191,9 @@
             });
 
             submitFormButton.addEventListener("click", () => {
-                alert("Form submitted!");
+                alert("Your inquiry has been submitted!");
                 formPopup.style.display = "none";
             });
-
-            languageSwitchButtons[0].click(); // 初期言語を英語に設定
         });
     </script>
 </body>
