@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Alert App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #444;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        main {
+            width: 90%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .movie {
+            background: #333;
+            border-radius: 10px;
+            margin: 10px 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .movie h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .movie p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .movie button {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            background: #f90;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .movie button:hover {
+            background: #e68a00;
+        }
+
+        footer {
+            margin-top: auto;
+            background-color: #444;
+            color: #ccc;
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        New Movie Alerts
+    </header>
+    <main id="movie-list">
+        <!-- 映画リストがここに表示されます -->
+    </main>
+    <footer>
+        &copy; 2024 Movie Alert App
+    </footer>
+
+    <script>
+        // 映画データ (仮のデータ)
+        const movies = [
+            {
+                title: "The Marvels",
+                releaseDate: "2024-12-05",
+                description: "A thrilling new adventure in the Marvel universe.",
+            },
+            {
+                title: "Avatar: The Way of Water",
+                releaseDate: "2024-11-30",
+                description: "James Cameron returns with an epic underwater journey.",
+            },
+            {
+                title: "The Batman: Rebirth",
+                releaseDate: "2024-12-15",
+                description: "The Dark Knight faces new challenges in Gotham.",
+            },
+        ];
+
+        // 映画リストを表示
+        const movieList = document.getElementById("movie-list");
+
+        movies.forEach((movie) => {
+            const movieCard = document.createElement("div");
+            movieCard.className = "movie";
+
+            movieCard.innerHTML = `
+                <h3>${movie.title}</h3>
+                <p>Release Date: ${movie.releaseDate}</p>
+                <p>${movie.description}</p>
+                <button onclick="notifyMe('${movie.title}', '${movie.releaseDate}')">Remind Me</button>
+            `;
+
+            movieList.appendChild(movieCard);
+        });
+
+        // 通知をリクエストする関数
+        function notifyMe(title, releaseDate) {
+            if (!("Notification" in window)) {
+                alert("This browser does not support notifications.");
+                return;
+            }
+
+            if (Notification.permission === "granted") {
+                showNotification(title, releaseDate);
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then((permission) => {
+                    if (permission === "granted") {
+                        showNotification(title, releaseDate);
+                    }
+                });
+            }
+        }
+
+        // 通知を表示する関数
+        function showNotification(title, releaseDate) {
+            const notification = new Notification("New Movie Alert!", {
+                body: `${title} is releasing on ${releaseDate}!`,
+                icon: "https://via.placeholder.com/100", // アイコンを必要に応じて変更
+            });
+
+            // 通知クリック時のアクション
+            notification.onclick = () => {
+                window.focus();
+            };
+        }
+    </script>
+</body>
+</html>
