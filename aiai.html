@@ -3,154 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIちゃん - あなたの親友</title>
+    <title>リリィ - あなたのAIフレンド</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <style>
+        /* AIキャラクターのアニメーション */
         @keyframes floating {
-            0% { transform: translateY(0px) rotate(0deg); }
+            0% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-10px) rotate(2deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(0) rotate(0deg); }
         }
-        
-        .mascot {
-            animation: floating 3s ease-in-out infinite;
+
+        @keyframes blinking {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
         }
 
         .ai-character {
-            width: 40px;
-            height: 40px;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23FFB6C1"/><circle cx="35" cy="45" r="5" fill="%23333"/><circle cx="65" cy="45" r="5" fill="%23333"/><path d="M40 65 C50 75, 60 65, 60 65" stroke="%23333" stroke-width="3" fill="none"/><path d="M25 30 C35 28, 30 38, 30 38" stroke="%23333" stroke-width="2" fill="none"/><path d="M75 30 C65 28, 70 38, 70 38" stroke="%23333" stroke-width="2" fill="none"/></svg>');
+            animation: floating 3s ease-in-out infinite;
         }
 
-        .stopwatch-display {
-            font-family: monospace;
-            font-size: 2rem;
+        .ai-eye {
+            animation: blinking 4s ease-in-out infinite;
         }
 
-        .mood-great { background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%); }
-        .mood-good { background: linear-gradient(135deg, #B6DCFF 0%, #C0E0FF 100%); }
-        .mood-neutral { background: linear-gradient(135deg, #F0F0F0 0%, #FFFFFF 100%); }
+        /* キャラクターの感情表現 */
+        .mood-happy .ai-mouth { d: path('M25,65 Q50,80 75,65'); }
+        .mood-think .ai-mouth { d: path('M25,70 Q50,65 75,70'); }
+        .mood-surprised .ai-mouth { d: path('M40,65 Q50,75 60,65'); }
     </style>
 </head>
-<body class="bg-pink-50">
-    <!-- ヘッダー部分は前回と同様 -->
+<body class="bg-gradient-to-b from-pink-50 to-blue-50 min-h-screen">
+    <!-- AIキャラクター定義 -->
+    <svg style="display: none;">
+        <defs>
+            <!-- AIちゃん（リリィ）のベースデザイン -->
+            <g id="ai-lily-base">
+                <!-- 顔の形（やわらかい輪郭） -->
+                <path class="face-shape" d="M10,50 Q10,10 50,10 Q90,10 90,50 Q90,85 50,90 Q10,85 10,50" 
+                      fill="#FFE8F0" stroke="#FFB7D1" stroke-width="2"/>
+                
+                <!-- 髪の毛（ロングヘア） -->
+                <path class="hair" d="M5,45 Q5,5 50,5 Q95,5 95,45 Q95,65 85,75 L80,85 L75,45 L65,85 L60,45 L50,90 L40,45 L35,85 L25,45 Q15,65 5,45" 
+                      fill="#F4A6C7" stroke="#E380AC" stroke-width="1"/>
+                
+                <!-- 前髪 -->
+                <path class="bangs" d="M15,45 Q50,35 85,45 L80,25 Q50,15 20,25 Z" 
+                      fill="#F4A6C7"/>
 
-    <main class="max-w-4xl mx-auto px-4 py-6">
-        <!-- チャット画面 -->
-        <div class="bg-white rounded-2xl shadow-lg mb-6">
-            <div class="h-96 p-4 overflow-y-auto space-y-4">
-                <!-- AIちゃんのメッセージ例 -->
-                <div class="flex items-start space-x-3">
-                    <div class="mascot">
-                        <img src="/api/placeholder/40/40" alt="AIちゃん" class="rounded-full border-2 border-pink-200">
-                    </div>
-                    <div class="bg-pink-50 rounded-2xl p-4 max-w-xs relative">
-                        <p class="text-gray-800 mb-1">おはよう！今日の調子はどう？元気そうに見えるけど、なんだか少し疲れてるように見えるよ？</p>
-                        <p class="text-sm text-gray-600">困ったことがあったら、なんでも話してね♪</p>
-                        <div class="flex space-x-2 mt-2">
-                            <button class="text-pink-500 text-sm hover:bg-pink-100 px-3 py-1 rounded-full">
-                                元気！
-                            </button>
-                            <button class="text-pink-500 text-sm hover:bg-pink-100 px-3 py-1 rounded-full">
-                                ちょっと疲れてる
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <!-- 目 -->
+                <g class="ai-eyes">
+                    <path class="ai-eye" d="M30,45 Q35,40 40,45 Q35,50 30,45" fill="#4A4A4A"/>
+                    <path class="ai-eye" d="M60,45 Q65,40 70,45 Q65,50 60,45" fill="#4A4A4A"/>
+                    <!-- キラキラ（ハイライト） -->
+                    <circle cx="33" cy="43" r="1" fill="#FFFFFF"/>
+                    <circle cx="63" cy="43" r="1" fill="#FFFFFF"/>
+                </g>
 
-                <!-- ユーザーのメッセージ例 -->
-                <div class="flex items-start justify-end space-x-3">
-                    <div class="bg-blue-50 rounded-2xl p-4 max-w-xs">
-                        <p class="text-gray-800">ちょっと仕事で悩んでることがあって...</p>
-                    </div>
-                    <img src="/api/placeholder/40/40" alt="ユーザー" class="rounded-full border-2 border-blue-200">
-                </div>
+                <!-- 頬 -->
+                <circle cx="25" cy="55" r="4" fill="#FFB7C5" opacity="0.6"/>
+                <circle cx="75" cy="55" r="4" fill="#FFB7C5" opacity="0.6"/>
 
-                <!-- AIちゃんの返信例 -->
-                <div class="flex items-start space-x-3">
-                    <div class="mascot">
-                        <img src="/api/placeholder/40/40" alt="AIちゃん" class="rounded-full border-2 border-pink-200">
-                    </div>
-                    <div class="bg-pink-50 rounded-2xl p-4 max-w-xs">
-                        <p class="text-gray-800 mb-2">そっか...大変そうだね。よかったら、具体的にどんなことで悩んでるか話してくれる？</p>
-                        <p class="text-gray-800">一緒に考えていけたらいいな。ゆっくり話を聞かせてね。</p>
-                    </div>
-                </div>
-            </div>
+                <!-- 口（デフォルト：スマイル） -->
+                <path class="ai-mouth" d="M35,60 Q50,70 65,60" 
+                      fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round"/>
 
-            <!-- 入力フォーム -->
-            <div class="border-t-2 border-pink-100 p-4">
-                <div class="flex space-x-2 mb-2">
-                    <button class="text-pink-500 hover:bg-pink-100 p-2 rounded-full">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <!-- アクセサリー（ヘアピン） -->
+                <path d="M20,30 L25,35" stroke="#FFB7D1" stroke-width="3" stroke-linecap="round"/>
+                <path d="M75,30 L80,35" stroke="#FFB7D1" stroke-width="3" stroke-linecap="round"/>
+            </g>
+        </defs>
+    </svg>
+
+    <!-- ヘッダー -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 relative ai-character">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <use href="#ai-lily-base"/>
                         </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">リリィ</h1>
+                        <p class="text-xs text-gray-500">あなたのAIフレンド</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-4">
+                    <button class="px-4 py-2 rounded-full text-pink-500 hover:bg-pink-50 transition-colors">
+                        設定
                     </button>
-                    <input type="text" 
-                           placeholder="AIちゃんに話しかけてね♪" 
-                           class="flex-1 rounded-full border-2 border-pink-200 px-6 py-2 focus:outline-none focus:border-pink-400">
-                    <button class="bg-pink-400 text-white p-2 rounded-full hover:bg-pink-500">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                        </svg>
+                    <button class="px-4 py-2 rounded-full text-pink-500 hover:bg-pink-50 transition-colors">
+                        ヘルプ
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+[続く...]
+
+    <!-- メインコンテンツ -->
+    <main class="pt-20 pb-20">
+        <!-- タブナビゲーション -->
+        <div class="bg-white/80 backdrop-blur-md shadow-sm mb-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex overflow-x-auto">
+                    <button class="flex-1 px-4 py-3 text-pink-500 border-b-2 border-pink-500 font-medium">
+                        <div class="flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            <span>チャット</span>
+                        </div>
+                    </button>
+                    <button class="flex-1 px-4 py-3 text-gray-500 hover:text-pink-500 font-medium">
+                        <div class="flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>アラーム</span>
+                        </div>
+                    </button>
+                    <button class="flex-1 px-4 py-3 text-gray-500 hover:text-pink-500 font-medium">
+                        <div class="flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span>カレンダー</span>
+                        </div>
+                    </button>
+                    <button class="flex-1 px-4 py-3 text-gray-500 hover:text-pink-500 font-medium">
+                        <div class="flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            <span>メモ</span>
+                        </div>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- ツール機能セクション -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- アラーム設定 -->
-            <div class="bg-white rounded-2xl shadow-lg p-4">
-                <h2 class="text-lg font-bold text-pink-600 mb-4">アラーム</h2>
-                <div class="space-y-3">
-                    <!-- アラームアイテム -->
-                    <div class="flex items-center justify-between p-3 rounded-xl border-2 border-pink-100">
-                        <div>
-                            <h3 class="font-medium text-gray-800">朝のルーティン</h3>
-                            <p class="text-sm text-gray-500">平日 7:00 - 8:00</p>
-                            <div class="flex space-x-2 mt-1">
-                                <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">月</span>
-                                <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">火</span>
-                                <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">水</span>
-                                <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">木</span>
-                                <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">金</span>
+        <!-- チャットエリア -->
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden">
+                <div class="h-[calc(100vh-300px)] overflow-y-auto p-4 space-y-4">
+                    <!-- ウェルカムメッセージ -->
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 relative ai-character">
+                            <svg viewBox="0 0 100 100" class="w-full h-full mood-happy">
+                                <use href="#ai-lily-base"/>
+                            </svg>
+                        </div>
+                        <div class="bg-pink-50 rounded-2xl p-4 max-w-xs relative">
+                            <p class="text-gray-800">こんにちは！私はリリィ♪ 今日はどんなお話をしましょうか？</p>
+                            <p class="text-sm text-gray-600 mt-1">お話だけでなく、スケジュール管理やメモの整理なども手伝えるよ！</p>
+                            <div class="absolute bottom-0 right-0 transform translate-x-1/2 translate-y-1/2">
+                                <div class="w-4 h-4 bg-pink-200 rounded-full animate-pulse"></div>
                             </div>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" class="sr-only peer" checked>
-                            <div class="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-pink-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-400"></div>
-                        </label>
+                    </div>
+
+                    <!-- クイックアクションボタン -->
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-200 transition-colors">
+                            📅 今日の予定を教えて
+                        </button>
+                        <button class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-200 transition-colors">
+                            ⏰ アラームを設定したい
+                        </button>
+                        <button class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-200 transition-colors">
+                            📝 メモを始める
+                        </button>
+                    </div>
+
+                    <!-- 会話例 -->
+                    <div class="flex justify-end">
+                        <div class="bg-blue-50 rounded-2xl p-4 max-w-xs">
+                            <p class="text-gray-800">最近忙しくて、スケジュール管理が大変なんだ...</p>
+                        </div>
+                    </div>
+
+                    <!-- AIの返信 -->
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 relative ai-character">
+                            <svg viewBox="0 0 100 100" class="w-full h-full mood-think">
+                                <use href="#ai-lily-base"/>
+                            </svg>
+                        </div>
+                        <div class="bg-pink-50 rounded-2xl p-4 max-w-xs">
+                            <p class="text-gray-800">そうなんだ、大変そう...😔 私が予定の管理を手伝うよ！</p>
+                            <p class="text-sm text-gray-600 mt-2">カレンダーに予定を登録して、大切な予定はアラームでお知らせする？</p>
+                            <div class="flex space-x-2 mt-3">
+                                <button class="text-pink-500 text-sm hover:bg-pink-100 px-3 py-1 rounded-full">
+                                    予定を登録する
+                                </button>
+                                <button class="text-pink-500 text-sm hover:bg-pink-100 px-3 py-1 rounded-full">
+                                    アラームを設定する
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <button class="mt-4 w-full bg-pink-100 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-200">
-                    ＋ 新しいアラームを追加
-                </button>
+                <!-- メッセージ入力エリア -->
+                <div class="border-t-2 border-pink-100 p-4">
+                    <div class="flex items-end space-x-2">
+                        <button class="text-pink-500 p-2 rounded-full hover:bg-pink-50">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </button>
+                        <div class="flex-1 relative">
+                            <input type="text" 
+                                   placeholder="リリィに話しかけてね♪" 
+                                   class="w-full rounded-full border-2 border-pink-200 px-6 py-3 focus:outline-none focus:border-pink-400 bg-pink-50/50">
+                            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-pink-400 p-2 hover:text-pink-500">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- ストップウォッチ -->
-            <div class="bg-white rounded-2xl shadow-lg p-4">
-                <h2 class="text-lg font-bold text-pink-600 mb-4">ストップウォッチ</h2>
-                <div class="text-center">
-                    <div class="stopwatch-display mb-4">00:00:00</div>
-                    <div class="flex justify-center space-x-4">
-                        <button class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">
-                            スタート
-                        </button>
-                        <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-300">
-                            ラップ
-                        </button>
-                        <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-300">
-                            リセット
+            <!-- アラームタブのコンテンツ -->
+            <div class="hidden">
+                <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">アラーム</h2>
+                        <button class="bg-pink-400 text-white px-4 py-2 rounded-full hover:bg-pink-500">
+                            ＋ 新規アラーム
                         </button>
                     </div>
-                    <div class="mt-4 text-left">
-                        <h3 class="text-sm font-medium text-gray-600 mb-2">ラップタイム</h3>
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-sm text-gray-600">
-                                <span>ラップ 1</span>
-                                <span>00:00:00</span>
+                    
+                    <!-- アラームリスト -->
+                    <div class="space-y-4">
+                        <!-- アラームアイテム -->
+                        <div class="flex items-center justify-between p-4 bg-pink-50 rounded-xl">
+                            <div>
+                                <h3 class="font-medium text-gray-800">朝の準備</h3>
+                                <div class="flex space-x-2 mt-1">
+                                    <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">月</span>
+                                    <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">水</span>
+                                    <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">金</span>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">7:00</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-pink-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-400"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- カレンダータブのコンテンツ -->
+            <div class="hidden">
+                <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-6">
+                    <!-- カレンダーヘッダー -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">2024年 11月</h2>
+                        <div class="flex space-x-2">
+                            <button class="p-2 rounded-full hover:bg-pink-100">
+                                <svg class="w-6 h-6 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                            </button>
+                            <button class="p-2 rounded-full hover:bg-pink-100">
+                                <svg class="w-6 h-6 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- カレンダーグリッド -->
+                    <div class="grid grid-cols-7 gap-2">
+                        <!-- 曜日ヘッダー -->
+                        <div class="text-center text-gray-500 font-medium">日</div>
+                        <div class="text-center text-gray-500 font-medium">月</div>
+                        <div class="text-center text-gray-500 font-medium">火</div>
+                        <div class="text-center text-gray-500 font-medium">水</div>
+                        <div class="text-center text-gray-500 font-medium">木</div>
+                        <div class="text-center text-gray-500 font-medium">金</div>
+                        <div class="text-center text-gray-500 font-medium">土</div>
+                        
+                        <!-- カレンダー日付 -->
+                        <!-- 実際の実装ではJavaScriptで動的に生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- メモタブのコンテンツ -->
+            <div class="hidden">
+                <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">メモ</h2>
+                        <button class="bg-pink-400 text-white px-4 py-2 rounded-full hover:bg-pink-500">
+                            ＋ 新規メモ
+                        </button>
+                    </div>
+                    
+                    <!-- メモリスト -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- メモカード -->
+                        <div class="p-4 bg-pink-50 rounded-xl hover:shadow-md transition-shadow">
+                            <h3 class="font-medium text-gray-800 mb-2">買い物リスト</h3>
+                            <p class="text-sm text-gray-600 line-clamp-3">
+                                - 野菜<br>
+                                - 果物<br>
+                                - 日用品
+                            </p>
+                            <div class="flex justify-between items-center mt-4">
+                                <span class="text-xs text-gray-500">2024/11/27</span>
+                                <button class="text-pink-500 hover:bg-pink-100 p-2 rounded-full">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -158,74 +335,5 @@
             </div>
         </div>
     </main>
-    <!-- モバイルナビゲーション -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-pink-100 md:hidden">
-        <div class="flex justify-around p-4">
-            <button class="flex flex-col items-center text-pink-500">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                </svg>
-                <span class="text-xs mt-1">チャット</span>
-            </button>
-            <button class="flex flex-col items-center text-pink-500">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span class="text-xs mt-1">タイマー</span>
-            </button>
-            <button class="flex flex-col items-center text-pink-500">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                </svg>
-                <span class="text-xs mt-1">アラーム</span>
-            </button>
-            <button class="flex flex-col items-center text-pink-500">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                <span class="text-xs mt-1">設定</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- アラーム追加モーダル -->
-    <div class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-            <h3 class="text-lg font-bold text-pink-600 mb-4">新しいアラーム</h3>
-            
-            <!-- 時間設定 -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">時間</label>
-                <input type="time" class="w-full rounded-lg border-2 border-pink-200 p-2">
-            </div>
-
-            <!-- 繰り返し設定 -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">繰り返し</label>
-                <div class="flex space-x-2">
-                    <button class="px-3 py-1 rounded-full border-2 border-pink-200 text-sm">月</button>
-                    <button class="px-3 py-1 rounded-full border-2 border-pink-200 text-sm">火</button>
-                    <button class="px-3 py-1 rounded-full border-2 border-pink-200 text-sm">水</button>
-                    <button class="px-3 py-1 rounded-full border-2 border-pink-200 text-sm">木</button>
-                    <button class="px-3 py-1 rounded-full border-2 border-pink-200 text-sm">金</button>
-                    <button class="px-3 py-1 rounded-full border-2 border-pink-200 text-sm">土</button>
-                    <button class="px-3 py-1 rounded-full border-2 border-pink-200 text-sm">日</button>
-                </div>
-            </div>
-
-            <!-- メモ -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">メモ</label>
-                <input type="text" placeholder="アラームの説明を入力" class="w-full rounded-lg border-2 border-pink-200 p-2">
-            </div>
-
-            <!-- ボタン -->
-            <div class="flex space-x-2">
-                <button class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-full">キャンセル</button>
-                <button class="flex-1 bg-pink-400 text-white px-4 py-2 rounded-full">保存</button>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
