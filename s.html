@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group textarea {
+            resize: none;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        .question p {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <header>Personality Test for Recruitment</header>
+    <div class="container">
+        <form id="personality-form">
+            <!-- 名前と年齢 -->
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+
+            <!-- 質問 -->
+            <div class="question">
+                <p>1. How do you handle stressful situations?</p>
+                <label>
+                    <input type="radio" name="question1" value="Stay calm and find solutions" required>
+                    Stay calm and find solutions
+                </label>
+                <label>
+                    <input type="radio" name="question1" value="Get overwhelmed and need support">
+                    Get overwhelmed and need support
+                </label>
+            </div>
+
+            <div class="question">
+                <p>2. How do you work in a team environment?</p>
+                <label>
+                    <input type="radio" name="question2" value="Collaborate and communicate effectively" required>
+                    Collaborate and communicate effectively
+                </label>
+                <label>
+                    <input type="radio" name="question2" value="Prefer to work independently">
+                    Prefer to work independently
+                </label>
+            </div>
+
+            <div class="question">
+                <p>3. How do you approach deadlines?</p>
+                <label>
+                    <input type="radio" name="question3" value="Plan ahead and manage time well" required>
+                    Plan ahead and manage time well
+                </label>
+                <label>
+                    <input type="radio" name="question3" value="Tend to procrastinate but finish on time">
+                    Tend to procrastinate but finish on time
+                </label>
+            </div>
+
+            <!-- メッセージ -->
+            <div class="form-group">
+                <label for="comments">Additional Comments (Optional)</label>
+                <textarea id="comments" name="comments" rows="4"></textarea>
+            </div>
+
+            <!-- 送信ボタン -->
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+    <footer>&copy; 2024 Personality Test Inc.</footer>
+
+    <script>
+        document.getElementById("personality-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const age = document.getElementById("age").value;
+            const question1 = document.querySelector('input[name="question1"]:checked').value;
+            const question2 = document.querySelector('input[name="question2"]:checked').value;
+            const question3 = document.querySelector('input[name="question3"]:checked').value;
+            const comments = document.getElementById("comments").value;
+
+            // メール内容の生成
+            const emailBody = `
+                Name: ${name}
+                Age: ${age}
+                Q1: ${question1}
+                Q2: ${question2}
+                Q3: ${question3}
+                Comments: ${comments}
+            `;
+
+            // EmailJSを使用してメール送信（EmailJSの設定が必要）
+            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                name: name,
+                age: age,
+                question1: question1,
+                question2: question2,
+                question3: question3,
+                comments: comments,
+            }).then(
+                function (response) {
+                    alert("Results have been sent to the company!");
+                    document.getElementById("personality-form").reset();
+                },
+                function (error) {
+                    alert("There was an error sending the results. Please try again.");
+                }
+            );
+        });
+    </script>
+
+    <!-- EmailJSライブラリ -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.4.1/dist/email.min.js"></script>
+    <script>
+        (function () {
+            emailjs.init("YOUR_USER_ID");
+        })();
+    </script>
+</body>
+</html>
