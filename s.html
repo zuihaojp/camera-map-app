@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personality Test</title>
+    <title>性格診断テスト</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,36 +29,14 @@
             margin-top: 20px;
             padding: 20px;
             width: 90%;
-            max-width: 600px;
+            max-width: 800px;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .form-group textarea {
-            resize: none;
-        }
-
         .question {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .question p {
@@ -95,115 +73,120 @@
     </style>
 </head>
 <body>
-    <header>Personality Test for Recruitment</header>
+    <header>性格診断テスト</header>
     <div class="container">
         <form id="personality-form">
             <!-- 名前と年齢 -->
             <div class="form-group">
-                <label for="name">Name</label>
+                <label for="name">お名前</label>
                 <input type="text" id="name" name="name" required>
             </div>
             <div class="form-group">
-                <label for="age">Age</label>
+                <label for="age">年齢</label>
                 <input type="number" id="age" name="age" required>
             </div>
 
             <!-- 質問 -->
-            <div class="question">
-                <p>1. How do you handle stressful situations?</p>
-                <label>
-                    <input type="radio" name="question1" value="Stay calm and find solutions" required>
-                    Stay calm and find solutions
-                </label>
-                <label>
-                    <input type="radio" name="question1" value="Get overwhelmed and need support">
-                    Get overwhelmed and need support
-                </label>
-            </div>
-
-            <div class="question">
-                <p>2. How do you work in a team environment?</p>
-                <label>
-                    <input type="radio" name="question2" value="Collaborate and communicate effectively" required>
-                    Collaborate and communicate effectively
-                </label>
-                <label>
-                    <input type="radio" name="question2" value="Prefer to work independently">
-                    Prefer to work independently
-                </label>
-            </div>
-
-            <div class="question">
-                <p>3. How do you approach deadlines?</p>
-                <label>
-                    <input type="radio" name="question3" value="Plan ahead and manage time well" required>
-                    Plan ahead and manage time well
-                </label>
-                <label>
-                    <input type="radio" name="question3" value="Tend to procrastinate but finish on time">
-                    Tend to procrastinate but finish on time
-                </label>
-            </div>
-
-            <!-- メッセージ -->
-            <div class="form-group">
-                <label for="comments">Additional Comments (Optional)</label>
-                <textarea id="comments" name="comments" rows="4"></textarea>
-            </div>
+            <div id="questions-container"></div>
 
             <!-- 送信ボタン -->
-            <button type="submit" class="btn">Submit</button>
+            <button type="submit" class="btn">送信</button>
         </form>
     </div>
-    <footer>&copy; 2024 Personality Test Inc.</footer>
+    <footer>&copy; 2024 性格診断テスト</footer>
 
     <script>
+        const questions = [
+            "新しい環境に入ることに抵抗はないですか？",
+            "計画を立てて行動するのが得意ですか？",
+            "新しいアイデアを思いつくことが得意ですか？",
+            "他人の気持ちを察するのが得意ですか？",
+            "細かいことに気を配るのが得意ですか？",
+            "大勢の中で積極的に発言しますか？",
+            "プレッシャーの中でも冷静に行動できますか？",
+            "長時間の作業にも集中力を保てますか？",
+            "新しいことに挑戦することが好きですか？",
+            "問題が起きたとき、すぐに解決方法を考えますか？",
+            "他人と協力して作業するのが好きですか？",
+            "失敗を恐れず、前向きに行動しますか？",
+            "自分の感情をコントロールするのが得意ですか？",
+            "慎重に物事を進める方ですか？",
+            "大勢の前で話すことが好きですか？",
+            "自分の意見を率直に伝える方ですか？",
+            "計画通りに進まない場合でも柔軟に対応できますか？",
+            "何事にも前向きな姿勢で取り組みますか？",
+            "創造力を発揮する場面が好きですか？",
+            "問題解決に積極的に取り組む方ですか？",
+            "同僚やチームメンバーをサポートするのが好きですか？",
+            "責任感を持って行動する方ですか？",
+            "自分のミスを素直に認めることができますか？",
+            "複数のタスクを同時にこなすのが得意ですか？",
+            "決断を下すのに迷うことが少ないですか？",
+            "他人の意見を尊重する方ですか？",
+            "時間管理が得意ですか？",
+            "初対面の人と話すのが得意ですか？",
+            "リスクを取ることに抵抗はないですか？",
+            "新しい技術や知識を積極的に学びますか？",
+            "長期的な目標を立てて取り組むのが好きですか？",
+            "協調性を大切にしますか？",
+            "目標に向かって努力し続ける方ですか？",
+            "ストレスを上手に発散する方法を知っていますか？",
+            "挑戦的な仕事が好きですか？",
+            "優先順位を明確にして行動できますか？",
+            "結果よりもプロセスを重視しますか？",
+            "自己主張が得意ですか？",
+            "他人にアドバイスをするのが好きですか？",
+            "周囲の人々に影響を与えることが得意ですか？",
+            "チームの中でリーダーシップを発揮する方ですか？",
+            "効率的に仕事を進める方ですか？",
+            "失敗を恐れず挑戦することが好きですか？",
+            "忍耐強い方ですか？",
+            "現実的な視点で物事を考えますか？",
+            "自己改善に積極的ですか？",
+            "他人のために行動することが多いですか？",
+            "正直さを大切にしますか？"
+        ];
+
+        const container = document.getElementById("questions-container");
+
+        questions.forEach((question, index) => {
+            const questionDiv = document.createElement("div");
+            questionDiv.className = "question";
+
+            questionDiv.innerHTML = `
+                <p>${index + 1}. ${question}</p>
+                <label>
+                    <input type="radio" name="question${index + 1}" value="はい" required>
+                    はい
+                </label>
+                <label>
+                    <input type="radio" name="question${index + 1}" value="いいえ">
+                    いいえ
+                </label>
+            `;
+
+            container.appendChild(questionDiv);
+        });
+
         document.getElementById("personality-form").addEventListener("submit", function (e) {
             e.preventDefault();
 
             const name = document.getElementById("name").value;
             const age = document.getElementById("age").value;
-            const question1 = document.querySelector('input[name="question1"]:checked').value;
-            const question2 = document.querySelector('input[name="question2"]:checked').value;
-            const question3 = document.querySelector('input[name="question3"]:checked').value;
-            const comments = document.getElementById("comments").value;
+            const answers = questions.map((_, index) => {
+                return document.querySelector(`input[name="question${index + 1}"]:checked`).value;
+            });
 
-            // メール内容の生成
-            const emailBody = `
-                Name: ${name}
-                Age: ${age}
-                Q1: ${question1}
-                Q2: ${question2}
-                Q3: ${question3}
-                Comments: ${comments}
-            `;
+            // ここで回答を処理してメール送信や結果表示を行います。
+            console.log({
+                name,
+                age,
+                answers
+            });
 
-            // EmailJSを使用してメール送信（EmailJSの設定が必要）
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
-                name: name,
-                age: age,
-                question1: question1,
-                question2: question2,
-                question3: question3,
-                comments: comments,
-            }).then(
-                function (response) {
-                    alert("Results have been sent to the company!");
-                    document.getElementById("personality-form").reset();
-                },
-                function (error) {
-                    alert("There was an error sending the results. Please try again.");
-                }
-            );
+            alert("結果が送信されました！お疲れ様でした。");
+            document.getElementById("personality-form").reset();
         });
-    </script>
-
-    <!-- EmailJSライブラリ -->
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.4.1/dist/email.min.js"></script>
-    <script>
-        (function () {
-            emailjs.init("YOUR_USER_ID");
-        })();
     </script>
 </body>
 </html>
