@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIちゃん</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <style>
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .chat-bubble {
+            position: relative;
+            max-width: 80%;
+        }
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #FFF8FA transparent;
+        }
+        .ai-message {
+            background: #FFF8FA;
+            border: 2px solid #FFE4E9;
+        }
+        .user-message {
+            background: #E4F3FF;
+            border: 2px solid #B8E2FF;
+        }
+    </style>
+</head>
+<body class="bg-pink-50">
+    <header class="bg-white shadow-sm border-b-2 border-pink-200">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <h1 class="text-xl font-bold text-pink-600">AIちゃん</h1>
+            <nav class="flex space-x-4">
+                <button onclick="showTab('chat')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">チャット</button>
+                <button onclick="showTab('diary')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">日記</button>
+                <button onclick="showTab('alarm')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">アラーム</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- チャットタブ -->
+        <div id="chat" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-lg mb-6 overflow-hidden">
+                <div id="chat-messages" class="h-96 p-4 overflow-y-auto space-y-4">
+                    <div class="ai-message rounded-2xl p-3 chat-bubble">
+                        <p>こんにちは！今日は何をする予定？</p>
+                    </div>
+                </div>
+                <div class="border-t-2 border-pink-100 p-4 flex space-x-2">
+                    <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" 
+                        class="flex-1 rounded-full border-2 border-pink-200 px-6 py-2 focus:outline-none">
+                    <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 日記タブ -->
+        <div id="diary" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">日記</h2>
+                <textarea id="diary-entry" rows="5" class="w-full border-2 border-pink-200 p-3 rounded-md"></textarea>
+                <button onclick="saveDiary()" class="mt-4 w-full bg-pink-400 text-white px-4 py-2 rounded-full hover:bg-pink-500">保存</button>
+                <div id="diary-entries" class="mt-4"></div>
+            </div>
+        </div>
+
+        <!-- アラームタブ -->
+        <div id="alarm" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">アラーム設定</h2>
+                <div id="alarm-list"></div>
+                <button onclick="addAlarm()" class="mt-4 w-full bg-pink-400 text-white px-4 py-2 rounded-full hover:bg-pink-500">＋ 新しいアラーム</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input').value.trim();
+            if (!input) return;
+
+            // ユーザーメッセージを表示
+            const chatMessages = document.getElementById('chat-messages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'user-message rounded-2xl p-3 chat-bubble self-end';
+            userMessage.innerText = input;
+            chatMessages.appendChild(userMessage);
+
+            // AIメッセージを追加（例: ランダム応答）
+            const responses = ["うんうん、それは面白そう！", "なるほどね！他には？", "それでどんな気持ち？"];
+            const aiMessage = document.createElement('div');
+            aiMessage.className = 'ai-message rounded-2xl p-3 chat-bubble';
+            aiMessage.innerText = responses[Math.floor(Math.random() * responses.length)];
+            chatMessages.appendChild(aiMessage);
+
+            // 入力欄をクリア
+            document.getElementById('chat-input').value = "";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function saveDiary() {
+            const entry = document.getElementById('diary-entry').value.trim();
+            if (!entry) return;
+
+            const diaryEntries = document.getElementById('diary-entries');
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'p-3 bg-pink-50 border border-pink-200 rounded-md mt-2';
+            entryDiv.innerText = entry;
+            diaryEntries.appendChild(entryDiv);
+
+            document.getElementById('diary-entry').value = "";
+        }
+
+        function addAlarm() {
+            const alarmList = document.getElementById('alarm-list');
+            const alarmDiv = document.createElement('div');
+            alarmDiv.className = 'flex items-center justify-between p-3 rounded-xl border-2 border-pink-100 mt-3';
+            alarmDiv.innerHTML = `
+                <input type="text" placeholder="例: 毎朝7時" class="flex-1 p-2 border-pink-200 rounded-md">
+                <button class="bg-pink-400 text-white px-4 py-2 rounded-full hover:bg-pink-500">保存</button>
+            `;
+            alarmList.appendChild(alarmDiv);
+        }
+    </script>
+</body>
+</html>
