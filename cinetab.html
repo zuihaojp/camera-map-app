@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIちゃん - シネマとマイリスト</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .movie-card { padding: 1rem; border: 2px solid #FFD1DC; background: #FFF8FA; border-radius: 0.5rem; margin: 0.5rem; }
+        .add-to-list { padding: 0.5rem; border: none; background: #FFC0CB; color: #fff; border-radius: 0.5rem; cursor: pointer; }
+        .add-to-list:hover { background: #FF9BB2; }
+    </style>
+</head>
+<body class="bg-pink-50">
+    <header class="bg-white shadow-sm border-b-2 border-pink-200">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <h1 class="text-xl font-bold text-pink-600">AIちゃん - シネマとマイリスト</h1>
+            <nav class="flex space-x-4">
+                <button onclick="showTab('cinema')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">シネマ</button>
+                <button onclick="showTab('streaming')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">ストリーミング</button>
+                <button onclick="showTab('mylist')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">マイリスト</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- シネマタブ -->
+        <div id="cinema" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">1～12月のおすすめ作品</h2>
+                <div id="month-buttons" class="flex flex-wrap gap-2 mb-4">
+                    <!-- 月ボタン生成 -->
+                </div>
+                <div id="movie-list" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- ストリーミングタブ -->
+        <div id="streaming" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">ストリーミングサービスのおすすめ</h2>
+                <div id="service-buttons" class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="displayStreamingMovies('Netflix')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Netflix</button>
+                    <button onclick="displayStreamingMovies('Disney+')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Disney+</button>
+                    <button onclick="displayStreamingMovies('Hulu')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Hulu</button>
+                    <button onclick="displayStreamingMovies('U-NEXT')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">U-NEXT</button>
+                </div>
+                <div id="streaming-movie-list" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- マイリストタブ -->
+        <div id="mylist" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">マイリスト</h2>
+                <div id="mylist-items" class="grid grid-cols-1 gap-4">
+                    <!-- マイリスト表示 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 映画データ (1～12月)
+        const movieData = {
+            1: ["映画A1", "映画B1", "映画C1"],
+            2: ["映画A2", "映画B2", "映画C2"],
+            3: ["映画A3", "映画B3", "映画C3"],
+            4: ["映画A4", "映画B4", "映画C4"],
+            5: ["映画A5", "映画B5", "映画C5"],
+            6: ["映画A6", "映画B6", "映画C6"],
+            7: ["映画A7", "映画B7", "映画C7"],
+            8: ["映画A8", "映画B8", "映画C8"],
+            9: ["映画A9", "映画B9", "映画C9"],
+            10: ["映画A10", "映画B10", "映画C10"],
+            11: ["映画A11", "映画B11", "映画C11"],
+            12: ["映画A12", "映画B12", "映画C12"]
+        };
+
+        // ストリーミングサービスごとの映画データ
+        const streamingMovies = {
+            Netflix: ["Netflix 映画1", "Netflix ドラマ1", "Netflix ドラマ2"],
+            "Disney+": ["Disney+ 映画1", "Disney+ 映画2", "Disney+ ドラマ1"],
+            Hulu: ["Hulu ドラマ1", "Hulu 映画1", "Hulu ドラマ2"],
+            "U-NEXT": ["U-NEXT 映画1", "U-NEXT 映画2", "U-NEXT ドラマ1"]
+        };
+
+        const myList = []; // マイリスト
+
+        // タブ切り替え
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // 月ボタン生成
+        function createMonthButtons() {
+            const monthButtons = document.getElementById("month-buttons");
+            for (let month = 1; month <= 12; month++) {
+                const button = document.createElement("button");
+                button.innerText = `${month}月`;
+                button.className = "bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300";
+                button.onclick = () => displayMovies(month);
+                monthButtons.appendChild(button);
+            }
+        }
+
+        // 映画リスト表示
+        function displayMovies(month) {
+            const movieList = document.getElementById("movie-list");
+            movieList.innerHTML = ""; // リストをクリア
+            movieData[month].forEach(movie => {
+                const movieCard = document.createElement("div");
+                movieCard.className = "movie-card";
+                movieCard.innerHTML = `
+                    <p>${movie}</p>
+                    <button class="add-to-list" onclick="addToMyList('${movie}')">マイリストに追加</button>
+                `;
+                movieList.appendChild(movieCard);
+            });
+        }
+
+        // ストリーミングサービスの映画リスト表示
+        function displayStreamingMovies(service) {
+            const streamingMovieList = document.getElementById("streaming-movie-list");
+            streamingMovieList.innerHTML = ""; // リストをクリア
+            streamingMovies[service].forEach(movie => {
+                const movieCard = document.createElement("div");
+                movieCard.className = "movie-card";
+                movieCard.innerHTML = `
+                    <p>${movie}</p>
+                    <button class="add-to-list" onclick="addToMyList('${movie}')">マイリストに追加</button>
+                `;
+                streamingMovieList.appendChild(movieCard);
+            });
+        }
+
+        // マイリストに追加
+        function addToMyList(movie) {
+            if (!myList.includes(movie)) {
+                myList.push(movie);
+                updateMyList();
+            } else {
+                alert("この作品は既にマイリストに追加されています！");
+            }
+        }
+
+        // マイリスト更新
+        function updateMyList() {
+                    const myListItems = document.getElementById("mylist-items");
+            myListItems.innerHTML = ""; // マイリストをクリア
+            myList.forEach(movie => {
+                const listItem = document.createElement("div");
+                listItem.className = "movie-card";
+                listItem.innerHTML = `<p>${movie}</p>`;
+                myListItems.appendChild(listItem);
+            });
+        }
+
+        // 初期化
+        document.addEventListener("DOMContentLoaded", () => {
+            createMonthButtons(); // 月ボタン生成
+            displayMovies(1); // デフォルトで1月の映画を表示
+        });
+    </script>
+</body>
+</html>
