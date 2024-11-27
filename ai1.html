@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIちゃん</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .chat-bubble { position: relative; max-width: 80%; }
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #FFF8FA transparent;
+        }
+        .ai-message { background: #FFF8FA; border: 2px solid #FFE4E9; }
+        .user-message { background: #E4F3FF; border: 2px solid #B8E2FF; }
+    </style>
+    <link rel="manifest" href="manifest5.json">
+</head>
+<body class="bg-pink-50">
+    <header class="bg-white shadow-sm border-b-2 border-pink-200">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <h1 class="text-xl font-bold text-pink-600">AIちゃん</h1>
+            <nav class="flex space-x-4">
+                <button onclick="showTab('chat')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">チャット</button>
+                <button onclick="showTab('diary')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">日記</button>
+                <button onclick="showTab('alarm')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">アラーム</button>
+                <button onclick="showTab('profile')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">プロフィール</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- チャットタブ -->
+        <div id="chat" class="tab-content active">
+            <div id="chat-messages" class="h-96 bg-white rounded-2xl shadow-lg p-4 overflow-y-auto space-y-4">
+                <div class="ai-message rounded-2xl p-3">
+                    <p>こんにちは！今日は何をする予定？</p>
+                </div>
+            </div>
+            <div class="border-t-2 border-pink-100 p-4 flex space-x-2">
+                <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" 
+                    class="flex-1 rounded-full border-2 border-pink-200 px-6 py-2 focus:outline-none">
+                <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
+            </div>
+        </div>
+
+        <!-- プロフィールタブ -->
+        <div id="profile" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">プロフィール</h2>
+                <input id="profile-name" type="text" placeholder="名前を入力" class="w-full border-2 border-pink-200 p-3 rounded-md mb-3">
+                <input id="profile-birthday" type="date" class="w-full border-2 border-pink-200 p-3 rounded-md mb-3">
+                <button onclick="saveProfile()" class="w-full bg-pink-400 text-white px-4 py-2 rounded-full hover:bg-pink-500">保存</button>
+                <div id="profile-display" class="mt-4"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const profile = { name: "", birthday: "" };
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input').value.trim();
+            if (!input) return;
+
+            const chatMessages = document.getElementById('chat-messages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'user-message rounded-2xl p-3 chat-bubble self-end';
+            userMessage.innerText = input;
+            chatMessages.appendChild(userMessage);
+
+            const responses = ["うんうん、それは面白そう！", "なるほどね！他には？", "それでどんな気持ち？"];
+            const aiMessage = document.createElement('div');
+            aiMessage.className = 'ai-message rounded-2xl p-3 chat-bubble';
+            aiMessage.innerText = responses[Math.floor(Math.random() * responses.length)];
+            chatMessages.appendChild(aiMessage);
+
+            document.getElementById('chat-input').value = "";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function saveProfile() {
+            profile.name = document.getElementById('profile-name').value;
+            profile.birthday = document.getElementById('profile-birthday').value;
+
+            document.getElementById('profile-display').innerText = `こんにちは、${profile.name}さん！`;
+            scheduleBirthdayMessage();
+        }
+
+        function scheduleBirthdayMessage() {
+            const today = new Date();
+            const [year, month, day] = profile.birthday.split("-");
+            if (month == today.getMonth() + 1 && day == today.getDate()) {
+                notify("AIちゃん", `お誕生日おめでとうございます、${profile.name}さん！`);
+            }
+        }
+
+        function notify(title, message) {
+            if (Notification.permission === "granted") {
+                new Notification(title, { body: message });
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification(title, { body: message });
+                    }
+                });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("service-worker5.js")
+                    .then(() => console.log("Service Worker registered!"))
+                    .catch(err => console.error("Service Worker registration failed:", err));
+            }
+
+            // 誕生日通知チェック
+            setInterval(scheduleBirthdayMessage, 1000 * 60 * 60); // 毎時間チェック
+        });
+    </script>
+</body>
+</html>
