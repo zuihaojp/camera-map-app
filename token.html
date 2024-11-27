@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 DApp with Token Support</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Web3 DApp with Token Support</h1>
+    <button id="connect-wallet">Connect Wallet</button>
+    <button id="get-token-balance" disabled>Get Token Balance</button>
+    <button id="send-token" disabled>Send Token</button>
+
+    <div class="info">
+        <p id="wallet-info">Wallet Address: Not Connected</p>
+        <p id="token-balance-info">Token Balance: N/A</p>
+        <p id="status-info"></p>
+    </div>
+
+    <script>
+        const tokenAddress = "YOUR_ERC20_TOKEN_CONTRACT_ADDRESS"; // Replace with the token contract address
+        const tokenABI = [
+            // ERC-20 Token Standard ABI
+            "function name() view returns (string)",
+            "function symbol() view returns (string)",
+            "function decimals() view returns (uint8)",
+            "function totalSupply() view returns (uint256)",
+            "function balanceOf(address) view returns (uint256)",
+            "function transfer(address to, uint amount) returns (bool)"
+        ];
+
+        let provider, signer, tokenContract;
+
+        // Connect Wallet
+        document.getElementById("connect-wallet").addEventListener("click", async () => {
+            if (!window.ethereum) {
+                alert("Please install Metamask!");
+                return;
+            }
+
+            try {
+                await window.ethereum.request({ method: "eth_requestAccounts" });
+
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                const walletAddress = await signer.getAddress();
+
+                tokenContract = new ethers.Contract(tokenAddress, tokenABI, signer);
+
+                document.getElementById("wallet-info").textContent = `Wallet Address: ${walletAddress}`;
+                document.getElementById("get-token-balance").disabled = false;
+                document.getElementById("send-token").disabled = false;
+
+                document.getElementById("status-info").textContent = "Wallet connected!";
+            } catch (error) {
+                console.error(error);
+                document.getElementById("status-info").textContent = "Failed to connect wallet.";
+            }
+        });
+
+        // Get Token Balance
+        document.getElementById("get-token-balance").addEventListener("click", async () => {
+            try {
+                const walletAddress = await signer.getAddress();
+                const balance = await tokenContract.balanceOf(walletAddress);
+                const decimals = await tokenContract.decimals();
+                const tokenBalance = ethers.utils.formatUnits(balance, decimals);
+
+                document.getElementById("token-balance-info").textContent = `Token Balance: ${tokenBalance}`;
+                document.getElementById("status-info").textContent = "Token balance retrieved!";
+            } catch (error) {
+                console.error(error);
+                document.getElementById("status-info").textContent = "Failed to retrieve token balance.";
+            }
+        });
+
+        // Send Token
+        document.getElementById("send-token").addEventListener("click", async () => {
+            try {
+                const recipient = prompt("Enter recipient address:");
+                if (!recipient) {
+                    alert("Recipient address is required.");
+                    return;
+                }
+
+                const amount = prompt("Enter amount of tokens:");
+                if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+                    alert("Invalid amount.");
+                    return;
+                }
+
+                const decimals = await tokenContract.decimals();
+                const parsedAmount = ethers.utils.parseUnits(amount, decimals);
+
+                const tx = await tokenContract.transfer(recipient, parsedAmount);
+                document.getElementById("status-info").textContent = `Token sent! Tx Hash: ${tx.hash}`;
+                console.log("Transaction", tx);
+            } catch (error) {
+                console.error(error);
+                document.getElementById("status-info").textContent = "Failed to send tokens.";
+            }
+        });
+    </script>
+</body>
+</html>
