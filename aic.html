@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>AIちゃん</title>
+    <meta name="theme-color" content="#FFB7D1">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <style>
+        /* リセットとベーススタイル */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #FFE6F0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ヘッダー */
+        .header {
+            background-color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* チャット領域 */
+        .chat-container {
+            max-width: 640px;
+            margin: 60px auto 80px;
+            padding: 16px;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .message.ai {
+            flex-direction: row;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 20px;
+        }
+
+        .message.ai .message-bubble {
+            background-color: #fff;
+        }
+
+        .message.user .message-bubble {
+            background-color: #E3F2FD;
+        }
+
+        /* 入力エリア */
+        .input-container {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background-color: white;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        .input-wrapper {
+            max-width: 640px;
+            margin: 0 auto;
+            display: flex;
+            gap: 8px;
+        }
+
+        .message-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 2px solid #FFB7D1;
+            border-radius: 24px;
+            outline: none;
+        }
+
+        .send-button {
+            background-color: #FFB7D1;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ナビゲーションバー */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 8px 0;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-items {
+            max-width: 640px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            color: #666;
+            text-decoration: none;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: #FFB7D1;
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-title">
+            <img src="icon-192.png" alt="AIちゃん" class="ai-icon">
+            <h1>AIちゃん</h1>
+        </div>
+        <div class="header-actions">
+            <button onclick="requestNotificationPermission()">通知設定</button>
+        </div>
+    </header>
+
+    <!-- チャット領域 -->
+    <main class="chat-container">
+        <div class="message ai">
+            <img src="icon-192.png" alt="AIちゃん" class="ai-icon">
+            <div class="message-bubble">
+                こんにちは！今日も一緒に頑張ろうね♪
+            </div>
+        </div>
+    </main>
+
+    <!-- 入力エリア -->
+    <div class="input-container">
+        <div class="input-wrapper">
+            <input type="text" class="message-input" placeholder="AIちゃんに話しかけてね♪">
+            <button class="send-button">
+                送信
+            </button>
+        </div>
+    </div>
+
+    <!-- ナビゲーションバー -->
+    <nav class="nav-bar">
+        <div class="nav-items">
+            <a href="#" class="nav-item active">
+                <span>ホーム</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span>アラーム</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span>設定</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // Service Workerの登録
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registered');
+                })
+                .catch(error => {
+                    console.error('ServiceWorker registration failed:', error);
+                });
+        }
+
+        // プッシュ通知の許可要求
+        async function requestNotificationPermission() {
+            if ('Notification' in window) {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    // 通知が許可された後の処理
+                    alert('通知が許可されました！');
+                }
+            }
+        }
+
+        // メッセージの送信処理
+        document.querySelector('.send-button').addEventListener('click', sendMessage);
+        document.querySelector('.message-input').addEventListener('keypress', e => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function sendMessage() {
+            const input = document.querySelector('.message-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatContainer = document.querySelector('.chat-container');
+                
+                // ユーザーメッセージの追加
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user';
+                userMessage.innerHTML = `
+                    <div class="message-bubble">
+                        ${message}
+                    </div>
+                `;
+                chatContainer.appendChild(userMessage);
+                
+                // AIの返信（実際はAPIコール等が必要）
+                setTimeout(() => {
+                    const aiMessage = document.createElement('div');
+                    aiMessage.className = 'message ai';
+                    aiMessage.innerHTML = `
+                        <img src="icon-192.png" alt="AIちゃん" class="ai-icon">
+                        <div class="message-bubble">
+                            ${getAIResponse(message)}
+                        </div>
+                    `;
+                    chatContainer.appendChild(aiMessage);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 1000);
+                
+                input.value = '';
+            }
+        }
+
+        // 簡単なAI返信ロジック（実際はもっと複雑な処理が必要）
+        function getAIResponse(message) {
+            if (message.includes('おはよう')) {
+                return 'おはようございます！今日も一緒に頑張りましょう♪';
+            } else if (message.includes('アラーム')) {
+                return 'アラームを設定しますか？時間を教えてください！';
+            } else {
+                return 'はい！お手伝いできることがありましたら、言ってくださいね♪';
+            }
+        }
+    </script>
+</body>
+</html>
