@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カスタマイズ型AIアシスタント</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #0077be;
+            color: white;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .chat-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin: 10px 0;
+        }
+
+        .user {
+            text-align: right;
+            color: blue;
+        }
+
+        .ai {
+            text-align: left;
+            color: green;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #0077be;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005f9e;
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <header>カスタマイズ型AIアシスタント</header>
+    <div class="container">
+        <div class="chat-container" id="chat-container">
+            <div class="message ai">こんにちは！AIアシスタントです。</div>
+        </div>
+        <input type="text" id="user-input" placeholder="メッセージを入力">
+        <button onclick="sendMessage()">送信</button>
+    </div>
+    <script>
+        const chatContainer = document.getElementById("chat-container");
+
+        function sendMessage() {
+            const inputField = document.getElementById("user-input");
+            const userMessage = inputField.value.trim();
+
+            if (!userMessage) return;
+
+            // ユーザーのメッセージを表示
+            const userDiv = document.createElement("div");
+            userDiv.className = "message user";
+            userDiv.textContent = userMessage;
+            chatContainer.appendChild(userDiv);
+
+            // AIの応答をシミュレーション
+            const aiResponse = generateAIResponse(userMessage);
+            const aiDiv = document.createElement("div");
+            aiDiv.className = "message ai";
+            aiDiv.textContent = aiResponse;
+            chatContainer.appendChild(aiDiv);
+
+            // フィールドをクリア
+            inputField.value = "";
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function generateAIResponse(message) {
+            // 簡易的な応答生成
+            if (message.includes("こんにちは")) {
+                return "こんにちは！何かお手伝いできることはありますか？";
+            } else if (message.includes("ありがとう")) {
+                return "どういたしまして！";
+            } else {
+                return "それについて詳しく教えてください。";
+            }
+        }
+
+        // PWA対応: Service Worker登録
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then(reg => console.log("Service Worker registered", reg))
+                .catch(err => console.error("Service Worker registration failed", err));
+        }
+    </script>
+</body>
+</html>
