@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aiちゃんシネマ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .movie-card { padding: 1rem; border: 2px solid #FFD1DC; background: #FFF8FA; border-radius: 0.5rem; margin: 0.5rem; }
+        .add-to-list { padding: 0.5rem; border: none; background: #FFC0CB; color: #fff; border-radius: 0.5rem; cursor: pointer; }
+        .add-to-list:hover { background: #FF9BB2; }
+        .chat-bubble { padding: 1rem; border-radius: 1rem; margin-bottom: 1rem; display: flex; align-items: start; gap: 1rem; }
+        .chat-bubble.ai { background: #FFE4E9; text-align: left; }
+        .chat-bubble.user { background: #D1F2FF; text-align: right; flex-direction: row-reverse; }
+        .ai-avatar { width: 50px; height: 50px; }
+        .blog-editor { background: #FFF8FA; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
+        .blog-preview { background: #FFE4E9; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
+    </style>
+</head>
+
+<body class="bg-pink-50">
+    <header class="bg-white shadow-sm border-b-2 border-pink-200">
+        <div class="max-w-4xl mx-auto px-4 py-3 text-center">
+            <h1 class="text-2xl font-bold text-pink-600">aiちゃんシネマ</h1>
+            <nav class="flex justify-center space-x-4 mt-4">
+                <button onclick="showTab('cinema')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">シネマ</button>
+                <button onclick="showTab('streaming')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">ストリーミング</button>
+                <button onclick="showTab('mylist')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">マイリスト</button>
+                <button onclick="showTab('chat')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">チャット</button>
+                <button onclick="showTab('company-blog')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">会社ブログ</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- シネマタブ -->
+        <div id="cinema" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">1～12月のおすすめシネマ</h2>
+                <div id="month-buttons" class="flex flex-wrap gap-2 mb-4"></div>
+                <div id="movie-list" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- ストリーミングタブ -->
+        <div id="streaming" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">ストリーミングサービスの新作</h2>
+                <div id="service-buttons" class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="displayStreamingMovies('Netflix')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Netflix</button>
+                    <button onclick="displayStreamingMovies('Disney+')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Disney+</button>
+                    <button onclick="displayStreamingMovies('Hulu')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Hulu</button>
+                    <button onclick="displayStreamingMovies('U-NEXT')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">U-NEXT</button>
+                </div>
+                <div id="streaming-movie-list" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- マイリストタブ -->
+        <div id="mylist" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">マイリスト</h2>
+                <div id="mylist-items" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+<!-- チャットタブの部分を更新 -->
+<div id="chat" class="tab-content">
+    <div class="bg-white rounded-2xl shadow-lg p-4">
+        <h2 class="text-lg font-bold text-pink-600 mb-4">AIちゃんとチャット</h2>
+        <div id="chat-messages" class="bg-pink-50 p-4 rounded-lg h-96 overflow-y-auto"></div>
+        <div class="flex mt-4">
+            <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" class="flex-1 border-2 border-pink-300 px-4 py-2 rounded-full">
+            <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
+        </div>
+    </div>
+</div>
+
+<!-- 会社ブログタブを更新 -->
+<div id="company-blog" class="tab-content">
+    <div class="bg-white rounded-2xl shadow-lg p-4">
+        <h2 class="text-lg font-bold text-pink-600 mb-4">会社ブログ</h2>
+        
+        <!-- 管理者用ブログ投稿フォーム -->
+        <div id="blog-editor" class="blog-editor">
+            <h3 class="text-pink-600 font-bold mb-2">新規投稿</h3>
+            <input type="password" id="admin-password" placeholder="管理者パスワード" class="w-full mb-2 p-2 border border-pink-200 rounded">
+            <input type="text" id="blog-title" placeholder="タイトル" class="w-full mb-2 p-2 border border-pink-200 rounded">
+            <textarea id="blog-content" placeholder="本文" class="w-full h-32 mb-2 p-2 border border-pink-200 rounded"></textarea>
+            <button onclick="submitBlogPost()" class="bg-pink-400 text-white px-4 py-2 rounded hover:bg-pink-500">投稿</button>
+        </div>
+
+        <!-- ブログ記事一覧 -->
+        <div id="blog-entries" class="grid grid-cols-1 gap-4 mt-4"></div>
+    </div>
+</div>
+
+<script>
+// 既存のJavaScriptコードはそのままで、以下を追加
+
+// AIちゃんのアバター SVG
+const aiAvatar = `
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- 顔の基本形 -->
+  <circle cx="50" cy="50" r="45" fill="#FFE4E9" stroke="#FFB6C1" stroke-width="2">
+    <animate attributeName="r" values="45;43;45" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 目 -->
+  <g id="eyes">
+    <!-- 左目 -->
+    <circle cx="35" cy="45" r="5" fill="#FF69B4">
+      <animate attributeName="cy" values="45;43;45" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 右目 -->
+    <circle cx="65" cy="45" r="5" fill="#FF69B4">
+      <animate attributeName="cy" values="45;43;45" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <!-- まつ毛 -->
+    <path d="M30 40 L35 38 L40 40" stroke="#FF69B4" stroke-width="2" fill="none"/>
+    <path d="M60 40 L65 38 L70 40" stroke="#FF69B4" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- 口 -->
+  <path d="M40 60 Q50 70 60 60" stroke="#FF69B4" stroke-width="2" fill="none">
+    <animate attributeName="d" 
+             values="M40 60 Q50 70 60 60;M40 65 Q50 75 60 65;M40 60 Q50 70 60 60" 
+             dur="2s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- ほっぺ -->
+  <circle cx="25" cy="55" r="5" fill="#FFB6C1" opacity="0.5"/>
+  <circle cx="75" cy="55" r="5" fill="#FFB6C1" opacity="0.5"/>
+</svg>
+`;
+
+// チャットメッセージ送信関数を更新
+function sendMessage() {
+    const input = document.getElementById("chat-input").value.trim();
+    if (!input) return;
+
+    const chatMessages = document.getElementById("chat-messages");
+    
+    // ユーザーメッセージ
+    const userMessage = document.createElement("div");
+    userMessage.className = "chat-bubble user";
+    userMessage.innerHTML = `
+        <div class="message-text">${input}</div>
+    `;
+    chatMessages.appendChild(userMessage);
+
+    // AIちゃんのメッセージ
+    const aiMessage = document.createElement("div");
+    aiMessage.className = "chat-bubble ai";
+    aiMessage.innerHTML = `
+        <div class="ai-avatar">${aiAvatar}</div>
+        <div class="message-text">${generateAIResponse(input)}</div>
+    `;
+    chatMessages.appendChild(aiMessage);
+
+    document.getElementById("chat-input").value = "";
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// ブログ投稿関連の機能
+const ADMIN_PASSWORD = "admin123"; // 実際の運用では安全なパスワード管理を実装してください
+let blogPosts = [
+    {
+        id: 1,
+        title: "ブログ記事1",
+        content: "最近の映画のトレンドについての記事内容です。",
+        date: "2024-03-28"
+    },
+    {
+        id: 2,
+        title: "ブログ記事2",
+        content: "Huluで注目されているドラマのレビュー。",
+        date: "2024-03-27"
+    }
+];
+
+function submitBlogPost() {
+    const password = document.getElementById("admin-password").value;
+    const title = document.getElementById("blog-title").value;
+    const content = document.getElementById("blog-content").value;
+
+    if (password !== ADMIN_PASSWORD) {
+        alert("パスワードが正しくありません。");
+        return;
+    }
+
+    if (!title || !content) {
+        alert("タイトルと本文を入力してください。");
+        return;
+    }
+
+    const newPost = {
+        id: blogPosts.length + 1,
+        title: title,
+        content: content,
+        date: new Date().toISOString().split('T')[0]
+    };
+
+    blogPosts.unshift(newPost);
+    updateBlogEntries();
+    clearBlogForm();
+    alert("ブログ記事を投稿しました！");
+}
+
+function updateBlogEntries() {
+    const blogEntriesDiv = document.getElementById("blog-entries");
+    blogEntriesDiv.innerHTML = "";
+
+    blogPosts.forEach(post => {
+        const postElement = document.createElement("div");
+        postElement.className = "p-3 bg-pink-50 border border-pink-200 rounded-md";
+        postElement.innerHTML = `
+            <h3 class="text-pink-600 font-bold">${post.title}</h3>
+            <p class="text-sm text-gray-500 mb-2">${post.date}</p>
+            <p>${post.content}</p>
+        `;
+        blogEntriesDiv.appendChild(postElement);
+    });
+}
+
+function clearBlogForm() {
+    document.getElementById("admin-password").value = "";
+    document.getElementById("blog-title").value = "";
+    document.getElementById("blog-content").value = "";
+}
+
+// 初期化時にブログ記事を表示
+document.addEventListener("DOMContentLoaded", () => {
+    createMonthButtons();
+    displayMovies(1);
+    updateBlogEntries();
+});
+</script>
+</body>
+</html>
