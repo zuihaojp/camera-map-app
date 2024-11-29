@@ -292,20 +292,23 @@
         padding: 0 15px;
     }
 
-    /* メインビジュアル調整 */
-    .hero {
-        height: 60vh;
-        margin-top: 60px;
-    }
+/* ヒーローセクションの高さを小さな画面で調整 */
+.hero {
+    height: 50vh; /* 高さを50%に */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
 
-    .hero h1 {
-        font-size: 28px;
-    }
+.hero h1 {
+    font-size: 24px; /* フォントサイズを小さく */
+}
 
-    .hero p {
-        font-size: 16px;
-        padding: 0 20px;
-    }
+.hero p {
+    font-size: 14px;
+}
 
     /* グリッドレイアウト調整 */
     .content-grid,
