@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIBUYA MEDICAL CLINIC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #B8860B;
+            --accent: #DAA520;
+            --text-dark: #1a1a1a;
+            --text-light: #ffffff;
+            --background: #F5F5F5;
+            --gold-gradient: linear-gradient(135deg, #B8860B, #DAA520);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 100% 0; }
+        }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        header {
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .clinic-name {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .clinic-name span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)),
+                        url('https://example.com/your-image.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-light);
+            margin-top: 70px;
+        }
+
+        .hero-content {
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .gold-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--gold-gradient);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 3px;
+            margin-top: 30px;
+            font-size: 16px;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .gold-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="clinic-name">
+                SHIBUYA <span>MEDICAL</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#about">ABOUT</a></li>
+                    <li><a href="#departments">DEPARTMENTS</a></li>
+                    <li><a href="#reservation">RESERVATION</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>PREMIUM MEDICAL CARE</h1>
+            <p>最高級のオンライン診療サービスを、あなたの生活に。</p>
+            <a href="#reservation" class="gold-button">ご予約はこちら</a>
+        </div>
+    </section>
+
+<main>
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <span class="title-label">ABOUT</span>
+                    最高峰の医療体験を
+                </h2>
+                <div class="content-grid">
+                    <div class="text-content">
+                        <p class="lead">洗練された空間で、最先端の医療サービスを。</p>
+                        <p>渋谷医療クリニックは、最新のテクノロジーと熟練した医師陣による、プレミアムな医療サービスを提供しています。オンライン診療システムを通じて、快適な医療体験をお届けいたします。</p>
+                        <ul class="feature-list">
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                24時間対応の医療サポート
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                経験豊富な専門医による診療
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                最新のオンライン診療システム
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">患者様満足度</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">15+</span>
+                            <span class="stat-label">専門医在籍</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">24h</span>
+                            <span class="stat-label">医療サポート</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="departments" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <span class="title-label">DEPARTMENTS</span>
+                    診療科目
+                </h2>
+                <div class="departments-grid">
+                    <div class="department-card" onclick="showReservation('美容皮膚科')">
+                        <div class="card-content">
+                            <i class="fas fa-user-md"></i>
+                            <h3>美容皮膚科</h3>
+                            <p>最新の美容医療技術による、確かな結果をお約束します。</p>
+                            <div class="card-action">
+                                <span>詳しく見る</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="department-card" onclick="showReservation('内科')">
+                        <div class="card-content">
+                            <i class="fas fa-heartbeat"></i>
+                            <h3>内科</h3>
+                            <p>包括的な診断と治療で、あなたの健康をサポートします。</p>
+                            <div class="card-action">
+                                <span>詳しく見る</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="department-card" onclick="showReservation('心療内科')">
+                        <div class="card-content">
+                            <i class="fas fa-brain"></i>
+                            <h3>心療内科</h3>
+                            <p>心身のバランスを整え、より良い生活を支援します。</p>
+                            <div class="card-action">
+                                <span>詳しく見る</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="department-card" onclick="showReservation('美容点滴')">
+                        <div class="card-content">
+                            <i class="fas fa-tint"></i>
+                            <h3>美容点滴</h3>
+                            <p>内側からの美しさを引き出す、最新の治療法を提供します。</p>
+                            <div class="card-action">
+                                <span>詳しく見る</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <style>
+            .section {
+                padding: 100px 0;
+                background: white;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+
+            .section-title {
+                text-align: center;
+                margin-bottom: 60px;
+                font-weight: 300;
+                font-size: 36px;
+                color: var(--primary);
+            }
+
+            .title-label {
+                display: block;
+                font-size: 14px;
+                letter-spacing: 3px;
+                color: var(--secondary);
+                margin-bottom: 10px;
+            }
+
+            .content-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 60px;
+                align-items: center;
+            }
+
+            .lead {
+                font-size: 24px;
+                color: var(--secondary);
+                margin-bottom: 20px;
+            }
+
+            .feature-list {
+                list-style: none;
+                padding: 0;
+                margin: 30px 0;
+            }
+
+            .feature-list li {
+                margin: 15px 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .feature-list i {
+                color: var(--secondary);
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+            }
+
+            .stat-item {
+                text-align: center;
+                padding: 30px;
+                background: var(--background);
+                border: 1px solid rgba(218, 165, 32, 0.1);
+            }
+
+            .stat-number {
+                display: block;
+                font-size: 36px;
+                color: var(--secondary);
+                margin-bottom: 10px;
+            }
+
+            .stat-label {
+                font-size: 14px;
+                color: var(--text-dark);
+            }
+
+            .departments-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 30px;
+            }
+
+            .department-card {
+                background: white;
+                border: 1px solid rgba(218, 165, 32, 0.1);
+                padding: 30px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .department-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+
+            .card-content i {
+                font-size: 36px;
+                color: var(--secondary);
+                margin-bottom: 20px;
+            }
+
+            .card-content h3 {
+                margin: 15px 0;
+                color: var(--primary);
+            }
+
+            .card-action {
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: var(--secondary);
+            }
+        </style>
+
+<section id="reservation" class="section reservation-section">
+            <div class="container">
+                <h2 class="section-title">
+                    <span class="title-label">RESERVATION</span>
+                    診療予約
+                </h2>
+                
+                <div class="reservation-container">
+                    <div class="form-wrapper">
+                        <form id="reservation-form" class="luxury-form">
+                            <div class="form-group">
+                                <label for="department">診療科目</label>
+                                <select id="department" name="department" required>
+                                    <option value="">診療科目をお選びください</option>
+                                    <option value="美容皮膚科">美容皮膚科</option>
+                                    <option value="内科">内科</option>
+                                    <option value="心療内科">心療内科</option>
+                                    <option value="美容点滴">美容点滴</option>
+                                </select>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="date">ご希望日</label>
+                                    <input type="date" id="date" name="date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="time">ご希望時間</label>
+                                    <select id="time" name="time" required>
+                                        <option value="">時間を選択</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="16:00">16:00</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="name">お名前</label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="kana">フリガナ</label>
+                                    <input type="text" id="kana" name="kana" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">メールアドレス</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">電話番号</label>
+                                <input type="tel" id="phone" name="phone" pattern="[0-9]{2,4}-[0-9]{2,4}-[0-9]{4}" 
+                                       placeholder="03-1234-5678" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">ご要望・症状</label>
+                                <textarea id="message" name="message" rows="4" required></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-button">
+                                <span>予約リクエストを送信</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="reservation-info">
+                        <div class="info-card">
+                            <h3>診療時間</h3>
+                            <table class="schedule-table">
+                                <tr>
+                                    <th>平日</th>
+                                    <td>10:00 - 19:00</td>
+                                </tr>
+                                <tr>
+                                    <th>土曜</th>
+                                    <td>10:00 - 17:00</td>
+                                </tr>
+                                <tr>
+                                    <th>日祝</th>
+                                    <td>休診</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>お問い合わせ</h3>
+                            <p><i class="fas fa-phone"></i> 03-1234-5678</p>
+                            <p><i class="fas fa-envelope"></i> info@shibuya-clinic.com</p>
+                            <div class="social-links">
+                                <a href="#" class="social-link">
+                                    <i class="fab fa-line"></i>
+                                </a>
+                                <a href="#" class="social-link">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <style>
+            .reservation-section {
+                background: var(--background);
+            }
+
+            .reservation-container {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 40px;
+            }
+
+            .form-wrapper {
+                background: white;
+                padding: 40px;
+                border: 1px solid rgba(218, 165, 32, 0.1);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            }
+
+            .luxury-form {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .form-group label {
+                font-size: 14px;
+                color: var(--text-dark);
+            }
+
+            .luxury-form input,
+            .luxury-form select,
+            .luxury-form textarea {
+                padding: 12px;
+                border: 1px solid rgba(218, 165, 32, 0.2);
+                border-radius: 3px;
+                font-size: 16px;
+                transition: all 0.3s ease;
+            }
+
+            .luxury-form input:focus,
+            .luxury-form select:focus,
+            .luxury-form textarea:focus {
+                outline: none;
+                border-color: var(--secondary);
+                box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.1);
+            }
+
+            .submit-button {
+                background: var(--gold-gradient);
+                color: white;
+                padding: 15px 30px;
+                border: none;
+                border-radius: 3px;
+                font-size: 16px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                transition: all 0.3s ease;
+            }
+
+            .submit-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+            }
+
+            .info-card {
+                background: white;
+                padding: 30px;
+                margin-bottom: 20px;
+                border: 1px solid rgba(218, 165, 32, 0.1);
+            }
+
+            .info-card h3 {
+                color: var(--primary);
+                margin-bottom: 20px;
+                font-size: 18px;
+                position: relative;
+                padding-bottom: 10px;
+            }
+
+            .info-card h3::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 40px;
+                height: 2px;
+                background: var(--secondary);
+            }
+
+            .schedule-table {
+                width: 100%;
+                margin-top: 15px;
+            }
+
+            .schedule-table th,
+            .schedule-table td {
+                padding: 10px;
+                border-bottom: 1px solid rgba(218, 165, 32, 0.1);
+            }
+
+            .schedule-table th {
+                font-weight: normal;
+                color: var(--text-dark);
+                width: 100px;
+            }
+
+            .social-links {
+                display: flex;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .social-link {
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid rgba(218, 165, 32, 0.2);
+                border-radius: 50%;
+                color: var(--secondary);
+                transition: all 0.3s ease;
+            }
+
+            .social-link:hover {
+                background: var(--secondary);
+                color: white;
+                transform: translateY(-2px);
+            }
+
+            @media (max-width: 768px) {
+                .reservation-container {
+                    grid-template-columns: 1fr;
+                }
+
+                .form-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+
+<footer class="site-footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-info">
+                        <h3>SHIBUYA MEDICAL</h3>
+                        <p>〒150-0002<br>
+                           東京都渋谷区渋谷2-2-2<br>
+                           渋谷メディカルビル 5F</p>
+                        <div class="footer-contact">
+                            <p><i class="fas fa-phone"></i> 03-1234-5678</p>
+                            <p><i class="fas fa-envelope"></i> info@shibuya-clinic.com</p>
+                        </div>
+                    </div>
+
+                    <div class="footer-nav">
+                        <h4>MENU</h4>
+                        <ul>
+                            <li><a href="#about">当院について</a></li>
+                            <li><a href="#departments">診療科目</a></li>
+                            <li><a href="#reservation">ご予約</a></li>
+                            <li><a href="#access">アクセス</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-hours">
+                        <h4>診療時間</h4>
+                        <table>
+                            <tr>
+                                <th>平日</th>
+                                <td>10:00 - 19:00</td>
+                            </tr>
+                            <tr>
+                                <th>土曜</th>
+                                <td>10:00 - 17:00</td>
+                            </tr>
+                            <tr>
+                                <th>日祝</th>
+                                <td>休診</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-line"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                    <p class="copyright">© 2024 SHIBUYA MEDICAL CLINIC All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <style>
+            .site-footer {
+                background: var(--primary);
+                color: var(--text-light);
+                padding: 60px 0 30px;
+            }
+
+            .footer-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 40px;
+                margin-bottom: 40px;
+            }
+
+            .footer-info h3 {
+                font-size: 24px;
+                font-weight: 300;
+                margin-bottom: 20px;
+                color: var(--accent);
+            }
+
+            .footer-contact {
+                margin-top: 20px;
+            }
+
+            .footer-contact p {
+                margin: 10px 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .footer-nav h4,
+            .footer-hours h4 {
+                color: var(--accent);
+                margin-bottom: 20px;
+                font-size: 18px;
+                font-weight: normal;
+            }
+
+            .footer-nav ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            .footer-nav ul li {
+                margin: 10px 0;
+            }
+
+            .footer-nav ul li a {
+                color: var(--text-light);
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .footer-nav ul li a:hover {
+                color: var(--accent);
+            }
+
+            .footer-hours table {
+                width: 100%;
+            }
+
+            .footer-hours table th,
+            .footer-hours table td {
+                padding: 8px 0;
+                font-weight: normal;
+            }
+
+            .footer-bottom {
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding-top: 30px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .copyright {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+            @media (max-width: 768px) {
+                .footer-grid {
+                    grid-template-columns: 1fr;
+                    gap: 30px;
+                }
+            }
+        </style>
+
+<script>
+            // スムーズスクロール機能
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // 予約フォーム送信処理
+            document.getElementById('reservation-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const formObject = {};
+                formData.forEach((value, key) => formObject[key] = value);
+
+                // 予約内容の確認メッセージを作成
+                const confirmMessage = `
+                    以下の内容で予約リクエストを承りました。
+
+                    診療科目: ${formObject.department}
+                    予約日時: ${formObject.date} ${formObject.time}
+                    お名前: ${formObject.name}（${formObject.kana}）
+                    電話番号: ${formObject.phone}
+                    メールアドレス: ${formObject.email}
+
+                    ご要望・症状:
+                    ${formObject.message}
+
+                    確認メールをお送りいたしますので、
+                    内容をご確認ください。
+                `;
+
+                // モーダルで予約確認を表示
+                showReservationConfirmation(confirmMessage);
+
+                // フォームをリセット
+                this.reset();
+            });
+
+            // スクロール時のヘッダー効果
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.style.backgroundColor = `rgba(44, 62, 80, 0.95)`;
+                    header.style.backdropFilter = 'blur(10px)';
+                } else {
+                    header.style.backgroundColor = 'var(--primary)';
+                    header.style.backdropFilter = 'none';
+                }
+            });
+
+// 予約確認モーダル表示関数
+            function showReservationConfirmation(message) {
+                // モーダル要素の作成
+                const modal = document.createElement('div');
+                modal.className = 'confirmation-modal';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>ご予約ありがとうございます</h3>
+                            <button class="close-button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="confirmation-message">${message.replace(/\n/g, '<br>')}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="ok-button">OK</button>
+                        </div>
+                    </div>
+                `;
+
+                // モーダルのスタイル定義
+                const modalStyle = document.createElement('style');
+                modalStyle.textContent = `
+                    .confirmation-modal {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.5);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 1000;
+                        animation: fadeIn 0.3s ease;
+                    }
+
+                    .modal-content {
+                        background: white;
+                        padding: 30px;
+                        border-radius: 5px;
+                        max-width: 500px;
+                        width: 90%;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                        animation: slideIn 0.3s ease;
+                    }
+
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+
+                    @keyframes slideIn {
+                        from { transform: translateY(-20px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+
+                    .modal-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 20px;
+                        border-bottom: 2px solid var(--accent);
+                        padding-bottom: 15px;
+                    }
+
+                    .modal-header h3 {
+                        color: var(--primary);
+                        margin: 0;
+                        font-weight: 300;
+                        letter-spacing: 1px;
+                    }
+
+                    .close-button {
+                        background: none;
+                        border: none;
+                        font-size: 24px;
+                        cursor: pointer;
+                        color: var(--text-dark);
+                        transition: color 0.3s ease;
+                    }
+
+                    .close-button:hover {
+                        color: var(--accent);
+                    }
+
+                    .confirmation-message {
+                        white-space: pre-line;
+                        line-height: 1.8;
+                        color: var(--text-dark);
+                    }
+
+                    .modal-footer {
+                        margin-top: 30px;
+                        text-align: center;
+                    }
+
+                    .ok-button {
+                        background: var(--gold-gradient);
+                        color: white;
+                        border: none;
+                        padding: 12px 40px;
+                        border-radius: 3px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-size: 16px;
+                        letter-spacing: 1px;
+                    }
+
+                    .ok-button:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+                    }
+                `;
+
+                // スタイルとモーダルを追加
+                document.head.appendChild(modalStyle);
+                document.body.appendChild(modal);
+
+                // モーダルを閉じる処理
+                const closeModal = () => {
+                    modal.classList.add('fadeOut');
+                    setTimeout(() => {
+                        modal.remove();
+                        modalStyle.remove();
+                    }, 300);
+                };
+
+                // イベントリスナーの設定
+                modal.querySelector('.close-button').addEventListener('click', closeModal);
+                modal.querySelector('.ok-button').addEventListener('click', closeModal);
+                modal.addEventListener('click', e => {
+                    if (e.target === modal) closeModal();
+                });
+            }
+        </script>
+    </body>
+</html>
