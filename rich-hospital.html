@@ -25,6 +25,190 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+    /* モバイルファースト基本設定 */
+    :root {
+        --header-height: 60px;
+        --bottom-nav-height: 60px;
+        --safe-bottom: env(safe-area-inset-bottom);
+        --safe-top: env(safe-area-inset-top);
+    }
+
+    /* タッチ操作の最適化 */
+    * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    /* スクロールの滑らかさ設定 */
+    html, body {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        overflow-x: hidden;
+    }
+
+    /* ヘッダーのモバイル対応 */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--header-height);
+        padding-top: var(--safe-top);
+        background: var(--primary);
+        z-index: 1000;
+        transition: transform 0.3s ease;
+    }
+
+    /* スクロール時のヘッダー挙動 */
+    header.hidden {
+        transform: translateY(-100%);
+    }
+
+    /* モバイルメニュー */
+    .mobile-menu {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: var(--bottom-nav-height);
+        padding-bottom: var(--safe-bottom);
+        background: white;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+
+    .mobile-menu-inner {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 100%;
+    }
+
+    .mobile-menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        color: var(--text-dark);
+        text-decoration: none;
+        font-size: 12px;
+    }
+
+    .mobile-menu-item i {
+        font-size: 24px;
+        margin-bottom: 4px;
+    }
+
+    .mobile-menu-item.active {
+        color: var(--accent);
+    }
+
+    /* モバイルでのフォーム要素の最適化 */
+    input, select, textarea {
+        font-size: 16px !important; /* iOSでのズームを防ぐ */
+        padding: 12px !important;
+        border-radius: 8px !important;
+        margin-bottom: 16px !important;
+    }
+
+    /* モバイルでのボタンサイズ最適化 */
+    button {
+        min-height: 44px; /* タップターゲットサイズの確保 */
+        padding: 12px 24px !important;
+    }
+
+    /* Pull to Refresh インジケータ */
+    .pull-to-refresh {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.3s ease;
+        transform: translateY(-100%);
+    }
+
+    .pull-to-refresh.visible {
+        transform: translateY(0);
+    }
+
+    /* オフラインモード表示 */
+    .offline-indicator {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        background: #ff9800;
+        color: white;
+        text-align: center;
+        padding: 8px;
+        font-size: 14px;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+    }
+
+    .offline .offline-indicator {
+        transform: translateY(0);
+    }
+
+    /* トースト通知 */
+    .toast {
+        position: fixed;
+        bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 20px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 24px;
+        font-size: 14px;
+        animation: fadeInUp 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        z-index: 1001;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translate(-50%, 20px);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+
+    /* インストールボタン */
+    .install-button {
+        position: fixed;
+        bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 20px);
+        right: 20px;
+        background: var(--accent);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 24px;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        font-size: 14px;
+        z-index: 999;
+    }
+</style>
+
+    <style>
         /* モバイル対応の基本スタイル */
         :root {
             --primary: #2C3E50;
@@ -82,6 +266,156 @@
             padding-top: var(--safe-area-inset-top);
             padding-bottom: var(--safe-area-inset-bottom);
         }
+        /* スマートフォン（縦向き）用のスタイル */
+@media screen and (max-width: 480px) {
+    /* ヘッダー調整 */
+    .header-content {
+        padding: 0 10px;
+    }
+
+    .clinic-name {
+        font-size: 18px;
+    }
+
+    /* メインナビゲーション非表示 */
+    nav ul {
+        display: none;
+    }
+
+    /* モバイルメニュー表示 */
+    .mobile-menu {
+        display: block;
+    }
+
+    /* コンテナー幅調整 */
+    .container {
+        padding: 0 15px;
+    }
+
+    /* メインビジュアル調整 */
+    .hero {
+        height: 60vh;
+        margin-top: 60px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero p {
+        font-size: 16px;
+        padding: 0 20px;
+    }
+
+    /* グリッドレイアウト調整 */
+    .content-grid,
+    .departments-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    /* 診療科目カード調整 */
+    .department-card {
+        padding: 20px;
+    }
+
+    /* 予約フォーム調整 */
+    .reservation-container {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* フッター調整 */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+/* スマートフォン（横向き）用のスタイル */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .departments-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* タブレット用のスタイル */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 0 30px;
+    }
+
+    .departments-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* iPhoneX以降のノッチ対応 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .mobile-menu {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .form-container {
+        padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+    }
+}
+
+/* タッチデバイス用のインタラクション */
+@media (hover: none) {
+    .department-card:hover {
+        transform: none;
+    }
+
+    .department-card:active {
+        background-color: rgba(0,0,0,0.05);
+    }
+
+    .mobile-menu-item:active {
+        opacity: 0.7;
+    }
+}
+
+/* ダークモード対応 */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .department-card,
+    .form-container,
+    .modal-content {
+        background-color: #2c2c2c;
+        border-color: #3a3a3a;
+    }
+
+    input, select, textarea {
+        background-color: #333333;
+        color: #ffffff;
+        border-color: #4a4a4a;
+    }
+}
+
+/* 印刷用スタイル */
+@media print {
+    .mobile-menu,
+    .social-links,
+    .reservation-form button {
+        display: none;
+    }
+}
     </style>
 </head>
 <body>
