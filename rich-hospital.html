@@ -2,10 +2,30 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SHIBUYA MEDICAL CLINIC</title>
+    
+    <!-- PWA対応 -->
+    <link rel="manifest" href="manifest6.json">
+    <meta name="theme-color" content="#2C3E50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="渋谷メディカル">
+    
+    <!-- iOS用アイコン -->
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    
+    <!-- スプラッシュスクリーン -->
+    <link rel="apple-touch-startup-image" href="splash/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="splash/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="splash/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="splash/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    
+    <!-- 外部リソース -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
+        /* モバイル対応の基本スタイル */
         :root {
             --primary: #2C3E50;
             --secondary: #B8860B;
@@ -14,140 +34,53 @@
             --text-light: #ffffff;
             --background: #F5F5F5;
             --gold-gradient: linear-gradient(135deg, #B8860B, #DAA520);
+            --safe-area-inset-top: env(safe-area-inset-top);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            /* ユーザー選択を防ぐ */
+            user-select: none;
         }
 
-        @keyframes shimmer {
-            0% { background-position: -100% 0; }
-            100% { background-position: 100% 0; }
+        /* 入力フィールドではユーザー選択を許可 */
+        input, textarea {
+            user-select: text;
         }
 
         body {
-            font-family: 'Noto Serif JP', serif;
             margin: 0;
             padding: 0;
-            background-color: var(--background);
-            color: var(--text-dark);
-            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
-        header {
+        /* スクロール時のバウンス効果の背景色 */
+        html {
             background: var(--primary);
-            color: var(--text-light);
-            padding: 20px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* モバイルでのホバー状態の最適化 */
+        @media (hover: hover) {
+            .button:hover {
+                opacity: 0.8;
+            }
         }
 
-        .clinic-name {
-            font-size: 24px;
-            font-weight: 300;
-            letter-spacing: 2px;
+        /* タッチデバイスでのアクティブ状態 */
+        @media (hover: none) {
+            .button:active {
+                opacity: 0.8;
+            }
         }
 
-        .clinic-name span {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            gap: 30px;
-        }
-
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 14px;
-            letter-spacing: 1px;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        .hero {
-            height: 80vh;
-            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)),
-                        url('https://example.com/your-image.jpg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--text-light);
-            margin-top: 70px;
-        }
-
-        .hero-content {
-            animation: fadeIn 1s ease-out;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 300;
-            margin-bottom: 20px;
-            letter-spacing: 4px;
-        }
-
-        .hero p {
-            font-size: 18px;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-
-        .gold-button {
-            display: inline-block;
-            padding: 15px 40px;
-            background: var(--gold-gradient);
-            color: var(--text-light);
-            text-decoration: none;
-            border-radius: 3px;
-            margin-top: 30px;
-            font-size: 16px;
-            letter-spacing: 1px;
-            transition: transform 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .gold-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+        /* iOS用のセーフエリア対応 */
+        .safe-area-padding {
+            padding-top: var(--safe-area-inset-top);
+            padding-bottom: var(--safe-area-inset-bottom);
         }
     </style>
 </head>
@@ -1007,4 +940,72 @@
             }
         </script>
     </body>
+
+<script>
+    // Service Workerの登録
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker6.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful');
+                    
+                    // プッシュ通知の許可リクエスト
+                    return registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: 'あなたのVAPIDパブリックキー'
+                    });
+                })
+                .catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+
+    // インストールバナーの制御
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // インストールボタンの表示
+        const installButton = document.createElement('button');
+        installButton.className = 'install-button';
+        installButton.textContent = 'アプリをインストール';
+        installButton.addEventListener('click', (e) => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('ユーザーがインストールを承認しました');
+                }
+                deferredPrompt = null;
+            });
+        });
+        
+        // 適切な場所にボタンを追加
+        document.querySelector('.header-content').appendChild(installButton);
+    });
+
+    // オフライン/オンライン検出
+    window.addEventListener('online', function() {
+        document.body.classList.remove('offline');
+        showToast('オンラインに復帰しました');
+    });
+
+    window.addEventListener('offline', function() {
+        document.body.classList.add('offline');
+        showToast('オフラインモードです');
+    });
+
+    // トースト通知表示関数
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
+</script>
 </html>
