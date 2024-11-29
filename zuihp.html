@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZUIHAO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2E7D32;
+            --accent: #FFC107;
+            --text: #333333;
+            --background: #FAFAFA;
+        }
+
+        body {
+            font-family: "Noto Sans JP", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .language-buttons {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .language-buttons button {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .language-buttons button:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            text-align: center;
+            background: white;
+            padding: 40px 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .hero h2 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .cta {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+            border-radius: 8px;
+        }
+
+        .cta h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .cta p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="company-name">ZUIHAO</h1>
+        <div class="language-buttons">
+            <button onclick="changeLanguage('ja')">日本語</button>
+            <button onclick="changeLanguage('en')">English</button>
+            <button onclick="changeLanguage('zh')">中文</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2 id="hero-title">最高のサービスを提供します</h2>
+            <p id="hero-description">私たちのオンラインサービスで、生活をより豊かに。</p>
+        </div>
+
+        <div class="cta">
+            <h2 id="cta-title">お問い合わせはこちら</h2>
+            <p id="cta-description">プロジェクトやご相談についてお気軽にお問い合わせください。</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ZUIHAO All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const translations = {
+            ja: {
+                companyName: "ZUIHAO",
+                heroTitle: "最高のサービスを提供します",
+                heroDescription: "私たちのオンラインサービスで、生活をより豊かに。",
+                ctaTitle: "お問い合わせはこちら",
+                ctaDescription: "プロジェクトやご相談についてお気軽にお問い合わせください。"
+            },
+            en: {
+                companyName: "ZUIHAO",
+                heroTitle: "Providing the Best Services",
+                heroDescription: "Enrich your life with our online services.",
+                ctaTitle: "Contact Us",
+                ctaDescription: "Feel free to reach out to discuss your projects or inquiries."
+            },
+            zh: {
+                companyName: "最好的",
+                heroTitle: "提供最好的服务",
+                heroDescription: "通过我们的在线服务，让生活更加充实。",
+                ctaTitle: "联系我们",
+                ctaDescription: "欢迎随时联系我们讨论您的项目或咨询。"
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.getElementById("company-name").textContent = translations[lang].companyName;
+            document.getElementById("hero-title").textContent = translations[lang].heroTitle;
+            document.getElementById("hero-description").textContent = translations[lang].heroDescription;
+            document.getElementById("cta-title").textContent = translations[lang].ctaTitle;
+            document.getElementById("cta-description").textContent = translations[lang].ctaDescription;
+        }
+    </script>
+</body>
+</html>
