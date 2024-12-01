@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3画面表示CBTシステム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .panel {
+            flex: 1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .panel + .panel {
+            border-left: none;
+        }
+        #questions-panel {
+            background-color: #f9f9f9;
+        }
+        #law-panel {
+            background-color: #f2f2f2;
+        }
+        #answer-panel {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- 問題文のパネル -->
+    <div id="questions-panel" class="panel">
+        <h2>問題文</h2>
+        <p id="question-text">ここに問題文が表示されます。</p>
+    </div>
+
+    <!-- 試験用法文のパネル -->
+    <div id="law-panel" class="panel">
+        <h2>試験用法文</h2>
+        <p>ここに試験用法文が表示されます。</p>
+    </div>
+
+    <!-- 答案作成のパネル -->
+    <div id="answer-panel" class="panel">
+        <h2>答案作成</h2>
+        <textarea id="answer-textarea" style="width: 100%; height: calc(100% - 40px);" placeholder="ここに答案を作成してください。"></textarea>
+    </div>
+
+    <script>
+        // サンプルデータ
+        const questions = [
+            "問題1: 日本の首都はどこですか？",
+            "問題2: 日本の通貨は何ですか？",
+            "問題3: 富士山の高さは約何メートルですか？"
+        ];
+
+        const laws = [
+            "法文1: 日本国憲法第1条 天皇は、日本国の象徴であり...",
+            "法文2: 民法第90条 公序良俗に反する法律行為は無効とする。",
+            "法文3: 刑法第199条 人を殺した者は、死刑または無期懲役に処する。"
+        ];
+
+        let currentQuestionIndex = 0;
+
+        const questionText = document.getElementById("question-text");
+        const lawPanel = document.getElementById("law-panel");
+
+        // 初期表示
+        function displayContent(index) {
+            questionText.textContent = questions[index];
+            lawPanel.innerHTML = `<h2>試験用法文</h2><p>${laws[index]}</p>`;
+        }
+
+        // 初期化
+        displayContent(currentQuestionIndex);
+    </script>
+</body>
+</html>
