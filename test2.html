@@ -40,23 +40,28 @@
             margin-bottom: 10px;
         }
         .textarea-container {
-            position: relative;
-            width: 595px; /* A4幅 */
-            height: 842px; /* A4高さ */
             margin: 0 auto 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .textarea-container h3 {
+            text-align: left;
+            margin-bottom: 5px;
         }
         .lined-textarea {
             width: 100%;
-            height: 100%;
+            height: 842px; /* A4サイズ */
             line-height: 1.5;
             background: repeating-linear-gradient(white, white 28px, lightgray 28px, lightgray 29px);
             border: 1px solid #ccc;
-            border-radius: 5px;
             padding: 10px;
             font-family: Arial, sans-serif;
             font-size: 14px;
             resize: none;
             box-sizing: border-box;
+            margin-bottom: 20px;
         }
         .reference-files {
             margin: 20px 0;
@@ -118,15 +123,20 @@
         async function saveAsPDF(subject) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const textAreaContent = document.getElementById(`${subject}-textarea`).value;
             const userName = document.getElementById(`${subject}-name`).value;
 
-            // Add content to the PDF
+            // Add user name and subject
             doc.setFontSize(14);
             doc.text(`科目: ${subject}`, 10, 10);
             doc.text(`名前: ${userName}`, 10, 20);
-            doc.text("答案:", 10, 30);
-            doc.text(textAreaContent, 10, 40, { maxWidth: 190 });
+
+            // Add content from textareas
+            for (let i = 1; i <= 4; i++) {
+                const textAreaContent = document.getElementById(`${subject}-textarea-page${i}`).value;
+                doc.text(`Page ${i}`, 10, 30 + (i - 1) * 10);
+                doc.text(textAreaContent, 10, 40, { maxWidth: 190 });
+                if (i < 4) doc.addPage(); // Add new page except for the last page
+            }
 
             // Save the PDF
             doc.save(`${subject}_答案.pdf`);
@@ -140,42 +150,28 @@
         <button class="subject-button" onclick="showSubject('civil', 4200)">民法 (70分)</button>
         <button class="subject-button" onclick="showSubject('criminal', 4200)">刑法 (70分)</button>
         <button class="subject-button" onclick="showSubject('constitutional', 4200)">憲法 (70分)</button>
-        <button class="subject-button" onclick="showSubject('administrative', 4200)">行政法 (70分)</button>
-        <button class="subject-button" onclick="showSubject('commercial', 4200)">商法 (70分)</button>
-        <button class="subject-button" onclick="showSubject('civil_procedure', 5400)">民事訴訟法 (90分)</button>
-        <button class="subject-button" onclick="showSubject('criminal_procedure', 5400)">刑事訴訟法 (90分)</button>
-        <button class="subject-button" onclick="showSubject('labor_law', 4200)">労働基準法 (70分)</button>
-        <button class="subject-button" onclick="showSubject('economic_law', 4200)">経済法 (70分)</button>
     </div>
 
-    <!-- 民事訴訟法セクション -->
-    <div id="civil_procedure-section" class="question-section">
-        <h2>民事訴訟法</h2>
-        <div class="timer" id="civil_procedure-timer">残り時間: 90:00</div>
+    <!-- 民法セクション -->
+    <div id="civil-section" class="question-section">
+        <h2>民法</h2>
+        <div class="timer" id="civil-timer">残り時間: 70:00</div>
         <h3>問題文:</h3>
         <div class="reference-files">
-            <a href="問題文民事訴訟法.pdf" target="_blank">問題文を見る</a>
+            <a href="問題文民法.pdf" target="_blank">問題文を見る</a>
         </div>
         <div class="textarea-container">
-            <textarea id="civil_procedure-textarea" class="lined-textarea" placeholder="ここに論文を入力してください"></textarea>
+            <h3>答案用紙 1/4</h3>
+            <textarea id="civil-textarea-page1" class="lined-textarea" placeholder="ここに答案を入力してください (1ページ目)"></textarea>
+            <h3>答案用紙 2/4</h3>
+            <textarea id="civil-textarea-page2" class="lined-textarea" placeholder="ここに答案を入力してください (2ページ目)"></textarea>
+            <h3>答案用紙 3/4</h3>
+            <textarea id="civil-textarea-page3" class="lined-textarea" placeholder="ここに答案を入力してください (3ページ目)"></textarea>
+            <h3>答案用紙 4/4</h3>
+            <textarea id="civil-textarea-page4" class="lined-textarea" placeholder="ここに答案を入力してください (4ページ目)"></textarea>
         </div>
-        <input id="civil_procedure-name" type="text" placeholder="名前を入力してください">
-        <button class="save-button" onclick="saveAsPDF('民事訴訟法')">PDFで保存</button>
-    </div>
-
-    <!-- 刑事訴訟法セクション -->
-    <div id="criminal_procedure-section" class="question-section">
-        <h2>刑事訴訟法</h2>
-        <div class="timer" id="criminal_procedure-timer">残り時間: 90:00</div>
-        <h3>問題文:</h3>
-        <div class="reference-files">
-            <a href="問題文刑事訴訟法.pdf" target="_blank">問題文を見る</a>
-        </div>
-        <div class="textarea-container">
-            <textarea id="criminal_procedure-textarea" class="lined-textarea" placeholder="ここに論文を入力してください"></textarea>
-        </div>
-        <input id="criminal_procedure-name" type="text" placeholder="名前を入力してください">
-        <button class="save-button" onclick="saveAsPDF('刑事訴訟法')">PDFで保存</button>
+        <input id="civil-name" type="text" placeholder="名前を入力してください">
+        <button class="save-button" onclick="saveAsPDF('民法')">PDFで保存</button>
     </div>
 </body>
 </html>
