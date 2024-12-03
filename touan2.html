@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>練習用試験画面</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        /* 基本スタイルは同じ */
+        .tab-container {
+            display: flex;
+            background: #f5f5f5;
+            padding: 10px 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            margin-right: 5px;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            background: white;
+            color: #666;
+        }
+
+        .tab.active {
+            background: #1a237e;
+            color: white;
+            font-weight: bold;
+        }
+
+        .content-container {
+            display: flex;
+            height: calc(100vh - 180px);
+        }
+
+        .document-viewer {
+            display: none;
+            width: 50%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background: #f5f5f5;
+            overflow-y: auto;
+        }
+
+        .document-viewer.active {
+            display: block;
+        }
+
+        .answer-container.with-doc {
+            width: 50%;
+        }
+
+        .answer-container.full-width {
+            width: 100%;
+        }
+
+        /* PDFビューアのコントロール */
+        .pdf-controls {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            z-index: 100;
+        }
+
+        .zoom-button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+        }
+
+        .zoom-button:hover {
+            background: #f0f0f0;
+        }
+
+        /* 答案用紙のスタイルは前回と同じ */
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="exam-info">
+            <h1 style="margin: 0; font-size: 1.2rem;">練習用画面</h1>
+            <div>受験番号: <span id="examNumberDisplay">未入力</span></div>
+        </div>
+        <div class="timer">残り時間: <span id="timeDisplay">140:00</span></div>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab active" onclick="switchTab('answer')">解答用紙</div>
+        <div class="tab" onclick="switchTab('question')">問題</div>
+        <div class="tab" onclick="switchTab('law')">六法</div>
+        <div class="tab" onclick="switchTab('cases')">判例</div>
+        <div class="tab" onclick="switchTab('materials')">資料</div>
+    </div>
+
+    <div class="content-container">
+        <div id="answer" class="answer-container full-width">
+            <div class="page-wrapper">
+                <div class="page-number">1/4</div>
+                <textarea class="answer-sheet" id="answer1"></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">2/4</div>
+                <textarea class="answer-sheet" id="answer2"></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">3/4</div>
+                <textarea class="answer-sheet" id="answer3"></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">4/4</div>
+                <textarea class="answer-sheet" id="answer4"></textarea>
+            </div>
+        </div>
+
+        <div id="question" class="document-viewer">
+            <div class="pdf-controls">
+                <button class="zoom-button" onclick="zoomPDF('question', 'in')">拡大</button>
+                <button class="zoom-button" onclick="zoomPDF('question', 'out')">縮小</button>
+                <button class="zoom-button" onclick="zoomPDF('question', 'reset')">リセット</button>
+            </div>
+            <div id="questionViewer"></div>
+        </div>
+
+        <div id="law" class="document-viewer">
+            <div class="pdf-controls">
+                <button class="zoom-button" onclick="zoomPDF('law', 'in')">拡大</button>
+                <button class="zoom-button" onclick="zoomPDF('law', 'out')">縮小</button>
+                <button class="zoom-button" onclick="zoomPDF('law', 'reset')">リセット</button>
+            </div>
+            <div id="lawViewer"></div>
+        </div>
+
+        <div id="cases" class="document-viewer">
+            <div class="pdf-controls">
+                <button class="zoom-button" onclick="zoomPDF('cases', 'in')">拡大</button>
+                <button class="zoom-button" onclick="zoomPDF('cases', 'out')">縮小</button>
+                <button class="zoom-button" onclick="zoomPDF('cases', 'reset')">リセット</button>
+            </div>
+            <div id="casesViewer"></div>
+        </div>
+
+        <div id="materials" class="document-viewer">
+            <div class="pdf-controls">
+                <button class="zoom-button" onclick="zoomPDF('materials', 'in')">拡大</button>
+                <button class="zoom-button" onclick="zoomPDF('materials', 'out')">縮小</button>
+                <button class="zoom-button" onclick="zoomPDF('materials', 'reset')">リセット</button>
+            </div>
+            <div id="materialsViewer"></div>
+        </div>
+    </div>
+
+    <div class="control-panel">
+        <div>
+            <input type="text" class="exam-number-input" id="examNumberInput" placeholder="受験番号を入力" />
+            <button id="startButton" class="button start-button" onclick="startExam()">開始</button>
+            <button id="pauseButton" class="button" onclick="pauseTimer()" disabled>一時停止</button>
+        </div>
+        <button id="submitButton" class="button submit-button" onclick="submitExam()" disabled>終了</button>
+    </div>
+
+    <script>
+        let timer;
+        let timeLeft = 140 * 60;
+        let isPaused = false;
+        const pdfScales = {
+            question: 1,
+            law: 1,
+            cases: 1,
+            materials: 1
+        };
+
+        function switchTab(tabId) {
+            // タブの切り替え
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+
+            // コンテンツの切り替え
+            document.querySelectorAll('.document-viewer').forEach(viewer => {
+                viewer.classList.remove('active');
+            });
+
+            if (tabId === 'answer') {
+                document.querySelector('.answer-container').classList.add('full-width');
+            } else {
+                document.getElementById(tabId).classList.add('active');
+                document.querySelector('.answer-container').classList.remove('full-width');
+                document.querySelector('.answer-container').classList.add('with-doc');
+            }
+        }
+
+        function zoomPDF(viewerId, action) {
+            switch(action) {
+                case 'in':
+                    pdfScales[viewerId] *= 1.2;
+                    break;
+                case 'out':
+                    pdfScales[viewerId] *= 0.8;
+                    break;
+                case 'reset':
+                    pdfScales[viewerId] = 1;
+                    break;
+            }
+            renderPDF(viewerId);
+        }
+
+        function pauseTimer() {
+            if (!isPaused) {
+                clearInterval(timer);
+                document.getElementById('pauseButton').textContent = '再開';
+                isPaused = true;
+            } else {
+                startTimer();
+                document.getElementById('pauseButton').textContent = '一時停止';
+                isPaused = false;
+            }
+        }
+
+        // 他の関数（startExam, startTimer, submitExam など）は前回と同じ
+
+        // PDF初期化
+        window.onload = function() {
+            // PDFの読み込み（実際のパスを設定する必要があります）
+            ['question', 'law', 'cases', 'materials'].forEach(id => {
+                const path = `/path/to/${id}.pdf`;  // 実際のPDFパスを設定
+                pdfjsLib.getDocument(path).promise.then(pdf => {
+                    // PDF表示処理
+                }).catch(error => {
+                    console.error(`Error loading ${id} PDF:`, error);
+                });
+            });
+
+            // テキストエリアを初期状態で読み取り専用に
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`answer${i}`).readOnly = true;
+            }
+        };
+    </script>
+</body>
+</html>
