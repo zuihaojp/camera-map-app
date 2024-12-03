@@ -133,7 +133,7 @@
             // Add content from textareas
             for (let i = 1; i <= 4; i++) {
                 const textAreaContent = document.getElementById(`${subject}-textarea-page${i}`).value;
-                doc.text(`Page ${i}`, 10, 30 + (i - 1) * 10);
+                doc.text(`Page ${i}`, 10, 30);
                 doc.text(textAreaContent, 10, 40, { maxWidth: 190 });
                 if (i < 4) doc.addPage(); // Add new page except for the last page
             }
@@ -150,6 +150,12 @@
         <button class="subject-button" onclick="showSubject('civil', 4200)">民法 (70分)</button>
         <button class="subject-button" onclick="showSubject('criminal', 4200)">刑法 (70分)</button>
         <button class="subject-button" onclick="showSubject('constitutional', 4200)">憲法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('administrative', 4200)">行政法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('commercial', 4200)">商法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('civil_procedure', 5400)">民事訴訟法 (90分)</button>
+        <button class="subject-button" onclick="showSubject('criminal_procedure', 5400)">刑事訴訟法 (90分)</button>
+        <button class="subject-button" onclick="showSubject('labor_law', 4200)">労働基準法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('economic_law', 4200)">経済法 (70分)</button>
     </div>
 
     <!-- 民法セクション -->
@@ -159,6 +165,8 @@
         <h3>問題文:</h3>
         <div class="reference-files">
             <a href="問題文民法.pdf" target="_blank">問題文を見る</a>
+            <a href="六法民法.pdf" target="_blank">六法PDFを見る</a>
+            <a href="参考資料民法.pdf" target="_blank">参考資料PDFを見る</a>
         </div>
         <div class="textarea-container">
             <h3>答案用紙 1/4</h3>
@@ -173,5 +181,7 @@
         <input id="civil-name" type="text" placeholder="名前を入力してください">
         <button class="save-button" onclick="saveAsPDF('民法')">PDFで保存</button>
     </div>
+
+    <!-- 他の科目も同様に設定 -->
 </body>
 </html>
