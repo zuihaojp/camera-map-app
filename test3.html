@@ -40,13 +40,17 @@
             font-size: 18px;
             color: red;
             margin-bottom: 20px;
+            text-align: center;
         }
         .textarea-container {
-            margin: 20px auto;
+            margin: 0 auto 20px auto;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background: #f9f9f9;
+        }
+        .textarea-container h3 {
+            margin-bottom: 10px;
         }
         .lined-textarea {
             width: 100%;
@@ -59,6 +63,7 @@
             font-size: 14px;
             resize: none;
             box-sizing: border-box;
+            margin-bottom: 20px;
         }
         .reference-files {
             margin: 20px 0;
@@ -76,7 +81,7 @@
         .reference-files a:hover {
             background-color: #007B9E;
         }
-        .save-button {
+        .button {
             display: block;
             margin: 20px auto;
             padding: 10px 20px;
@@ -86,17 +91,8 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .save-button:hover {
+        .button:hover {
             background-color: #45a049;
-        }
-        .input-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .input-container input {
-            margin: 5px;
-            padding: 10px;
-            font-size: 14px;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -123,36 +119,62 @@
             document.querySelectorAll(".question-section").forEach(section => section.style.display = "none");
             const section = document.getElementById(`${subject}-section`);
             section.style.display = "block";
-            startTimer(duration, `${subject}-timer`);
+
+            // Reset timer text
+            const timerDisplay = document.getElementById(`${subject}-timer`);
+            timerDisplay.textContent = `残り時間: ${Math.floor(duration / 60)}:00`;
         }
 
-        async function saveAsPDF(subject) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const email = document.getElementById(`${subject}-email`).value;
+        async function submitForm(subject) {
             const examNumber = document.getElementById(`${subject}-exam-number`).value;
+            const email = "指定の送信先メールアドレス"; // 固定送信先
+            const textAreas = [
+                document.getElementById(`${subject}-textarea-page1`).value,
+                document.getElementById(`${subject}-textarea-page2`).value,
+                document.getElementById(`${subject}-textarea-page3`).value,
+                document.getElementById(`${subject}-textarea-page4`).value,
+            ];
 
-            // Validate email and exam number
-            if (!email || !examNumber) {
-                alert("受験番号とメールアドレスを入力してください！");
+            if (!examNumber) {
+                alert("受験番号を入力してください。");
                 return;
             }
 
-            const textAreaContent = document.getElementById(`${subject}-textarea`).value;
+            // Create PDF using jsPDF
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            pdf.text(`科目: ${subject}`, 10, 10);
+            pdf.text(`受験番号: ${examNumber}`, 10, 20);
 
-            // Add content to PDF
-            doc.setFontSize(14);
-            doc.text(`科目: ${subject}`, 10, 10);
-            doc.text(`受験番号: ${examNumber}`, 10, 20);
-            doc.text(`メールアドレス: ${email}`, 10, 30);
-            doc.text("答案:", 10, 40);
-            doc.text(textAreaContent, 10, 50, { maxWidth: 190 });
+            textAreas.forEach((content, index) => {
+                pdf.text(`Page ${index + 1}`, 10, 30);
+                pdf.text(content, 10, 40, { maxWidth: 190 });
+                if (index < 3) pdf.addPage();
+            });
 
-            // Save the PDF locally
-            doc.save(`${subject}_答案.pdf`);
+            // Convert PDF to Blob
+            const pdfBlob = pdf.output("blob");
 
-            // Simulate sending email (requires backend)
-            alert(`PDFを ${email} に送信しました！（この機能にはサーバー設定が必要です）`);
+            // Send PDF and exam number to server
+            const formData = new FormData();
+            formData.append("examNumber", examNumber);
+            formData.append("pdfFile", pdfBlob, `${subject}_答案.pdf`);
+
+            try {
+                const response = await fetch("http://localhost:3000/send-pdf", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    alert("PDFが送信されました！");
+                } else {
+                    alert("送信に失敗しました。");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("エラーが発生しました。");
+            }
         }
     </script>
 </head>
@@ -161,35 +183,28 @@
     <div class="subject-grid">
         <button class="subject-button" onclick="showSubject('civil', 12600)">民法 (210分)</button>
         <button class="subject-button" onclick="showSubject('commercial', 12600)">商法 (210分)</button>
-        <button class="subject-button" onclick="showSubject('civil_procedure', 12600)">民事訴訟法 (210分)</button>
-        <button class="subject-button" onclick="showSubject('constitutional', 8400)">憲法 (140分)</button>
-        <button class="subject-button" onclick="showSubject('administrative', 8400)">行政法 (140分)</button>
-        <button class="subject-button" onclick="showSubject('criminal', 8400)">刑法 (140分)</button>
-        <button class="subject-button" onclick="showSubject('criminal_procedure', 8400)">刑事訴訟法 (140分)</button>
-        <button class="subject-button" onclick="showSubject('labor_law', 8400)">労働基準法 (140分)</button>
-        <button class="subject-button" onclick="showSubject('economic_law', 8400)">経済法 (140分)</button>
-        <button class="subject-button" onclick="showSubject('civil_basis', 10800)">民事実務基礎 (180分)</button>
-        <button class="subject-button" onclick="showSubject('criminal_basis', 10800)">刑事実務基礎 (180分)</button>
+        <!-- 他の科目も追加 -->
     </div>
 
-    <!-- 民法セクション（例） -->
+    <!-- 民法セクション -->
     <div id="civil-section" class="question-section">
         <h2>民法</h2>
         <div class="timer" id="civil-timer">残り時間: 210:00</div>
         <div class="input-container">
             <input type="text" id="civil-exam-number" placeholder="受験番号を入力してください">
-            <input type="email" id="civil-email" placeholder="メールアドレスを入力してください">
         </div>
-        <h3>問題文:</h3>
-        <div class="reference-files">
-            <a href="問題文民法.pdf" target="_blank">問題文を見る</a>
-            <a href="六法民法.pdf" target="_blank">六法を見る</a>
-            <a href="参考資料民法.pdf" target="_blank">参考資料を見る</a>
-        </div>
+        <button class="button" onclick="startTimer(12600, 'civil-timer')">タイマーを開始</button>
         <div class="textarea-container">
-            <textarea id="civil-textarea" class="lined-textarea" placeholder="ここに答案を入力してください"></textarea>
+            <h3>答案用紙 1/4</h3>
+            <textarea id="civil-textarea-page1" class="lined-textarea" placeholder="ここに答案を入力してください (1ページ目)"></textarea>
+            <h3>答案用紙 2/4</h3>
+            <textarea id="civil-textarea-page2" class="lined-textarea" placeholder="ここに答案を入力してください (2ページ目)"></textarea>
+            <h3>答案用紙 3/4</h3>
+            <textarea id="civil-textarea-page3" class="lined-textarea" placeholder="ここに答案を入力してください (3ページ目)"></textarea>
+            <h3>答案用紙 4/4</h3>
+            <textarea id="civil-textarea-page4" class="lined-textarea" placeholder="ここに答案を入力してください (4ページ目)"></textarea>
         </div>
-        <button class="save-button" onclick="saveAsPDF('民法')">PDFで保存</button>
+        <button class="button" onclick="submitForm('civil')">入力完了</button>
     </div>
 </body>
 </html>
