@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>試験画面 - CBT対策プラットフォーム</title>
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #303f9f;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 120px);
+        }
+
+        .tab-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #ddd;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow: auto;
+            padding: 1rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .answer-sheet {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            box-sizing: border-box;
+            resize: none;
+            font-size: 16px;
+            line-height: 1.8;
+            background-image: linear-gradient(#ddd 1px, transparent 1px);
+            background-size: 100% 2rem;
+            background-position: 0 -1px;
+        }
+
+        .control-panel {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .start-button {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .start-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .submit-button {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .email-input {
+            padding: 0.5rem;
+            width: 250px;
+            margin-right: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        @media print {
+            .header, .tabs, .control-panel {
+                display: none;
+            }
+            .answer-sheet {
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 style="margin: 0; font-size: 1.2rem;">CBT試験システム</h1>
+        <div class="timer">残り時間: <span id="time">140:00</span></div>
+    </div>
+
+    <div class="main-content">
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('answer')">答案用紙</button>
+                <button class="tab" onclick="switchTab('question')">問題</button>
+                <button class="tab" onclick="switchTab('law')">六法</button>
+                <!-- 練習モード用の追加タブ -->
+                <button class="tab practice-only" onclick="switchTab('cases')" style="display: none;">判例</button>
+                <button class="tab practice-only" onclick="switchTab('materials')" style="display: none;">資料</button>
+            </div>
+
+            <div id="answer" class="tab-content active">
+                <textarea class="answer-sheet" placeholder="ここに解答を入力してください" id="answerText"></textarea>
+            </div>
+            <div id="question" class="tab-content">
+                <!-- 問題PDFが表示される領域 -->
+                <div id="questionPdf" style="height: 100%;">
+                    問題PDFがここに表示されます
+                </div>
+            </div>
+            <div id="law" class="tab-content">
+                <!-- 六法PDFが表示される領域 -->
+                <div id="lawPdf" style="height: 100%;">
+                    六法PDFがここに表示されます
+                </div>
+            </div>
+            <div id="cases" class="tab-content">
+                <!-- 判例PDFが表示される領域（練習モードのみ） -->
+                <div id="casesPdf" style="height: 100%;">
+                    判例PDFがここに表示されます
+                </div>
+            </div>
+            <div id="materials" class="tab-content">
+                <!-- 資料PDFが表示される領域（練習モードのみ） -->
+                <div id="materialsPdf" style="height: 100%;">
+                    資料PDFがここに表示されます
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-panel">
+        <button id="startButton" class="button start-button" onclick="startExam()">試験開始</button>
+        <div>
+            <input type="email" class="email-input" id="emailInput" placeholder="メールアドレスを入力" />
+            <button id="submitButton" class="button submit-button" onclick="submitExam()" disabled>提出</button>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h2>提出確認</h2>
+            <p>答案を提出してもよろしいですか？</p>
+            <div class="modal-buttons">
+                <button class="button" onclick="closeModal()">キャンセル</button>
+                <button class="button submit-button" onclick="confirmSubmit()">提出する</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timer;
+        let timeLeft = 140 * 60; // 140分を秒に換算
+
+        function startExam() {
+            document.getElementById('startButton').disabled = true;
+            document.getElementById('submitButton').disabled = false;
+            startTimer();
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('time').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        }
+
+        function submitExam() {
+            const email = document.getElementById('emailInput').value;
+            if (!email) {
+                alert('メールアドレスを入力してください。');
+                return;
+            }
+            document.getElementById('confirmModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+
+        function confirmSubmit() {
+            const email = document.getElementById('emailInput').value;
+            const answer = document.getElementById('answerText').value;
+            
+            // ここでメール送信のAPIを呼び出す
+            console.log('Submitting to:', email);
+            console.log('Answer:', answer);
+            
+            // 実際のメール送信処理をここに実装
+            // サーバーサイドのエンドポイントにPOSTリクエストを送信する形になります
+            
+            alert('答案を提出しました。入力したメールアドレスに答案のコピーが送信されます。');
+            closeModal();
+        }
+
+        // 練習モード判定と表示切替
+        function initializePracticeMode() {
+            const isPracticeMode = window.location.pathname.includes('practice');
+            const practiceTabs = document.querySelectorAll('.practice-only');
+            practiceTabs.forEach(tab => {
+                tab.style.display = isPracticeMode ? 'block' : 'none';
+            });
+        }
+
+        window.onload = initializePracticeMode;
+    </script>
+</body>
+</html>
