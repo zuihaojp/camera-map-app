@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>司法試験練習</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .subject-list {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .subject-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .subject-button:hover {
+            background-color: #45a049;
+        }
+        .question-section {
+            display: none;
+        }
+        .timer {
+            font-size: 18px;
+            color: red;
+            margin-bottom: 10px;
+        }
+        .textarea-container {
+            position: relative;
+            width: 595px; /* A4幅に合わせる */
+            height: 842px; /* A4高さに合わせる */
+            margin: 0 auto 20px auto;
+        }
+        .lined-textarea {
+            width: 100%;
+            height: 100%;
+            line-height: 1.5;
+            background: repeating-linear-gradient(white, white 28px, lightgray 28px, lightgray 29px);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            resize: none;
+            box-sizing: border-box;
+        }
+        .reference-files {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .reference-files a {
+            display: inline-block;
+            margin-right: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #008CBA;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .reference-files a:hover {
+            background-color: #007B9E;
+        }
+        .save-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .save-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        let timerInterval;
+
+        function startTimer(duration, timerDisplayId) {
+            let timeLeft = duration;
+            const timerDisplay = document.getElementById(timerDisplayId);
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `残り時間: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("時間切れです！");
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        function showSubject(subject, duration) {
+            document.querySelectorAll(".question-section").forEach(section => section.style.display = "none");
+            const section = document.getElementById(`${subject}-section`);
+            section.style.display = "block";
+            startTimer(duration, `${subject}-timer`);
+        }
+
+        async function saveAsPDF(subject) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const textAreaContent = document.getElementById(`${subject}-textarea`).value;
+            const userName = document.getElementById(`${subject}-name`).value;
+
+            // Add content to the PDF
+            doc.setFontSize(14);
+            doc.text(`科目: ${subject}`, 10, 10);
+            doc.text(`名前: ${userName}`, 10, 20);
+            doc.text("答案:", 10, 30);
+            doc.text(textAreaContent, 10, 40, { maxWidth: 190 });
+
+            // Save the PDF
+            doc.save(`${subject}_答案.pdf`);
+        }
+    </script>
+</head>
+<body>
+    <h1>司法試験練習</h1>
+    <h2>科目を選択してください</h2>
+    <div class="subject-list">
+        <button class="subject-button" onclick="showSubject('civil', 4200)">民法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('criminal', 4200)">刑法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('constitutional', 4200)">憲法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('administrative', 4200)">行政法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('commercial', 4200)">商法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('civil_procedure', 5400)">民事実務基礎 (90分)</button>
+        <button class="subject-button" onclick="showSubject('criminal_procedure', 5400)">刑事実務基礎 (90分)</button>
+        <button class="subject-button" onclick="showSubject('labor_law', 4200)">労働基準法 (70分)</button>
+        <button class="subject-button" onclick="showSubject('economic_law', 4200)">経済法 (70分)</button>
+    </div>
+
+    <!-- 民法セクション -->
+    <div id="civil-section" class="question-section">
+        <h2>民法</h2>
+        <div class="timer" id="civil-timer">残り時間: 70:00</div>
+        <h3>問題文:</h3>
+        <div class="reference-files">
+            <a href="問題文民法.pdf" target="_blank">問題文を見る</a>
+        </div>
+        <div class="textarea-container">
+            <textarea id="civil-textarea" class="lined-textarea" placeholder="ここに論文を入力してください"></textarea>
+        </div>
+        <input id="civil-name" type="text" placeholder="名前を入力してください">
+        <button class="save-button" onclick="saveAsPDF('民法')">PDFで保存</button>
+    </div>
+
+    <!-- 他の科目のセクションも同様に設定 -->
+</body>
+</html>
