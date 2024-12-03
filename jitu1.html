@@ -111,23 +111,56 @@
         .answer-sheet {
             width: 21cm;
             height: 29.7cm;
-            margin: 0;
-            padding: 2.54cm;
+            padding: 25px; /* 余白を小さく */
+            margin: 0 auto;
             box-sizing: border-box;
             border: 1px solid #ccc;
+            background: white;
             font-size: 16px;
             line-height: 2;
             resize: none;
-            background-image: repeating-linear-gradient(
-                transparent,
-                transparent 24px,
-                #E5E5E5 24px,
-                #E5E5E5 25px
-            );
-            background-position: 2.54cm 2.54cm;
-            display: block;
+            white-space: pre-wrap; /* 改行を保持 */
+            background-image: 
+                linear-gradient(#fff 23px, #e5e5e5 24px),
+                linear-gradient(90deg, transparent 3em, transparent 3em); /* 左マージンなし */
+            background-size: 100% 25px;
+            letter-spacing: 1px;
+            font-family: "MS Mincho", serif; /* 明朝体 */
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .answer-sheet::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 25px; /* 左端の余白 */
+            height: 100%;
+            width: 1px;
+            background-color: #ff000020; /* 薄い赤の縦線 */
         }
 
+        .answer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+
+        .page-wrapper {
+            position: relative;
+        }
+
+
+        .page-number {
+            position: absolute;
+            top: -20px;
+            right: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
         .control-panel {
             padding: 1rem;
             background: #f8f9fa;
@@ -205,11 +238,15 @@
             margin-top: 1.5rem;
         }
 
-        @media print {
-            .header, .tabs, .control-panel {
+               @media print {
+            .answer-sheet {
+                box-shadow: none;
+                border: none;
+            }
+            .answer-sheet::before {
                 display: none;
             }
-            .answer-sheet {
+            .page-wrapper {
                 break-after: page;
             }
         }
@@ -230,27 +267,24 @@
 
         <div id="answer" class="tab-content active">
             <div class="answer-container">
-                <div class="page-number">1/4ページ</div>
-                <div class="answer-sheet-wrapper">
-                    <textarea class="answer-sheet" id="answer1" placeholder="1枚目"></textarea>
-                </div>
-
-                <div class="page-number">2/4ページ</div>
-                <div class="answer-sheet-wrapper">
-                    <textarea class="answer-sheet" id="answer2" placeholder="2枚目"></textarea>
-                </div>
-
-                <div class="page-number">3/4ページ</div>
-                <div class="answer-sheet-wrapper">
-                    <textarea class="answer-sheet" id="answer3" placeholder="3枚目"></textarea>
-                </div>
-
-                <div class="page-number">4/4ページ</div>
-                <div class="answer-sheet-wrapper">
-                    <textarea class="answer-sheet" id="answer4" placeholder="4枚目"></textarea>
-                </div>
+            <div class="page-wrapper">
+                <div class="page-number">1/4</div>
+              <textarea class="answer-sheet" id="answer1" placeholder=""></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">2/4</div>
+                <textarea class="answer-sheet" id="answer2" placeholder=""></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">3/4</div>
+                <textarea class="answer-sheet" id="answer3" placeholder=""></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">4/4</div>
+                <textarea class="answer-sheet" id="answer4" placeholder=""></textarea>
             </div>
         </div>
+    </div>
 
         <div id="question" class="tab-content">
             <div id="questionViewer" class="pdf-viewer"></div>
