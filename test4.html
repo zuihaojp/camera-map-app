@@ -121,6 +121,7 @@
         function showContent(subjectId) {
             document.querySelectorAll('.content-container').forEach(content => content.classList.remove('active'));
             document.getElementById(subjectId).classList.add('active');
+            document.getElementById('main-container').style.display = 'none';
         }
 
         function showTab(tabId, parentId) {
@@ -196,11 +197,13 @@
 </head>
 <body>
     <h1>司法試験練習</h1>
-    <div class="subject-grid">
-        <button class="subject-button" onclick="showContent('civil-content')">民法</button>
-        <button class="subject-button" onclick="showContent('commercial-content')">商法</button>
-        <button class="subject-button" onclick="showContent('civil_procedure-content')">民事訴訟法</button>
-        <!-- 他の科目も同様にボタン追加 -->
+    <div id="main-container">
+        <div class="subject-grid">
+            <button class="subject-button" onclick="showContent('civil-content')">民法</button>
+            <button class="subject-button" onclick="showContent('commercial-content')">商法</button>
+            <button class="subject-button" onclick="showContent('civil_procedure-content')">民事訴訟法</button>
+            <!-- 他の科目も同様にボタン追加 -->
+        </div>
     </div>
 
     <div id="civil-content" class="content-container">
@@ -208,6 +211,7 @@
             <button class="tab-button" onclick="showTab('civil-question', 'civil-content')">問題文</button>
             <button class="tab-button" onclick="showTab('civil-answer', 'civil-content')">答案</button>
             <button class="tab-button" onclick="showTab('civil-law', 'civil-content')">六法</button>
+            <button class="tab-button" onclick="showTab('civil-reference', 'civil-content')">参考資料</button>
         </div>
         <div id="civil-question" class="tab-content active">
             <iframe src="問題文民法.pdf"></iframe>
@@ -228,6 +232,9 @@
         </div>
         <div id="civil-law" class="tab-content">
             <iframe src="六法民法.pdf"></iframe>
+        </div>
+        <div id="civil-reference" class="tab-content">
+            <iframe src="参考資料民法.pdf"></iframe>
         </div>
     </div>
 </body>
