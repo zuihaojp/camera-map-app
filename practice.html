@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科目選択 - CBT対策プラットフォーム</title>
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --hover-color: #283593;
+            --bg-color: #f8f9fa;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #303f9f 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .subject-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subject-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .subject-button {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: #f8f9ff;
+        }
+
+        .subject-info {
+            flex-grow: 1;
+        }
+
+        .subject-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .subject-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .arrow {
+            margin-left: 1rem;
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #666;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 2rem;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #555;
+        }
+
+        @media (max-width: 768px) {
+            .subject-button {
+                padding: 1.5rem;
+            }
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            background: white;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>科目選択</h1>
+        <p class="subtitle">練習したい科目を選択してください</p>
+    </div>
+
+    <div class="subject-container">
+        <div class="subject-grid">
+            <a href="minji1.html" class="subject-button">
+                <div class="subject-info">
+                    <div class="subject-name">民事系</div>
+                    <div class="subject-description">民法、商法、民事訴訟法</div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+            
+            <a href="koho1.html" class="subject-button">
+                <div class="subject-info">
+                    <div class="subject-name">公法系</div>
+                    <div class="subject-description">憲法、行政法</div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+            
+            <a href="keiji1.html" class="subject-button">
+                <div class="subject-info">
+                    <div class="subject-name">刑事系</div>
+                    <div class="subject-description">刑法、刑事訴訟法</div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+            
+            <a href="sentaku1.html" class="subject-button">
+                <div class="subject-info">
+                    <div class="subject-name">選択科目</div>
+                    <div class="subject-description">倒産法、租税法、経済法、知的財産法、労働法、環境法、国際関係法（公法系）、国際関係法（私法系）</div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+            
+            <a href="jitu1.html" class="subject-button">
+                <div class="subject-info">
+                    <div class="subject-name">実務基礎</div>
+                    <div class="subject-description">法曹倫理、民事訴訟実務、刑事訴訟実務</div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+
+        <a href="index.html" class="back-button">トップページに戻る</a>
+    </div>
+
+    <footer>
+        © 2024 CBT対策プラットフォーム All Rights Reserved.
+    </footer>
+</body>
+</html>
