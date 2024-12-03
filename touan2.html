@@ -80,7 +80,244 @@
             background: #f0f0f0;
         }
 
-        /* 答案用紙のスタイルは前回と同じ */
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+            box-sizing: border-box;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            padding: 0 1rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .answer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: calc(100vh - var(--header-height) - var(--control-height) - 48px);
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .answer-sheet-wrapper {
+            width: 21cm;
+            margin: 0 auto 2rem;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-number {
+            width: 21cm;
+            margin: 0.5rem auto;
+            text-align: right;
+            color: #666;
+            font-size: 0.9rem;
+            padding-right: 1rem;
+        }
+
+        .answer-sheet {
+            width: 21cm;
+            height: 29.7cm;
+            padding: 25px; /* 余白を小さく */
+            margin: 0 auto;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            background: white;
+            font-size: 16px;
+            line-height: 2;
+            resize: none;
+            white-space: pre-wrap; /* 改行を保持 */
+            background-image: 
+                linear-gradient(#fff 23px, #e5e5e5 24px),
+                linear-gradient(90deg, transparent 3em, transparent 3em); /* 左マージンなし */
+            background-size: 100% 25px;
+            letter-spacing: 1px;
+            font-family: "MS Mincho", serif; /* 明朝体 */
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .answer-sheet::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 25px; /* 左端の余白 */
+            height: 100%;
+            width: 1px;
+            background-color: #ff000020; /* 薄い赤の縦線 */
+        }
+
+        .answer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+
+        .page-wrapper {
+            position: relative;
+        }
+
+
+        .page-number {
+            position: absolute;
+            top: -20px;
+            right: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .control-panel {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--control-height);
+            box-sizing: border-box;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .start-button {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .submit-button {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .email-input {
+            padding: 0.8rem;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: calc(100vh - var(--header-height) - var(--control-height) - 48px);
+            overflow: auto;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+               @media print {
+            .answer-sheet {
+                box-shadow: none;
+                border: none;
+            }
+            .answer-sheet::before {
+                display: none;
+            }
+            .page-wrapper {
+                break-after: page;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -166,7 +403,7 @@
         <button id="submitButton" class="button submit-button" onclick="submitExam()" disabled>終了</button>
     </div>
 
-    <script>
+   <script>
         let timer;
         let timeLeft = 140 * 60;
         let isPaused = false;
@@ -225,25 +462,104 @@
             }
         }
 
-        // 他の関数（startExam, startTimer, submitExam など）は前回と同じ
+        function startExam() {
+            if (!confirm('試験を開始します。よろしいですか？')) return;
+            
+            document.getElementById('startButton').disabled = true;
+            document.getElementById('submitButton').disabled = false;
+            startTimer();
 
-        // PDF初期化
-        window.onload = function() {
-            // PDFの読み込み（実際のパスを設定する必要があります）
-            ['question', 'law', 'cases', 'materials'].forEach(id => {
-                const path = `/path/to/${id}.pdf`;  // 実際のPDFパスを設定
-                pdfjsLib.getDocument(path).promise.then(pdf => {
-                    // PDF表示処理
-                }).catch(error => {
-                    console.error(`Error loading ${id} PDF:`, error);
-                });
+            // テキストエリアを編集可能に
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`answer${i}`).readOnly = false;
+            }
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    autoSubmit();
+                }
+                // 残り10分で警告
+                if (timeLeft === 600) {
+                    alert('残り10分です');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timeDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
             });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        }
 
+        function showSubmitConfirm() {
+            const email = document.getElementById('emailInput').value;
+            if (!email) {
+                alert('メールアドレスを入力してください。');
+                return;
+            }
+            document.getElementById('submitModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('submitModal').style.display = 'none';
+        }
+
+        function submitExam() {
+            const email = document.getElementById('emailInput').value;
+            const answers = [];
+            for (let i = 1; i <= 4; i++) {
+                answers.push(document.getElementById(`answer${i}`).value);
+            }
+
+            // メール送信APIを呼び出す（実装必要）
+            console.log('Submitting to:', email);
+            alert('答案を提出しました。入力したメールアドレスに答案のコピーが送信されます。');
+            closeModal();
+            window.location.href = 'index.html';
+        }
+
+        function autoSubmit() {
+            alert('試験時間が終了しました。自動的に提出します。');
+            submitExam();
+        }
+
+        // 初期化
+        window.onload = function() {
             // テキストエリアを初期状態で読み取り専用に
             for (let i = 1; i <= 4; i++) {
                 document.getElementById(`answer${i}`).readOnly = true;
             }
+
+            // PDFの初期化（実際のパスを設定する必要があります）
+            initializePDF('question', '/path/to/question.pdf');
+            initializePDF('law', '/path/to/law.pdf');
         };
+
+        function initializePDF(viewerId, pdfPath) {
+            pdfjsLib.getDocument(pdfPath).promise.then(pdf => {
+                // PDF表示の実装（別途必要）
+            }).catch(error => {
+                console.error(`Error loading ${viewerId} PDF:`, error);
+            });
+        }
     </script>
 </body>
 </html>
