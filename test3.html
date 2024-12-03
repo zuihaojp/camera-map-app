@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>司法試験練習</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+        .subject-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .subject-button:hover {
+            background-color: #45a049;
+        }
+        .question-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .timer {
+            font-size: 18px;
+            color: red;
+            margin-bottom: 20px;
+        }
+        .textarea-container {
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .lined-textarea {
+            width: 100%;
+            height: 842px;
+            line-height: 1.5;
+            background: repeating-linear-gradient(white, white 28px, lightgray 28px, lightgray 29px);
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            resize: none;
+            box-sizing: border-box;
+        }
+        .reference-files {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .reference-files a {
+            display: inline-block;
+            margin-right: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #008CBA;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .reference-files a:hover {
+            background-color: #007B9E;
+        }
+        .save-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .save-button:hover {
+            background-color: #45a049;
+        }
+        .input-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-container input {
+            margin: 5px;
+            padding: 10px;
+            font-size: 14px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        let timerInterval;
+
+        function startTimer(duration, timerDisplayId) {
+            let timeLeft = duration;
+            const timerDisplay = document.getElementById(timerDisplayId);
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `残り時間: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("時間切れです！");
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        function showSubject(subject, duration) {
+            document.querySelectorAll(".question-section").forEach(section => section.style.display = "none");
+            const section = document.getElementById(`${subject}-section`);
+            section.style.display = "block";
+            startTimer(duration, `${subject}-timer`);
+        }
+
+        async function saveAsPDF(subject) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const email = document.getElementById(`${subject}-email`).value;
+            const examNumber = document.getElementById(`${subject}-exam-number`).value;
+
+            // Validate email and exam number
+            if (!email || !examNumber) {
+                alert("受験番号とメールアドレスを入力してください！");
+                return;
+            }
+
+            const textAreaContent = document.getElementById(`${subject}-textarea`).value;
+
+            // Add content to PDF
+            doc.setFontSize(14);
+            doc.text(`科目: ${subject}`, 10, 10);
+            doc.text(`受験番号: ${examNumber}`, 10, 20);
+            doc.text(`メールアドレス: ${email}`, 10, 30);
+            doc.text("答案:", 10, 40);
+            doc.text(textAreaContent, 10, 50, { maxWidth: 190 });
+
+            // Save the PDF locally
+            doc.save(`${subject}_答案.pdf`);
+
+            // Simulate sending email (requires backend)
+            alert(`PDFを ${email} に送信しました！（この機能にはサーバー設定が必要です）`);
+        }
+    </script>
+</head>
+<body>
+    <h1>司法試験練習</h1>
+    <div class="subject-grid">
+        <button class="subject-button" onclick="showSubject('civil', 12600)">民法 (210分)</button>
+        <button class="subject-button" onclick="showSubject('commercial', 12600)">商法 (210分)</button>
+        <button class="subject-button" onclick="showSubject('civil_procedure', 12600)">民事訴訟法 (210分)</button>
+        <button class="subject-button" onclick="showSubject('constitutional', 8400)">憲法 (140分)</button>
+        <button class="subject-button" onclick="showSubject('administrative', 8400)">行政法 (140分)</button>
+        <button class="subject-button" onclick="showSubject('criminal', 8400)">刑法 (140分)</button>
+        <button class="subject-button" onclick="showSubject('criminal_procedure', 8400)">刑事訴訟法 (140分)</button>
+        <button class="subject-button" onclick="showSubject('labor_law', 8400)">労働基準法 (140分)</button>
+        <button class="subject-button" onclick="showSubject('economic_law', 8400)">経済法 (140分)</button>
+        <button class="subject-button" onclick="showSubject('civil_basis', 10800)">民事実務基礎 (180分)</button>
+        <button class="subject-button" onclick="showSubject('criminal_basis', 10800)">刑事実務基礎 (180分)</button>
+    </div>
+
+    <!-- 民法セクション（例） -->
+    <div id="civil-section" class="question-section">
+        <h2>民法</h2>
+        <div class="timer" id="civil-timer">残り時間: 210:00</div>
+        <div class="input-container">
+            <input type="text" id="civil-exam-number" placeholder="受験番号を入力してください">
+            <input type="email" id="civil-email" placeholder="メールアドレスを入力してください">
+        </div>
+        <h3>問題文:</h3>
+        <div class="reference-files">
+            <a href="問題文民法.pdf" target="_blank">問題文を見る</a>
+            <a href="六法民法.pdf" target="_blank">六法を見る</a>
+            <a href="参考資料民法.pdf" target="_blank">参考資料を見る</a>
+        </div>
+        <div class="textarea-container">
+            <textarea id="civil-textarea" class="lined-textarea" placeholder="ここに答案を入力してください"></textarea>
+        </div>
+        <button class="save-button" onclick="saveAsPDF('民法')">PDFで保存</button>
+    </div>
+</body>
+</html>
