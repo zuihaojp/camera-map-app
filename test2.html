@@ -147,13 +147,15 @@
     <h1>司法試験練習</h1>
     <h2>科目を選択してください</h2>
     <div class="subject-list">
-        <button class="subject-button" onclick="showSubject('civil', 4200)">民法 (70分)</button>
-        <button class="subject-button" onclick="showSubject('criminal', 4200)">刑法 (70分)</button>
-        <button class="subject-button" onclick="showSubject('constitutional', 4200)">憲法 (70分)</button>
+　　   <button class="subject-button" onclick="showSubject('civil', 4200)">民法 (70分)</button>
+      <button class="subject-button" onclick="showSubject('commercial', 4200)">商法 (70分)</button>
+　　   <button class="subject-button" onclick="showSubject('civil_procedure', 5400)">民事訴訟法 (90分)</button>
+     <button class="subject-button" onclick="showSubject('constitutional', 4200)">憲法 (70分)</button>
         <button class="subject-button" onclick="showSubject('administrative', 4200)">行政法 (70分)</button>
-        <button class="subject-button" onclick="showSubject('commercial', 4200)">商法 (70分)</button>
-        <button class="subject-button" onclick="showSubject('civil_procedure', 5400)">民事訴訟法 (90分)</button>
-        <button class="subject-button" onclick="showSubject('criminal_procedure', 5400)">刑事訴訟法 (90分)</button>
+　　   <button class="subject-button" onclick="showSubject('criminal', 4200)">刑法 (70分)</button>
+　     <button class="subject-button" onclick="showSubject('criminal_procedure', 5400)">刑事訴訟法 (90分)</button>
+　　   <button class="subject-button" onclick="showSubject('civil', 4200)">民事実務基礎(90分)</button>
+　　   <button class="subject-button" onclick="showSubject('civil', 4200)">刑事実務基礎 (90分)</button>
         <button class="subject-button" onclick="showSubject('labor_law', 4200)">労働基準法 (70分)</button>
         <button class="subject-button" onclick="showSubject('economic_law', 4200)">経済法 (70分)</button>
     </div>
@@ -182,6 +184,31 @@
         <button class="save-button" onclick="saveAsPDF('民法')">PDFで保存</button>
     </div>
 
+<!-- 憲法セクション -->
+    <div id="constitutional-section" class="question-section">
+        <h2>憲法</h2>
+        <div class="timer" id="constitutional-timer">残り時間: 70:00</div>
+        <h3>問題文:</h3>
+        <div class="reference-files">
+            <a href="問題文民法.pdf" target="_blank">問題文を見る</a>
+            <a href="六法民法.pdf" target="_blank">六法PDFを見る</a>
+            <a href="参考資料民法.pdf" target="_blank">参考資料PDFを見る</a>
+        </div>
+        <div class="textarea-container">
+            <h3>答案用紙 1/4</h3>
+            <textarea id="civil-textarea-page1" class="lined-textarea" placeholder="ここに答案を入力してください (1ページ目)"></textarea>
+            <h3>答案用紙 2/4</h3>
+            <textarea id="civil-textarea-page2" class="lined-textarea" placeholder="ここに答案を入力してください (2ページ目)"></textarea>
+            <h3>答案用紙 3/4</h3>
+            <textarea id="civil-textarea-page3" class="lined-textarea" placeholder="ここに答案を入力してください (3ページ目)"></textarea>
+            <h3>答案用紙 4/4</h3>
+            <textarea id="civil-textarea-page4" class="lined-textarea" placeholder="ここに答案を入力してください (4ページ目)"></textarea>
+        </div>
+        <input id="civil-name" type="text" placeholder="名前を入力してください">
+        <button class="save-button" onclick="saveAsPDF('憲法')">PDFで保存</button>
+    </div>
+
     <!-- 他の科目も同様に設定 -->
 </body>
 </html>
+
