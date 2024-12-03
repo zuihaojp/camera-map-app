@@ -32,6 +32,13 @@
         .subject-button:hover {
             background-color: #45a049;
         }
+        .content-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .content-container.active {
+            display: block;
+        }
         .tab-container {
             display: flex;
             justify-content: center;
@@ -72,6 +79,12 @@
             resize: none;
             margin-bottom: 20px;
         }
+        .timer {
+            font-size: 18px;
+            color: red;
+            margin-bottom: 20px;
+            text-align: center;
+        }
         .input-container {
             text-align: center;
             margin-bottom: 20px;
@@ -103,18 +116,41 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        let timerInterval;
+
+        function showContent(subjectId) {
+            document.querySelectorAll('.content-container').forEach(content => content.classList.remove('active'));
+            document.getElementById(subjectId).classList.add('active');
+        }
+
+        function showTab(tabId, parentId) {
+            document.querySelectorAll(`#${parentId} .tab-content`).forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
         }
 
-        async function submitForm() {
-            const examNumber = document.getElementById("exam-number").value;
+        function startTimer(duration, timerId) {
+            let timeLeft = duration;
+            const timerDisplay = document.getElementById(timerId);
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `残り時間: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("時間切れです！");
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        async function submitForm(subjectId) {
+            const examNumber = document.getElementById(`${subjectId}-exam-number`).value;
             const textAreas = [
-                document.getElementById("textarea-page1").value,
-                document.getElementById("textarea-page2").value,
-                document.getElementById("textarea-page3").value,
-                document.getElementById("textarea-page4").value,
+                document.getElementById(`${subjectId}-textarea-page1`).value,
+                document.getElementById(`${subjectId}-textarea-page2`).value,
+                document.getElementById(`${subjectId}-textarea-page3`).value,
+                document.getElementById(`${subjectId}-textarea-page4`).value,
             ];
 
             if (!examNumber) {
@@ -138,7 +174,7 @@
             // Send PDF to backend
             const formData = new FormData();
             formData.append("examNumber", examNumber);
-            formData.append("pdfFile", pdfBlob, "answer.pdf");
+            formData.append("pdfFile", pdfBlob, `${subjectId}_答案.pdf`);
 
             try {
                 const response = await fetch("http://localhost:3000/send-pdf", {
@@ -161,43 +197,36 @@
 <body>
     <h1>司法試験練習</h1>
     <div class="subject-grid">
-        <button class="subject-button" onclick="showTab('civil')">民法</button>
-        <button class="subject-button" onclick="showTab('commercial')">商法</button>
-        <button class="subject-button" onclick="showTab('civil_procedure')">民事訴訟法</button>
-        <button class="subject-button" onclick="showTab('constitutional')">憲法</button>
-        <button class="subject-button" onclick="showTab('administrative')">行政法</button>
-        <button class="subject-button" onclick="showTab('criminal')">刑法</button>
-        <button class="subject-button" onclick="showTab('criminal_procedure')">刑事訴訟法</button>
-        <button class="subject-button" onclick="showTab('labor_law')">労働基準法</button>
-        <button class="subject-button" onclick="showTab('economic_law')">経済法</button>
-        <button class="subject-button" onclick="showTab('civil_basis')">民事実務基礎</button>
-        <button class="subject-button" onclick="showTab('criminal_basis')">刑事実務基礎</button>
+        <button class="subject-button" onclick="showContent('civil-content')">民法</button>
+        <button class="subject-button" onclick="showContent('commercial-content')">商法</button>
+        <button class="subject-button" onclick="showContent('civil_procedure-content')">民事訴訟法</button>
+        <!-- 他の科目も同様にボタン追加 -->
     </div>
 
-    <!-- タブ内容: 民法（例） -->
-    <div id="civil" class="tab-content">
-        <h2>民法</h2>
+    <div id="civil-content" class="content-container">
         <div class="tab-container">
-            <button class="tab-button" onclick="showTab('question')">問題文</button>
-            <button class="tab-button" onclick="showTab('answer')">答案</button>
-            <button class="tab-button" onclick="showTab('law')">六法</button>
+            <button class="tab-button" onclick="showTab('civil-question', 'civil-content')">問題文</button>
+            <button class="tab-button" onclick="showTab('civil-answer', 'civil-content')">答案</button>
+            <button class="tab-button" onclick="showTab('civil-law', 'civil-content')">六法</button>
         </div>
-        <div id="question" class="tab-content active">
+        <div id="civil-question" class="tab-content active">
             <iframe src="問題文民法.pdf"></iframe>
         </div>
-        <div id="answer" class="tab-content">
+        <div id="civil-answer" class="tab-content">
+            <div class="timer" id="civil-timer">残り時間: 70:00</div>
+            <button class="button" onclick="startTimer(4200, 'civil-timer')">タイマーを開始</button>
             <div class="textarea-container">
-                <textarea id="textarea-page1" placeholder="答案1ページ目"></textarea>
-                <textarea id="textarea-page2" placeholder="答案2ページ目"></textarea>
-                <textarea id="textarea-page3" placeholder="答案3ページ目"></textarea>
-                <textarea id="textarea-page4" placeholder="答案4ページ目"></textarea>
+                <textarea id="civil-textarea-page1" placeholder="答案1ページ目"></textarea>
+                <textarea id="civil-textarea-page2" placeholder="答案2ページ目"></textarea>
+                <textarea id="civil-textarea-page3" placeholder="答案3ページ目"></textarea>
+                <textarea id="civil-textarea-page4" placeholder="答案4ページ目"></textarea>
             </div>
             <div class="input-container">
-                <input type="text" id="exam-number" placeholder="受験番号を入力してください">
+                <input type="text" id="civil-exam-number" placeholder="受験番号を入力してください">
             </div>
-            <button class="button" onclick="submitForm()">入力完了</button>
+            <button class="button" onclick="submitForm('civil')">入力完了</button>
         </div>
-        <div id="law" class="tab-content">
+        <div id="civil-law" class="tab-content">
             <iframe src="六法民法.pdf"></iframe>
         </div>
     </div>
