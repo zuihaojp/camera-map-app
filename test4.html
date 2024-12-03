@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBTテストサイト</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+        .subject-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .subject-button:hover {
+            background-color: #45a049;
+        }
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .tab-button:hover {
+            background-color: #45a049;
+        }
+        .tab-content {
+            display: none;
+            text-align: center;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .textarea-container {
+            margin: 20px auto;
+            width: 80%;
+            text-align: left;
+        }
+        .textarea-container textarea {
+            width: 100%;
+            height: 842px; /* A4サイズ */
+            line-height: 1.5;
+            background: repeating-linear-gradient(white, white 28px, lightgray 28px, lightgray 29px);
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 14px;
+            resize: none;
+            margin-bottom: 20px;
+        }
+        .input-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-container input {
+            margin: 5px;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        iframe {
+            width: 80%;
+            height: 800px;
+            border: 1px solid #ccc;
+            margin: 20px auto;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        async function submitForm() {
+            const examNumber = document.getElementById("exam-number").value;
+            const textAreas = [
+                document.getElementById("textarea-page1").value,
+                document.getElementById("textarea-page2").value,
+                document.getElementById("textarea-page3").value,
+                document.getElementById("textarea-page4").value,
+            ];
+
+            if (!examNumber) {
+                alert("受験番号を入力してください。");
+                return;
+            }
+
+            // Create PDF
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            pdf.text(`受験番号: ${examNumber}`, 10, 10);
+
+            textAreas.forEach((content, index) => {
+                pdf.text(`Page ${index + 1}`, 10, 20);
+                pdf.text(content, 10, 30, { maxWidth: 190 });
+                if (index < 3) pdf.addPage();
+            });
+
+            const pdfBlob = pdf.output("blob");
+
+            // Send PDF to backend
+            const formData = new FormData();
+            formData.append("examNumber", examNumber);
+            formData.append("pdfFile", pdfBlob, "answer.pdf");
+
+            try {
+                const response = await fetch("http://localhost:3000/send-pdf", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    alert("答案が送信されました！");
+                } else {
+                    alert("送信に失敗しました。");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("エラーが発生しました。");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>司法試験練習</h1>
+    <div class="subject-grid">
+        <button class="subject-button" onclick="showTab('civil')">民法</button>
+        <button class="subject-button" onclick="showTab('commercial')">商法</button>
+        <button class="subject-button" onclick="showTab('civil_procedure')">民事訴訟法</button>
+        <button class="subject-button" onclick="showTab('constitutional')">憲法</button>
+        <button class="subject-button" onclick="showTab('administrative')">行政法</button>
+        <button class="subject-button" onclick="showTab('criminal')">刑法</button>
+        <button class="subject-button" onclick="showTab('criminal_procedure')">刑事訴訟法</button>
+        <button class="subject-button" onclick="showTab('labor_law')">労働基準法</button>
+        <button class="subject-button" onclick="showTab('economic_law')">経済法</button>
+        <button class="subject-button" onclick="showTab('civil_basis')">民事実務基礎</button>
+        <button class="subject-button" onclick="showTab('criminal_basis')">刑事実務基礎</button>
+    </div>
+
+    <!-- タブ内容: 民法（例） -->
+    <div id="civil" class="tab-content">
+        <h2>民法</h2>
+        <div class="tab-container">
+            <button class="tab-button" onclick="showTab('question')">問題文</button>
+            <button class="tab-button" onclick="showTab('answer')">答案</button>
+            <button class="tab-button" onclick="showTab('law')">六法</button>
+        </div>
+        <div id="question" class="tab-content active">
+            <iframe src="問題文民法.pdf"></iframe>
+        </div>
+        <div id="answer" class="tab-content">
+            <div class="textarea-container">
+                <textarea id="textarea-page1" placeholder="答案1ページ目"></textarea>
+                <textarea id="textarea-page2" placeholder="答案2ページ目"></textarea>
+                <textarea id="textarea-page3" placeholder="答案3ページ目"></textarea>
+                <textarea id="textarea-page4" placeholder="答案4ページ目"></textarea>
+            </div>
+            <div class="input-container">
+                <input type="text" id="exam-number" placeholder="受験番号を入力してください">
+            </div>
+            <button class="button" onclick="submitForm()">入力完了</button>
+        </div>
+        <div id="law" class="tab-content">
+            <iframe src="六法民法.pdf"></iframe>
+        </div>
+    </div>
+</body>
+</html>
