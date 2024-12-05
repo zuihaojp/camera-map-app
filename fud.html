@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="東京の高級不動産・住宅をご紹介。厳選された物件の情報をお届けします。">
+    <meta property="og:title" content="AURA ESTATE - Premium Residence">
+    <meta property="og:description" content="東京の高級不動産・住宅をご紹介。厳選された物件の情報をお届けします。">
+    <meta property="og:image" content="/assets/images/ogp.jpg">
+    <meta property="og:type" content="website">
+    <title>AURA ESTATE - Premium Residence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 全体的なスタイルやヘッダー、検索セクションのスタイルを定義済み */
+
+        /* スムーズなスクロールの実装 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* フッターのスタイル */
+        footer {
+            background: var(--primary-dark);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="container header-content">
+            <h1 class="logo">AURA ESTATE</h1>
+            
+            <nav class="nav-menu">
+                <a href="#properties" class="nav-link" data-translate="nav.properties">物件一覧</a>
+                <a href="#areas" class="nav-link" data-translate="nav.areas">エリア</a>
+                <a href="#services" class="nav-link" data-translate="nav.services">サービス</a>
+                <a href="#about" class="nav-link" data-translate="nav.about">会社概要</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="ja">日本語</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="zh">中文</button>
+                </div>
+
+                <button class="contact-btn" data-translate="nav.contact">お問い合わせ</button>
+                
+                <button class="mobile-menu-btn" aria-label="メニュー">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-background">
+            <img src="/assets/images/hero.jpg" alt="Luxury apartment view">
+        </div>
+        
+        <div class="container hero-content">
+            <h2 class="hero-title">
+                Find Your Dream
+                <br>
+                Luxury Residence
+            </h2>
+            <p class="hero-subtitle">
+                厳選された高級物件で、あなたの理想の住まいをお探しします。
+                プレミアムな立地と贅沢な空間をご提案いたします。
+            </p>
+
+            <div class="hero-search">
+                <div class="search-row">
+                    <div class="search-input">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="エリア・駅名から探す">
+                    </div>
+                    
+                    <div class="search-select">
+                        <select>
+                            <option value="">価格帯を選択</option>
+                            <option value="1">〜5億円</option>
+                            <option value="2">5億円〜10億円</option>
+                            <option value="3">10億円〜</option>
+                        </select>
+                    </div>
+
+                    <button class="search-button">
+                        検索する
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 詳細検索セクション -->
+    <section class="advanced-search">
+        <div class="container">
+            <div class="search-filters">
+                <div class="filter-header">
+                    <div>
+                        <h3 class="filter-title">詳細検索</h3>
+                        <p class="filter-subtitle">お好みの条件で物件を検索できます</p>
+                    </div>
+                </div>
+
+                <div class="primary-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-map-marker-alt"></i>
+                            エリア
+                        </label>
+                        <div class="filter-select">
+                            <select>
+                                <option value="">選択してください</option>
+                                <option>港区</option>
+                                <option>渋谷区</option>
+                                <option>千代田区</option>
+                                <option>中央区</option>
+                                <option>新宿区</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-train"></i>
+                            沿線・駅
+                        </label>
+                        <div class="filter-select">
+                            <select>
+                                <option value="">選択してください</option>
+                                <option>山手線</option>
+                                <option>日比谷線</option>
+                                <option>銀座線</option>
+                                <option>丸ノ内線</option>
+                                <option>南北線</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-yen-sign"></i>
+                            価格帯
+                        </label>
+                        <div class="filter-select">
+                            <select>
+                                <option value="">選択してください</option>
+                                <option>〜3億円</option>
+                                <option>3億円〜5億円</option>
+                                <option>5億円〜10億円</option>
+                                <option>10億円〜</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 AURA ESTATE. All Rights Reserved.</p>
+            <p><a href="#contact">お問い合わせ</a></p>
+        </div>
+    </footer>
+</body>
+</html>
