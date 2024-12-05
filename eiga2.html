@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIちゃん - シネマと日記</title>
+
+    <!-- PWA対応のメタタグ -->
+    <meta name="theme-color" content="#FFD1DC">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AIちゃん日記">
+
+    <!-- アイコン -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/popcorn-icon-180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/popcorn-icon-192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/popcorn-icon-32.png">
+
+    <!-- スタイルシート -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css">
+    <style>
+        /* 共通スタイル */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-pink-50" id="app-body">
+    <header class="bg-white shadow-sm border-b-2 border-pink-200">
+        <div class="max-w-4xl mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-pink-600">AIちゃん - シネマと日記</h1>
+                <nav class="flex justify-center space-x-4">
+                    <button onclick="showTab('cinema')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">シネマ</button>
+                    <button onclick="showTab('streaming')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">ストリーミング</button>
+                    <button onclick="showTab('mylist')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">マイリスト</button>
+                    <button onclick="showTab('chat')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">チャット</button>
+                    <button onclick="showTab('diary')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">日記</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- シネマタブ -->
+        <div id="cinema" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">1～12月のおすすめ作品</h2>
+                <div id="month-buttons" class="flex flex-wrap gap-2 mb-4"></div>
+                <div id="movie-list" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- ストリーミングタブ -->
+        <div id="streaming" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">ストリーミングサービスのおすすめ</h2>
+                <div id="streaming-movie-list" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- マイリストタブ -->
+        <div id="mylist" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">マイリスト</h2>
+                <div id="mylist-items" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- チャットタブ -->
+        <div id="chat" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">AIちゃんとチャット</h2>
+                <div id="chat-messages" class="bg-pink-50 p-4 rounded-lg h-96 overflow-y-auto"></div>
+                <div class="flex mt-4">
+                    <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" class="flex-1 border-2 border-pink-300 px-4 py-2 rounded-full">
+                    <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 日記タブ -->
+        <div id="diary" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">日記</h2>
+                <div id="calendar" class="mb-4"></div>
+                <div id="diary-form" class="hidden">
+                    <h3 id="selected-date" class="text-lg font-bold text-pink-600 mb-2"></h3>
+                    <textarea id="diary-content" class="border border-pink-300 rounded-lg px-4 py-2 w-full mb-4" placeholder="ここに日記を書いてください..."></textarea>
+                    <button onclick="saveDiary()" class="bg-pink-400 text-white px-6 py-2 rounded-lg hover:bg-pink-500">保存する</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
+    <script>
+        // タブ切り替え
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // 日記データ
+        const diaryData = JSON.parse(localStorage.getItem('diaryData')) || {};
+
+        // カレンダー初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                dateClick: (info) => {
+                    const selectedDate = info.dateStr;
+                    document.getElementById('selected-date').textContent = `日付: ${selectedDate}`;
+                    document.getElementById('diary-form').classList.remove('hidden');
+                    document.getElementById('diary-content').value = diaryData[selectedDate] || '';
+                }
+            });
+            calendar.render();
+        });
+
+        // 日記保存
+        function saveDiary() {
+            const date = document.getElementById('selected-date').textContent.split(': ')[1];
+            const content = document.getElementById('diary-content').value;
+            diaryData[date] = content;
+            localStorage.setItem('diaryData', JSON.stringify(diaryData));
+            alert('日記を保存しました！');
+        }
+    </script>
+</body>
+</html>
