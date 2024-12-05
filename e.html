@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIちゃん - シネマと日記</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f9f9f9; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
+        .calendar-cell { padding: 10px; text-align: center; background-color: #fff; border: 1px solid #ddd; cursor: pointer; }
+        .calendar-cell:hover { background-color: #f0f0f0; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .calendar-header button { padding: 5px 10px; background-color: #ffd1dc; border: none; cursor: pointer; border-radius: 5px; }
+        .calendar-header button:hover { background-color: #ff91aa; color: white; }
+        .diary-list { margin-top: 20px; }
+        .diary-item { padding: 10px; background-color: #fff; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-message { display: flex; align-items: center; margin: 10px 0; }
+        .chat-message.user { justify-content: flex-end; }
+        .chat-message.ai { justify-content: flex-start; }
+        .chat-icon { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; margin: 0 10px; }
+        .chat-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .chat-bubble { max-width: 70%; word-wrap: break-word; padding: 10px; border-radius: 15px; }
+        .chat-bubble.user { background-color: #D1F2FF; text-align: right; }
+        .chat-bubble.ai { background-color: #FFE4E9; text-align: left; }
+        #payment-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; }
+        #payment-modal.active { display: flex; }
+        .modal-content { background: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .modal-content button { margin-top: 10px; padding: 10px 20px; background: #ffd1dc; border: none; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AIちゃん - シネマと日記</h1>
+        <nav>
+            <button onclick="showTab('cinema')">シネマ</button>
+            <button onclick="showTab('streaming')">ストリーミング</button>
+            <button onclick="showTab('mylist')">マイリスト</button>
+            <button onclick="showTab('chat')">チャット</button>
+            <button onclick="showTab('diary')">日記</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- シネマタブ -->
+        <div id="cinema" class="tab-content active">
+            <h2>シネマタブ</h2>
+        </div>
+
+        <!-- ストリーミングタブ -->
+        <div id="streaming" class="tab-content">
+            <h2>ストリーミングタブ</h2>
+        </div>
+
+        <!-- マイリストタブ -->
+        <div id="mylist" class="tab-content">
+            <h2>マイリストタブ</h2>
+        </div>
+
+        <!-- チャットタブ -->
+        <div id="chat" class="tab-content">
+            <h2>AIちゃんとチャット</h2>
+            <div id="chat-messages" class="bg-pink-50 p-4 rounded-lg h-96 overflow-y-auto"></div>
+            <div class="flex mt-4">
+                <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" class="flex-1 border-2 border-pink-300 px-4 py-2 rounded-full">
+                <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
+            </div>
+        </div>
+
+        <!-- 日記タブ -->
+        <div id="diary" class="tab-content">
+            <h2>日記</h2>
+            <div id="calendar-container">
+                <div class="calendar-header">
+                    <button onclick="changeMonth(-1)">前月</button>
+                    <h2 id="current-month"></h2>
+                    <button onclick="changeMonth(1)">次月</button>
+                </div>
+                <div id="calendar" class="calendar"></div>
+            </div>
+            <div id="diary-form" style="margin-top: 20px; display: none;">
+                <h3 id="selected-date">選択した日付:</h3>
+                <textarea id="diary-content" rows="5" style="width: 100%;"></textarea>
+                <button onclick="saveDiary()" style="margin-top: 10px; padding: 10px; background-color: #ffd1dc; border: none; cursor: pointer;">保存</button>
+            </div>
+            <div id="diary-list" class="diary-list"></div>
+        </div>
+
+        <!-- 課金モーダル -->
+        <div id="payment-modal">
+            <div class="modal-content">
+                <h2>AIチャット機能は有料です</h2>
+                <p>月額¥500でご利用いただけます。</p>
+                <button onclick="processPayment()">課金する</button>
+                <button onclick="closePaymentModal()">キャンセル</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let isPaidUser = false; // 課金済みかどうかを管理
+        const diaryData = JSON.parse(localStorage.getItem('diaryData')) || {};
+        let currentDate = new Date();
+
+        // タブ切り替え
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // カレンダー作成
+        function createCalendar(year, month) {
+            const calendar = document.getElementById('calendar');
+            const currentMonthLabel = document.getElementById('current-month');
+            calendar.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            currentMonthLabel.textContent = `${year}年 ${month + 1}月`;
+
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-cell';
+                calendar.appendChild(emptyCell);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-cell';
+                cell.textContent = day;
+                cell.onclick = () => openDiary(year, month, day);
+                calendar.appendChild(cell);
+            }
+        }
+
+        // 月変更
+        function changeMonth(offset) {
+            currentDate.setMonth(currentDate.getMonth() + offset);
+            createCalendar(currentDate.getFullYear(), currentDate.getMonth());
+        }
+
+        // 日記を開く
+        function openDiary(year, month, day) {
+            const selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${            String(day).padStart(2, '0')}`;
+            document.getElementById('selected-date').textContent = `選択した日付: ${selectedDate}`;
+            document.getElementById('diary-content').value = diaryData[selectedDate] || '';
+            document.getElementById('diary-form').style.display = 'block';
+        }
+
+        // 日記を保存
+        function saveDiary() {
+            const selectedDate = document.getElementById('selected-date').textContent.split(': ')[1];
+            const content = document.getElementById('diary-content').value;
+
+            if (!content.trim()) {
+                alert("日記の内容を入力してください！");
+                return;
+            }
+
+            diaryData[selectedDate] = content;
+            localStorage.setItem('diaryData', JSON.stringify(diaryData));
+            alert('日記を保存しました！');
+            updateDiaryList();
+        }
+
+        // 日記一覧の更新
+        function updateDiaryList() {
+            const diaryList = document.getElementById('diary-list');
+            diaryList.innerHTML = '';
+
+            Object.keys(diaryData).forEach(date => {
+                const item = document.createElement('div');
+                item.className = 'diary-item';
+                item.innerHTML = `
+                    <span>${date}: ${diaryData[date]}</span>
+                    <button onclick="deleteDiary('${date}')" style="background: #f87171; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">削除</button>
+                `;
+                diaryList.appendChild(item);
+            });
+        }
+
+        // 日記を削除
+        function deleteDiary(date) {
+            if (confirm(`${date}の日記を削除しますか？`)) {
+                delete diaryData[date];
+                localStorage.setItem('diaryData', JSON.stringify(diaryData));
+                updateDiaryList();
+            }
+        }
+
+        // 課金モーダルを開く
+        function openPaymentModal() {
+            document.getElementById('payment-modal').classList.add('active');
+        }
+
+        // 課金モーダルを閉じる
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.remove('active');
+        }
+
+        // 課金処理
+        async function processPayment() {
+            // 実際の課金処理はサーバー側で実装（例: Stripe）
+            // ここでは仮処理として成功扱い
+            setTimeout(() => {
+                alert("課金が完了しました！");
+                isPaidUser = true; // 課金済みに設定
+                closePaymentModal();
+            }, 1000);
+        }
+
+        // チャット送信
+        async function sendMessage() {
+            if (!isPaidUser) {
+                openPaymentModal(); // 課金モーダルを表示
+                return;
+            }
+
+            const input = document.getElementById("chat-input").value.trim();
+            const chatMessages = document.getElementById("chat-messages");
+
+            if (input === "") return;
+
+            // ユーザーメッセージの表示
+            const userMessage = document.createElement("div");
+            userMessage.className = "chat-message user";
+            userMessage.innerHTML = `
+                <div class="chat-bubble user">${input}</div>
+                <div class="chat-icon">
+                    <img src="https://via.placeholder.com/40/blue" alt="User Icon">
+                </div>
+            `;
+            chatMessages.appendChild(userMessage);
+
+            // ChatGPT応答を取得
+            const aiResponse = await getChatGPTResponse(input);
+
+            // AIメッセージの表示
+            const aiMessage = document.createElement("div");
+            aiMessage.className = "chat-message ai";
+            aiMessage.innerHTML = `
+                <div class="chat-icon">
+                    <img src="https://via.placeholder.com/40/pink" alt="AI Icon">
+                </div>
+                <div class="chat-bubble ai">${aiResponse}</div>
+            `;
+            chatMessages.appendChild(aiMessage);
+
+            // 入力欄をクリアしてスクロール
+            document.getElementById("chat-input").value = "";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ChatGPT応答を取得
+        async function getChatGPTResponse(message) {
+            const apiUrl = "https://api.openai.com/v1/chat/completions";
+            const headers = {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer your-openai-api-key`, // OpenAI APIキーを設定
+            };
+            const body = {
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "user", content: message }],
+                max_tokens: 100,
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify(body),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.choices[0].message.content.trim();
+            } catch (error) {
+                console.error("ChatGPT APIエラー:", error);
+                return "申し訳ありません、応答を生成できませんでした。もう一度試してください。";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createCalendar(currentDate.getFullYear(), currentDate.getMonth());
+            updateDiaryList();
+            showTab('cinema'); // デフォルトのタブをシネマに設定
+        });
+    </script>
+</body>
+</html>
