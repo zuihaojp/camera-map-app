@@ -11,177 +11,232 @@
     <title>AURA ESTATE - Premium Residence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* 全体的なスタイルやヘッダー、検索セクションのスタイルを定義済み */
-
-        /* スムーズなスクロールの実装 */
-        html {
-            scroll-behavior: smooth;
+        :root {
+            --primary: #7C3AED;
+            --secondary: #4F46E5;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+            --white: #ffffff;
+            --header-height: 80px;
         }
 
-        /* フッターのスタイル */
-        footer {
-            background: var(--primary-dark);
-            color: var(--white);
-            padding: 2rem 0;
-            text-align: center;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        footer p {
-            font-size: 0.9rem;
+        body {
+            min-height: 100vh;
+            background: #f7f7f7;
+            padding-top: var(--header-height);
         }
 
-        footer a {
-            color: var(--secondary);
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
             text-decoration: none;
         }
 
-        footer a:hover {
-            text-decoration: underline;
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .hero {
+            height: calc(100vh - var(--header-height));
+            background: url('/assets/images/hero.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input,
+        .search-bar select {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: var(--secondary);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ヘッダー -->
-    <header class="header">
-        <div class="container header-content">
-            <h1 class="logo">AURA ESTATE</h1>
-            
-            <nav class="nav-menu">
-                <a href="#properties" class="nav-link" data-translate="nav.properties">物件一覧</a>
-                <a href="#areas" class="nav-link" data-translate="nav.areas">エリア</a>
-                <a href="#services" class="nav-link" data-translate="nav.services">サービス</a>
-                <a href="#about" class="nav-link" data-translate="nav.about">会社概要</a>
+    <header>
+        <div class="container">
+            <a href="#" class="logo">AURA ESTATE</a>
+            <nav>
+                <a href="#about" class="nav-link">会社概要</a>
+                <a href="#properties" class="nav-link">物件一覧</a>
+                <a href="#contact" class="nav-link">お問い合わせ</a>
             </nav>
-
-            <div class="header-actions">
-                <div class="language-selector">
-                    <button class="lang-btn active" data-lang="ja">日本語</button>
-                    <button class="lang-btn" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="zh">中文</button>
-                </div>
-
-                <button class="contact-btn" data-translate="nav.contact">お問い合わせ</button>
-                
-                <button class="mobile-menu-btn" aria-label="メニュー">
-                    <i class="fas fa-bars"></i>
-                </button>
+            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="ja">日本語</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="zh">中文</button>
             </div>
         </div>
     </header>
 
-    <!-- ヒーローセクション -->
-    <section class="hero-section">
-        <div class="hero-background">
-            <img src="/assets/images/hero.jpg" alt="Luxury apartment view">
-        </div>
-        
-        <div class="container hero-content">
-            <h2 class="hero-title">
-                Find Your Dream
-                <br>
-                Luxury Residence
-            </h2>
-            <p class="hero-subtitle">
-                厳選された高級物件で、あなたの理想の住まいをお探しします。
-                プレミアムな立地と贅沢な空間をご提案いたします。
-            </p>
-
-            <div class="hero-search">
-                <div class="search-row">
-                    <div class="search-input">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="エリア・駅名から探す">
-                    </div>
-                    
-                    <div class="search-select">
-                        <select>
-                            <option value="">価格帯を選択</option>
-                            <option value="1">〜5億円</option>
-                            <option value="2">5億円〜10億円</option>
-                            <option value="3">10億円〜</option>
-                        </select>
-                    </div>
-
-                    <button class="search-button">
-                        検索する
-                    </button>
-                </div>
-            </div>
+    <section class="hero">
+        <h1>Find Your Dream Luxury Residence</h1>
+        <p>厳選された物件で理想の住まいをご提供します。</p>
+        <div class="search-bar">
+            <input type="text" placeholder="エリア・駅名で検索">
+            <select>
+                <option value="">価格帯を選択</option>
+                <option value="low">〜5億円</option>
+                <option value="mid">5億円〜10億円</option>
+                <option value="high">10億円〜</option>
+            </select>
+            <button>検索する</button>
         </div>
     </section>
 
-    <!-- 詳細検索セクション -->
-    <section class="advanced-search">
-        <div class="container">
-            <div class="search-filters">
-                <div class="filter-header">
-                    <div>
-                        <h3 class="filter-title">詳細検索</h3>
-                        <p class="filter-subtitle">お好みの条件で物件を検索できます</p>
-                    </div>
-                </div>
-
-                <div class="primary-filters">
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-map-marker-alt"></i>
-                            エリア
-                        </label>
-                        <div class="filter-select">
-                            <select>
-                                <option value="">選択してください</option>
-                                <option>港区</option>
-                                <option>渋谷区</option>
-                                <option>千代田区</option>
-                                <option>中央区</option>
-                                <option>新宿区</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-train"></i>
-                            沿線・駅
-                        </label>
-                        <div class="filter-select">
-                            <select>
-                                <option value="">選択してください</option>
-                                <option>山手線</option>
-                                <option>日比谷線</option>
-                                <option>銀座線</option>
-                                <option>丸ノ内線</option>
-                                <option>南北線</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-yen-sign"></i>
-                            価格帯
-                        </label>
-                        <div class="filter-select">
-                            <select>
-                                <option value="">選択してください</option>
-                                <option>〜3億円</option>
-                                <option>3億円〜5億円</option>
-                                <option>5億円〜10億円</option>
-                                <option>10億円〜</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- フッター -->
     <footer>
         <div class="container">
             <p>&copy; 2024 AURA ESTATE. All Rights Reserved.</p>
-            <p><a href="#contact">お問い合わせ</a></p>
         </div>
     </footer>
+
+    <script>
+        // 言語切り替え
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // 必要に応じてローカライズ処理を追加
+            });
+        });
+    </script>
 </body>
 </html>
