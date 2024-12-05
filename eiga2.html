@@ -55,6 +55,12 @@
         <div id="streaming" class="tab-content">
             <div class="bg-white rounded-2xl shadow-lg p-4">
                 <h2 class="text-lg font-bold text-pink-600 mb-4">ストリーミングサービスのおすすめ</h2>
+                <div id="service-buttons" class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="displayStreamingMovies('Netflix')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Netflix</button>
+                    <button onclick="displayStreamingMovies('Disney+')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Disney+</button>
+                    <button onclick="displayStreamingMovies('Hulu')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Hulu</button>
+                    <button onclick="displayStreamingMovies('U-NEXT')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">U-NEXT</button>
+                </div>
                 <div id="streaming-movie-list" class="grid grid-cols-1 gap-4"></div>
             </div>
         </div>
@@ -95,16 +101,20 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
     <script>
-        // タブ切り替え
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        // 日記データ
+        const moviesByMonth = { /* 元の映画データ */ };
+        const streamingData = { /* 元のストリーミングデータ */ };
+        const myList = [];
         const diaryData = JSON.parse(localStorage.getItem('diaryData')) || {};
 
-        // カレンダー初期化
+        function showTab(tabId) { /* タブ切り替え処理 */ }
+        function createMonthButtons() { /* シネマ月ボタン生成 */ }
+        function displayMovies(month) { /* シネマ作品表示 */ }
+        function displayStreamingMovies(service) { /* ストリーミング作品表示 */ }
+        function addToMyList(movie) { /* マイリスト追加 */ }
+        function updateMyListDisplay() { /* マイリスト更新 */ }
+        function sendMessage() { /* チャット送信 */ }
+
+        // 日記機能
         document.addEventListener('DOMContentLoaded', () => {
             const calendarEl = document.getElementById('calendar');
             const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -119,14 +129,20 @@
             calendar.render();
         });
 
-        // 日記保存
         function saveDiary() {
-            const date = document.getElementById('selected-date').textContent.split(': ')[1];
+            const date = document.getElementById('selected-date').textContent.split(':            ')[1];
             const content = document.getElementById('diary-content').value;
             diaryData[date] = content;
             localStorage.setItem('diaryData', JSON.stringify(diaryData));
             alert('日記を保存しました！');
         }
+
+        // 初期化処理
+        document.addEventListener("DOMContentLoaded", () => {
+            showTab('cinema'); // デフォルトタブを表示
+            createMonthButtons(); // シネマ月ボタン生成
+            displayMovies(1); // 初期表示で1月の映画を表示
+        });
     </script>
 </body>
 </html>
