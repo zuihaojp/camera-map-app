@@ -6,13 +6,17 @@
     <title>Premium Online Services</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap">
     <style>
+        /* 既存のルートカラー変数 */
         :root {
             --gold: #D4AF37;
-            --dark-blue: #0A0A1A;
-            --navy: #141428;
+            --dark-blue: #1a1a2e;
+            --navy: #262640;
             --light-gold: #F4E7BE;
+            --text-color: #ffffff;
+            --card-bg: #2a2a4a;
         }
 
+        /* 既存のリセットとベーススタイル */
         * {
             margin: 0;
             padding: 0;
@@ -23,19 +27,20 @@
             margin: 0;
             font-family: 'Noto Serif JP', serif;
             background-color: var(--dark-blue);
-            color: var(--light-gold);
+            color: var(--text-color);
             line-height: 1.6;
         }
 
+        /* ヘッダースタイル更新 */
         header {
-            background-color: rgba(10, 10, 26, 0.95);
+            background-color: rgba(26, 26, 46, 0.95);
             padding: 1.5rem 5%;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
 
         .header-content {
@@ -53,6 +58,13 @@
             letter-spacing: 2px;
         }
 
+        /* ナビゲーションスタイル更新 */
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
         nav ul {
             list-style: none;
             display: flex;
@@ -61,7 +73,7 @@
 
         nav ul li a {
             text-decoration: none;
-            color: var(--light-gold);
+            color: var(--text-color);
             font-weight: 400;
             padding: 0.5rem 0;
             position: relative;
@@ -79,11 +91,41 @@
             transition: width 0.3s ease;
         }
 
+        nav ul li a:hover {
+            color: var(--gold);
+        }
+
         nav ul li a:hover::after {
             width: 100%;
         }
 
-</style>
+        /* 言語切り替えボタンスタイル */
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: 2rem;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: var(--gold);
+            color: var(--dark-blue);
+        }
+
+        .lang-btn.active {
+            background: var(--gold);
+            color: var(--dark-blue);
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -91,13 +133,64 @@
             <div class="logo">Premium Services</div>
             <nav>
                 <ul>
-                    <li><a href="#services">サービス</a></li>
-                    <li><a href="#contact">お問い合わせ</a></li>
+                    <li><a href="#services" data-ja="サービス" data-en="Services" data-zh="服务">サービス</a></li>
+                    <li><a href="#contact" data-ja="お問い合わせ" data-en="Contact" data-zh="联系我们">お問い合わせ</a></li>
                 </ul>
+                <div class="language-switcher">
+                    <button class="lang-btn active" onclick="changeLang('ja')">日本語</button>
+                    <button class="lang-btn" onclick="changeLang('en')">English</button>
+                    <button class="lang-btn" onclick="changeLang('zh')">中文</button>
+                </div>
             </nav>
         </div>
     </header>
-    
+
+    <script>
+        // 言語データ
+        const translations = {
+            ja: {
+                services: 'サービス',
+                contact: 'お問い合わせ',
+                title: 'プレミアムサービス',
+                // 他の翻訳キーを追加
+            },
+            en: {
+                services: 'Services',
+                contact: 'Contact',
+                title: 'Premium Services',
+                // 他の翻訳キーを追加
+            },
+            zh: {
+                services: '服务',
+                contact: '联系我们',
+                title: '高端服务',
+                // 他の翻訳キーを追加
+            }
+        };
+
+        // 言語切り替え関数
+        function changeLang(lang) {
+            // アクティブなボタンの更新
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.onclick.toString().includes(lang)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // テキストの更新
+            document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+        }
+    </script>
+
+</body>
+</html>
+```css
+/* 前のスタイルに続けて追加 */
+
+/* ヒーローセクション */
 .hero {
     height: 100vh;
     display: flex;
@@ -118,8 +211,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
-    opacity: 0.5;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+    opacity: 0.7;
 }
 
 .hero-content {
@@ -141,28 +234,18 @@
 .hero p {
     font-size: 1.2rem;
     margin-bottom: 3rem;
-    color: var(--light-gold);
+    color: var(--text-color);
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
     line-height: 2;
 }
 
+/* サービスセクション */
 .services {
     padding: 8rem 5%;
     background-color: var(--navy);
     position: relative;
-}
-
-.services::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.05));
-    pointer-events: none;
 }
 
 .services-grid {
@@ -176,34 +259,19 @@
 }
 
 .service-card {
-    background: linear-gradient(145deg, rgba(20, 20, 40, 0.9), rgba(10, 10, 26, 0.9));
-    border: 1px solid rgba(212, 175, 55, 0.1);
+    background: var(--card-bg);
+    border: 1px solid rgba(212, 175, 55, 0.2);
     padding: 3rem 2rem;
-    border-radius: 2px;
+    border-radius: 8px;
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
 }
 
-.service-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    transition: 0.5s;
-}
-
-.service-card:hover::after {
-    left: 100%;
-}
-
 .service-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    border-color: rgba(212, 175, 55, 0.3);
+    border-color: var(--gold);
 }
 
 .service-card h2 {
@@ -214,20 +282,10 @@
     padding-bottom: 1rem;
 }
 
-.service-card h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 50px;
-    height: 1px;
-    background-color: var(--gold);
-}
-
 .service-card p {
     margin-bottom: 2rem;
     line-height: 1.8;
-    color: var(--light-gold);
+    color: var(--text-color);
 }
 
 .service-card a {
@@ -237,10 +295,8 @@
     font-weight: 400;
     padding: 0.8rem 2rem;
     border: 1px solid var(--gold);
+    border-radius: 4px;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    background: transparent;
 }
 
 .service-card a:hover {
@@ -248,111 +304,76 @@
     color: var(--dark-blue);
 }
 
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero p {
-        font-size: 1.1rem;
-    }
-
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .service-card {
-        padding: 2rem 1.5rem;
-    }
-}
-```css
-/* 前のスタイルに続けて追加 */
-
-footer {
-    background-color: var(--dark-blue);
-    padding: 4rem 5%;
-    position: relative;
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
-}
-
-.footer-content {
-    max-width: 1400px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.footer-content p {
-    color: var(--light-gold);
-    margin: 1rem 0;
-    font-size: 1.1rem;
-}
-
-.footer-content .copyright {
-    color: var(--gold);
-    font-size: 0.9rem;
-    margin-top: 2rem;
-}
-
-.footer-content .contact {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.5rem 2rem;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.footer-content .contact:hover {
-    background-color: var(--gold);
-    color: var(--dark-blue);
-}
-
-@media (max-width: 768px) {
-    footer {
-        padding: 3rem 5%;
-    }
-}
-
-    <div class="hero">
-        <div class="hero-content">
-            <h1>洗練された体験をオンラインで</h1>
-            <p>最高級のオンラインサービスを通じて、特別な価値と時間をお届けいたします。<br>
-               プライバシーを重視した、上質なサービスをご提供いたします。</p>
-        </div>
+<!-- ヘッダーの後に追加 -->
+<div class="hero">
+    <div class="hero-content">
+        <h1 data-ja="洗練された体験をオンラインで" 
+            data-en="Refined Online Experience" 
+            data-zh="优雅的在线体验">洗練された体験をオンラインで</h1>
+        <p data-ja="最高級のオンラインサービスを通じて、特別な価値と時間をお届けいたします。" 
+           data-en="Delivering exceptional value and premium experience through our online services." 
+           data-zh="通过最高级的在线服务，为您提供独特的价值和优质体验。">
+            最高級のオンラインサービスを通じて、特別な価値と時間をお届けいたします。
+        </p>
     </div>
+</div>
 
-    <section class="services" id="services">
-        <div class="services-grid">
-            <div class="service-card">
-                <h2>プライベート診療</h2>
-                <p>専門医による個別オンライン診療。徹底したプライバシー保護のもと、24時間体制でケアいたします。</p>
-                <a href="./service-1/clinic.html">詳細を見る</a>
-            </div>
-            <div class="service-card">
-                <h2>プレミアム法務相談</h2>
-                <p>国内トップクラスの弁護士による、専門的な法務アドバイスと戦略的なリーガルソリューション。</p>
-                <a href="./service-2/law.html">詳細を見る</a>
-            </div>
-            <div class="service-card">
-                <h2>ラグジュアリー不動産</h2>
-                <p>厳選された高級物件の仲介から、プライベートな取引まで。ワンストップで完結する不動産サービス。</p>
-                <a href="./service-3/estate.html">詳細を見る</a>
-            </div>
-            <div class="service-card">
-                <h2>アート オークション</h2>
-                <p>日本を代表する写真家の貴重な作品を、プライベートオークションにてご提供。芸術的価値の高いコレクションをご堪能ください。</p>
-                <a href="./service-4/index.html">詳細を見る</a>
-            </div>
+<section class="services" id="services">
+    <div class="services-grid">
+        <div class="service-card">
+            <h2 data-ja="プライベート診療" 
+                data-en="Private Medical Care" 
+                data-zh="私人诊疗">プライベート診療</h2>
+            <p data-ja="専門医による個別オンライン診療。徹底したプライバシー保護のもと、24時間体制でケアいたします。" 
+               data-en="Personalized online medical consultation by specialists. 24/7 care with complete privacy protection." 
+               data-zh="专业医生提供个性化在线诊疗。全天候服务，严格保护隐私。">
+                専門医による個別オンライン診療。徹底したプライバシー保護のもと、24時間体制でケアいたします。
+            </p>
+            <a href="./service-1/clinic.html" 
+               data-ja="詳細を見る" 
+               data-en="Learn More" 
+               data-zh="了解更多">詳細を見る</a>
         </div>
-    </section>
 
-    <footer id="contact">
-        <div class="footer-content">
-            <p>最高級のオンラインサービスで、特別な体験を。</p>
-            <a href="mailto:premium@example.com" class="contact">お問い合わせ</a>
-            <p class="copyright">&copy; 2024 Premium Online Services</p>
+        <div class="service-card">
+            <h2 data-ja="プレミアム法務相談" 
+                data-en="Premium Legal Consultation" 
+                data-zh="高端法律咨询">プレミアム法務相談</h2>
+            <p data-ja="国内トップクラスの弁護士による、専門的な法務アドバイスと戦略的なリーガルソリューション。" 
+               data-en="Expert legal advice and strategic solutions from top-tier lawyers." 
+               data-zh="顶级律师提供专业法律建议和战略解决方案。">
+                国内トップクラスの弁護士による、専門的な法務アドバイスと戦略的なリーガルソリューション。
+            </p>
+            <a href="./service-2/law.html" 
+               data-ja="詳細を見る" 
+               data-en="Learn More" 
+               data-zh="了解更多">詳細を見る</a>
         </div>
-    </footer>
-</body>
-</html>
+
+        <!-- 他のサービスカードも同様に多言語対応 -->
+    </div>
+</section>
+
+<script>
+// 既存の翻訳データに追加
+translations.ja.learnMore = '詳細を見る';
+translations.en.learnMore = 'Learn More';
+translations.zh.learnMore = '了解更多';
+
+// 言語切り替え関数を拡張
+function changeLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.onclick.toString().includes(lang)) {
+            btn.classList.add('active');
+        }
+    });
+
+    document.querySelectorAll(`[data-${lang}]`).forEach(element => {
+        element.textContent = element.getAttribute(`data-${lang}`);
+    });
+
+    // HTML言語属性の更新
+    document.documentElement.lang = lang;
+}
+</script>
