@@ -115,7 +115,65 @@
 
     <!-- メインコンテンツ部分は既存のまま -->
     <main class="max-w-4xl mx-auto px-4 py-6">
-        <!-- 既存のタブコンテンツはそのまま -->
+        <!-- シネマタブ -->
+        <div id="cinema" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">1～12月のおすすめ作品</h2>
+                <div id="month-buttons" class="flex flex-wrap gap-2 mb-4"></div>
+                <div id="movie-list" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- ストリーミングタブ -->
+        <div id="streaming" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">ストリーミングサービスのおすすめ</h2>
+                <div id="service-buttons" class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="displayStreamingMovies('Netflix')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Netflix</button>
+                    <button onclick="displayStreamingMovies('Disney+')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Disney+</button>
+                    <button onclick="displayStreamingMovies('Hulu')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Hulu</button>
+                    <button onclick="displayStreamingMovies('U-NEXT')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">U-NEXT</button>
+                </div>
+                <div id="streaming-movie-list" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- マイリストタブ -->
+        <div id="mylist" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">マイリスト</h2>
+                <div id="mylist-items" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- チャットタブ -->
+        <div id="chat" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">AIちゃんとチャット</h2>
+                <div id="chat-messages" class="bg-pink-50 p-4 rounded-lg h-96 overflow-y-auto"></div>
+                <div class="flex mt-4">
+                    <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" class="flex-1 border-2 border-pink-300 px-4 py-2 rounded-full">
+                    <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 会社ブログタブ -->
+        <div id="company-blog" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg p-4">
+                <h2 class="text-lg font-bold text-pink-600 mb-4">会社ブログ</h2>
+                <div id="blog-entries" class="grid grid-cols-1 gap-4">
+                    <div class="p-3 bg-pink-50 border border-pink-200 rounded-md">
+                        <h3 class="text-pink-600 font-bold">ブログ記事1</h3>
+                        <p>最近の映画のトレンドについての記事内容です。</p>
+                    </div>
+                    <div class="p-3 bg-pink-50 border border-pink-200 rounded-md">
+                        <h3 class="text-pink-600 font-bold">ブログ記事2</h3>
+                        <p>Huluで注目されているドラマのレビュー。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <script>
 // 映画データ
