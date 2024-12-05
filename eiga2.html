@@ -4,64 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIちゃん - シネマと日記</title>
+
+    <!-- スタイルシート -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f9f9f9; }
+        body { background-color: #f9f9f9; font-family: Arial, sans-serif; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
         .calendar-cell { padding: 10px; text-align: center; background-color: #fff; border: 1px solid #ddd; cursor: pointer; }
         .calendar-cell:hover { background-color: #f0f0f0; }
-        .selected { background-color: #ffd1dc; color: white; }
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .calendar-header button { padding: 5px 10px; background-color: #ffd1dc; border: none; cursor: pointer; border-radius: 5px; }
         .calendar-header button:hover { background-color: #ff91aa; color: white; }
         .calendar-header h2 { margin: 0; font-size: 1.2rem; }
         .diary-list { margin-top: 20px; }
         .diary-item { padding: 10px; background-color: #fff; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 5px; }
+        .chat-bubble { margin: 0.5rem 0; padding: 0.5rem 1rem; max-width: 80%; word-wrap: break-word; }
+        .chat-bubble.user { align-self: flex-end; background-color: #D1F2FF; }
+        .chat-bubble.ai { align-self: flex-start; background-color: #FFE4E9; }
     </style>
 </head>
-<body>
-    <header>
-        <h1>AIちゃん - シネマと日記</h1>
-        <nav>
-            <button onclick="showTab('cinema')">シネマ</button>
-            <button onclick="showTab('streaming')">ストリーミング</button>
-            <button onclick="showTab('mylist')">マイリスト</button>
-            <button onclick="showTab('chat')">チャット</button>
-            <button onclick="showTab('diary')">日記</button>
-        </nav>
+<body class="bg-pink-50">
+    <header class="bg-white shadow-sm border-b-2 border-pink-200">
+        <div class="max-w-4xl mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-pink-600">AIちゃん - シネマと日記</h1>
+                <nav class="flex justify-center space-x-4">
+                    <button onclick="showTab('cinema')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">シネマ</button>
+                    <button onclick="showTab('streaming')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">ストリーミング</button>
+                    <button onclick="showTab('mylist')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">マイリスト</button>
+                    <button onclick="showTab('chat')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">チャット</button>
+                    <button onclick="showTab('diary')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">日記</button>
+                </nav>
+            </div>
+        </div>
     </header>
 
-    <main>
+    <main class="max-w-4xl mx-auto px-4 py-6">
         <!-- シネマタブ -->
         <div id="cinema" class="tab-content active">
-            <h2>シネマタブ</h2>
-            <!-- 映画コンテンツをここに追加 -->
+            <h2 class="text-lg font-bold text-pink-600">シネマタブ</h2>
+            <!-- 映画関連の内容をここに追加 -->
         </div>
 
         <!-- ストリーミングタブ -->
         <div id="streaming" class="tab-content">
-            <h2>ストリーミングタブ</h2>
-            <!-- ストリーミングコンテンツをここに追加 -->
+            <h2 class="text-lg font-bold text-pink-600">ストリーミングタブ</h2>
+            <!-- ストリーミング関連の内容をここに追加 -->
         </div>
 
         <!-- マイリストタブ -->
         <div id="mylist" class="tab-content">
-            <h2>マイリストタブ</h2>
-            <!-- マイリストコンテンツをここに追加 -->
+            <h2 class="text-lg font-bold text-pink-600">マイリストタブ</h2>
+            <!-- マイリスト関連の内容をここに追加 -->
         </div>
 
         <!-- チャットタブ -->
         <div id="chat" class="tab-content">
-            <h2>チャットタブ</h2>
-            <div id="chat-messages"></div>
-            <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね">
-            <button onclick="sendMessage()">送信</button>
+            <h2 class="text-lg font-bold text-pink-600">AIちゃんとチャット</h2>
+            <div id="chat-messages" class="bg-pink-50 p-4 rounded-lg h-96 overflow-y-auto flex flex-col"></div>
+            <div class="flex mt-4">
+                <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" class="flex-1 border-2 border-pink-300 px-4 py-2 rounded-full">
+                <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
+            </div>
         </div>
 
         <!-- 日記タブ -->
         <div id="diary" class="tab-content">
-            <h2>日記</h2>
+            <h2 class="text-lg font-bold text-pink-600">日記</h2>
             <div id="calendar-container">
                 <div class="calendar-header">
                     <button onclick="changeMonth(-1)">前月</button>
@@ -126,8 +137,7 @@
         }
 
         function saveDiary() {
-            const selectedDate = document.getElementById('selected-date').textContent.split(': ')[1];
-            const content = document.getElementById('diary-content').value;
+                        const content = document.getElementById('diary-content').value;
             diaryData[selectedDate] = content;
             localStorage.setItem('diaryData', JSON.stringify(diaryData));
             alert('日記を保存しました！');
@@ -145,9 +155,47 @@
             });
         }
 
+        // チャット機能
+        function sendMessage() {
+            const input = document.getElementById("chat-input").value.trim();
+            const chatMessages = document.getElementById("chat-messages");
+
+            if (input === "") return;
+
+            const userMessage = document.createElement("div");
+            userMessage.className = "chat-bubble user";
+            userMessage.textContent = input;
+            chatMessages.appendChild(userMessage);
+
+            const aiResponse = generateAIResponse(input);
+
+            const aiMessage = document.createElement("div");
+            aiMessage.className = "chat-bubble ai";
+            aiMessage.textContent = aiResponse;
+            chatMessages.appendChild(aiMessage);
+
+            document.getElementById("chat-input").value = "";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateAIResponse(input) {
+            const lowerInput = input.toLowerCase();
+
+            if (lowerInput.includes("おはよう")) return "おはよう！今日も元気にいこうね♪";
+            if (lowerInput.includes("おやすみ")) return "おやすみなさい！いい夢を見てね♪";
+            if (lowerInput.includes("ありがとう")) return "どういたしまして！嬉しいな♪";
+            if (lowerInput.includes("おめでとう")) return "おめでとう！頑張ったね！";
+            if (lowerInput.includes("元気")) return "もちろん元気だよ！";
+            if (lowerInput.includes("映画")) return "最近おすすめの映画は「AIの冒険」だよ！";
+            if (lowerInput.includes("大好き")) return "私も大好きだよ！";
+
+            return "それについてもっと教えてね！";
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             createCalendar(currentDate.getFullYear(), currentDate.getMonth());
             updateDiaryList();
+            showTab('cinema'); // デフォルトのタブをシネマに設定
         });
     </script>
 </body>
