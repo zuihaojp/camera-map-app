@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="東京の高級不動産・住宅をご紹介。厳選された物件の情報をお届けします。">
-    <meta property="og:title" content="AURA ESTATE - Premium Residence">
-    <meta property="og:description" content="東京の高級不動産・住宅をご紹介。厳選された物件の情報をお届けします。">
-    <meta property="og:image" content="/assets/images/ogp.jpg">
-    <meta property="og:type" content="website">
     <title>AURA ESTATE - Premium Residence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -17,6 +13,7 @@
             --text-dark: #1a1a1a;
             --text-light: #666;
             --white: #ffffff;
+            --bg-light: rgba(255, 255, 255, 0.8);
             --header-height: 80px;
         }
 
@@ -42,7 +39,6 @@
             background: rgba(255, 255, 255, 0.9);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            backdrop-filter: blur(10px);
         }
 
         .container {
@@ -79,37 +75,6 @@
             color: var(--primary);
         }
 
-        .mobile-menu-btn {
-            display: none;
-            font-size: 1.5rem;
-            color: var(--text-dark);
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-
-        .language-selector {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .lang-btn {
-            background: none;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.3rem 0.8rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .lang-btn.active {
-            background: var(--primary);
-            color: var(--white);
-        }
-
         .hero {
             height: calc(100vh - var(--header-height));
             background: url('/assets/images/hero.jpg') no-repeat center center/cover;
@@ -118,42 +83,57 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            color: var(--white);
+            color: var(--text-dark);
+            background-blend-mode: overlay;
         }
 
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            background: var(--bg-light);
+            padding: 1rem 2rem;
+            border-radius: 12px;
         }
 
         .hero p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
-        }
-
-        .search-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--bg-light);
+            padding: 0.8rem 1.5rem;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .search-bar input,
-        .search-bar select {
-            flex: 1;
+        .form-section {
+            padding: 4rem 1.5rem;
+            background: #fefefe;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        form label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        form input,
+        form select {
             padding: 0.8rem;
             border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             font-size: 1rem;
         }
 
-        .search-bar button {
+        form button {
             background: var(--primary);
             color: var(--white);
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
@@ -161,31 +141,25 @@
             transition: background 0.3s;
         }
 
-        .search-bar button:hover {
+        form button:hover {
             background: var(--secondary);
         }
 
-        @media (max-width: 768px) {
-            nav {
-                display: none;
-            }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: var(--white);
+        }
 
-            .mobile-menu-btn {
-                display: block;
-            }
+        footer a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .search-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -198,45 +172,62 @@
                 <a href="#properties" class="nav-link">物件一覧</a>
                 <a href="#contact" class="nav-link">お問い合わせ</a>
             </nav>
-            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
-            <div class="language-selector">
-                <button class="lang-btn active" data-lang="ja">日本語</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="zh">中文</button>
-            </div>
         </div>
     </header>
 
     <section class="hero">
         <h1>Find Your Dream Luxury Residence</h1>
         <p>厳選された物件で理想の住まいをご提供します。</p>
-        <div class="search-bar">
-            <input type="text" placeholder="エリア・駅名で検索">
-            <select>
-                <option value="">価格帯を選択</option>
-                <option value="low">〜5億円</option>
-                <option value="mid">5億円〜10億円</option>
-                <option value="high">10億円〜</option>
-            </select>
-            <button>検索する</button>
+    </section>
+
+    <section id="about">
+        <div class="form-section">
+            <h2>会社概要</h2>
+            <p>こちらに会社概要を記載します。</p>
+        </div>
+    </section>
+
+    <section id="properties">
+        <div class="form-section">
+            <h2>物件一覧</h2>
+            <p>物件情報をここに追加します。</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="form-section">
+            <h2>お問い合わせ</h2>
+            <form>
+                <label for="name">お名前</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="phone">電話番号</label>
+                <input type="text" id="phone" name="phone" required>
+
+                <label for="address">住所</label>
+                <input type="text" id="address" name="address" required>
+
+                <label for="language">希望言語</label>
+                <select id="language" name="language">
+                    <option value="ja">日本語</option>
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                </select>
+
+                <label for="payment">支払い方法</label>
+                <select id="payment" name="payment">
+                    <option value="credit">クレジットカード</option>
+                    <option value="bank">銀行振込</option>
+                    <option value="cash">現金</option>
+                </select>
+
+                <button type="submit">送信する</button>
+            </form>
         </div>
     </section>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2024 AURA ESTATE. All Rights Reserved.</p>
-        </div>
+        <p>&copy; 2024 AURA ESTATE. <a href="#contact">お問い合わせ</a></p>
     </footer>
-
-    <script>
-        // 言語切り替え
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                // 必要に応じてローカライズ処理を追加
-            });
-        });
-    </script>
 </body>
 </html>
