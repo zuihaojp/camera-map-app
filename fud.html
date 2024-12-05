@@ -176,6 +176,41 @@
             display: block;
         }
 
+        form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        form label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-blue);
+        }
+
+        form input,
+        form select {
+            padding: 0.8rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        form button {
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        form button:hover {
+            background: var(--secondary);
+        }
+
         footer {
             text-align: center;
             padding: 2rem;
@@ -201,7 +236,7 @@
             <nav>
                 <a href="#tab-about" class="nav-link" data-tab="about">会社概要</a>
                 <a href="#tab-properties" class="nav-link" data-tab="properties">物件一覧</a>
-                <a href="#contact" class="nav-link">お問い合わせ</a>
+                <a href="#tab-contact" class="nav-link" data-tab="contact">お問い合わせ</a>
             </nav>
         </div>
     </header>
@@ -225,6 +260,7 @@
         <div class="tabs">
             <div class="tab active" data-content="about">会社概要</div>
             <div class="tab" data-content="properties">物件一覧</div>
+            <div class="tab" data-content="contact">お問い合わせ</div>
         </div>
 
         <div id="tab-about" class="tab-content active">
@@ -236,10 +272,39 @@
             <h2>物件一覧</h2>
             <p>こちらに物件情報を記載します。</p>
         </div>
+
+        <div id="tab-contact" class="tab-content">
+            <h2>お問い合わせ</h2>
+            <form>
+                <label for="name">お名前</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="phone">電話番号</label>
+                <input type="text" id="phone" name="phone" required>
+
+                <label for="address">住所</label>
+                <input type="text" id="address" name="address" required>
+                                <label for="language">希望言語</label>
+                <select id="language" name="language" required>
+                    <option value="ja">日本語</option>
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                </select>
+
+                <label for="payment">支払い方法</label>
+                <select id="payment" name="payment" required>
+                    <option value="credit">クレジットカード</option>
+                    <option value="bank">銀行振込</option>
+                    <option value="cash">現金</option>
+                </select>
+
+                <button type="submit">送信する</button>
+            </form>
+        </div>
     </section>
 
     <footer>
-        <p>&copy; 2024 AURA ESTATE. <a href="#contact">お問い合わせ</a></p>
+        <p>&copy; 2024 AURA ESTATE. <a href="#tab-contact">お問い合わせ</a></p>
     </footer>
 
     <script>
