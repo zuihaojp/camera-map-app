@@ -113,8 +113,7 @@
         </div>
     </header>
 
-    <!-- メインコンテンツ部分は既存のまま -->
-    <main class="max-w-4xl mx-auto px-4 py-6">
+<main class="max-w-4xl mx-auto px-4 py-6">
         <!-- シネマタブ -->
         <div id="cinema" class="tab-content active">
             <div class="bg-white rounded-2xl shadow-lg p-4">
@@ -162,20 +161,13 @@
         <div id="company-blog" class="tab-content">
             <div class="bg-white rounded-2xl shadow-lg p-4">
                 <h2 class="text-lg font-bold text-pink-600 mb-4">会社ブログ</h2>
-                <div id="blog-entries" class="grid grid-cols-1 gap-4">
-                    <div class="p-3 bg-pink-50 border border-pink-200 rounded-md">
-                        <h3 class="text-pink-600 font-bold">ブログ記事1</h3>
-                        <p>最近の映画のトレンドについての記事内容です。</p>
-                    </div>
-                    <div class="p-3 bg-pink-50 border border-pink-200 rounded-md">
-                        <h3 class="text-pink-600 font-bold">ブログ記事2</h3>
-                        <p>Huluで注目されているドラマのレビュー。</p>
-                    </div>
-                </div>
+                <div id="blog-entries" class="grid grid-cols-1 gap-4"></div>
             </div>
         </div>
     </main>
+
     <script>
+      <script>
 // 映画データ
 const moviesByMonth = {
     1: [
@@ -183,36 +175,12 @@ const moviesByMonth = {
         { title: "雪の結晶", genre: "ファンタジー", rating: "4.8", description: "冬の魔法をテーマにした作品", releaseDate: "2024/01/20" }
     ],
     2: [
-        { title: "バレンタイン・ストーリー", genre: "ロマンス", rating: "4.3", description: "甘い恋の物語", releaseDate: "2024/02/10" },
-        { title: "月光の誓い", genre: "ミステリー", rating: "4.6", description: "月夜に繰り広げられる謎", releaseDate: "2024/02/20" }
+        { title: "バレンタイン・ストーリー", genre: "ロマンス", rating: "4.3", description: "甘い恋の物語", releaseDate: "2024/02/10" }
     ],
     3: [
         { title: "春風のワルツ", genre: "音楽", rating: "4.4", description: "春の訪れと共に始まる音楽物語", releaseDate: "2024/03/05" }
     ],
-    4: [
-        { title: "桜色の約束", genre: "青春", rating: "4.7", description: "卒業シーズンの青春ストーリー", releaseDate: "2024/04/01" }
-    ],
-    5: [
-        { title: "エメラルドの風", genre: "アドベンチャー", rating: "4.2", description: "新緑の中での冒険", releaseDate: "2024/05/15" }
-    ],
-    6: [
-        { title: "梅雨の晴れ間", genre: "ヒューマンドラマ", rating: "4.5", description: "雨の日の心温まる出会い", releaseDate: "2024/06/10" }
-    ],
-    7: [
-        { title: "夏祭りの夜", genre: "青春", rating: "4.6", description: "懐かしい夏の思い出", releaseDate: "2024/07/20" }
-    ],
-    8: [
-        { title: "真夏の大冒険", genre: "アクション", rating: "4.8", description: "熱い夏の冒険物語", releaseDate: "2024/08/01" }
-    ],
-    9: [
-        { title: "秋風のセレナーデ", genre: "音楽", rating: "4.4", description: "秋の音楽フェスティバル", releaseDate: "2024/09/15" }
-    ],
-    10: [
-        { title: "紅葉の調べ", genre: "ドラマ", rating: "4.3", description: "秋の情景と共に紡がれる物語", releaseDate: "2024/10/10" }
-    ],
-    11: [
-        { title: "霜降る朝に", genre: "ミステリー", rating: "4.7", description: "寒い朝に始まる謎解き", releaseDate: "2024/11/05" }
-    ],
+    // 他の月のデータ...
     12: [
         { title: "聖夜の奇跡", genre: "ファンタジー", rating: "4.9", description: "クリスマスの魔法", releaseDate: "2024/12/20" }
     ]
@@ -221,8 +189,7 @@ const moviesByMonth = {
 // ストリーミングサービスのデータ
 const streamingData = {
     'Netflix': [
-        { title: "宇宙への旅", genre: "SF", rating: "4.7", description: "壮大な宇宙冒険" },
-        { title: "都会の夜", genre: "ドラマ", rating: "4.5", description: "都市の物語" }
+        { title: "宇宙への旅", genre: "SF", rating: "4.7", description: "壮大な宇宙冒険" }
     ],
     'Disney+': [
         { title: "魔法の王国", genre: "ファンタジー", rating: "4.8", description: "魔法世界の冒険" }
@@ -235,7 +202,14 @@ const streamingData = {
     ]
 };
 
+// マイリストの配列
 const myList = [];
+
+// タブ切り替え
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+}
 
 // テーマ切り替え
 function changeTheme(theme) {
@@ -246,6 +220,8 @@ function changeTheme(theme) {
 // 月ボタンの作成
 function createMonthButtons() {
     const monthButtons = document.getElementById('month-buttons');
+    if (!monthButtons) return;
+    monthButtons.innerHTML = '';
     for (let i = 1; i <= 12; i++) {
         const button = document.createElement('button');
         button.textContent = `${i}月`;
@@ -258,6 +234,7 @@ function createMonthButtons() {
 // 映画の表示
 function displayMovies(month) {
     const movieList = document.getElementById('movie-list');
+    if (!movieList) return;
     movieList.innerHTML = '';
     
     const movies = moviesByMonth[month] || [];
@@ -277,10 +254,14 @@ function displayMovies(month) {
         movieList.appendChild(movieCard);
     });
 }
-
+</script>
+    </script>
+    <script>
+       <script>
 // ストリーミング作品の表示
 function displayStreamingMovies(service) {
     const movieList = document.getElementById('streaming-movie-list');
+    if (!movieList) return;
     movieList.innerHTML = '';
     
     const movies = streamingData[service] || [];
@@ -314,6 +295,7 @@ function addToMyList(movie) {
 // マイリストの表示更新
 function updateMyListDisplay() {
     const mylistContainer = document.getElementById('mylist-items');
+    if (!mylistContainer) return;
     mylistContainer.innerHTML = '';
     myList.forEach(movie => {
         const movieCard = document.createElement('div');
@@ -341,10 +323,48 @@ function removeFromMyList(title) {
     }
 }
 
-// ブログ記事の取得（外部APIを想定）
+// チャット機能
+function sendMessage() {
+    const input = document.getElementById("chat-input");
+    const message = input.value.trim();
+    if (!message) return;
+
+    const chatMessages = document.getElementById("chat-messages");
+    if (!chatMessages) return;
+
+    // ユーザーメッセージの追加
+    const userMessage = document.createElement("div");
+    userMessage.className = "chat-bubble user";
+    userMessage.textContent = message;
+    chatMessages.appendChild(userMessage);
+
+    // AIの応答
+    const aiMessage = document.createElement("div");
+    aiMessage.className = "chat-bubble ai";
+    aiMessage.textContent = generateAIResponse(message);
+    chatMessages.appendChild(aiMessage);
+
+    // 入力欄をクリアしてスクロール
+    input.value = "";
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// AI応答の生成
+function generateAIResponse(input) {
+    if (input.includes("おすすめ")) {
+        return "最新のおすすめ映画はシネマタブでチェックしてくださいね！";
+    } else if (input.includes("こんにちは")) {
+        return "こんにちは！映画のことなら何でも聞いてくださいね♪";
+    } else if (input.includes("マイリスト")) {
+        return "マイリストタブで保存した作品を確認できますよ！";
+    }
+    return "それについて、もう少し詳しく教えていただけますか？";
+}
+
+// ブログ記事の取得と表示
 async function fetchBlogPosts() {
     try {
-        // 実際のAPIエンドポイントを設定してください
+        // 実際のAPIエンドポイントに置き換える必要があります
         const response = await fetch('https://api.your-company.com/blog/feed');
         const posts = await response.json();
         displayBlogPosts(posts);
@@ -352,7 +372,7 @@ async function fetchBlogPosts() {
         console.error('ブログの取得に失敗しました:', error);
         // フォールバックコンテンツ
         displayBlogPosts([
-            { 
+            {
                 title: "2024年春の映画特集",
                 content: "今年の春は注目作が目白押し！期待の新作をご紹介します。",
                 date: "2024-03-01"
@@ -369,6 +389,7 @@ async function fetchBlogPosts() {
 // ブログ記事の表示
 function displayBlogPosts(posts) {
     const blogContainer = document.getElementById('blog-entries');
+    if (!blogContainer) return;
     blogContainer.innerHTML = posts.map(post => `
         <div class="p-4 bg-pink-50 border border-pink-200 rounded-lg hover:shadow-md transition-shadow">
             <h3 class="text-pink-600 font-bold text-lg">${post.title}</h3>
@@ -386,5 +407,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchBlogPosts();     // ブログ記事を取得
 });
 </script>
+    </script>
 </body>
 </html>
