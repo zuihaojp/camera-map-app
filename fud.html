@@ -14,6 +14,7 @@
             --white: #ffffff;
             --bg-light: rgba(255, 255, 255, 0.8);
             --header-height: 80px;
+            --tab-height: 50px;
         }
 
         * {
@@ -26,7 +27,7 @@
         body {
             min-height: 100vh;
             background: #f7f7f7;
-            padding-top: var(--header-height);
+            padding-top: calc(var(--header-height) + var(--tab-height));
         }
 
         header {
@@ -58,103 +59,37 @@
         }
 
         nav {
-            display: flex;
-            gap: 1.5rem;
+            display: none;
         }
 
-        .nav-link {
-            text-decoration: none;
-            color: var(--text-blue);
-            font-size: 1rem;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-link:hover {
-            color: var(--primary);
-        }
-
-        .hero {
-            height: calc(100vh - var(--header-height));
-            background: url('/assets/images/hero.jpg') no-repeat center center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: var(--white);
-            background-blend-mode: overlay;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: var(--bg-light);
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            color: var(--text-blue);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            background: var(--bg-light);
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            color: var(--text-blue);
-        }
-
-        .search-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-bar input,
-        .search-bar select {
-            flex: 1;
-            padding: 0.8rem;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .search-bar button {
-            background: var(--primary);
-            color: var(--white);
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .search-bar button:hover {
-            background: var(--secondary);
-        }
-
+        /* タブのスタイル */
         .tabs {
-            margin: 2rem 0;
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            height: var(--tab-height);
+            background: var(--white);
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 2rem;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
         .tab {
-            padding: 0.8rem 1.5rem;
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            background: var(--white);
             cursor: pointer;
             font-size: 1rem;
-            font-weight: bold;
-            color: var(--primary);
-            transition: background 0.3s;
+            font-weight: 500;
+            color: var(--text-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .tab:hover {
+            background: rgba(124, 58, 237, 0.1);
         }
 
         .tab.active {
@@ -165,7 +100,7 @@
         .tab-content {
             display: none;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 2rem auto;
             padding: 1.5rem;
             background: var(--white);
             border-radius: 12px;
@@ -230,79 +165,62 @@
     </style>
 </head>
 <body>
+    <!-- ヘッダー -->
     <header>
         <div class="container">
             <a href="#" class="logo">AURA ESTATE</a>
-            <nav>
-                <a href="#tab-about" class="nav-link" data-tab="about">会社概要</a>
-                <a href="#tab-properties" class="nav-link" data-tab="properties">物件一覧</a>
-                <a href="#tab-contact" class="nav-link" data-tab="contact">お問い合わせ</a>
-            </nav>
         </div>
     </header>
 
-    <section class="hero">
-        <h1>Find Your Dream Luxury Residence</h1>
-        <p>厳選された物件で理想の住まいをご提供します。</p>
-        <div class="search-bar">
-            <input type="text" placeholder="エリア・駅名で検索">
-            <select>
-                <option value="">価格帯を選択</option>
-                <option value="low">〜5億円</option>
-                <option value="mid">5億円〜10億円</option>
-                <option value="high">10億円〜</option>
+    <!-- タブメニュー -->
+    <div class="tabs">
+        <div class="tab active" data-content="about">会社概要</div>
+        <div class="tab" data-content="properties">物件一覧</div>
+        <div class="tab" data-content="contact">お問い合わせ</div>
+    </div>
+
+    <!-- タブコンテンツ -->
+    <div id="tab-about" class="tab-content active">
+        <h2>会社概要</h2>
+        <p>こちらに会社概要の内容を記載します。</p>
+    </div>
+
+    <div id="tab-properties" class="tab-content">
+        <h2>物件一覧</h2>
+        <p>こちらに物件情報を記載します。</p>
+    </div>
+
+    <div id="tab-contact" class="tab-content">
+        <h2>お問い合わせ</h2>
+        <form>
+            <label for="name">お名前</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="phone">電話番号</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <label for="address">住所</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="language">希望言語</label>
+            <select id="language" name="language" required>
+                <option value="ja">日本語</option>
+                <option value="en">English</option>
+                <option value="zh">中文</option>
             </select>
-            <button>検索する</button>
-        </div>
-    </section>
 
-    <section id="tabs">
-        <div class="tabs">
-            <div class="tab active" data-content="about">会社概要</div>
-            <div class="tab" data-content="properties">物件一覧</div>
-            <div class="tab" data-content="contact">お問い合わせ</div>
-        </div>
+            <label for="payment">支払い方法</label>
+            <select id="payment" name="payment" required>
+                <option value="credit">クレジットカード</option>
+                <option value="bank">銀行振込</option>
+                <option value="cash">現金</option>
+            </select>
 
-        <div id="tab-about" class="tab-content active">
-            <h2>会社概要</h2>
-            <p>こちらに会社概要の内容を記載します。</p>
-        </div>
+            <button type="submit">送信する</button>
+        </form>
+    </div>
 
-        <div id="tab-properties" class="tab-content">
-            <h2>物件一覧</h2>
-            <p>こちらに物件情報を記載します。</p>
-        </div>
-
-        <div id="tab-contact" class="tab-content">
-            <h2>お問い合わせ</h2>
-            <form>
-                <label for="name">お名前</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="phone">電話番号</label>
-                <input type="text" id="phone" name="phone" required>
-
-                <label for="address">住所</label>
-                <input type="text" id="address" name="address" required>
-                                <label for="language">希望言語</label>
-                <select id="language" name="language" required>
-                    <option value="ja">日本語</option>
-                    <option value="en">English</option>
-                    <option value="zh">中文</option>
-                </select>
-
-                <label for="payment">支払い方法</label>
-                <select id="payment" name="payment" required>
-                    <option value="credit">クレジットカード</option>
-                    <option value="bank">銀行振込</option>
-                    <option value="cash">現金</option>
-                </select>
-
-                <button type="submit">送信する</button>
-            </form>
-        </div>
-    </section>
-
+    <!-- フッター -->
     <footer>
         <p>&copy; 2024 AURA ESTATE. <a href="#tab-contact">お問い合わせ</a></p>
     </footer>
