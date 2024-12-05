@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Online Services</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-blue: #0A0A1A;
+            --navy: #141428;
+            --light-gold: #F4E7BE;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Noto Serif JP', serif;
+            background-color: var(--dark-blue);
+            color: var(--light-gold);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: rgba(10, 10, 26, 0.95);
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--light-gold);
+            font-weight: 400;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+</style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">Premium Services</div>
+            <nav>
+                <ul>
+                    <li><a href="#services">サービス</a></li>
+                    <li><a href="#contact">お問い合わせ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 5%;
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--navy) 100%);
+    position: relative;
+    overflow: hidden;
+    margin-top: 80px;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+    opacity: 0.5;
+}
+
+.hero-content {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.2;
+    letter-spacing: 2px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    color: var(--light-gold);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 2;
+}
+
+.services {
+    padding: 8rem 5%;
+    background-color: var(--navy);
+    position: relative;
+}
+
+.services::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.05));
+    pointer-events: none;
+}
+
+.services-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.service-card {
+    background: linear-gradient(145deg, rgba(20, 20, 40, 0.9), rgba(10, 10, 26, 0.9));
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    padding: 3rem 2rem;
+    border-radius: 2px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    transition: 0.5s;
+}
+
+.service-card:hover::after {
+    left: 100%;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.service-card h2 {
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.service-card h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 1px;
+    background-color: var(--gold);
+}
+
+.service-card p {
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    color: var(--light-gold);
+}
+
+.service-card a {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--gold);
+    font-weight: 400;
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--gold);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+}
+
+.service-card a:hover {
+    background-color: var(--gold);
+    color: var(--dark-blue);
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card {
+        padding: 2rem 1.5rem;
+    }
+}
+```css
+/* 前のスタイルに続けて追加 */
+
+footer {
+    background-color: var(--dark-blue);
+    padding: 4rem 5%;
+    position: relative;
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-content p {
+    color: var(--light-gold);
+    margin: 1rem 0;
+    font-size: 1.1rem;
+}
+
+.footer-content .copyright {
+    color: var(--gold);
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+.footer-content .contact {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 2rem;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-content .contact:hover {
+    background-color: var(--gold);
+    color: var(--dark-blue);
+}
+
+@media (max-width: 768px) {
+    footer {
+        padding: 3rem 5%;
+    }
+}
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>洗練された体験をオンラインで</h1>
+            <p>最高級のオンラインサービスを通じて、特別な価値と時間をお届けいたします。<br>
+               プライバシーを重視した、上質なサービスをご提供いたします。</p>
+        </div>
+    </div>
+
+    <section class="services" id="services">
+        <div class="services-grid">
+            <div class="service-card">
+                <h2>プライベート診療</h2>
+                <p>専門医による個別オンライン診療。徹底したプライバシー保護のもと、24時間体制でケアいたします。</p>
+                <a href="./service-1/clinic.html">詳細を見る</a>
+            </div>
+            <div class="service-card">
+                <h2>プレミアム法務相談</h2>
+                <p>国内トップクラスの弁護士による、専門的な法務アドバイスと戦略的なリーガルソリューション。</p>
+                <a href="./service-2/law.html">詳細を見る</a>
+            </div>
+            <div class="service-card">
+                <h2>ラグジュアリー不動産</h2>
+                <p>厳選された高級物件の仲介から、プライベートな取引まで。ワンストップで完結する不動産サービス。</p>
+                <a href="./service-3/estate.html">詳細を見る</a>
+            </div>
+            <div class="service-card">
+                <h2>アート オークション</h2>
+                <p>日本を代表する写真家の貴重な作品を、プライベートオークションにてご提供。芸術的価値の高いコレクションをご堪能ください。</p>
+                <a href="./service-4/index.html">詳細を見る</a>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <p>最高級のオンラインサービスで、特別な体験を。</p>
+            <a href="mailto:premium@example.com" class="contact">お問い合わせ</a>
+            <p class="copyright">&copy; 2024 Premium Online Services</p>
+        </div>
+    </footer>
+</body>
+</html>
