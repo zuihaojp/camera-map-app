@@ -5,17 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIちゃん - シネマと日記</title>
 
-    <!-- PWA対応のメタタグ -->
-    <meta name="theme-color" content="#FFD1DC">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="AIちゃん日記">
-
-    <!-- アイコン -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/popcorn-icon-180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/img/popcorn-icon-192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/img/popcorn-icon-32.png">
-
     <!-- スタイルシート -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css">
@@ -101,20 +90,28 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
     <script>
-        const moviesByMonth = { /* 元の映画データ */ };
-        const streamingData = { /* 元のストリーミングデータ */ };
+        const moviesByMonth = { /* 映画データ */ };
+        const streamingData = { /* ストリーミングデータ */ };
         const myList = [];
         const diaryData = JSON.parse(localStorage.getItem('diaryData')) || {};
 
-        function showTab(tabId) { /* タブ切り替え処理 */ }
-        function createMonthButtons() { /* シネマ月ボタン生成 */ }
-        function displayMovies(month) { /* シネマ作品表示 */ }
+        // タブ切り替え
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // シネマ用の処理
+        function createMonthButtons() { /* 月ボタン生成 */ }
+        function displayMovies(month) { /* 映画表示 */ }
         function displayStreamingMovies(service) { /* ストリーミング作品表示 */ }
         function addToMyList(movie) { /* マイリスト追加 */ }
         function updateMyListDisplay() { /* マイリスト更新 */ }
+
+        // チャット機能
         function sendMessage() { /* チャット送信 */ }
 
-        // 日記機能
+        // 日記カレンダー機能
         document.addEventListener('DOMContentLoaded', () => {
             const calendarEl = document.getElementById('calendar');
             const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -130,17 +127,17 @@
         });
 
         function saveDiary() {
-            const date = document.getElementById('selected-date').textContent.split(':            ')[1];
+            const date = document.getElementById('selected-date').textContent.split(': ')[1];
             const content = document.getElementById('diary-content').value;
             diaryData[date] = content;
             localStorage.setItem('diaryData', JSON.stringify(diaryData));
             alert('日記を保存しました！');
         }
 
-        // 初期化処理
-        document.addEventListener("DOMContentLoaded", () => {
-            showTab('cinema'); // デフォルトタブを表示
-            createMonthButtons(); // シネマ月ボタン生成
+        // 初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('cinema'); // デフォルトのタブ
+                        createMonthButtons(); // シネマ用月ボタン生成
             displayMovies(1); // 初期表示で1月の映画を表示
         });
     </script>
