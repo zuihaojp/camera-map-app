@@ -303,26 +303,33 @@
     }
 
     /* レスポンシブデザイン */
-    @media (max-width: 768px) {
-        .hero h1 {
-            font-size: 2.5rem;
-        }
-        .hero p {
-            font-size: 1.1rem;
-        }
-        .services-grid {
-            grid-template-columns: 1fr;
-        }
-        .service-card {
-            padding: 2rem 1.5rem;
-        }
-        nav ul {
-            gap: 1rem;
-        }
-        .language-switcher {
-            margin-left: 1rem;
-        }
+　　　@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
     }
+    .hero p {
+        font-size: 1.1rem;
+    }
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    .service-card {
+        padding: 2rem 1.5rem;
+    }
+    nav ul {
+        gap: 1rem;
+    }
+    .language-switcher {
+        margin-left: 1rem;
+        flex-wrap: wrap; /* ボタンが折り返せるように */
+        justify-content: flex-end; /* 右端に配置 */
+    }
+    .lang-btn {
+        font-size: 0.9rem; /* ボタンを少し小さく */
+        padding: 0.4rem 0.6rem; /* ボタンの内側余白を調整 */
+        margin-bottom: 0.3rem; /* 折り返した際にボタン間のスペースを確保 */
+    }
+}
 </style>
 </head>
 <body>
