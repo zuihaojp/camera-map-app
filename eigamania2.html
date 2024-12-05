@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">   
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIちゃん - シネマとマイリスト</title>
-    <!-- PWA対応のためのメタタグとマニフェスト -->
+
+    <!-- PWA対応のメタタグ -->
     <meta name="theme-color" content="#FFD1DC">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AIちゃんシネマ">
-    <link rel="manifest" href="manifest10.json">
-    <!-- iOSデバイス用のアイコン -->
-    <link rel="apple-touch-icon" href="icon-192x192.png">
-    <!-- 通常のファビコン -->
-    <link rel="icon" type="image/png" href="icon-192x192.png">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <meta name="description" content="映画とアニメのおすすめ情報をお届け！">
+
+    <!-- シンプルなシネマアイコン -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFD1DC'/><path d='M30 30h40v40H30z' fill='white'/><rect x='25' y='25' width='8' height='50' fill='white'/><rect x='67' y='25' width='8' height='50' fill='white'/><rect x='33' y='35' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='45' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='55' width='34' height='4' fill='%23FFD1DC'/></svg>">
+
+    <!-- iOS用アイコン -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFD1DC'/><path d='M30 30h40v40H30z' fill='white'/><rect x='25' y='25' width='8' height='50' fill='white'/><rect x='67' y='25' width='8' height='50' fill='white'/><rect x='33' y='35' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='45' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='55' width='34' height='4' fill='%23FFD1DC'/></svg>">
+
+    <!-- マニフェストファイル -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkFJ44Gh44KD44KzIOOCt+ODjeODnuOBqOODnuOCpOODquOCueODiCIsCiAgInNob3J0X25hbWUiOiAiQUnjgaHjgoTjgpMiLAogICJ0aGVtZV9jb2xvciI6ICIjRkZEMURDIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjRkZGOEZBIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAic3RhcnRfdXJsIjogIi4vIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+PHJlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMCcgZmlsbD0nI0ZGRDFEQycvPjxwYXRoIGQ9J00zMCAzMGg0MHY0MEgzMHonIGZpbGw9J3doaXRlJy8+PHJlY3QgeD0nMjUnIHk9JzI1JyB3aWR0aD0nOCcgaGVpZ2h0PSc1MCcgZmlsbD0nd2hpdGUnLz48cmVjdCB4PSc2NycgeT0nMjUnIHdpZHRoPSc4JyBoZWlnaHQ9JzUwJyBmaWxsPSd3aGl0ZScvPjxyZWN0IHg9JzMzJyB5PSczNScgd2lkdGg9JzM0JyBoZWlnaHQ9JzQnIGZpbGw9JyNGRkQxREMnLz48cmVjdCB4PSczMycgeT0nNDUnIHdpZHRoPSczNCcgaGVpZ2h0PSc0JyBmaWxsPScjRkZEMURDJy8+PHJlY3QgeD0nMzMnIHk9JzU1JyB3aWR0aD0nMzQnIGhlaWdodD0nNCcgZmlsbD0nI0ZGRDFEQycvPjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+
+    <!-- スプラッシュスクリーン -->
+    <link href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23FFD1DC'/><path d='M30 30h40v40H30z' fill='white'/><rect x='25' y='25' width='8' height='50' fill='white'/><rect x='67' y='25' width='8' height='50' fill='white'/><rect x='33' y='35' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='45' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='55' width='34' height='4' fill='%23FFD1DC'/></svg>" 
+          media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" 
+          rel="apple-touch-startup-image">
     <style>
         /* 基本スタイル */
         .tab-content { display: none; }
