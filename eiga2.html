@@ -4,193 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIちゃん - シネマと日記</title>
-
-    <!-- スタイルシート -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css">
     <style>
+        body { font-family: Arial, sans-serif; background-color: #f9f9f9; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .watched { text-decoration: line-through; color: gray; }
-        .chat-bubble { margin: 0.5rem 0; padding: 0.5rem 1rem; max-width: 80%; word-wrap: break-word; }
-        .chat-bubble.user { align-self: flex-end; background-color: #D1F2FF; }
-        .chat-bubble.ai { align-self: flex-start; background-color: #FFE4E9; }
+        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
+        .calendar-cell { padding: 10px; text-align: center; background-color: #fff; border: 1px solid #ddd; cursor: pointer; }
+        .calendar-cell:hover { background-color: #f0f0f0; }
+        .selected { background-color: #ffd1dc; color: white; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .calendar-header button { padding: 5px 10px; background-color: #ffd1dc; border: none; cursor: pointer; border-radius: 5px; }
+        .calendar-header button:hover { background-color: #ff91aa; color: white; }
+        .calendar-header h2 { margin: 0; font-size: 1.2rem; }
+        .diary-list { margin-top: 20px; }
+        .diary-item { padding: 10px; background-color: #fff; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 5px; }
     </style>
 </head>
-<body class="bg-pink-50">
-    <header class="bg-white shadow-sm border-b-2 border-pink-200">
-        <div class="max-w-4xl mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-pink-600">AIちゃん - シネマと日記</h1>
-                <nav class="flex justify-center space-x-4">
-                    <button onclick="showTab('cinema')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">シネマ</button>
-                    <button onclick="showTab('streaming')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">ストリーミング</button>
-                    <button onclick="showTab('mylist')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">マイリスト</button>
-                    <button onclick="showTab('chat')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">チャット</button>
-                    <button onclick="showTab('diary')" class="text-pink-500 hover:bg-pink-100 px-3 py-1 rounded-full text-sm">日記</button>
-                </nav>
-            </div>
-        </div>
+<body>
+    <header>
+        <h1>AIちゃん - シネマと日記</h1>
+        <nav>
+            <button onclick="showTab('cinema')">シネマ</button>
+            <button onclick="showTab('streaming')">ストリーミング</button>
+            <button onclick="showTab('mylist')">マイリスト</button>
+            <button onclick="showTab('chat')">チャット</button>
+            <button onclick="showTab('diary')">日記</button>
+        </nav>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-6">
+    <main>
         <!-- シネマタブ -->
         <div id="cinema" class="tab-content active">
-            <div class="bg-white rounded-2xl shadow-lg p-4">
-                <h2 class="text-lg font-bold text-pink-600 mb-4">1～12月のおすすめ作品</h2>
-                <div id="month-buttons" class="flex flex-wrap gap-2 mb-4"></div>
-                <div id="movie-list" class="grid grid-cols-1 gap-4"></div>
-            </div>
+            <h2>シネマタブ</h2>
+            <!-- 映画コンテンツをここに追加 -->
         </div>
 
         <!-- ストリーミングタブ -->
         <div id="streaming" class="tab-content">
-            <div class="bg-white rounded-2xl shadow-lg p-4">
-                <h2 class="text-lg font-bold text-pink-600 mb-4">ストリーミングサービスのおすすめ</h2>
-                <div id="streaming-movie-list" class="grid grid-cols-1 gap-4"></div>
-            </div>
+            <h2>ストリーミングタブ</h2>
+            <!-- ストリーミングコンテンツをここに追加 -->
         </div>
 
         <!-- マイリストタブ -->
         <div id="mylist" class="tab-content">
-            <div class="bg-white rounded-2xl shadow-lg p-4">
-                <h2 class="text-lg font-bold text-pink-600 mb-4">マイリスト</h2>
-                <div id="mylist-items" class="grid grid-cols-1 gap-4"></div>
-            </div>
+            <h2>マイリストタブ</h2>
+            <!-- マイリストコンテンツをここに追加 -->
         </div>
 
         <!-- チャットタブ -->
         <div id="chat" class="tab-content">
-            <div class="bg-white rounded-2xl shadow-lg p-4">
-                <h2 class="text-lg font-bold text-pink-600 mb-4">AIちゃんとチャット</h2>
-                <div id="chat-messages" class="bg-pink-50 p-4 rounded-lg h-96 overflow-y-auto"></div>
-                <div class="flex mt-4">
-                    <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" class="flex-1 border-2 border-pink-300 px-4 py-2 rounded-full">
-                    <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
-                </div>
-            </div>
+            <h2>チャットタブ</h2>
+            <div id="chat-messages"></div>
+            <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね">
+            <button onclick="sendMessage()">送信</button>
         </div>
 
         <!-- 日記タブ -->
         <div id="diary" class="tab-content">
-            <div class="bg-white rounded-2xl shadow-lg p-4">
-                <h2 class="text-lg font-bold text-pink-600 mb-4">日記</h2>
-                <div id="calendar" class="mb-4"></div>
-                <div id="diary-form" class="hidden">
-                    <h3 id="selected-date" class="text-lg font-bold text-pink-600 mb-2"></h3>
-                    <textarea id="diary-content" class="border border-pink-300 rounded-lg px-4 py-2 w-full mb-4" placeholder="ここに日記を書いてください..."></textarea>
-                    <button onclick="saveDiary()" class="bg-pink-400 text-white px-6 py-2 rounded-lg hover:bg-pink-500">保存する</button>
+            <h2>日記</h2>
+            <div id="calendar-container">
+                <div class="calendar-header">
+                    <button onclick="changeMonth(-1)">前月</button>
+                    <h2 id="current-month"></h2>
+                    <button onclick="changeMonth(1)">次月</button>
                 </div>
+                <div id="calendar" class="calendar"></div>
             </div>
+            <div id="diary-form" style="margin-top: 20px; display: none;">
+                <h3 id="selected-date">選択した日付:</h3>
+                <textarea id="diary-content" rows="5" style="width: 100%;"></textarea>
+                <button onclick="saveDiary()" style="margin-top: 10px; padding: 10px; background-color: #ffd1dc; border: none; cursor: pointer;">保存</button>
+            </div>
+            <div id="diary-list" class="diary-list"></div>
         </div>
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
     <script>
         const diaryData = JSON.parse(localStorage.getItem('diaryData')) || {};
-        const watchedList = [];
-        const myList = [];
+        let currentDate = new Date();
 
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
         }
 
-        function sendMessage() {
-            const input = document.getElementById("chat-input").value.trim();
-            const chatMessages = document.getElementById("chat-messages");
+        function createCalendar(year, month) {
+            const calendar = document.getElementById('calendar');
+            const currentMonthLabel = document.getElementById('current-month');
+            calendar.innerHTML = '';
 
-            if (input === "") return;
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-            const userMessage = document.createElement("div");
-            userMessage.className = "chat-bubble user";
-            userMessage.textContent = input;
-            chatMessages.appendChild(userMessage);
+            currentMonthLabel.textContent = `${year}年 ${month + 1}月`;
 
-            const aiResponse = generateAIResponse(input);
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-cell';
+                calendar.appendChild(emptyCell);
+            }
 
-            const aiMessage = document.createElement("div");
-            aiMessage.className = "chat-bubble ai";
-            aiMessage.textContent = aiResponse;
-            chatMessages.appendChild(aiMessage);
-
-            document.getElementById("chat-input").value = "";
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-cell';
+                cell.textContent = day;
+                cell.onclick = () => openDiary(year, month, day);
+                calendar.appendChild(cell);
+            }
         }
 
-        function generateAIResponse(input) {
-            const lowerInput = input.toLowerCase();
+        function changeMonth(offset) {
+            currentDate.setMonth(currentDate.getMonth() + offset);
+            createCalendar(currentDate.getFullYear(), currentDate.getMonth());
+        }
 
-            if (lowerInput.includes("おはよう")) return "おはよう！今日も元気にいこうね♪";
-            if (lowerInput.includes("おやすみ")) return "おやすみなさい！いい夢を見てね♪";
-            if (lowerInput.includes("ありがとう")) return "どういたしまして！嬉しいな♪";
-            if (lowerInput.includes("おめでとう")) return "おめでとう！頑張ったね！";
-            if (lowerInput.includes("元気")) return "もちろん元気だよ！";
-            if (lowerInput.includes("映画")) return "最近おすすめの映画は「AIの冒険」だよ！";
-            if (lowerInput.includes("大好き")) return "私も大好きだよ！";
-
-            return "それについてもっと教えてね！";
+        function openDiary(year, month, day) {
+            const selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            document.getElementById('selected-date').textContent = `選択した日付: ${selectedDate}`;
+            document.getElementById('diary-content').value = diaryData[selectedDate] || '';
+            document.getElementById('diary-form').style.display = 'block';
         }
 
         function saveDiary() {
-            const date = document.getElementById('selected-date').textContent.split(': ')[1];
+            const selectedDate = document.getElementById('selected-date').textContent.split(': ')[1];
             const content = document.getElementById('diary-content').value;
-            diaryData[date] = content;
+            diaryData[selectedDate] = content;
             localStorage.setItem('diaryData', JSON.stringify(diaryData));
             alert('日記を保存しました！');
+            updateDiaryList();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const calendarEl = document.getElementById('calendar');
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                dateClick: (info) => {
-                    const selectedDate = info.dateStr;
-                    document.getElementById('selected-date').textContent = `日付: ${selectedDate}`;
-                    document.getElementById('diary-form').classList.remove('hidden');
-                    document.getElementById('diary-content').                    value = diaryData[selectedDate] || ''; // 選択した日付の内容を表示
-                }
+        function updateDiaryList() {
+            const diaryList = document.getElementById('diary-list');
+            diaryList.innerHTML = '';
+            Object.keys(diaryData).forEach(date => {
+                const item = document.createElement('div');
+                item.className = 'diary-item';
+                item.textContent = `${date}: ${diaryData[date]}`;
+                diaryList.appendChild(item);
             });
-            calendar.render();
-        });
-
-        function addToMyList(movie) {
-            if (!myList.some(item => item.title === movie.title)) {
-                myList.push(movie);
-                updateMyListDisplay();
-                alert(`「${movie.title}」をマイリストに追加しました！`);
-            } else {
-                alert('この作品は既にマイリストに追加されています。');
-            }
         }
 
-        function updateMyListDisplay() {
-            const mylistContainer = document.getElementById('mylist-items');
-            mylistContainer.innerHTML = myList.map(movie => `
-                <div class="p-4 bg-white shadow-lg rounded-lg">
-                    <h3 class="font-bold text-lg ${watchedList.includes(movie.title) ? 'watched' : ''}">
-                        ${movie.title}
-                    </h3>
-                    <p>${movie.description}</p>
-                    <button onclick="markAsWatched('${movie.title}')" 
-                        class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2">
-                        鑑賞済みにする
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function markAsWatched(title) {
-            if (!watchedList.includes(title)) {
-                watchedList.push(title);
-                updateMyListDisplay();
-                alert(`「${title}」を鑑賞済みにしました！`);
-            }
-        }
-
-        // 初期化
         document.addEventListener('DOMContentLoaded', () => {
-            showTab('cinema'); // デフォルトのタブをシネマに設定
+            createCalendar(currentDate.getFullYear(), currentDate.getMonth());
+            updateDiaryList();
         });
     </script>
 </body>
