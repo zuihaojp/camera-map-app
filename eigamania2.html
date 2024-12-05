@@ -11,17 +11,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIちゃん - シネマとマイリスト</title>
 
-    <!-- 最小限のPWA対応メタタグ -->
+    
+    <!-- PWA対応のメタタグ -->
     <meta name="theme-color" content="#FFD1DC">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AIちゃんシネマ">
 
-    <!-- シンプルなシネマアイコン -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFD1DC'/><path d='M30 30h40v40H30z' fill='white'/><rect x='25' y='25' width='8' height='50' fill='white'/><rect x='67' y='25' width='8' height='50' fill='white'/><rect x='33' y='35' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='45' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='55' width='34' height='4' fill='%23FFD1DC'/></svg>">
-
-    <!-- iOS用アイコン -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFD1DC'/><path d='M30 30h40v40H30z' fill='white'/><rect x='25' y='25' width='8' height='50' fill='white'/><rect x='67' y='25' width='8' height='50' fill='white'/><rect x='33' y='35' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='45' width='34' height='4' fill='%23FFD1DC'/><rect x='33' y='55' width='34' height='4' fill='%23FFD1DC'/></svg>">
+    <!-- 180x180のサイズはiOS用のホーム画面アイコンに最適 -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/popcorn-icon-180.png">
+    <!-- 192x192のサイズはAndroid用のホーム画面アイコンに最適 -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/popcorn-icon-192.png">
+    <!-- 一般的なファビコンサイズ -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/popcorn-icon-32.png">
 
     <!-- 既存のスタイルシートと設定 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
