@@ -58,6 +58,30 @@
             text-decoration: none;
         }
 
+        .language-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .language-button {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .language-button.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .language-button:hover {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
         .tabs {
             position: fixed;
             top: var(--header-height);
@@ -92,56 +116,8 @@
             color: var(--white);
         }
 
-        .main-content {
-            text-align: center;
-            max-width: 800px;
-            margin: 2rem auto;
-        }
-
-        .main-content h1 {
-            font-size: 2rem;
-            color: var(--text-blue);
-            margin-bottom: 1rem;
-        }
-
-        .main-content p {
-            font-size: 1.2rem;
-            color: var(--text-blue);
-            margin-bottom: 2rem;
-        }
-
-        .search-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .search-bar input,
-        .search-bar select {
-            padding: 0.8rem;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .search-bar button {
-            background: var(--primary);
-            color: var(--white);
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .search-bar button:hover {
-            background: var(--secondary);
-        }
-
+        .main-content,
         .tab-content {
-            display: none;
             max-width: 800px;
             margin: 2rem auto;
             padding: 1.5rem;
@@ -150,43 +126,24 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        form {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        form label {
-            font-size: 1rem;
-            font-weight: 500;
+        .main-content h1,
+        .tab-content h2 {
+            font-size: 1.5rem;
             color: var(--text-blue);
         }
 
-        form input,
-        form select {
-            padding: 0.8rem;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            font-size: 1rem;
+        .main-content p,
+        .tab-content p {
+            font-size: 1.2rem;
+            color: var(--text-blue);
         }
 
-        form button {
-            background: var(--primary);
-            color: var(--white);
-            padding: 0.8rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s;
+        .tab-content {
+            display: none;
         }
 
-        form button:hover {
-            background: var(--secondary);
+        .tab-content.active {
+            display: block;
         }
 
         footer {
@@ -208,12 +165,19 @@
     </style>
 </head>
 <body>
+    <!-- ヘッダー -->
     <header>
         <div class="container">
             <a href="#" class="logo">AURA ESTATE</a>
+            <div class="language-buttons">
+                <button class="language-button active" data-lang="ja">日本語</button>
+                <button class="language-button" data-lang="en">English</button>
+                <button class="language-button" data-lang="zh">中文</button>
+            </div>
         </div>
     </header>
 
+    <!-- タブメニュー -->
     <div class="tabs">
         <div class="tab active" data-content="main">トップページ</div>
         <div class="tab" data-content="about">会社概要</div>
@@ -221,63 +185,53 @@
         <div class="tab" data-content="contact">お問い合わせ</div>
     </div>
 
+    <!-- コンテンツ -->
     <div id="tab-main" class="main-content tab-content active">
-        <h1>プレミアムな不動産サービスを提供します</h1>
-        <p>理想の住まいを見つけるために、信頼できるサービスをお届けします。</p>
-        <div class="search-bar">
-            <input type="text" placeholder="エリア・駅名で検索">
-            <select>
-                <option value="">価格帯を選択</option>
-                <option value="low">〜5億円</option>
-                <option value="mid">5億円〜10億円</option>
-                <option value="high">10億円〜</option>
-            </select>
-            <button>検索する</button>
-        </div>
+        <h1 data-ja="プレミアムな不動産サービスを提供します" data-en="Providing Premium Real Estate Services" data-zh="提供高端房地产服务">プレミアムな不動産サービスを提供します</h1>
+        <p data-ja="理想の住まいを見つけるために、信頼できるサービスをお届けします。" data-en="We provide trusted services to help you find your dream home." data-zh="我们提供可靠的服务，帮助您找到梦想的家。">理想の住まいを見つけるために、信頼できるサービスをお届けします。</p>
     </div>
 
     <div id="tab-about" class="tab-content">
-        <h2>会社概要</h2>
-        <p>こちらに会社概要の内容を記載します。</p>
+        <h2 data-ja="会社概要" data-en="About Us" data-zh="公司简介">会社概要</h2>
+        <p data-ja="こちらに会社概要の内容を記載します。" data-en="Here is the content of the company overview." data-zh="这里是公司概况的内容。">こちらに会社概要の内容を記載します。</p>
     </div>
 
     <div id="tab-properties" class="tab-content">
-        <h2>物件一覧</h2>
-        <p>こちらに物件情報を記載します。</p>
+        <h2 data-ja="物件一覧" data-en="Property Listings" data-zh="房产列表">物件一覧</h2>
+        <p data-ja="こちらに物件情報を記載します。" data-en="Here are the property details." data-zh="这里是房产信息。">こちらに物件情報を記載します。</p>
     </div>
 
     <div id="tab-contact" class="tab-content">
-        <h2>お問い合わせ</h2>
+        <h2 data-ja="お問い合わせ" data-en="Contact Us" data-zh="联系我们">お問い合わせ</h2>
         <form>
-            <label for="name">お名前</label>
+            <label for="name" data-ja="お名前" data-en="Name" data-zh="姓名">お名前</label>
             <input type="text" id="name" name="name" required>
 
-            <label for="phone">電話番号</label>
+            <label for="phone" data-ja="電話番号" data-en="Phone Number" data-zh="电话号码">電話番号</label>
             <input type="text" id="phone" name="phone" required>
 
-            <label for="address">住所</label>
+            <label for="address" data-ja="住所" data-en="Address" data-zh="地址">住所</label>
             <input type="text" id="address" name="address" required>
 
-            <label for="language">希望言語</label>
+            <label for="language" data-ja="希望言語" data-en="Preferred Language" data-zh="首选语言">希望言語</label>
             <select id="language" name="language" required>
                 <option value="ja">日本語</option>
                 <option value="en">English</option>
                 <option value="zh">中文</option>
             </select>
 
-            <label for="payment">支払い方法</label>
+            <label for="payment" data-ja="支払い方法" data-en="Payment Method" data-zh="付款方式">支払い方法</label>
             <select id="payment" name="payment" required>
                 <option value="credit">クレジットカード</option>
                 <option value="bank">銀行振込</option>
                 <option value="cash">現金</option>
             </select>
-
-            <button type="submit">送信する</button>
+                        <button type="submit" data-ja="送信する" data-en="Submit" data-zh="提交">送信する</button>
         </form>
     </div>
 
     <footer>
-        <p>&copy; 2024 AURA ESTATE. <a href="#tab-contact">お問い合わせ</a></p>
+        <p>&copy; 2024 AURA ESTATE. <a href="#tab-contact" data-ja="お問い合わせ" data-en="Contact Us" data-zh="联系我们">お問い合わせ</a></p>
     </footer>
 
     <script>
@@ -292,6 +246,25 @@
                 tab.classList.add('active');
                 const target = document.getElementById(`tab-${tab.dataset.content}`);
                 if (target) target.classList.add('active');
+            });
+        });
+
+        // 言語切り替えのスクリプト
+        document.querySelectorAll('.language-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // 全ての言語ボタンのアクティブ状態を解除
+                document.querySelectorAll('.language-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active'); // クリックしたボタンをアクティブ化
+
+                const selectedLang = button.dataset.lang; // 選択された言語コード
+
+                // 言語データを持つ全ての要素を更新
+                document.querySelectorAll('[data-ja]').forEach(element => {
+                    const text = element.getAttribute(`data-${selectedLang}`);
+                    if (text) {
+                        element.textContent = text;
+                    }
+                });
             });
         });
     </script>
