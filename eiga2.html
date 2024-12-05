@@ -12,6 +12,9 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .watched { text-decoration: line-through; color: gray; }
+        .chat-bubble { margin: 0.5rem 0; padding: 0.5rem 1rem; max-width: 80%; word-wrap: break-word; }
+        .chat-bubble.user { align-self: flex-end; background-color: #D1F2FF; }
+        .chat-bubble.ai { align-self: flex-start; background-color: #FFE4E9; }
     </style>
 </head>
 <body class="bg-pink-50">
@@ -84,19 +87,73 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
     <script>
-        const moviesByMonth = { /* 映画データ */ };
-        const streamingData = { /* ストリーミングデータ */ };
-        const myList = [];
-        const watchedList = [];
         const diaryData = JSON.parse(localStorage.getItem('diaryData')) || {};
+        const watchedList = [];
+        const myList = [];
 
-        // タブ切り替え
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
         }
 
-        // マイリスト追加処理
+        function sendMessage() {
+            const input = document.getElementById("chat-input").value.trim();
+            const chatMessages = document.getElementById("chat-messages");
+
+            if (input === "") return;
+
+            const userMessage = document.createElement("div");
+            userMessage.className = "chat-bubble user";
+            userMessage.textContent = input;
+            chatMessages.appendChild(userMessage);
+
+            const aiResponse = generateAIResponse(input);
+
+            const aiMessage = document.createElement("div");
+            aiMessage.className = "chat-bubble ai";
+            aiMessage.textContent = aiResponse;
+            chatMessages.appendChild(aiMessage);
+
+            document.getElementById("chat-input").value = "";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateAIResponse(input) {
+            const lowerInput = input.toLowerCase();
+
+            if (lowerInput.includes("おはよう")) return "おはよう！今日も元気にいこうね♪";
+            if (lowerInput.includes("おやすみ")) return "おやすみなさい！いい夢を見てね♪";
+            if (lowerInput.includes("ありがとう")) return "どういたしまして！嬉しいな♪";
+            if (lowerInput.includes("おめでとう")) return "おめでとう！頑張ったね！";
+            if (lowerInput.includes("元気")) return "もちろん元気だよ！";
+            if (lowerInput.includes("映画")) return "最近おすすめの映画は「AIの冒険」だよ！";
+            if (lowerInput.includes("大好き")) return "私も大好きだよ！";
+
+            return "それについてもっと教えてね！";
+        }
+
+        function saveDiary() {
+            const date = document.getElementById('selected-date').textContent.split(': ')[1];
+            const content = document.getElementById('diary-content').value;
+            diaryData[date] = content;
+            localStorage.setItem('diaryData', JSON.stringify(diaryData));
+            alert('日記を保存しました！');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                dateClick: (info) => {
+                    const selectedDate = info.dateStr;
+                    document.getElementById('selected-date').textContent = `日付: ${selectedDate}`;
+                    document.getElementById('diary-form').classList.remove('hidden');
+                    document.getElementById('diary-content').                    value = diaryData[selectedDate] || ''; // 選択した日付の内容を表示
+                }
+            });
+            calendar.render();
+        });
+
         function addToMyList(movie) {
             if (!myList.some(item => item.title === movie.title)) {
                 myList.push(movie);
@@ -107,18 +164,22 @@
             }
         }
 
-        // マイリスト表示更新
         function updateMyListDisplay() {
             const mylistContainer = document.getElementById('mylist-items');
             mylistContainer.innerHTML = myList.map(movie => `
-                <div class="movie-card">
-                    <h3 class="font-bold text-lg ${watchedList.includes(movie.title) ? 'watched' : ''}">${movie.title}</h3>
-                    <button onclick='markAsWatched("${movie.title}")' class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2">鑑賞済みにする</button>
+                <div class="p-4 bg-white shadow-lg rounded-lg">
+                    <h3 class="font-bold text-lg ${watchedList.includes(movie.title) ? 'watched' : ''}">
+                        ${movie.title}
+                    </h3>
+                    <p>${movie.description}</p>
+                    <button onclick="markAsWatched('${movie.title}')" 
+                        class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2">
+                        鑑賞済みにする
+                    </button>
                 </div>
             `).join('');
         }
 
-        // 鑑賞済みにする処理
         function markAsWatched(title) {
             if (!watchedList.includes(title)) {
                 watchedList.push(title);
@@ -127,34 +188,9 @@
             }
         }
 
-        // 日記カレンダー初期化
-        document.addEventListener('DOMContentLoaded', () => {
-            const calendarEl = document.getElementById('calendar');
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                dateClick: (info) => {
-                    const selectedDate = info.dateStr;
-                    document.getElementById('selected-date').textContent = `日付: ${selectedDate}`;
-                    document.getElementById('diary-form').classList.remove('hidden');
-                    document.getElementById('diary-content').value = diaryData[selectedDate] || '';
-                }
-            });
-            calendar.render();
-        });
-
-        // 日記保存処理
-        function saveDiary() {
-            const date = document.getElementById('selected-date').textContent.split(': ')[1];
-            const content = document.getElementById('diary-content').value;
-            diaryData[date] = content;
-            localStorage.setItem('diaryData', JSON.stringify(diaryData));
-            alert('日記を保存しました！');
-        }
-
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
-            showTab('cinema'); // デフォルトのタブ
-            updateMyListDisplay(); // マイリストを初期化
+            showTab('cinema'); // デフォルトのタブをシネマに設定
         });
     </script>
 </body>
