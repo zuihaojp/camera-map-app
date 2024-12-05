@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css">
     <style>
-        /* 共通スタイル */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        .watched { text-decoration: line-through; color: gray; }
     </style>
 </head>
-<body class="bg-pink-50" id="app-body">
+<body class="bg-pink-50">
     <header class="bg-white shadow-sm border-b-2 border-pink-200">
         <div class="max-w-4xl mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
@@ -44,12 +44,6 @@
         <div id="streaming" class="tab-content">
             <div class="bg-white rounded-2xl shadow-lg p-4">
                 <h2 class="text-lg font-bold text-pink-600 mb-4">ストリーミングサービスのおすすめ</h2>
-                <div id="service-buttons" class="flex flex-wrap gap-2 mb-4">
-                    <button onclick="displayStreamingMovies('Netflix')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Netflix</button>
-                    <button onclick="displayStreamingMovies('Disney+')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Disney+</button>
-                    <button onclick="displayStreamingMovies('Hulu')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">Hulu</button>
-                    <button onclick="displayStreamingMovies('U-NEXT')" class="bg-pink-200 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-300">U-NEXT</button>
-                </div>
                 <div id="streaming-movie-list" class="grid grid-cols-1 gap-4"></div>
             </div>
         </div>
@@ -93,6 +87,7 @@
         const moviesByMonth = { /* 映画データ */ };
         const streamingData = { /* ストリーミングデータ */ };
         const myList = [];
+        const watchedList = [];
         const diaryData = JSON.parse(localStorage.getItem('diaryData')) || {};
 
         // タブ切り替え
@@ -101,17 +96,38 @@
             document.getElementById(tabId).classList.add('active');
         }
 
-        // シネマ用の処理
-        function createMonthButtons() { /* 月ボタン生成 */ }
-        function displayMovies(month) { /* 映画表示 */ }
-        function displayStreamingMovies(service) { /* ストリーミング作品表示 */ }
-        function addToMyList(movie) { /* マイリスト追加 */ }
-        function updateMyListDisplay() { /* マイリスト更新 */ }
+        // マイリスト追加処理
+        function addToMyList(movie) {
+            if (!myList.some(item => item.title === movie.title)) {
+                myList.push(movie);
+                updateMyListDisplay();
+                alert(`「${movie.title}」をマイリストに追加しました！`);
+            } else {
+                alert('この作品は既にマイリストに追加されています。');
+            }
+        }
 
-        // チャット機能
-        function sendMessage() { /* チャット送信 */ }
+        // マイリスト表示更新
+        function updateMyListDisplay() {
+            const mylistContainer = document.getElementById('mylist-items');
+            mylistContainer.innerHTML = myList.map(movie => `
+                <div class="movie-card">
+                    <h3 class="font-bold text-lg ${watchedList.includes(movie.title) ? 'watched' : ''}">${movie.title}</h3>
+                    <button onclick='markAsWatched("${movie.title}")' class="bg-green-500 text-white px-3 py-1 rounded-lg mt-2">鑑賞済みにする</button>
+                </div>
+            `).join('');
+        }
 
-        // 日記カレンダー機能
+        // 鑑賞済みにする処理
+        function markAsWatched(title) {
+            if (!watchedList.includes(title)) {
+                watchedList.push(title);
+                updateMyListDisplay();
+                alert(`「${title}」を鑑賞済みにしました！`);
+            }
+        }
+
+        // 日記カレンダー初期化
         document.addEventListener('DOMContentLoaded', () => {
             const calendarEl = document.getElementById('calendar');
             const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -126,6 +142,7 @@
             calendar.render();
         });
 
+        // 日記保存処理
         function saveDiary() {
             const date = document.getElementById('selected-date').textContent.split(': ')[1];
             const content = document.getElementById('diary-content').value;
@@ -137,8 +154,7 @@
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
             showTab('cinema'); // デフォルトのタブ
-            createMonthButtons(); // シネマ用月ボタン生成
-            displayMovies(1); // 初期表示で1月の映画を表示
+            updateMyListDisplay(); // マイリストを初期化
         });
     </script>
 </body>
