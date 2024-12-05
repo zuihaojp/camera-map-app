@@ -20,12 +20,17 @@
         .calendar-header h2 { margin: 0; font-size: 1.2rem; }
         .diary-list { margin-top: 20px; }
         .diary-item { padding: 10px; background-color: #fff; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 5px; }
-        .chat-bubble { margin: 0.5rem 0; padding: 0.5rem 1rem; max-width: 80%; word-wrap: break-word; }
-        .chat-bubble.user { align-self: flex-end; background-color: #D1F2FF; }
-        .chat-bubble.ai { align-self: flex-start; background-color: #FFE4E9; }
+        .chat-message { display: flex; align-items: center; margin: 10px 0; }
+        .chat-message.user { justify-content: flex-end; }
+        .chat-message.ai { justify-content: flex-start; }
+        .chat-icon { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; margin: 0 10px; }
+        .chat-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .chat-bubble { max-width: 70%; word-wrap: break-word; padding: 10px; border-radius: 15px; }
+        .chat-bubble.user { background-color: #D1F2FF; text-align: right; }
+        .chat-bubble.ai { background-color: #FFE4E9; text-align: left; }
     </style>
 </head>
-<body class="bg-pink-50">
+<body>
     <header class="bg-white shadow-sm border-b-2 border-pink-200">
         <div class="max-w-4xl mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
@@ -45,25 +50,22 @@
         <!-- シネマタブ -->
         <div id="cinema" class="tab-content active">
             <h2 class="text-lg font-bold text-pink-600">シネマタブ</h2>
-            <!-- 映画関連の内容をここに追加 -->
         </div>
 
         <!-- ストリーミングタブ -->
         <div id="streaming" class="tab-content">
             <h2 class="text-lg font-bold text-pink-600">ストリーミングタブ</h2>
-            <!-- ストリーミング関連の内容をここに追加 -->
         </div>
 
         <!-- マイリストタブ -->
         <div id="mylist" class="tab-content">
             <h2 class="text-lg font-bold text-pink-600">マイリストタブ</h2>
-            <!-- マイリスト関連の内容をここに追加 -->
         </div>
 
         <!-- チャットタブ -->
         <div id="chat" class="tab-content">
             <h2 class="text-lg font-bold text-pink-600">AIちゃんとチャット</h2>
-            <div id="chat-messages" class="bg-pink-50 p-4 rounded-lg h-96 overflow-y-auto flex flex-col"></div>
+            <div id="chat-messages" class="bg-pink-50 p-4 rounded-lg h-96 overflow-y-auto"></div>
             <div class="flex mt-4">
                 <input id="chat-input" type="text" placeholder="AIちゃんに話しかけてね♪" class="flex-1 border-2 border-pink-300 px-4 py-2 rounded-full">
                 <button onclick="sendMessage()" class="bg-pink-400 text-white px-6 py-2 rounded-full hover:bg-pink-500">送信</button>
@@ -137,7 +139,8 @@
         }
 
         function saveDiary() {
-                        const content = document.getElementById('diary-content').value;
+            const selectedDate = document.getElementById('selected-date').textContent.split(': ')[1];
+                       const content = document.getElementById('diary-content').value;
             diaryData[selectedDate] = content;
             localStorage.setItem('diaryData', JSON.stringify(diaryData));
             alert('日記を保存しました！');
@@ -163,15 +166,25 @@
             if (input === "") return;
 
             const userMessage = document.createElement("div");
-            userMessage.className = "chat-bubble user";
-            userMessage.textContent = input;
+            userMessage.className = "chat-message user";
+            userMessage.innerHTML = `
+                <div class="chat-bubble user">${input}</div>
+                <div class="chat-icon">
+                    <img src="https://via.placeholder.com/40/blue" alt="User Icon">
+                </div>
+            `;
             chatMessages.appendChild(userMessage);
 
             const aiResponse = generateAIResponse(input);
 
             const aiMessage = document.createElement("div");
-            aiMessage.className = "chat-bubble ai";
-            aiMessage.textContent = aiResponse;
+            aiMessage.className = "chat-message ai";
+            aiMessage.innerHTML = `
+                <div class="chat-icon">
+                    <img src="https://via.placeholder.com/40/pink" alt="AI Icon">
+                </div>
+                <div class="chat-bubble ai">${aiResponse}</div>
+            `;
             chatMessages.appendChild(aiMessage);
 
             document.getElementById("chat-input").value = "";
