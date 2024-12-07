@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>試験画面</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --warning-color: #dc3545;
+            --success-color: #28a745;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exam-info {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .tab-container {
+            display: flex;
+            background: #f5f5f5;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            margin-right: 5px;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            background: white;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .answer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .answer-sheet {
+            width: 21cm;
+            height: 29.7cm;
+            padding: 25px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            background: white;
+            font-size: 16px;
+            line-height: 2;
+            resize: none;
+            white-space: pre-wrap;
+            background-image: 
+                linear-gradient(#fff 23px, #e5e5e5 24px);
+            background-size: 100% 25px;
+            letter-spacing: 1px;
+            font-family: "MS Mincho", serif;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-sheet::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 25px;
+            height: 100%;
+            width: 1px;
+            background-color: #ff000020;
+        }
+
+        .page-wrapper {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .page-number {
+            position: absolute;
+            top: -20px;
+            right: 0;
+            color: #666;
+        }
+
+        .pdf-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .pdf-controls {
+            padding: 10px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pdf-navigation {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 20px;
+        }
+
+        .pdf-upload-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-label {
+            padding: 6px 12px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pdf-upload {
+            display: none;
+        }
+
+        .page-nav-button, .zoom-button {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .page-nav-button:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .pdf-zoom-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .close-button {
+            padding: 6px 12px;
+            background: var(--warning-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pdf-viewer {
+            flex: 1;
+            overflow: auto;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .pdf-page {
+            background: white;
+            margin: 0 auto 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-panel {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .start-button-header {
+            background: var(--success-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        #examNumberInput {
+            padding: 0.5rem;
+            border: 1px solid white;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        @media print {
+            .header, .pdf-controls, .control-panel {
+                display: none;
+            }
+            .answer-sheet {
+                break-after: page;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="exam-info">
+            <h1 style="margin: 0; font-size: 1.2rem;">令和6年予備試験論文式試験</h1>
+            <div>受験番号: <span id="examNumberDisplay">未入力</span></div>
+        </div>
+        <div class="header-controls">
+            <div class="timer">残り時間: <span id="timeDisplay">140:00</span></div>
+            <input type="text" id="examNumberInput" placeholder="受験番号を入力">
+            <button id="startButton" class="start-button-header" onclick="startExam()">開始</button>
+        </div>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab active" onclick="switchTab('answer')">答案用紙</div>
+        <div class="tab" onclick="switchTab('pdf-viewer')">問題・資料</div>
+    </div>
+
+    <div class="main-content">
+        <div id="answer" class="answer-section">
+            <div class="page-wrapper">
+                <div class="page-number">1/4</div>
+                <textarea class="answer-sheet" id="answer1"></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">2/4</div>
+                <textarea class="answer-sheet" id="answer2"></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">3/4</div>
+                <textarea class="answer-sheet" id="answer3"></textarea>
+            </div>
+            <div class="page-wrapper">
+                <div class="page-number">4/4</div>
+                <textarea class="answer-sheet" id="answer4"></textarea>
+            </div>
+        </div>
+
+        <div id="pdf-viewer" class="pdf-container" style="display: none;">
+            <div class="pdf-controls">
+                <div class="pdf-upload-area">
+                    <label for="pdfUpload" class="upload-label">PDFを選択</label>
+                    <input type="file" accept=".pdf" id="pdfUpload" class="pdf-upload" onchange="handlePdfUpload(this.files[0])">
+                    <span id="fileName"></span>
+                </div>
+                <div class="pdf-navigation">
+                    <button onclick="changePage(-1)" class="page-nav-button" id="prevPage" disabled>前のページ</button>
+                    <span class="page-info">ページ: <span id="currentPage">-</span> / <span id="totalPages">-</span></span>
+                    <button onclick="changePage(1)" class="page-nav-button" id="nextPage" disabled>次のページ</button>
+                </div>
+                <div class="pdf-zoom-controls">
+                    <button onclick="zoomPDF('out')" class="zoom-button">縮小</button>
+                    <span id="zoomLevel">100%</span>
+                    <button onclick="zoomPDF('in')" class="zoom-button">拡大</button>
+                    <button onclick="resetPDF()" class="zoom-button">リセット</button>
+                    <button onclick="closePDF()" class="close-button">閉じる</button>
+                </div>
+            </div>
+            <div id="pdfViewer" class="pdf-viewer"></div>
+        </div>
+    </div>
+
+    <div class="control-panel">
+        <button id="submitButton" class="submit-button" onclick="submitExam()" disabled>終了</button>
+    </div>
+
+    <script>
+        let pdfDoc = null;
+        let currentScale = 1.0;
+        let currentPage = 1;
+        let timer;
+        let timeLeft = 140 * 60; // 140分を秒に換算
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        async function handlePdfUpload(file) {
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const typedarray = new Uint8Array(e.target.result);
+                try {
+                    pdfDoc = await pdfjsLib.getDocument(typedarray).promise;
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('totalPages').textContent = pdfDoc.numPages;
+                    currentPage = 1;
+                    updateNavigationButtons();
+                    renderPage(currentPage);
+                } catch (error) {
+                    console.error('PDF loading error:', error);
+                    alert('PDFの読み込みに失敗しました。');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function updateNavigationButtons() {
+            if (!pdfDoc) {
+                document.getElementById('prevPage').disabled = true;
+                document.getElementById('nextPage').disabled = true;
+                document.getElementById('currentPage').textContent = '-';
+                document.getElementById('totalPages').textContent = '-';
+                return;
+            }
+
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= pdfDoc.numPages;
+            document.getElementById('currentPage').textContent = currentPage;
+        }
+
+        async function changePage(delta) {
+            if (!pdfDoc) return;
+
+            const newPage = currentPage + delta;
+            if (newPage >= 1 && newPage <= pdfDoc.numPages) {
+                currentPage = newPage;
+                updateNavigationButtons();
+                await renderPage(currentPage);
+            }
+        }
+
+        async function renderPage(pageNumber) {
+            if (!pdfDoc) return;
+            
+            try {
+                const page = await pdfDoc.getPage(pageNumber);
+                const viewport = page.getViewport({ scale: currentScale });
+                
+                const canvas = document.createElement('canvas');
+                canvas.className = 'pdf-page';
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                const pdfViewer = document.getElementById('pdfViewer');
+                pdfViewer.innerHTML = '';
+                pdfViewer.appendChild(canvas);
+
+                await page.render(renderContext).promise;
+            } catch (error) {
+                console.error('Error rendering page:', error);
+                alert('PDFの表示に失敗しました。');
+            }
+        }
+
+        function zoomPDF(action) {
+            if (!pdfDoc) return;
+
+            if (action === 'in') {
+                currentScale *= 1.2;
+            } else if (action === 'out') {
+                currentScale *= 0.8;
+            }
+            
+            document.getElementById('zoomLevel').textContent = `${Math.round(currentScale * 100)}%`;
+            renderPage(currentPage);
+        }
+
+        function resetPDF() {
+            if (!pdfDoc) return;
+            
+            currentScale = 1.0;
+            document.getElementById('zoomLevel').textContent = '100%';
+            renderPage(currentPage);
+        }
+
+        function closePDF() {
+            pdfDoc = null;
+            document.getElementById('pdfViewer').innerHTML = '';
+            document.getElementById('fileName').textContent = '';
+            document.getElementById('pdfUpload').value = '';
+            updateNavigationButtons();
+        }
+
+        function startExam() {
+            const examNumber = document.getElementById('examNumberInput').value;
+            if (!examNumber) {
+                alert('受験番号を入力してください');
+                return;
+            }
+            if (!confirm('試験を開始します。よろしいですか？')) return;
+
+            document.getElementById('examNumberDisplay').textContent = examNumber;</antArtifact>
+            すみません、コードが長すぎて途中で切れてしまいました。JavaScriptの残りの部分を続けます：
+
+```javascript
+        function startExam() {
+            const examNumber = document.getElementById('examNumberInput').value;
+            if (!examNumber) {
+                alert('受験番号を入力してください');
+                return;
+            }
+            if (!confirm('試験を開始します。よろしいですか？')) return;
+
+            document.getElementById('examNumberDisplay').textContent = examNumber;
+            document.getElementById('startButton').disabled = true;
+            document.getElementById('submitButton').disabled = false;
+            document.getElementById('examNumberInput').disabled = true;
+
+            // テキストエリアを編集可能に
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`answer${i}`).readOnly = false;
+            }
+
+            startTimer();
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timeDisplay').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    submitExam();
+                }
+                
+                if (timeLeft === 600) { // 残り10分
+                    alert('残り10分です');
+                }
+            }, 1000);
+        }
+
+        function submitExam() {
+            if (!confirm('解答を終了します。よろしいですか？\n終了後は修正できません。')) return;
+
+            clearInterval(timer);
+            
+            // テキストエリアを読み取り専用に
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`answer${i}`).readOnly = true;
+            }
+
+            document.getElementById('submitButton').disabled = true;
+            alert('解答が終了しました。お疲れ様でした。');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+
+            document.getElementById('answer').style.display = tabId === 'answer' ? 'block' : 'none';
+            document.getElementById('pdf-viewer').style.display = tabId === 'pdf-viewer' ? 'block' : 'none';
+        }
+
+        // 初期化
+        window.onload = function() {
+            // テキストエリアを初期状態で読み取り専用に
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`answer${i}`).readOnly = true;
+            }
+        };
+    </script>
+</body>
+</html>
