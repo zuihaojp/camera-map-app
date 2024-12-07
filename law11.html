@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オンライン法律相談所</title>
+    <link rel="manifest" href="manifest2.json">
+    <meta name="theme-color" content="#1a237e">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #8b0000;
+            --accent-color: #c5a572;
+            --text-color: #333;
+            --light-bg: #f5f6fa;
+            --border-color: rgba(26, 35, 126, 0.1);
+        }
+
+        body {
+            font-family: "游明朝", YuMincho, "Hiragino Mincho ProN W3", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #0a1445);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+            font-size: 32px;
+            letter-spacing: 0.2em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid var(--accent-color);
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 30px;
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin: 50px 0;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .description {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .description::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px 12px 0 0;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .menu-item {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .menu-item h3 {
+            color: var(--primary-color);
+            font-size: 1.2em;
+            margin: 0 0 15px;
+            font-weight: 500;
+        }
+
+        .menu-item p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 0;
+        }
+
+        .form-container {
+            display: none;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-top: 40px;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-container input:focus,
+        .form-container select:focus,
+        .form-container textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        }
+
+        .form-container button {
+            background: linear-gradient(135deg, var(--primary-color), #0a1445);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 15px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            letter-spacing: 0.1em;
+            width: auto;
+            display: block;
+            margin: 30px auto 0;
+        }
+
+        .form-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.2);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            margin: 50px 0;
+            gap: 20px;
+        }
+
+        .social-icons a {
+            text-decoration: none;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary-color), #0a1445);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--primary-color), #0a1445);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 60px;
+            letter-spacing: 0.1em;
+            font-size: 0.9em;
+            border-top: 3px solid var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            .menu {
+                grid-template-columns: 1fr;
+            }
+
+            .description,
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            header {
+                font-size: 24px;
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>オンライン法律相談所</header>
+    <div class="container">
+        <div class="description">
+            <h2>オンライン相談に特化した法律事務所</h2>
+            <p>当法律事務所では、時代に即したオンライン相談システムを導入し、お客様の多様なニーズにお応えしています。</p>
+            <p>経験豊富な弁護士が、丁寧かつ確実な法的サポートを提供いたします。以下の相談内容からお選びください。</p>
+        </div>
+
+        <h1>相談内容</h1>
+        <div class="menu">
+            <div class="menu-item" onclick="showForm('民事に関するご相談')">
+                <h3>民事に関するご相談</h3>
+                <p>オンライン相談を予約する</p>
+            </div>
+            <div class="menu-item" onclick="showForm('刑事に関するご相談')">
+                <h3>刑事に関するご相談</h3>
+                <p>オンライン相談を予約する</p>
+            </div>
+            <div class="menu-item" onclick="showForm('交通事故に関するご相談')">
+                <h3>交通事故に関するご相談</h3>
+                <p>オンライン相談を予約する</p>
+            </div>
+            <div class="menu-item" onclick="showForm('家族に関するご相談')">
+                <h3>家族に関するご相談</h3>
+                <p>オンライン相談を予約する</p>
+            </div>
+            <div class="menu-item" onclick="showForm('不動産に関するご相談')">
+                <h3>不動産に関するご相談</h3>
+                <p>オンライン相談を予約する</p>
+            </div>
+            <div class="menu-item" onclick="showForm('登記事項に関するご相談')">
+                <h3>登記事項に関するご相談</h3>
+                <p>オンライン相談を予約する</p>
+            </div>
+            <div class="menu-item" onclick="showForm('会社に関するご相談')">
+                <h3>会社に関するご相談</h3>
+                <p>オンライン相談を予約する</p>
+            </div>
+        </div>
+
+        <div class="form-container" id="form-container">
+            <h2 id="form-title"></h2>
+            <form id="reservation-form" onsubmit="submitReservation(event)">
+                <label for="date">予約日</label>
+                <input type="date" id="date" name="date" required>
+                
+                <label for="time">相談時間</label>
+                <select id="time" name="time" required>
+                    <option value="9:00">9:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                </select>
+
+                <label for="name">お名前</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="phone">電話番号</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}" required placeholder="例: 090-1234-5678">
+
+                <label for="email">メールアドレス</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="details">ご相談内容の詳細</label>
+                <textarea id="details" name="details" rows="4" required></textarea>
+
+                <button type="submit">相談予約を確定する</button>
+            </form>
+        </div>
+
+        <div class="social-icons">
+            <a class="line" href="https://line.me/R/ti/p/%40YOUR-LINE-ID" target="_blank">
+                <i class="fab fa-line"></i>
+            </a>
+            <a class="instagram" href="https://instagram.com/YOUR-INSTAGRAM-USERNAME" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+    <footer>
+        © 2024 オンライン法律相談所 All Rights Reserved.
+    </footer>
+
+    <script>
+        function showForm(department) {
+            const formContainer = document.getElementById('form-container');
+            const formTitle = document.getElementById('form-title');
+            
+            formTitle.textContent = `${department} - オンライン予約`;
+            formContainer.style.display = 'block';
+            formContainer.classList.add('active');
+            
+            formContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function submitReservation(event) {
+            event.preventDefault();
+            const form = document.getElementById('reservation-form');
+            const formContainer = document.getElementById('form-container');
+            const formData = new FormData(form);
+            
+            const body = encodeURIComponent(
+                `相談内容: ${document.getElementById('form-title').textContent}\n` +
+                `予約日: ${formData.get('date')}\n` +
+                `時間: ${formData.get('time')}\n` +
+                `名前: ${formData.get('name')}\n` +
+                `電話番号: ${formData.get('phone')}\n` +
+                `メール: ${formData.get('email')}\n` +
+                `詳細: ${formData.get('details')}`
+            );
+
+            const mailtoLink = `mailto:lawoffice@example.com?subject=法律相談予約&body=${body}`;
+            window.location.href = mailtoLink;
+            
+            alert('予約リクエストを受け付けました。\n担当弁護士より確認のご連絡を差し上げます。');
+            form.reset();
+            formContainer.style.display = 'none';
+            formContainer.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
