@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>司法試験CBT</title>
+<style>
+    body {
+        margin: 0;
+        font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+        background: #f5f5f5;
+    }
+    header {
+        background: #1C1C1C;
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+    }
+    header h1 {
+        margin:0;
+        font-size:1.4rem;
+        font-weight:500;
+    }
+
+    .top-controls {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background: #333;
+        color:#fff;
+        padding: 0.5rem;
+    }
+
+    .top-controls .info {
+        font-size:0.9rem;
+    }
+
+    .top-controls button {
+        background: #555;
+        color: #fff;
+        border:none;
+        padding:0.5rem 1rem;
+        border-radius:4px;
+        font-size:0.9rem;
+        cursor:pointer;
+    }
+
+    .main-container {
+        max-width:1200px;
+        margin:1rem auto;
+        background:#fff;
+        border-radius:8px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        display:flex;
+        flex-direction:column;
+        padding:1rem;
+    }
+
+    .nav-buttons {
+        display:flex;
+        justify-content:center;
+        gap:1rem;
+        margin-bottom:1rem;
+    }
+
+    .nav-buttons button {
+        background:#ddd;
+        border:none;
+        padding:0.5rem 1rem;
+        border-radius:4px;
+        cursor:pointer;
+        font-size:1rem;
+        font-weight:bold;
+    }
+    .nav-buttons button.active {
+        background:#bbb;
+    }
+
+    .content-area {
+        flex:1;
+        display:none;
+        overflow:auto;
+        border:1px solid #ccc;
+        padding:1rem;
+        position:relative;
+        background:#fafafa;
+    }
+
+    .content-area.active {
+        display:block;
+    }
+
+    /* 問題文・六法PDF表示 */
+    .pdf-viewer {
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:0.5rem;
+    }
+
+    .pdf-controls {
+        display:flex;
+        gap:0.5rem;
+        margin-bottom:0.5rem;
+    }
+
+    .pdf-controls button {
+        background:#444;
+        color:#fff;
+        border:none;
+        padding:0.3rem 0.7rem;
+        border-radius:4px;
+        cursor:pointer;
+    }
+
+    .pdf-page-input {
+        width:50px;
+        text-align:center;
+    }
+
+    .pdf-frame {
+        width:100%;
+        height:80vh;
+        border:1px solid #ccc;
+        background:#fff;
+    }
+
+    /* 答案用紙部分 */
+    .answer-sheet-container {
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:1rem;
+    }
+
+    .answer-sheet-header {
+        width:100%;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .answer-sheet-header input {
+        padding:0.3rem;
+        border:1px solid #ccc;
+        border-radius:4px;
+    }
+
+    .pages-container {
+        display:flex;
+        flex-wrap:wrap;
+        gap:1rem;
+        justify-content:center;
+    }
+
+    .answer-page {
+        background:#fff;
+        width:210mm;
+        height:297mm;
+        border:1px solid #aaa;
+        box-sizing:border-box;
+        padding:1rem;
+        overflow:auto;
+    }
+
+    .answer-page textarea {
+        width:100%;
+        height:100%;
+        border:none;
+        resize:none;
+        font-family:"Meiryo",sans-serif;
+        font-size:0.9rem;
+        line-height:1.4;
+        outline:none;
+    }
+
+    /* メール送信欄 */
+    .email-send {
+        display:flex;
+        flex-direction:column;
+        gap:0.5rem;
+        width:100%;
+        max-width:400px;
+        margin:2rem auto 0;
+    }
+
+    .email-send input {
+        width:100%;
+        padding:0.5rem;
+        border:1px solid #ccc;
+        border-radius:4px;
+    }
+
+    .email-send button {
+        background:#333;
+        color:#fff;
+        border:none;
+        padding:0.5rem;
+        border-radius:4px;
+        cursor:pointer;
+        font-size:0.9rem;
+    }
+
+</style>
+</head>
+<body>
+<header>
+    <h1>司法試験CBT</h1>
+</header>
+<div class="top-controls">
+    <div class="info">残り時間: <span id="timeDisplay">120:00</span></div>
+    <button id="startBtn">開始</button>
+    <button id="endBtn">終了</button>
+</div>
+
+<div class="main-container">
+    <div class="nav-buttons">
+        <button id="problemBtn" class="active">問題文</button>
+        <button id="lawBtn">六法</button>
+        <button id="answerBtn">答案用紙</button>
+    </div>
+
+    <!-- 問題文 -->
+    <div class="content-area active" id="problemArea">
+        <div class="pdf-viewer">
+            <div class="pdf-controls">
+                <button id="problemPrev">前へ</button>
+                <input type="text" id="problemPage" class="pdf-page-input" value="1"/>
+                <button id="problemNext">次へ</button>
+            </div>
+            <!-- ここでPDFを表示するためのframeを用意する -->
+            <!-- 実際にはPDF.jsなどを使ってJS側でレンダリングすることが多いが、ここではiframeでダミー -->
+            <iframe id="problemPdf" class="pdf-frame" src="" title="問題文PDF"></iframe>
+            <p>※PDFを追加してください</p>
+        </div>
+    </div>
+
+    <!-- 六法 -->
+    <div class="content-area" id="lawArea">
+        <div class="pdf-viewer">
+            <div class="pdf-controls">
+                <button id="lawPrev">前へ</button>
+                <input type="text" id="lawPage" class="pdf-page-input" value="1"/>
+                <button id="lawNext">次へ</button>
+            </div>
+            <iframe id="lawPdf" class="pdf-frame" src="" title="六法PDF"></iframe>
+            <p>※PDFを追加してください</p>
+        </div>
+    </div>
+
+    <!-- 答案用紙 -->
+    <div class="content-area" id="answerArea">
+        <div class="answer-sheet-container">
+            <div class="answer-sheet-header">
+                <div>
+                    氏名: <input type="text" id="userName" placeholder="名前を入力"/>
+                </div>
+            </div>
+            <div class="pages-container">
+                <!-- A4サイズ8ページ分 -->
+                <div class="answer-page"><textarea placeholder="答案記述ページ1"></textarea></div>
+                <div class="answer-page"><textarea placeholder="答案記述ページ2"></textarea></div>
+                <div class="answer-page"><textarea placeholder="答案記述ページ3"></textarea></div>
+                <div class="answer-page"><textarea placeholder="答案記述ページ4"></textarea></div>
+                <div class="answer-page"><textarea placeholder="答案記述ページ5"></textarea></div>
+                <div class="answer-page"><textarea placeholder="答案記述ページ6"></textarea></div>
+                <div class="answer-page"><textarea placeholder="答案記述ページ7"></textarea></div>
+                <div class="answer-page"><textarea placeholder="答案記述ページ8"></textarea></div>
+            </div>
+            
+            <div class="email-send">
+                <input type="email" id="emailAddress" placeholder="メールアドレスを入力" />
+                <button id="sendMailBtn">答案をメール送信</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // タブ切り替え
+    const problemBtn = document.getElementById("problemBtn");
+    const lawBtn = document.getElementById("lawBtn");
+    const answerBtn = document.getElementById("answerBtn");
+
+    const problemArea = document.getElementById("problemArea");
+    const lawArea = document.getElementById("lawArea");
+    const answerArea = document.getElementById("answerArea");
+
+    problemBtn.addEventListener("click",()=>{
+        setActiveTab("problem");
+    });
+    lawBtn.addEventListener("click",()=>{
+        setActiveTab("law");
+    });
+    answerBtn.addEventListener("click",()=>{
+        setActiveTab("answer");
+    });
+
+    function setActiveTab(tab){
+        problemBtn.classList.remove("active");
+        lawBtn.classList.remove("active");
+        answerBtn.classList.remove("active");
+        problemArea.classList.remove("active");
+        lawArea.classList.remove("active");
+        answerArea.classList.remove("active");
+
+        if(tab==="problem"){
+            problemBtn.classList.add("active");
+            problemArea.classList.add("active");
+        } else if(tab==="law"){
+            lawBtn.classList.add("active");
+            lawArea.classList.add("active");
+        } else if(tab==="answer"){
+            answerBtn.classList.add("active");
+            answerArea.classList.add("active");
+        }
+    }
+
+    // タイマー機能
+    let remainingTime = 120*60; //120分
+    let timerInterval = null;
+    const timeDisplay = document.getElementById("timeDisplay");
+    const startBtn = document.getElementById("startBtn");
+    const endBtn = document.getElementById("endBtn");
+
+    startBtn.addEventListener("click", startTimer);
+    endBtn.addEventListener("click", endExam);
+
+    function startTimer(){
+        if(timerInterval) return;
+        timerInterval = setInterval(()=>{
+            remainingTime--;
+            updateTimeDisplay();
+            if(remainingTime <=0){
+                endExam();
+            }
+        },1000);
+    }
+
+    function updateTimeDisplay(){
+        let min = Math.floor(remainingTime/60);
+        let sec = remainingTime%60;
+        let minStr = min<10? "0"+min:min;
+        let secStr = sec<10? "0"+sec:sec;
+        timeDisplay.innerText = minStr+":"+secStr;
+    }
+
+    function endExam(){
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = null;
+        alert("試験を終了します。");
+    }
+
+    // PDFページ切り替え（ダミー）
+    // 実際にはPDF.jsなどを利用してレンダリングする必要があるが、ここでは簡易的にURLパラメータなどで表現
+    const problemPdf = document.getElementById("problemPdf");
+    const lawPdf = document.getElementById("lawPdf");
+    const problemPageInput = document.getElementById("problemPage");
+    const lawPageInput = document.getElementById("lawPage");
+    const problemPrev = document.getElementById("problemPrev");
+    const problemNext = document.getElementById("problemNext");
+    const lawPrev = document.getElementById("lawPrev");
+    const lawNext = document.getElementById("lawNext");
+
+    let problemPage=1;
+    let lawPage=1;
+
+    problemPrev.addEventListener("click", ()=>{
+        if(problemPage>1) problemPage--;
+        problemPageInput.value = problemPage;
+        loadProblemPdf(problemPage);
+    });
+
+    problemNext.addEventListener("click", ()=>{
+        problemPage++;
+        problemPageInput.value = problemPage;
+        loadProblemPdf(problemPage);
+    });
+
+    problemPageInput.addEventListener("change",()=>{
+        problemPage = parseInt(problemPageInput.value) || 1;
+        loadProblemPdf(problemPage);
+    });
+
+    lawPrev.addEventListener("click", ()=>{
+        if(lawPage>1) lawPage--;
+        lawPageInput.value = lawPage;
+        loadLawPdf(lawPage);
+    });
+
+    lawNext.addEventListener("click", ()=>{
+        lawPage++;
+        lawPageInput.value = lawPage;
+        loadLawPdf(lawPage);
+    });
+
+    lawPageInput.addEventListener("change",()=>{
+        lawPage = parseInt(lawPageInput.value) || 1;
+        loadLawPdf(lawPage);
+    });
+
+    function loadProblemPdf(page){
+        // ダミー：本来はpageパラメータでpdf.jsやpdfへの#page=指定などを行う
+        problemPdf.src = "about:blank"; 
+    }
+
+    function loadLawPdf(page){
+        lawPdf.src = "about:blank";
+    }
+
+    // 答案送信（メール送信）
+    const sendMailBtn = document.getElementById("sendMailBtn");
+    const emailAddress = document.getElementById("emailAddress");
+    const answerPages = document.querySelectorAll(".answer-page textarea");
+    const userName = document.getElementById("userName");
+
+    sendMailBtn.addEventListener("click",()=>{
+        const email = emailAddress.value.trim();
+        if(!email){
+            alert("メールアドレスを入力してください。");
+            return;
+        }
+        const name = userName.value.trim();
+        let body = "【氏名】:" + name + "\n\n";
+        let i=1;
+        answerPages.forEach(page=>{
+            body += "【ページ" + i + "】\n" + page.value + "\n\n";
+            i++;
+        });
+
+        // mailtoリンクを使用(ユーザーのメールクライアントが開く)
+        let mailtoLink = "mailto:"+encodeURIComponent(email)+"?subject="+encodeURIComponent("司法試験CBT答案")+"&body="+encodeURIComponent(body);
+        window.location.href = mailtoLink;
+    });
+
+</script>
+</body>
+</html>
