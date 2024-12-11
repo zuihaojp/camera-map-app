@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT司法試験・予備試験 専門サイト</title>
+<style>
+    body {
+        margin: 0;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(to bottom right, #f5f5f5, #e8e8e8);
+        color: #333;
+    }
+
+    header {
+        background: #222;
+        color: #fff;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    header h1 {
+        font-size: 1.6rem;
+        margin: 0;
+        font-weight: 500;
+    }
+
+    header p {
+        margin: 0.5rem 0 0;
+        font-size: 0.9rem;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .card-tabs {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 3rem;
+    }
+
+    .card {
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        width: 250px;
+        text-align: center;
+        padding: 2rem 1rem;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+        position: relative;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+    }
+
+    .card h2 {
+        margin: 0 0 1rem;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .card p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        color: #555;
+        margin: 0;
+    }
+
+    .login-require {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: #c0392b;
+        color: #fff;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        display: none;
+    }
+
+    /* 下部 お問い合わせフォーム */
+    footer {
+        background: #f2f2f2;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    footer h3 {
+        margin: 0 0 1rem;
+        font-size: 1.2rem;
+    }
+
+    footer form {
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    footer label {
+        display: block;
+        margin: 0.5rem 0 0.2rem;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    footer input, footer textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 0.9rem;
+    }
+
+    footer textarea {
+        height: 100px;
+        resize: vertical;
+    }
+
+    footer button {
+        margin-top: 1rem;
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .note {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        color: #555;
+    }
+
+    /* 高級感を追加するためにフォントと色調微調整 */
+    body {
+        font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+        background: linear-gradient(to bottom, #fefefe, #f4f4f4);
+    }
+
+    header {
+        background: #1C1C1C;
+    }
+
+    .card {
+        font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+        background-image: linear-gradient(to bottom right, #ffffff, #fafafa);
+    }
+
+    .card-tabs {
+        margin-top: 3rem;
+    }
+
+    .card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .logged-out .needs-login {
+        display: block;
+    }
+</style>
+</head>
+<body class="logged-out">
+<header>
+    <h1>CBT司法試験・予備試験 専門サイト</h1>
+    <p>オンラインで問題文・答案用紙・六法を一元管理。<br>iOS・Androidでも快適に利用できる高級感あるCBTサイト。</p>
+</header>
+
+<div class="container">
+    <div class="card-tabs">
+        <!-- タブ1：タイピング練習 -->
+        <div class="card" onclick="location.href='#typingPractice'">
+            <h2>タイピング練習</h2>
+            <p>タイピングスキルを強化して<br>試験に備えよう</p>
+        </div>
+
+        <!-- タブ2：司法試験CBT（要ログイン） -->
+        <div class="card" onclick="gotoCBT(2)">
+            <span class="login-require needs-login">要ログイン</span>
+            <h2>司法試験CBT</h2>
+            <p>オンライン形式で<br>本試験に近い演習を実現</p>
+        </div>
+
+        <!-- タブ3：司法試験予備試験CBT（要ログイン） -->
+        <div class="card" onclick="gotoCBT(3)">
+            <span class="login-require needs-login">要ログイン</span>
+            <h2>予備試験CBT</h2>
+            <p>予備試験にも対応した<br>カスタムテスト環境</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <h3>お問い合わせフォーム</h3>
+    <form id="contactForm">
+        <label for="name">お名前</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">メールアドレス</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">お問い合わせ内容</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit">送信</button>
+        <p class="note">折り返しご連絡いたします。</p>
+    </form>
+</footer>
+
+<script>
+    // ログイン状態フラグ（デモ用）
+    // 本来はサーバー側の認証状態に依存
+    var loggedIn = false;
+
+    function gotoCBT(tabNumber) {
+        if (!loggedIn) {
+            alert("このタブにアクセスするにはログインが必要です。");
+            return;
+        }
+        // ログイン済みの場合の遷移処理
+        // 実際にはhrefやwindow.locationで遷移
+        alert("ログイン済み！タブ" + tabNumber + "へ移動します。");
+    }
+</script>
+
+</body>
+</html>
