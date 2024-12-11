@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+    <title>Luxury Real Estate</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            color: #333;
+            background: #fff;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 70px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #000;
+            letter-spacing: 0.05em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #999;
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            background: url('https://example.com/luxury-property.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .hero-content {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            background: rgba(255,255,255,0.9);
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .search-box select,
+        .search-box input[type="text"],
+        .search-box button {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .search-box button {
+            background: #000;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #333;
+        }
+
+        main {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: #000;
+            margin: 1rem auto 0;
+        }
+
+        .properties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .property-card {
+            flex: 1 1 calc(33% - 2rem);
+            min-width: 280px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .property-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .property-card .info {
+            padding: 1rem;
+        }
+
+        .property-card .info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .property-card .info p {
+            margin: 0.5rem 0;
+        }
+
+        .about,
+        .news {
+            margin-top: 4rem;
+        }
+
+        .about p,
+        .news ul {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .news ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        .news ul li {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        footer {
+            background: #f9f9f9;
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        footer a {
+            color: #777;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Luxury Estate</div>
+        <nav>
+            <ul>
+                <li><a href="#">物件検索</a></li>
+                <li><a href="#">物件一覧</a></li>
+                <li><a href="#">会社概要</a></li>
+                <li><a href="#">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>上質な空間を、あなたのものに</h1>
+            <p>都心の高級マンションから、憧れの邸宅まで。<br>厳選された不動産をご紹介します。</p>
+            <div class="search-box">
+                <select name="area">
+                    <option value="">エリアを選択</option>
+                    <option value="tokyo">東京</option>
+                    <option value="osaka">大阪</option>
+                    <option value="kyoto">京都</option>
+                </select>
+                <select name="price-range">
+                    <option value="">価格帯</option>
+                    <option value="100000000">1億円以上</option>
+                    <option value="50000000">5000万円以上</option>
+                </select>
+                <select name="type">
+                    <option value="">物件種別</option>
+                    <option value="mansion">マンション</option>
+                    <option value="house">一戸建て</option>
+                </select>
+                <button>検索</button>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section class="featured properties">
+            <h2 class="section-title">特選物件</h2>
+            <div class="properties">
+                <div class="property-card">
+                    <img src="https://example.com/property1.jpg" alt="property1">
+                    <div class="info">
+                        <h3>六本木ヒルズレジデンス</h3>
+                        <p>価格：3億円</p>
+                        <p>所在地：東京都港区</p>
+                        <p><a href="#">詳しく見る</a></p>
+                    </div>
+                </div>
+                <div class="property-card">
+                    <img src="https://example.com/property2.jpg" alt="property2">
+                    <div class="info">
+                        <h3>麻布ガーデンテラス</h3>
+                        <p>価格：2億5000万円</p>
+                        <p>所在地：東京都港区麻布</p>
+                        <p><a href="#">詳しく見る</a></p>
+                    </div>
+                </div>
+                <div class="property-card">
+                    <img src="https://example.com/property3.jpg" alt="property3">
+                    <div class="info">
+                        <h3>表参道プレミアムハウス</h3>
+                        <p>価格：4億円</p>
+                        <p>所在地：東京都渋谷区</p>
+                        <p><a href="#">詳しく見る</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about">
+            <h2 class="section-title">私たちのこだわり</h2>
+            <p>
+                当社は高品質な不動産を厳選し、お客様一人ひとりのライフスタイルに合わせたご提案を行います。<br>
+                国内外の富裕層に支持されてきた豊富な実績とノウハウで、最高水準のサービスをご提供します。<br>
+                上質な空間づくりへの情熱を持ち、真摯にお客様のニーズと向き合います。
+            </p>
+        </section>
+
+        <section class="news">
+            <h2 class="section-title">最新情報</h2>
+            <ul>
+                <li>
+                    <strong>2024/12/01</strong> 新着物件「渋谷クリスタルタワー」掲載開始
+                </li>
+                <li>
+                    <strong>2024/11/20</strong> 「高級住宅特集」記事が雑誌にて紹介されました
+                </li>
+                <li>
+                    <strong>2024/10/30</strong> 年末年始の営業スケジュールについて
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            © 2024 Luxury Estate. All Rights Reserved. | 
+            <a href="#">会社概要</a> | 
+            <a href="#">プライバシーポリシー</a>
+        </p>
+    </footer>
+</body>
+</html>
