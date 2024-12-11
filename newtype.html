@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>司法試験タイピング練習</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+        background: #0b0b0b;
+        color: #fff;
+        overflow: hidden;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    header {
+        background: #1C1C1C;
+        padding: 1rem;
+        text-align: center;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 500;
+    }
+
+    .container {
+        position: relative;
+        width: 100vw;
+        height: calc(100vh - 60px);
+        overflow: hidden;
+        background: url('https://images.unsplash.com/photo-1614110804700-10e73d74f896?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+    }
+
+    /* オーバーレイ */
+    .overlay {
+        position: absolute;
+        top:0; left:0; right:0; bottom:0;
+        background: rgba(0,0,0,0.5);
+    }
+
+    /* 中央のターゲット */
+    .crosshair {
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle closest-side, transparent 50%, #fff 51%, transparent 52%), 
+                    linear-gradient(#fff 2px, transparent 2px), 
+                    linear-gradient(90deg, #fff 2px, transparent 2px);
+        background-size: 100% 100%, 100% 2px, 2px 100%;
+        background-position: center, center, center;
+        background-repeat: no-repeat;
+        pointer-events: none;
+    }
+
+    /* 的(単語)表示 */
+    .target-word {
+        position: absolute;
+        font-size: 1.4rem;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px #000;
+        white-space: nowrap;
+    }
+
+    /* 下部のコントロールパネル */
+    .control-panel {
+        position: absolute;
+        bottom:0; left:0; right:0;
+        background: rgba(0,0,0,0.8);
+        padding: 0.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .info-box {
+        color: #fff;
+        font-size: 0.9rem;
+        text-align: center;
+        margin: 0.5rem;
+    }
+
+    .info-box span {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    /* 入力フィールド */
+    input[type="text"] {
+        width: 200px;
+        padding: 0.4rem;
+        font-size: 1rem;
+        border: 1px solid #fff;
+        background: #333;
+        color: #fff;
+        border-radius: 4px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    /* スタートボタン */
+    .start-btn {
+        background: #444;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+    .start-btn:hover {
+        background: #555;
+    }
+
+    /* メッセージ用 */
+    .message {
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0,0,0,0.7);
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        display: none;
+    }
+    .message h2 {
+        margin: 0;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+    .message p {
+        font-size: 1rem;
+        margin: 0.5rem 0;
+    }
+    .message button {
+        margin-top: 1rem;
+        background: #222;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+
+</style>
+</head>
+<body>
+<header>
+    <h1>司法試験タイピング練習（射撃場イメージ）</h1>
+</header>
+<div class="container">
+    <div class="overlay"></div>
+    <div class="crosshair"></div>
+    <div class="message" id="messageBox">
+        <h2 id="messageTitle"></h2>
+        <p id="messageContent"></p>
+        <button onclick="restartGame()">リスタート</button>
+    </div>
+    <div class="control-panel">
+        <div class="info-box">レベル: <span id="levelDisplay">1</span></div>
+        <div class="info-box">スコア: <span id="scoreDisplay">0</span></div>
+        <div class="info-box">残り時間: <span id="timeDisplay">300</span>秒</div>
+        <input type="text" id="typingInput" placeholder="ここに入力" disabled>
+        <button class="start-btn" id="startBtn">スタート</button>
+    </div>
+</div>
+
+<script>
+    // 各レベルごとの単語リスト（法律用語イメージ：簡単→難しい単語へ）
+    // レベル1: 短く基本的な法律関連単語
+    // レベルが上がるごとに、難しい単語や長めの単語を増やす
+    const levelWords = {
+        1: ["法","裁","訴","令","規","条"],
+        2: ["判例","法律","条文","訴訟","契約","刑法"],
+        3: ["民法","刑事","民事","手続","司法","証拠"],
+        4: ["被告人","原告","被告","判決","上告","控訴"],
+        5: ["検察官","弁護人","訴状","法廷","陪審","行政法"],
+        6: ["憲法判例","債権回収","担保物権","強制執行","不法行為","特許法"],
+        7: ["株主総会決議無効","準法律行為","要物契約","不当利得","委任契約","相殺禁止"],
+        8: ["不可抗力条項","遺言執行者","補助参加人","法定相続分","有斐閣","特別抗告"],
+        9: ["抵当権設定登記","債務不履行責任","定期金給付判決","放棄と認諾","労働契約法","人身保護請求"],
+        10:["所有権移転登記請求","国家賠償請求訴訟","仮処分命令申請書","国際私法規定","司法書士実務規則","最高裁判所判事"]
+    };
+
+    let currentLevel = 1;
+    let score = 0;
+    let currentWord = "";
+    let gameTimer = 300; // 5分(300秒)
+    let timerInterval = null;
+    let currentWordsArray = [];
+    let gameInProgress = false;
+    let wordElement = null;
+
+    const levelDisplay = document.getElementById("levelDisplay");
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const timeDisplay = document.getElementById("timeDisplay");
+    const typingInput = document.getElementById("typingInput");
+    const startBtn = document.getElementById("startBtn");
+    const messageBox = document.getElementById("messageBox");
+    const messageTitle = document.getElementById("messageTitle");
+    const messageContent = document.getElementById("messageContent");
+
+    startBtn.addEventListener("click", startGame);
+    typingInput.addEventListener("input", checkTyping);
+
+    function startGame(){
+        if(gameInProgress) return;
+        gameInProgress = true;
+        startBtn.disabled = true;
+        typingInput.disabled = false;
+        typingInput.value = "";
+        typingInput.focus();
+
+        currentLevel = 1;
+        score = 0;
+        gameTimer = 300;
+        levelDisplay.innerText = currentLevel;
+        scoreDisplay.innerText = score;
+        timeDisplay.innerText = gameTimer;
+
+        hideMessage();
+        startTimer();
+        loadLevel(currentLevel);
+    }
+
+    function startTimer(){
+        clearInterval(timerInterval);
+        timerInterval = setInterval(()=>{
+            gameTimer--;
+            timeDisplay.innerText = gameTimer;
+            if(gameTimer <= 0){
+                endGame(false);
+            }
+        },1000);
+    }
+
+    function loadLevel(level){
+        currentWordsArray = [...levelWords[level]];
+        // 最初の単語を表示
+        displayNewWord();
+    }
+
+    function displayNewWord(){
+        if(wordElement){
+            wordElement.remove();
+        }
+        if(currentWordsArray.length === 0){
+            // 次のレベルへ
+            currentLevel++;
+            if(currentLevel > 10){
+                // 全クリア
+                endGame(true);
+                return;
+            }
+            levelDisplay.innerText = currentLevel;
+            loadLevel(currentLevel);
+            return;
+        }
+        currentWord = currentWordsArray.shift();
+
+        // 的(単語)をランダムな位置に表示
+        wordElement = document.createElement("div");
+        wordElement.classList.add("target-word");
+        wordElement.innerText = currentWord;
+
+        const container = document.querySelector(".container");
+        const containerRect = container.getBoundingClientRect();
+
+        // 表示位置(画面中央付近にランダム)
+        const posX = Math.random() * (containerRect.width - 200) + 100;
+        const posY = Math.random() * (containerRect.height - 200) + 100;
+
+        wordElement.style.left = posX + "px";
+        wordElement.style.top = posY + "px";
+        container.appendChild(wordElement);
+
+        // 入力欄リセット
+        typingInput.value = "";
+    }
+
+    function checkTyping(){
+        if(typingInput.value === currentWord){
+            // 正解
+            score++;
+            scoreDisplay.innerText = score;
+            displayNewWord();
+        }
+    }
+
+    function endGame(isClear){
+        clearInterval(timerInterval);
+        typingInput.disabled = true;
+        startBtn.disabled = false;
+        gameInProgress = false;
+        showMessage(isClear);
+    }
+
+    function showMessage(isClear){
+        messageBox.style.display = "block";
+        if(isClear){
+            messageTitle.innerText = "おめでとうございます！";
+            messageContent.innerText = "全てのレベル(1～10)をクリアしました！\nスコア: " + score;
+        } else {
+            messageTitle.innerText = "時間切れ";
+            messageContent.innerText = "時間内にクリアできませんでした。\nスコア: " + score;
+        }
+    }
+
+    function hideMessage(){
+        messageBox.style.display = "none";
+    }
+
+    function restartGame(){
+        hideMessage();
+        startGame();
+    }
+</script>
+</body>
+</html>
