@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>司法試験CBT</title>
+<title>司法試験CBT簡易テスト</title>
 <style>
     body {
         margin:0;
-        font-family: "Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+        font-family:"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
         background:#f5f5f5;
-        overflow:hidden; /* 全画面表示想定 */
+        overflow:hidden;
     }
-
     header {
         background:#1C1C1C;
         color:#fff;
@@ -35,112 +34,19 @@
         gap:0.5rem;
     }
 
-    .top-controls .info {
-        font-size:0.9rem;
-    }
-
-    .top-controls button {
-        background:#555;
-        color:#fff;
-        border:none;
-        padding:0.5rem 1rem;
-        border-radius:4px;
-        font-size:0.9rem;
-        cursor:pointer;
-    }
-
     .main-container {
-        position:absolute;
-        top:130px; /* ヘッダ＋上部コントロールエリア分 */
-        bottom:0; left:0; right:0;
+        position:absolute; top:130px; bottom:0; left:0; right:0;
         overflow:auto;
         background:#fff;
-        display:flex;
-        justify-content:center;
+        display:flex; justify-content:center; align-items:center;
         padding:1rem;
     }
 
     .answer-sheet-container {
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        gap:1rem;
+        display:flex; flex-direction:column; align-items:center; gap:1rem;
     }
 
-    .answer-sheet-header {
-        width:100%;
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-    }
-
-    .answer-sheet-header input {
-        padding:0.3rem;
-        border:1px solid #ccc;
-        border-radius:4px;
-    }
-
-    .pages-container {
-        display:flex;
-        flex-wrap:wrap;
-        gap:1rem;
-        justify-content:center;
-    }
-
-    .answer-page {
-        background:#fff;
-        width:210mm;
-        height:297mm; /* A4縦 */
-        border:1px solid #aaa;
-        box-sizing:border-box;
-        padding:1rem;
-        overflow:auto;
-        position:relative;
-    }
-
-    /* 横罫線用CSS */
-    .answer-page textarea {
-        width:100%; height:100%;
-        border:none; resize:none;
-        font-family:"Meiryo",sans-serif;
-        font-size:0.9rem;
-        line-height:1.4;
-        outline:none;
-        background: repeating-linear-gradient(
-          white,
-          white 24px,
-          #ccc 25px,
-          white 26px
-        );
-    }
-
-    .email-send {
-        display:flex;
-        flex-direction:column;
-        gap:0.5rem;
-        width:100%;
-        max-width:400px;
-        margin:2rem auto 0;
-    }
-
-    .email-send input {
-        width:100%;
-        padding:0.5rem;
-        border:1px solid #ccc;
-        border-radius:4px;
-    }
-
-    .email-send button {
-        background:#333;
-        color:#fff;
-        border:none;
-        padding:0.5rem;
-        border-radius:4px;
-        cursor:pointer;
-        font-size:0.9rem;
-    }
-
-    /* オーバーレイパネル(問題文・六法) */
+    /* オーバーレイパネル */
     .overlay-panel {
         position:absolute;
         background:#fafafa;
@@ -150,366 +56,82 @@
         display:flex;
         flex-direction:column;
         align-items:center;
-        padding:0.5rem;
-        transition: all 0.3s ease;
-        cursor:move; /* ドラッグ可能 */
-    }
-
-    /* hiddenクラスで非表示管理 */
-    .hidden {
-        display:none !important;
-    }
-
-    .overlay-panel .pdf-viewer {
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        gap:0.5rem;
-        width:100%;
-    }
-
-    .overlay-panel .pdf-controls {
-        display:flex;
-        gap:0.5rem;
-        margin-bottom:0.5rem;
         justify-content:center;
+        padding:0.5rem;
+        width:300px;
+        height:200px;
+        cursor:move;
     }
-
-    .overlay-panel .pdf-controls button {
-        background:#444;
-        color:#fff;
-        border:none;
-        padding:0.3rem 0.7rem;
-        border-radius:4px;
-        cursor:pointer;
-    }
-
-    .overlay-panel .pdf-page-input {
-        width:50px;
+    .overlay-title {
+        font-size:1rem;
+        margin-bottom:0.5rem;
+        background:#ddd;
+        width:100%;
         text-align:center;
     }
-
-    .pdf-canvas {
-        width:100%;
-        background:#fff;
-        border:1px solid #ccc;
-    }
-
-    .overlay-panel.small {
-        width:300px;
-        height:400px;
-        bottom:10px;
-        right:10px;
-    }
-
-    .overlay-panel.expanded-problem {
-        width:50%;
-        height:70%;
-        top:150px; 
-        left:50px;
-        bottom:auto;
-        right:auto;
-    }
-
-    .overlay-panel.expanded-law {
-        width:50%;
-        height:70%;
-        top:150px;
-        right:50px;
-        bottom:auto;
-        left:auto;
-    }
-
-    .overlay-panel .toggle-size-btn {
-        background:#666;
-        color:#fff;
-        border:none;
-        padding:0.3rem 0.7rem;
-        margin-bottom:0.5rem;
-        border-radius:4px;
-        cursor:pointer;
-        font-size:0.8rem;
-    }
-
 </style>
 </head>
 <body>
 <header>
-    <h1>司法試験CBT</h1>
+    <h1>司法試験CBT簡易表示テスト</h1>
 </header>
 <div class="top-controls">
-    <div class="info">残り時間: <span id="timeDisplay">120:00</span></div>
-    <button id="startBtn">開始</button>
-    <button id="endBtn">終了</button>
     <button id="toggleProblemBtn">問題文表示/非表示</button>
     <button id="toggleLawBtn">六法表示/非表示</button>
 </div>
 
 <div class="main-container">
     <div class="answer-sheet-container">
-        <div class="answer-sheet-header">
-            <div>氏名: <input type="text" id="userName" placeholder="名前を入力"/></div>
-        </div>
-        <div class="pages-container">
-            <div class="answer-page"><textarea placeholder="答案記述ページ1"></textarea></div>
-            <div class="answer-page"><textarea placeholder="答案記述ページ2"></textarea></div>
-            <div class="answer-page"><textarea placeholder="答案記述ページ3"></textarea></div>
-            <div class="answer-page"><textarea placeholder="答案記述ページ4"></textarea></div>
-            <div class="answer-page"><textarea placeholder="答案記述ページ5"></textarea></div>
-            <div class="answer-page"><textarea placeholder="答案記述ページ6"></textarea></div>
-            <div class="answer-page"><textarea placeholder="答案記述ページ7"></textarea></div>
-            <div class="answer-page"><textarea placeholder="答案記述ページ8"></textarea></div>
-        </div>
-        <div class="email-send">
-            <input type="email" id="emailAddress" placeholder="メールアドレスを入力" />
-            <button id="sendMailBtn">答案をPDF化</button>
-            <p>※実際のメール添付送信にはサーバ側での処理が必要です。</p>
-        </div>
+        <p>ここに答案用紙があります(ダミー)。</p>
     </div>
 </div>
 
-<!-- 問題文オーバーレイ -->
-<div class="overlay-panel small hidden" id="problemOverlay">
-    <button class="toggle-size-btn" id="problemSizeToggle">拡大/縮小</button>
-    <div class="pdf-viewer">
-        <div class="pdf-controls">
-            <button id="problemPrev">前へ</button>
-            <input type="text" id="problemPage" class="pdf-page-input" value="1"/>
-            <button id="problemNext">次へ</button>
-        </div>
-        <canvas id="problemPdfCanvas" class="pdf-canvas"></canvas>
-        <p>※PDFを追加してください</p>
-    </div>
+<!-- 問題文オーバーレイ(初期非表示) -->
+<div class="overlay-panel" id="problemOverlay" style="display:none;bottom:10px;right:10px;">
+    <div class="overlay-title">問題文</div>
+    <p>ここに問題文PDFが表示される想定</p>
 </div>
 
-<!-- 六法オーバーレイ -->
-<div class="overlay-panel small hidden" id="lawOverlay">
-    <button class="toggle-size-btn" id="lawSizeToggle">拡大/縮小</button>
-    <div class="pdf-viewer">
-        <div class="pdf-controls">
-            <button id="lawPrev">前へ</button>
-            <input type="text" id="lawPage" class="pdf-page-input" value="1"/>
-            <button id="lawNext">次へ</button>
-        </div>
-        <canvas id="lawPdfCanvas" class="pdf-canvas"></canvas>
-        <p>※PDFを追加してください</p>
-    </div>
+<!-- 六法オーバーレイ(初期非表示) -->
+<div class="overlay-panel" id="lawOverlay" style="display:none;bottom:10px;left:10px;">
+    <div class="overlay-title">六法</div>
+    <p>ここに六法PDFが表示される想定</p>
 </div>
 
-<!-- pdf.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 <script>
-    const { jsPDF } = window.jspdf;
-
-    // タイマー機能
-    let remainingTime = 120*60; //120分
-    let timerInterval = null;
-    const timeDisplay = document.getElementById("timeDisplay");
-    const startBtn = document.getElementById("startBtn");
-    const endBtn = document.getElementById("endBtn");
-    startBtn.addEventListener("click", startTimer);
-    endBtn.addEventListener("click", endExam);
-
-    function startTimer(){
-        if(timerInterval) return;
-        timerInterval = setInterval(()=>{
-            remainingTime--;
-            updateTimeDisplay();
-            if(remainingTime <=0){
-                endExam();
-            }
-        },1000);
-    }
-    function updateTimeDisplay(){
-        let min = Math.floor(remainingTime/60);
-        let sec = remainingTime%60;
-        let minStr = min<10? "0"+min:min;
-        let secStr = sec<10? "0"+sec:sec;
-        timeDisplay.innerText = minStr+":"+secStr;
-    }
-    function endExam(){
-        if(timerInterval) clearInterval(timerInterval);
-        timerInterval = null;
-        alert("試験を終了します。");
-    }
-
-    const pdfjsLib = window['pdfjsLib'];
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
-
-    // PDF URLs (実際には存在するPDFへのパスを指定)
-    const pdfUrlProblem = "example-problem.pdf";
-    const pdfUrlLaw = "example-law.pdf";
-
-    let problemPdfDoc = null;
-    let lawPdfDoc = null;
-    let problemPageNum = 1;
-    let lawPageNum = 1;
-
-    const problemPdfCanvas = document.getElementById("problemPdfCanvas");
-    const lawPdfCanvas = document.getElementById("lawPdfCanvas");
-    const problemCtx = problemPdfCanvas.getContext('2d');
-    const lawCtx = lawPdfCanvas.getContext('2d');
-    const problemPageInput = document.getElementById("problemPage");
-    const lawPageInput = document.getElementById("lawPage");
-    const problemPrev = document.getElementById("problemPrev");
-    const problemNext = document.getElementById("problemNext");
-    const lawPrev = document.getElementById("lawPrev");
-    const lawNext = document.getElementById("lawNext");
-
-    problemPrev.addEventListener("click",()=>{
-        if(problemPageNum>1){
-            problemPageNum--;
-            problemPageInput.value = problemPageNum;
-            renderPDFPage(problemPdfDoc, problemPageNum, problemPdfCanvas, problemCtx);
-        }
-    });
-    problemNext.addEventListener("click",()=>{
-        if(problemPdfDoc && problemPageNum < problemPdfDoc.numPages){
-            problemPageNum++;
-            problemPageInput.value = problemPageNum;
-            renderPDFPage(problemPdfDoc, problemPageNum, problemPdfCanvas, problemCtx);
-        }
-    });
-    problemPageInput.addEventListener("change",()=>{
-        let val = parseInt(problemPageInput.value,10);
-        if(problemPdfDoc && val>=1 && val<=problemPdfDoc.numPages){
-            problemPageNum=val;
-            renderPDFPage(problemPdfDoc, problemPageNum, problemPdfCanvas, problemCtx);
-        }
-    });
-
-    lawPrev.addEventListener("click",()=>{
-        if(lawPageNum>1){
-            lawPageNum--;
-            lawPageInput.value = lawPageNum;
-            renderPDFPage(lawPdfDoc, lawPageNum, lawPdfCanvas, lawCtx);
-        }
-    });
-    lawNext.addEventListener("click",()=>{
-        if(lawPdfDoc && lawPageNum < lawPdfDoc.numPages){
-            lawPageNum++;
-            lawPageInput.value = lawPageNum;
-            renderPDFPage(lawPdfDoc, lawPageNum, lawPdfCanvas, lawCtx);
-        }
-    });
-    lawPageInput.addEventListener("change",()=>{
-        let val = parseInt(lawPageInput.value,10);
-        if(lawPdfDoc && val>=1 && val<=lawPdfDoc.numPages){
-            lawPageNum=val;
-            renderPDFPage(lawPdfDoc, lawPageNum, lawPdfCanvas, lawCtx);
-        }
-    });
-
-    function loadPDFDocument(url, callback){
-        pdfjsLib.getDocument(url).promise.then((pdfDoc_)=>{
-            callback(pdfDoc_);
-        }).catch((error)=>{
-            console.error("PDF読み込みエラー:",error);
-        });
-    }
-
-    // PDF読み込み（PDFが存在しないとコンソールエラー）
-    loadPDFDocument(pdfUrlProblem, (pdfDoc)=>{
-        problemPdfDoc = pdfDoc;
-        renderPDFPage(problemPdfDoc, problemPageNum, problemPdfCanvas, problemCtx);
-    });
-    loadPDFDocument(pdfUrlLaw, (pdfDoc)=>{
-        lawPdfDoc = pdfDoc;
-        renderPDFPage(lawPdfDoc, lawPageNum, lawPdfCanvas, lawCtx);
-    });
-
-    function renderPDFPage(pdfDoc, pageNum, canvas, ctx){
-        if(!pdfDoc) return;
-        pdfDoc.getPage(pageNum).then((page)=>{
-            const viewport = page.getViewport({scale:1.0});
-            const scale = (canvas.parentNode.clientWidth / viewport.width)*0.95; 
-            const scaledViewport = page.getViewport({scale: scale});
-            canvas.height = scaledViewport.height;
-            canvas.width = scaledViewport.width;
-            const renderContext = {
-                canvasContext: ctx,
-                viewport: scaledViewport
-            };
-            page.render(renderContext);
-        });
-    }
-
-    // 答案PDF化
-    const sendMailBtn = document.getElementById("sendMailBtn");
-    const answerPages = document.querySelectorAll(".answer-page textarea");
-    const userName = document.getElementById("userName");
-
-    sendMailBtn.addEventListener("click",()=>{
-        const name = userName.value.trim() || "氏名未入力";
-        const doc = new jsPDF({orientation:'p', unit:'pt', format:'a4'});
-        let pageIndex=0;
-        answerPages.forEach(page=>{
-            if(pageIndex>0) doc.addPage();
-            const text = page.value;
-            const lines = doc.splitTextToSize(text, 500);
-            doc.setFont("Helvetica","",12);
-            doc.text("氏名: "+name,50,50);
-            doc.text(lines,50,80);
-            pageIndex++;
-        });
-
-        doc.save("答案.pdf");
-        alert("PDFが生成されました。メール添付送信にはサーバ処理が必要です。");
-    });
-
-    // 問題文・六法 オーバーレイ表示/非表示
-    const toggleProblemBtn = document.getElementById("toggleProblemBtn");
-    const toggleLawBtn = document.getElementById("toggleLawBtn");
     const problemOverlay = document.getElementById("problemOverlay");
     const lawOverlay = document.getElementById("lawOverlay");
+    const toggleProblemBtn = document.getElementById("toggleProblemBtn");
+    const toggleLawBtn = document.getElementById("toggleLawBtn");
 
-    toggleProblemBtn.addEventListener("click", ()=>{
-        problemOverlay.classList.toggle("hidden");
-    });
-
-    toggleLawBtn.addEventListener("click", ()=>{
-        lawOverlay.classList.toggle("hidden");
-    });
-
-    // 拡大/縮小ボタン
-    const problemSizeToggle = document.getElementById("problemSizeToggle");
-    const lawSizeToggle = document.getElementById("lawSizeToggle");
-    let problemExpanded = false;
-    let lawExpanded = false;
-
-    problemSizeToggle.addEventListener("click",()=>{
-        problemExpanded = !problemExpanded;
-        if(problemExpanded){
-            problemOverlay.classList.remove("small");
-            problemOverlay.classList.add("expanded-problem");
+    // 表示非表示の切り替えはstyle.displayで行うシンプルな実装
+    toggleProblemBtn.addEventListener("click",()=>{
+        if(problemOverlay.style.display==='none'){
+            problemOverlay.style.display='flex';
         } else {
-            problemOverlay.classList.add("small");
-            problemOverlay.classList.remove("expanded-problem");
+            problemOverlay.style.display='none';
         }
     });
 
-    lawSizeToggle.addEventListener("click",()=>{
-        lawExpanded = !lawExpanded;
-        if(lawExpanded){
-            lawOverlay.classList.remove("small");
-            lawOverlay.classList.add("expanded-law");
+    toggleLawBtn.addEventListener("click",()=>{
+        if(lawOverlay.style.display==='none'){
+            lawOverlay.style.display='flex';
         } else {
-            lawOverlay.classList.add("small");
-            lawOverlay.classList.remove("expanded-law");
+            lawOverlay.style.display='none';
         }
     });
 
-    // ドラッグで移動可能
+    // ドラッグ移動可能にする関数
     function makeDraggable(element){
         let isDragging = false;
         let offsetX=0, offsetY=0;
 
-        element.addEventListener('mousedown', (e)=>{
+        element.addEventListener('mousedown',(e)=>{
             isDragging = true;
             offsetX = e.clientX - element.offsetLeft;
             offsetY = e.clientY - element.offsetTop;
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
+            document.addEventListener('mousemove',onMouseMove);
+            document.addEventListener('mouseup',onMouseUp);
             e.preventDefault();
         });
 
@@ -519,11 +141,10 @@
                 element.style.top = (e.clientY - offsetY)+'px';
             }
         }
-
-        function onMouseUp(e){
+        function onMouseUp(){
             isDragging = false;
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
+            document.removeEventListener('mousemove',onMouseMove);
+            document.removeEventListener('mouseup',onMouseUp);
         }
     }
 
