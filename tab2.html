@@ -156,6 +156,7 @@
         align-items:center;
         padding:0.5rem;
         transition: all 0.3s ease;
+        cursor:move; /* ドラッグ可能 */
     }
 
     .overlay-panel .pdf-viewer {
@@ -187,14 +188,12 @@
         text-align:center;
     }
 
-    .overlay-panel .pdf-frame {
+    .pdf-canvas {
         width:100%;
-        height:calc(80vh - 50px);
-        border:1px solid #ccc;
         background:#fff;
+        border:1px solid #ccc;
     }
 
-    /* 初期は右下に小さく表示 */
     .overlay-panel.small {
         width:300px;
         height:400px;
@@ -202,22 +201,21 @@
         right:10px;
     }
 
-    /* 拡大時は画面半分を占める。問題文は左半分、六法は右半分にする例 */
     .overlay-panel.expanded-problem {
         width:50%;
-        height:100%;
-        top:130px; /* header+controls高さ分空ける */
-        left:0;
-        bottom:0;
+        height:70%;
+        top:150px; 
+        left:50px;
+        bottom:auto;
         right:auto;
     }
 
     .overlay-panel.expanded-law {
         width:50%;
-        height:100%;
-        top:130px;
-        right:0;
-        bottom:0;
+        height:70%;
+        top:150px;
+        right:50px;
+        bottom:auto;
         left:auto;
     }
 
@@ -272,7 +270,7 @@
 </div>
 
 <!-- 問題文オーバーレイ -->
-<div class="overlay-panel small" id="problemOverlay">
+<div class="overlay-panel small" id="problemOverlay" style="display:none;">
     <button class="toggle-size-btn" id="problemSizeToggle">拡大/縮小</button>
     <div class="pdf-viewer">
         <div class="pdf-controls">
@@ -280,13 +278,13 @@
             <input type="text" id="problemPage" class="pdf-page-input" value="1"/>
             <button id="problemNext">次へ</button>
         </div>
-        <iframe id="problemPdf" class="pdf-frame" src="" title="問題文PDF"></iframe>
+        <canvas id="problemPdfCanvas" class="pdf-canvas"></canvas>
         <p>※PDFを追加してください</p>
     </div>
 </div>
 
 <!-- 六法オーバーレイ -->
-<div class="overlay-panel small" id="lawOverlay">
+<div class="overlay-panel small" id="lawOverlay" style="display:none;">
     <button class="toggle-size-btn" id="lawSizeToggle">拡大/縮小</button>
     <div class="pdf-viewer">
         <div class="pdf-controls">
@@ -294,13 +292,13 @@
             <input type="text" id="lawPage" class="pdf-page-input" value="1"/>
             <button id="lawNext">次へ</button>
         </div>
-        <iframe id="lawPdf" class="pdf-frame" src="" title="六法PDF"></iframe>
+        <canvas id="lawPdfCanvas" class="pdf-canvas"></canvas>
         <p>※PDFを追加してください</p>
     </div>
 </div>
 
-<!-- jsPDF -->
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<!-- pdf.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 <script>
     const { jsPDF } = window.jspdf;
 
@@ -339,64 +337,106 @@
         alert("試験を終了します。");
     }
 
-    // PDFページ切り替え（ダミー）
-    const problemPdf = document.getElementById("problemPdf");
-    const lawPdf = document.getElementById("lawPdf");
+    // PDF読込に使うURL(例示用：実際のPDFファイルURLに置き換えて下さい)
+    const pdfUrlProblem = "example-problem.pdf";
+    const pdfUrlLaw = "example-law.pdf";
+
+    let problemPdfDoc = null;
+    let lawPdfDoc = null;
+    let problemPageNum = 1;
+    let lawPageNum = 1;
+
+    const problemPdfCanvas = document.getElementById("problemPdfCanvas");
+    const lawPdfCanvas = document.getElementById("lawPdfCanvas");
+    const problemCtx = problemPdfCanvas.getContext('2d');
+    const lawCtx = lawPdfCanvas.getContext('2d');
+
     const problemPageInput = document.getElementById("problemPage");
     const lawPageInput = document.getElementById("lawPage");
-    const problemPrev = document.getElementById("problemPrev");
-    const problemNext = document.getElementById("problemNext");
-    const lawPrev = document.getElementById("lawPrev");
-    const lawNext = document.getElementById("lawNext");
 
-    let problemPage=1;
-    let lawPage=1;
-
-    problemPrev.addEventListener("click", ()=>{
-        if(problemPage>1) problemPage--;
-        problemPageInput.value = problemPage;
-        loadProblemPdf(problemPage);
+    document.getElementById("problemPrev").addEventListener("click",()=>{
+        if(problemPageNum>1){
+            problemPageNum--;
+            problemPageInput.value = problemPageNum;
+            renderPDFPage(problemPdfDoc, problemPageNum, problemPdfCanvas, problemCtx);
+        }
     });
-
-    problemNext.addEventListener("click", ()=>{
-        problemPage++;
-        problemPageInput.value = problemPage;
-        loadProblemPdf(problemPage);
+    document.getElementById("problemNext").addEventListener("click",()=>{
+        if(problemPdfDoc && problemPageNum < problemPdfDoc.numPages){
+            problemPageNum++;
+            problemPageInput.value = problemPageNum;
+            renderPDFPage(problemPdfDoc, problemPageNum, problemPdfCanvas, problemCtx);
+        }
     });
-
     problemPageInput.addEventListener("change",()=>{
-        problemPage = parseInt(problemPageInput.value) || 1;
-        loadProblemPdf(problemPage);
+        let val = parseInt(problemPageInput.value,10);
+        if(problemPdfDoc && val>=1 && val<=problemPdfDoc.numPages){
+            problemPageNum=val;
+            renderPDFPage(problemPdfDoc, problemPageNum, problemPdfCanvas, problemCtx);
+        }
     });
 
-    lawPrev.addEventListener("click", ()=>{
-        if(lawPage>1) lawPage--;
-        lawPageInput.value = lawPage;
-        loadLawPdf(lawPage);
+    document.getElementById("lawPrev").addEventListener("click",()=>{
+        if(lawPageNum>1){
+            lawPageNum--;
+            lawPageInput.value = lawPageNum;
+            renderPDFPage(lawPdfDoc, lawPageNum, lawPdfCanvas, lawCtx);
+        }
     });
-
-    lawNext.addEventListener("click", ()=>{
-        lawPage++;
-        lawPageInput.value = lawPage;
-        loadLawPdf(lawPage);
+    document.getElementById("lawNext").addEventListener("click",()=>{
+        if(lawPdfDoc && lawPageNum < lawPdfDoc.numPages){
+            lawPageNum++;
+            lawPageInput.value = lawPageNum;
+            renderPDFPage(lawPdfDoc, lawPageNum, lawPdfCanvas, lawCtx);
+        }
     });
-
     lawPageInput.addEventListener("change",()=>{
-        lawPage = parseInt(lawPageInput.value) || 1;
-        loadLawPdf(lawPage);
+        let val = parseInt(lawPageInput.value,10);
+        if(lawPdfDoc && val>=1 && val<=lawPdfDoc.numPages){
+            lawPageNum=val;
+            renderPDFPage(lawPdfDoc, lawPageNum, lawPdfCanvas, lawCtx);
+        }
     });
 
-    function loadProblemPdf(page){
-        problemPdf.src = "about:blank";
+    const pdfjsLib = window['pdfjsLib'];
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+    // 例: PDF読込 (実際PDFがないとエラーになります)
+    loadPDFDocument(pdfUrlProblem, (pdfDoc)=>{
+        problemPdfDoc = pdfDoc;
+        renderPDFPage(problemPdfDoc, problemPageNum, problemPdfCanvas, problemCtx);
+    });
+    loadPDFDocument(pdfUrlLaw, (pdfDoc)=>{
+        lawPdfDoc = pdfDoc;
+        renderPDFPage(lawPdfDoc, lawPageNum, lawPdfCanvas, lawCtx);
+    });
+
+    function loadPDFDocument(url, callback){
+        pdfjsLib.getDocument(url).promise.then((pdfDoc_)=>{
+            callback(pdfDoc_);
+        }).catch((error)=>{
+            console.error("PDF読み込みエラー:",error);
+        });
     }
 
-    function loadLawPdf(page){
-        lawPdf.src = "about:blank";
+    function renderPDFPage(pdfDoc, pageNum, canvas, ctx){
+        if(!pdfDoc) return;
+        pdfDoc.getPage(pageNum).then((page)=>{
+            const viewport = page.getViewport({scale:1.0});
+            const scale = (canvas.parentNode.clientWidth / viewport.width)*0.95; 
+            const scaledViewport = page.getViewport({scale: scale});
+            canvas.height = scaledViewport.height;
+            canvas.width = scaledViewport.width;
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: scaledViewport
+            };
+            page.render(renderContext);
+        });
     }
 
     // 答案PDF化
     const sendMailBtn = document.getElementById("sendMailBtn");
-    const emailAddress = document.getElementById("emailAddress");
     const answerPages = document.querySelectorAll(".answer-page textarea");
     const userName = document.getElementById("userName");
 
@@ -423,7 +463,6 @@
         alert("PDFが生成されました。実際のメール送信にはサーバ側での処理が必要です。");
     });
 
-
     // 問題文・六法 オーバーレイ表示/非表示
     const toggleProblemBtn = document.getElementById("toggleProblemBtn");
     const toggleLawBtn = document.getElementById("toggleLawBtn");
@@ -431,18 +470,18 @@
     const lawOverlay = document.getElementById("lawOverlay");
 
     toggleProblemBtn.addEventListener("click", ()=>{
-        if(problemOverlay.style.display==="none" || problemOverlay.style.display===""){
+        if(problemOverlay.style.display === "none"){
             problemOverlay.style.display = "flex";
         } else {
-            problemOverlay.style.display="none";
+            problemOverlay.style.display = "none";
         }
     });
 
     toggleLawBtn.addEventListener("click", ()=>{
-        if(lawOverlay.style.display==="none" || lawOverlay.style.display===""){
+        if(lawOverlay.style.display === "none"){
             lawOverlay.style.display = "flex";
         } else {
-            lawOverlay.style.display="none";
+            lawOverlay.style.display = "none";
         }
     });
 
@@ -456,11 +495,9 @@
     problemSizeToggle.addEventListener("click",()=>{
         problemExpanded = !problemExpanded;
         if(problemExpanded){
-            // 拡大
             problemOverlay.classList.remove("small");
             problemOverlay.classList.add("expanded-problem");
         } else {
-            // 縮小
             problemOverlay.classList.add("small");
             problemOverlay.classList.remove("expanded-problem");
         }
@@ -476,6 +513,38 @@
             lawOverlay.classList.remove("expanded-law");
         }
     });
+
+    // ドラッグ移動可能にする関数
+    function makeDraggable(element){
+        let isDragging = false;
+        let offsetX=0, offsetY=0;
+
+        element.addEventListener('mousedown', (e)=>{
+            isDragging = true;
+            offsetX = e.clientX - element.offsetLeft;
+            offsetY = e.clientY - element.offsetTop;
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+            e.preventDefault();
+        });
+
+        function onMouseMove(e){
+            if(isDragging){
+                element.style.left = (e.clientX - offsetX)+'px';
+                element.style.top = (e.clientY - offsetY)+'px';
+            }
+        }
+
+        function onMouseUp(e){
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+    }
+
+    // オーバーレイをドラッグ可能に
+    makeDraggable(problemOverlay);
+    makeDraggable(lawOverlay);
 </script>
 </body>
 </html>
