@@ -24,11 +24,13 @@
 
     .top-controls {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-around;
         align-items: center;
         background: #333;
         color:#fff;
         padding: 0.5rem;
+        gap:0.5rem;
     }
 
     .top-controls .info {
@@ -46,62 +48,57 @@
     }
 
     .main-container {
-        max-width:1200px;
-        margin:1rem auto;
-        background:#fff;
-        border-radius:8px;
-        box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        display: flex;
+        height: calc(100vh - 130px);
+        overflow: hidden;
+    }
+
+    .panel {
+        border:1px solid #ccc;
+        background:#fafafa;
+        overflow:auto;
+        transition: width 0.3s ease;
         display:flex;
         flex-direction:column;
-        padding:1rem;
+        align-items:center;
+        padding:0.5rem;
     }
 
-    .nav-buttons {
-        display:flex;
-        justify-content:center;
-        gap:1rem;
-        margin-bottom:1rem;
+    /* 初期幅 */
+    .panel-left, .panel-right {
+        width:20%;
+        min-width:150px;
+        max-width:500px;
     }
-
-    .nav-buttons button {
-        background:#ddd;
-        border:none;
-        padding:0.5rem 1rem;
-        border-radius:4px;
-        cursor:pointer;
-        font-size:1rem;
-        font-weight:bold;
-    }
-    .nav-buttons button.active {
-        background:#bbb;
-    }
-
-    .content-area {
+    .panel-center {
         flex:1;
-        display:none;
         overflow:auto;
-        border:1px solid #ccc;
         padding:1rem;
-        position:relative;
-        background:#fafafa;
+        background:#fff;
     }
 
-    .content-area.active {
-        display:block;
+    /* 拡大時 */
+    .expanded-left {
+        width:35% !important;
+    }
+    .expanded-right {
+        width:35% !important;
     }
 
-    /* 問題文・六法PDF表示 */
+    /* PDF表示部分 */
     .pdf-viewer {
         display:flex;
         flex-direction:column;
         align-items:center;
         gap:0.5rem;
+        width:100%;
     }
 
     .pdf-controls {
         display:flex;
         gap:0.5rem;
         margin-bottom:0.5rem;
+        justify-content:center;
     }
 
     .pdf-controls button {
@@ -125,12 +122,13 @@
         background:#fff;
     }
 
-    /* 答案用紙部分 */
+    /* 答案用紙 */
     .answer-sheet-container {
         display:flex;
         flex-direction:column;
         align-items:center;
         gap:1rem;
+        max-width:100%;
     }
 
     .answer-sheet-header {
@@ -156,13 +154,15 @@
     .answer-page {
         background:#fff;
         width:210mm;
-        height:297mm;
+        height:297mm; /* A4縦 */
         border:1px solid #aaa;
         box-sizing:border-box;
         padding:1rem;
         overflow:auto;
+        position:relative;
     }
 
+    /* 横罫線用CSS：背景に罫線 */
     .answer-page textarea {
         width:100%;
         height:100%;
@@ -172,9 +172,14 @@
         font-size:0.9rem;
         line-height:1.4;
         outline:none;
+        background: repeating-linear-gradient(
+          white,
+          white 24px,
+          #ccc 25px,
+          white 26px
+        );
     }
 
-    /* メール送信欄 */
     .email-send {
         display:flex;
         flex-direction:column;
@@ -211,45 +216,26 @@
     <div class="info">残り時間: <span id="timeDisplay">120:00</span></div>
     <button id="startBtn">開始</button>
     <button id="endBtn">終了</button>
+    <button id="toggleProblem">問題文拡大/縮小</button>
+    <button id="toggleLaw">六法拡大/縮小</button>
 </div>
 
 <div class="main-container">
-    <div class="nav-buttons">
-        <button id="problemBtn" class="active">問題文</button>
-        <button id="lawBtn">六法</button>
-        <button id="answerBtn">答案用紙</button>
-    </div>
-
-    <!-- 問題文 -->
-    <div class="content-area active" id="problemArea">
+    <!-- 左パネル：問題文PDF -->
+    <div class="panel panel-left" id="problemPanel">
         <div class="pdf-viewer">
             <div class="pdf-controls">
                 <button id="problemPrev">前へ</button>
                 <input type="text" id="problemPage" class="pdf-page-input" value="1"/>
                 <button id="problemNext">次へ</button>
             </div>
-            <!-- ここでPDFを表示するためのframeを用意する -->
-            <!-- 実際にはPDF.jsなどを使ってJS側でレンダリングすることが多いが、ここではiframeでダミー -->
             <iframe id="problemPdf" class="pdf-frame" src="" title="問題文PDF"></iframe>
             <p>※PDFを追加してください</p>
         </div>
     </div>
 
-    <!-- 六法 -->
-    <div class="content-area" id="lawArea">
-        <div class="pdf-viewer">
-            <div class="pdf-controls">
-                <button id="lawPrev">前へ</button>
-                <input type="text" id="lawPage" class="pdf-page-input" value="1"/>
-                <button id="lawNext">次へ</button>
-            </div>
-            <iframe id="lawPdf" class="pdf-frame" src="" title="六法PDF"></iframe>
-            <p>※PDFを追加してください</p>
-        </div>
-    </div>
-
-    <!-- 答案用紙 -->
-    <div class="content-area" id="answerArea">
+    <!-- 中央パネル：答案用紙 -->
+    <div class="panel panel-center">
         <div class="answer-sheet-container">
             <div class="answer-sheet-header">
                 <div>
@@ -257,7 +243,6 @@
                 </div>
             </div>
             <div class="pages-container">
-                <!-- A4サイズ8ページ分 -->
                 <div class="answer-page"><textarea placeholder="答案記述ページ1"></textarea></div>
                 <div class="answer-page"><textarea placeholder="答案記述ページ2"></textarea></div>
                 <div class="answer-page"><textarea placeholder="答案記述ページ3"></textarea></div>
@@ -270,51 +255,30 @@
             
             <div class="email-send">
                 <input type="email" id="emailAddress" placeholder="メールアドレスを入力" />
-                <button id="sendMailBtn">答案をメール送信</button>
+                <button id="sendMailBtn">答案をPDF化</button>
+                <p>※実際のメール添付送信にはサーバ側での処理が必要です。</p>
             </div>
+        </div>
+    </div>
+
+    <!-- 右パネル：六法PDF -->
+    <div class="panel panel-right" id="lawPanel">
+        <div class="pdf-viewer">
+            <div class="pdf-controls">
+                <button id="lawPrev">前へ</button>
+                <input type="text" id="lawPage" class="pdf-page-input" value="1"/>
+                <button id="lawNext">次へ</button>
+            </div>
+            <iframe id="lawPdf" class="pdf-frame" src="" title="六法PDF"></iframe>
+            <p>※PDFを追加してください</p>
         </div>
     </div>
 </div>
 
+<!-- jsPDF CDN -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>
-    // タブ切り替え
-    const problemBtn = document.getElementById("problemBtn");
-    const lawBtn = document.getElementById("lawBtn");
-    const answerBtn = document.getElementById("answerBtn");
-
-    const problemArea = document.getElementById("problemArea");
-    const lawArea = document.getElementById("lawArea");
-    const answerArea = document.getElementById("answerArea");
-
-    problemBtn.addEventListener("click",()=>{
-        setActiveTab("problem");
-    });
-    lawBtn.addEventListener("click",()=>{
-        setActiveTab("law");
-    });
-    answerBtn.addEventListener("click",()=>{
-        setActiveTab("answer");
-    });
-
-    function setActiveTab(tab){
-        problemBtn.classList.remove("active");
-        lawBtn.classList.remove("active");
-        answerBtn.classList.remove("active");
-        problemArea.classList.remove("active");
-        lawArea.classList.remove("active");
-        answerArea.classList.remove("active");
-
-        if(tab==="problem"){
-            problemBtn.classList.add("active");
-            problemArea.classList.add("active");
-        } else if(tab==="law"){
-            lawBtn.classList.add("active");
-            lawArea.classList.add("active");
-        } else if(tab==="answer"){
-            answerBtn.classList.add("active");
-            answerArea.classList.add("active");
-        }
-    }
+    const { jsPDF } = window.jspdf;
 
     // タイマー機能
     let remainingTime = 120*60; //120分
@@ -352,7 +316,6 @@
     }
 
     // PDFページ切り替え（ダミー）
-    // 実際にはPDF.jsなどを利用してレンダリングする必要があるが、ここでは簡易的にURLパラメータなどで表現
     const problemPdf = document.getElementById("problemPdf");
     const lawPdf = document.getElementById("lawPdf");
     const problemPageInput = document.getElementById("problemPage");
@@ -400,7 +363,6 @@
     });
 
     function loadProblemPdf(page){
-        // ダミー：本来はpageパラメータでpdf.jsやpdfへの#page=指定などを行う
         problemPdf.src = "about:blank"; 
     }
 
@@ -408,31 +370,61 @@
         lawPdf.src = "about:blank";
     }
 
-    // 答案送信（メール送信）
+    // 答案PDF化
     const sendMailBtn = document.getElementById("sendMailBtn");
     const emailAddress = document.getElementById("emailAddress");
     const answerPages = document.querySelectorAll(".answer-page textarea");
     const userName = document.getElementById("userName");
 
     sendMailBtn.addEventListener("click",()=>{
-        const email = emailAddress.value.trim();
-        if(!email){
-            alert("メールアドレスを入力してください。");
-            return;
-        }
-        const name = userName.value.trim();
-        let body = "【氏名】:" + name + "\n\n";
-        let i=1;
-        answerPages.forEach(page=>{
-            body += "【ページ" + i + "】\n" + page.value + "\n\n";
-            i++;
+        const name = userName.value.trim() || "氏名未入力";
+        const doc = new jsPDF({
+            orientation: 'p',
+            unit: 'pt',
+            format: 'a4'
         });
 
-        // mailtoリンクを使用(ユーザーのメールクライアントが開く)
-        let mailtoLink = "mailto:"+encodeURIComponent(email)+"?subject="+encodeURIComponent("司法試験CBT答案")+"&body="+encodeURIComponent(body);
-        window.location.href = mailtoLink;
+        let pageIndex=0;
+        answerPages.forEach(page=>{
+            if(pageIndex>0) doc.addPage();
+            const text = page.value;
+            const lines = doc.splitTextToSize(text, 500);
+            doc.setFont("Helvetica","",12);
+            doc.text("氏名: "+name,50,50);
+            doc.text(lines,50,80);
+            pageIndex++;
+        });
+
+        doc.save("答案.pdf");
+        alert("PDFが生成されました。実際のメール送信にはサーバ側での処理が必要です。");
     });
 
+    // 問題文・六法拡大/縮小ボタン
+    const toggleProblemBtn = document.getElementById("toggleProblem");
+    const toggleLawBtn = document.getElementById("toggleLaw");
+    const problemPanel = document.getElementById("problemPanel");
+    const lawPanel = document.getElementById("lawPanel");
+
+    let problemExpanded = false;
+    let lawExpanded = false;
+
+    toggleProblemBtn.addEventListener("click", ()=>{
+        problemExpanded = !problemExpanded;
+        if(problemExpanded){
+            problemPanel.classList.add("expanded-left");
+        } else {
+            problemPanel.classList.remove("expanded-left");
+        }
+    });
+
+    toggleLawBtn.addEventListener("click", ()=>{
+        lawExpanded = !lawExpanded;
+        if(lawExpanded){
+            lawPanel.classList.add("expanded-right");
+        } else {
+            lawPanel.classList.remove("expanded-right");
+        }
+    });
 </script>
 </body>
 </html>
