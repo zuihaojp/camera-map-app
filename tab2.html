@@ -6,10 +6,12 @@
 <title>司法試験CBT</title>
 <style>
     body {
-        margin: 0;
+        margin:0;
         font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
-        background: #f5f5f5;
+        background:#f5f5f5;
+        overflow:hidden; /* 全画面表示の想定 */
     }
+
     header {
         background: #1C1C1C;
         color: #fff;
@@ -23,13 +25,13 @@
     }
 
     .top-controls {
-        display: flex;
-        flex-wrap: wrap;
+        display:flex;
+        flex-wrap:wrap;
         justify-content: space-around;
-        align-items: center;
-        background: #333;
+        align-items:center;
+        background:#333;
         color:#fff;
-        padding: 0.5rem;
+        padding:0.5rem;
         gap:0.5rem;
     }
 
@@ -38,8 +40,8 @@
     }
 
     .top-controls button {
-        background: #555;
-        color: #fff;
+        background:#555;
+        color:#fff;
         border:none;
         padding:0.5rem 1rem;
         border-radius:4px;
@@ -48,87 +50,23 @@
     }
 
     .main-container {
-        display: flex;
-        height: calc(100vh - 130px);
-        overflow: hidden;
-    }
-
-    .panel {
-        border:1px solid #ccc;
-        background:#fafafa;
+        position:absolute;
+        top:130px; /* header + top-controls 合計高さ仮 */
+        bottom:0;
+        left:0;
+        right:0;
         overflow:auto;
-        transition: width 0.3s ease;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        padding:0.5rem;
-    }
-
-    /* 初期幅 */
-    .panel-left, .panel-right {
-        width:20%;
-        min-width:150px;
-        max-width:500px;
-    }
-    .panel-center {
-        flex:1;
-        overflow:auto;
-        padding:1rem;
         background:#fff;
-    }
-
-    /* 拡大時 */
-    .expanded-left {
-        width:35% !important;
-    }
-    .expanded-right {
-        width:35% !important;
-    }
-
-    /* PDF表示部分 */
-    .pdf-viewer {
         display:flex;
-        flex-direction:column;
-        align-items:center;
-        gap:0.5rem;
-        width:100%;
-    }
-
-    .pdf-controls {
-        display:flex;
-        gap:0.5rem;
-        margin-bottom:0.5rem;
         justify-content:center;
+        padding:1rem;
     }
 
-    .pdf-controls button {
-        background:#444;
-        color:#fff;
-        border:none;
-        padding:0.3rem 0.7rem;
-        border-radius:4px;
-        cursor:pointer;
-    }
-
-    .pdf-page-input {
-        width:50px;
-        text-align:center;
-    }
-
-    .pdf-frame {
-        width:100%;
-        height:80vh;
-        border:1px solid #ccc;
-        background:#fff;
-    }
-
-    /* 答案用紙 */
     .answer-sheet-container {
         display:flex;
         flex-direction:column;
         align-items:center;
         gap:1rem;
-        max-width:100%;
     }
 
     .answer-sheet-header {
@@ -206,6 +144,94 @@
         font-size:0.9rem;
     }
 
+    /* オーバーレイパネル(問題文・六法) */
+    .overlay-panel {
+        position:absolute;
+        background:#fafafa;
+        border:1px solid #ccc;
+        box-shadow:0 2px 8px rgba(0,0,0,0.2);
+        z-index:999; 
+        display:none;
+        flex-direction:column;
+        align-items:center;
+        padding:0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .overlay-panel .pdf-viewer {
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:0.5rem;
+        width:100%;
+    }
+
+    .overlay-panel .pdf-controls {
+        display:flex;
+        gap:0.5rem;
+        margin-bottom:0.5rem;
+        justify-content:center;
+    }
+
+    .overlay-panel .pdf-controls button {
+        background:#444;
+        color:#fff;
+        border:none;
+        padding:0.3rem 0.7rem;
+        border-radius:4px;
+        cursor:pointer;
+    }
+
+    .overlay-panel .pdf-page-input {
+        width:50px;
+        text-align:center;
+    }
+
+    .overlay-panel .pdf-frame {
+        width:100%;
+        height:calc(80vh - 50px);
+        border:1px solid #ccc;
+        background:#fff;
+    }
+
+    /* 初期は右下に小さく表示 */
+    .overlay-panel.small {
+        width:300px;
+        height:400px;
+        bottom:10px;
+        right:10px;
+    }
+
+    /* 拡大時は画面半分を占める。問題文は左半分、六法は右半分にする例 */
+    .overlay-panel.expanded-problem {
+        width:50%;
+        height:100%;
+        top:130px; /* header+controls高さ分空ける */
+        left:0;
+        bottom:0;
+        right:auto;
+    }
+
+    .overlay-panel.expanded-law {
+        width:50%;
+        height:100%;
+        top:130px;
+        right:0;
+        bottom:0;
+        left:auto;
+    }
+
+    .overlay-panel .toggle-size-btn {
+        background:#666;
+        color:#fff;
+        border:none;
+        padding:0.3rem 0.7rem;
+        margin-bottom:0.5rem;
+        border-radius:4px;
+        cursor:pointer;
+        font-size:0.8rem;
+    }
+
 </style>
 </head>
 <body>
@@ -216,66 +242,64 @@
     <div class="info">残り時間: <span id="timeDisplay">120:00</span></div>
     <button id="startBtn">開始</button>
     <button id="endBtn">終了</button>
-    <button id="toggleProblem">問題文拡大/縮小</button>
-    <button id="toggleLaw">六法拡大/縮小</button>
+    <button id="toggleProblemBtn">問題文表示/非表示</button>
+    <button id="toggleLawBtn">六法表示/非表示</button>
 </div>
 
 <div class="main-container">
-    <!-- 左パネル：問題文PDF -->
-    <div class="panel panel-left" id="problemPanel">
-        <div class="pdf-viewer">
-            <div class="pdf-controls">
-                <button id="problemPrev">前へ</button>
-                <input type="text" id="problemPage" class="pdf-page-input" value="1"/>
-                <button id="problemNext">次へ</button>
-            </div>
-            <iframe id="problemPdf" class="pdf-frame" src="" title="問題文PDF"></iframe>
-            <p>※PDFを追加してください</p>
-        </div>
-    </div>
-
-    <!-- 中央パネル：答案用紙 -->
-    <div class="panel panel-center">
-        <div class="answer-sheet-container">
-            <div class="answer-sheet-header">
-                <div>
-                    氏名: <input type="text" id="userName" placeholder="名前を入力"/>
-                </div>
-            </div>
-            <div class="pages-container">
-                <div class="answer-page"><textarea placeholder="答案記述ページ1"></textarea></div>
-                <div class="answer-page"><textarea placeholder="答案記述ページ2"></textarea></div>
-                <div class="answer-page"><textarea placeholder="答案記述ページ3"></textarea></div>
-                <div class="answer-page"><textarea placeholder="答案記述ページ4"></textarea></div>
-                <div class="answer-page"><textarea placeholder="答案記述ページ5"></textarea></div>
-                <div class="answer-page"><textarea placeholder="答案記述ページ6"></textarea></div>
-                <div class="answer-page"><textarea placeholder="答案記述ページ7"></textarea></div>
-                <div class="answer-page"><textarea placeholder="答案記述ページ8"></textarea></div>
-            </div>
-            
-            <div class="email-send">
-                <input type="email" id="emailAddress" placeholder="メールアドレスを入力" />
-                <button id="sendMailBtn">答案をPDF化</button>
-                <p>※実際のメール添付送信にはサーバ側での処理が必要です。</p>
+    <div class="answer-sheet-container">
+        <div class="answer-sheet-header">
+            <div>
+                氏名: <input type="text" id="userName" placeholder="名前を入力"/>
             </div>
         </div>
-    </div>
-
-    <!-- 右パネル：六法PDF -->
-    <div class="panel panel-right" id="lawPanel">
-        <div class="pdf-viewer">
-            <div class="pdf-controls">
-                <button id="lawPrev">前へ</button>
-                <input type="text" id="lawPage" class="pdf-page-input" value="1"/>
-                <button id="lawNext">次へ</button>
-            </div>
-            <iframe id="lawPdf" class="pdf-frame" src="" title="六法PDF"></iframe>
-            <p>※PDFを追加してください</p>
+        <div class="pages-container">
+            <div class="answer-page"><textarea placeholder="答案記述ページ1"></textarea></div>
+            <div class="answer-page"><textarea placeholder="答案記述ページ2"></textarea></div>
+            <div class="answer-page"><textarea placeholder="答案記述ページ3"></textarea></div>
+            <div class="answer-page"><textarea placeholder="答案記述ページ4"></textarea></div>
+            <div class="answer-page"><textarea placeholder="答案記述ページ5"></textarea></div>
+            <div class="answer-page"><textarea placeholder="答案記述ページ6"></textarea></div>
+            <div class="answer-page"><textarea placeholder="答案記述ページ7"></textarea></div>
+            <div class="answer-page"><textarea placeholder="答案記述ページ8"></textarea></div>
+        </div>
+        <div class="email-send">
+            <input type="email" id="emailAddress" placeholder="メールアドレスを入力" />
+            <button id="sendMailBtn">答案をPDF化</button>
+            <p>※実際のメール添付送信にはサーバ側での処理が必要です。</p>
         </div>
     </div>
 </div>
 
-<!-- jsPDF CDN -->
+<!-- 問題文オーバーレイ -->
+<div class="overlay-panel small" id="problemOverlay">
+    <button class="toggle-size-btn" id="problemSizeToggle">拡大/縮小</button>
+    <div class="pdf-viewer">
+        <div class="pdf-controls">
+            <button id="problemPrev">前へ</button>
+            <input type="text" id="problemPage" class="pdf-page-input" value="1"/>
+            <button id="problemNext">次へ</button>
+        </div>
+        <iframe id="problemPdf" class="pdf-frame" src="" title="問題文PDF"></iframe>
+        <p>※PDFを追加してください</p>
+    </div>
+</div>
+
+<!-- 六法オーバーレイ -->
+<div class="overlay-panel small" id="lawOverlay">
+    <button class="toggle-size-btn" id="lawSizeToggle">拡大/縮小</button>
+    <div class="pdf-viewer">
+        <div class="pdf-controls">
+            <button id="lawPrev">前へ</button>
+            <input type="text" id="lawPage" class="pdf-page-input" value="1"/>
+            <button id="lawNext">次へ</button>
+        </div>
+        <iframe id="lawPdf" class="pdf-frame" src="" title="六法PDF"></iframe>
+        <p>※PDFを追加してください</p>
+    </div>
+</div>
+
+<!-- jsPDF -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>
     const { jsPDF } = window.jspdf;
@@ -363,7 +387,7 @@
     });
 
     function loadProblemPdf(page){
-        problemPdf.src = "about:blank"; 
+        problemPdf.src = "about:blank";
     }
 
     function loadLawPdf(page){
@@ -399,30 +423,57 @@
         alert("PDFが生成されました。実際のメール送信にはサーバ側での処理が必要です。");
     });
 
-    // 問題文・六法拡大/縮小ボタン
-    const toggleProblemBtn = document.getElementById("toggleProblem");
-    const toggleLawBtn = document.getElementById("toggleLaw");
-    const problemPanel = document.getElementById("problemPanel");
-    const lawPanel = document.getElementById("lawPanel");
 
-    let problemExpanded = false;
-    let lawExpanded = false;
+    // 問題文・六法 オーバーレイ表示/非表示
+    const toggleProblemBtn = document.getElementById("toggleProblemBtn");
+    const toggleLawBtn = document.getElementById("toggleLawBtn");
+    const problemOverlay = document.getElementById("problemOverlay");
+    const lawOverlay = document.getElementById("lawOverlay");
 
     toggleProblemBtn.addEventListener("click", ()=>{
-        problemExpanded = !problemExpanded;
-        if(problemExpanded){
-            problemPanel.classList.add("expanded-left");
+        if(problemOverlay.style.display==="none" || problemOverlay.style.display===""){
+            problemOverlay.style.display = "flex";
         } else {
-            problemPanel.classList.remove("expanded-left");
+            problemOverlay.style.display="none";
         }
     });
 
     toggleLawBtn.addEventListener("click", ()=>{
+        if(lawOverlay.style.display==="none" || lawOverlay.style.display===""){
+            lawOverlay.style.display = "flex";
+        } else {
+            lawOverlay.style.display="none";
+        }
+    });
+
+    // 拡大/縮小ボタン
+    const problemSizeToggle = document.getElementById("problemSizeToggle");
+    const lawSizeToggle = document.getElementById("lawSizeToggle");
+
+    let problemExpanded = false;
+    let lawExpanded = false;
+
+    problemSizeToggle.addEventListener("click",()=>{
+        problemExpanded = !problemExpanded;
+        if(problemExpanded){
+            // 拡大
+            problemOverlay.classList.remove("small");
+            problemOverlay.classList.add("expanded-problem");
+        } else {
+            // 縮小
+            problemOverlay.classList.add("small");
+            problemOverlay.classList.remove("expanded-problem");
+        }
+    });
+
+    lawSizeToggle.addEventListener("click",()=>{
         lawExpanded = !lawExpanded;
         if(lawExpanded){
-            lawPanel.classList.add("expanded-right");
+            lawOverlay.classList.remove("small");
+            lawOverlay.classList.add("expanded-law");
         } else {
-            lawPanel.classList.remove("expanded-right");
+            lawOverlay.classList.add("small");
+            lawOverlay.classList.remove("expanded-law");
         }
     });
 </script>
