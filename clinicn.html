@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIBUYA CLINIC</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a0a0a;
+            --accent: #00f5d4;
+            --gold: #ffd700;
+            --text: #ffffff;
+            --bg: #0a0a0a;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        header {
+            min-height: 100vh;
+            background: linear-gradient(45deg, var(--primary), #1a1a1a);
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 245, 212, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .clinic-logo {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(to right, var(--text), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.2em;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin: 1rem 0;
+            letter-spacing: 0.1em;
+            font-weight: 300;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .department-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .department-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 245, 212, 0.05));
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .department-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .department-card:hover::before {
+            transform: translateY(0);
+        }
+
+        .department-icon {
+            color: var(--accent);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .department-card h3 {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            color: var(--text);
+        }
+
+        .department-card p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .delivery-service {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .delivery-title {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-icon {
+            color: var(--accent);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: var(--text);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 4rem auto;
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-header {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text);
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-footer {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .form-note {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .submit-button {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 245, 212, 0.2);
+        }
+
+        footer {
+            background: linear-gradient(to right, var(--primary), #1a1a1a);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .social-links {
+            max-width: 800px;
+            margin: 6rem auto;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .social-title {
+            color: var(--text);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            min-width: 240px;
+        }
+
+        .social-button.line {
+            background: #00B900;
+        }
+
+        .social-button.instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        .social-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-button i {
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .clinic-logo {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 2rem;
+                margin: 2rem 1rem;
+            }
+
+            .delivery-service {
+                padding: 2rem;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .social-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-switcher">
+        <button class="lang-btn active" onclick="changeLang('ja', event)">日本語</button>
+        <button class="lang-btn" onclick="changeLang('en', event)">English</button>
+        <button class="lang-btn" onclick="changeLang('zh', event)">中文</button>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <h1 class="clinic-logo">SHIBUYA CLINIC</h1>
+            <p class="header-subtitle">Advanced Online Medical Care</p>
+            <div class="scroll-indicator">
+                <i class="fas fa-chevron-down" style="color: var(--accent)"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">診療科目</h2>
+        <div class="departments-grid">
+            <div class="department-card" onclick="showForm('薄毛治療科')">
+                <div class="department-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3>薄毛治療科</h3>
+                <p>最新の治療法と豊富な治療実績で、あなたに最適な発毛治療プランをご提案いたします。</p>
+            </div>
+            <div class="department-card" onclick="showForm('通風内科')">
+                <div class="department-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3>通風内科</h3>
+                <p>痛みの緩和から予防まで、生活習慣の改善を含めた総合的な治療アプローチを行います。</p>
+            </div>
+            <div class="department-card" onclick="showForm('美容内科')">
+                <div class="department-icon">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <h3>美容内科</h3>
+                <p>美容医療の専門医が、あなたの美しさと健康をサポートいたします。</p>
+            </div>
+            <div class="department-card" onclick="showForm('心療内科')">
+                <div class="department-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>心療内科</h3>
+                <p>心身の健康をトータルにケア。安心できる環境で、専門医による診療を提供します。</p>
+            </div>
+        </div>
+
+        <div class="delivery-service">
+            <h2 class="delivery-title">Premium Delivery Service</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>都内専用スピード配送</h3>
+                    <p>処方薬・検査キットを最短3時間以内にお届け</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>緊急対応可能</h3>
+                    <p>追加料金で緊急配送サービスに対応</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>安全な配送システム</h3>
+                    <p>専門スタッフによる確実な医薬品配送</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container" id="form-container">
+            <h2 id="form-title" class="form-header"></h2>
+            <form id="reservation-form" onsubmit="submitReservation(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="date">診療希望日 *</label>
+                        <input class="form-input" type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="time">診療時間 *</label>
+                        <select class="form-input" id="time" name="time" required>
+                            <option value="">時間を選択してください</option>
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="name">お名前 *</label>
+                        <input class="form-input" type="text" id="name" name="name" required placeholder="例：山田 太郎">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="phone">電話番号 *</label>
+                        <input class="form-input" type="tel" id="phone" name="phone" required placeholder="例：090-1234-5678">
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label" for="address">ご住所 *</label>
+                        <input class="form-input" type="text" id="address" name="address" required placeholder="例：東京都渋谷区渋谷1-1-1">
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label" for="email">メールアドレス *</label>
+                        <input class="form-input" type="email" id="email" name="email" required placeholder="例：email@example.com">
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label" for="message">症状・ご要望 *</label>
+                        <textarea class="form-input" id="message" name="message" rows="4" required placeholder="症状や気になることについて、できるだけ詳しくご記入ください。"></textarea>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <p class="form-note">* は必須項目です</p>
+                    <button type="submit" class="submit-button">
+                        <span>予約を確定する</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 SHIBUYA CLINIC All Rights Reserved.</p>
+    </footer>
+
+    <div class="social-links">
+        <h3 class="social-title">Follow Us</h3>
+        <div class="social-buttons">
+            <a href="https://line.me/R/ti/p/@YOUR-LINE-ID" class="social-button line" target="_blank">
+                <i class="fab fa-line"></i>
+                <span>LINE で予約する</span>
+            </a>
+            <a href="https://instagram.com/YOUR-INSTAGRAM" class="social-button instagram" target="_blank">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram をフォロー</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showForm(department) {
+            const formContainer = document.getElementById('form-container');
+            document.getElementById('form-title').textContent = `${department} - オンライン予約`;
+            formContainer.classList.add('active');
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function submitReservation(event) {
+            event.preventDefault();
+            const form = document.getElementById('reservation-form');
+            const formData = new FormData(form);
+            
+            // ここでAPI送信処理などを行う
+            alert('予約リクエストを受け付けました。\n担当スタッフより確認のご連絡を差し上げます。');
+            
+            form.reset();
+            document.getElementById('form-container').classList.remove('active');
+        }
+
+        function changeLang(lang, event) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            // 言語切り替えの処理をここに実装可能
+        }
+    </script>
+</body>
+</html>
