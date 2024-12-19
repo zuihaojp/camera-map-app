@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Real Estate</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1C1C3C;
+            color: #FFD700;
+        }
+
+        header {
+            background-color: #2A2A4D;
+            color: #FFD700;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .language-switch {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .language-switch button {
+            padding: 0.5rem;
+            background-color: #FFD700;
+            color: #1C1C3C;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .description {
+            text-align: center;
+            padding: 2rem;
+            background-color: #2A2A4D;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .property-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .property-card {
+            background-color: #2A2A4D;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            color: #FFD700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .property-card h3, .property-card p {
+            margin: 0.5rem;
+        }
+
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #2A2A4D;
+            color: #FFD700;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .form-popup input, .form-popup textarea, .form-popup select {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            background-color: #1C1C3C;
+            color: #FFD700;
+        }
+
+        .form-popup button {
+            background-color: #FFD700;
+            color: #1C1C3C;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-popup .close-btn {
+            background-color: red;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" id="logo">Luxury Real Estate</div>
+        <div class="language-switch">
+            <button data-lang="en">English</button>
+            <button data-lang="zh">中文</button>
+            <button data-lang="ja">日本語</button>
+        </div>
+    </header>
+    <main>
+        <section class="description" id="description">
+            Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.
+        </section>
+
+        <h2 style="text-align: center; color: #FFD700;" id="featured-properties-title">Featured Properties</h2>
+        <section class="property-list" id="property-list">
+            <div class="property-card">
+                <h3>Luxury Apartment in Tokyo</h3>
+                <p>Shibuya, Tokyo</p>
+                <p>Property ID: 001</p>
+                <p>¥120,000,000</p>
+                <button class="contact-btn">Contact Us</button>
+            </div>
+            <div class="property-card">
+                <h3>High-end Condo in Osaka</h3>
+                <p>Namba, Osaka</p>
+                <p>Property ID: 002</p>
+                <p>¥95,000,000</p>
+                <button class="contact-btn">Contact Us</button>
+            </div>
+            <div class="property-card">
+                <h3>Elegant House in Kyoto</h3>
+                <p>Gion, Kyoto</p>
+                <p>Property ID: 003</p>
+                <p>¥75,000,000</p>
+                <button class="contact-btn">Contact Us</button>
+            </div>
+        </section>
+
+        <div class="form-popup" id="form-popup">
+            <h3 id="form-title">Contact Form</h3>
+            <select id="property-id" required>
+                <option value="">Select Property ID</option>
+                <option value="001">001 - Luxury Apartment in Tokyo</option>
+                <option value="002">002 - High-end Condo in Osaka</option>
+                <option value="003">003 - Elegant House in Kyoto</option>
+            </select>
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="text" id="phone" placeholder="Phone Number" required>
+            <textarea id="message" placeholder="Your Message" rows="4" required></textarea>
+            <button id="submit-form">Submit</button>
+            <button class="close-btn" id="close-form">Close</button>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Luxury Real Estate</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const formPopup = document.getElementById("form-popup");
+            const closeFormButton = document.getElementById("close-form");
+            const submitFormButton = document.getElementById("submit-form");
+            const contactButtons = document.querySelectorAll(".contact-btn");
+            const languageSwitchButtons = document.querySelectorAll(".language-switch button");
+            const propertyCards = document.querySelectorAll(".property-card");
+
+            const translations = {
+                en: {
+                    logo: "Luxury Real Estate",
+                    description: "Welcome to our luxury real estate service. We offer online property tours, contracts, and secure payments, all from the comfort of your home.",
+                    featuredPropertiesTitle: "Featured Properties",
+                    contactButton: "Contact Us",
+                    formTitle: "Contact Form",
+                    propertyPlaceholder: "Select Property ID",
+                    namePlaceholder: "Your Name",
+                    emailPlaceholder: "Email Address",
+                    phonePlaceholder: "Phone Number",
+                    messagePlaceholder: "Your Message",
+                    submitButton: "Submit",
+                    closeButton: "Close",
+                    propertyIdLabel: "Property ID:",
+                    properties: [
+                        {id: "001", title: "Luxury Apartment in Tokyo", location: "Shibuya, Tokyo", price: "¥120,000,000"},
+                        {id: "002", title: "High-end Condo in Osaka", location: "Namba, Osaka", price: "¥95,000,000"},
+                        {id: "003", title: "Elegant House in Kyoto", location: "Gion, Kyoto", price: "¥75,000,000"}
+                    ]
+                },
+                zh: {
+                    logo: "豪华房地产",
+                    description: "欢迎来到我们的豪华房地产服务。我们提供在线房产参观、合同签订以及安全支付，一切都在您家中完成。",
+                    featuredPropertiesTitle: "精选房源",
+                    contactButton: "联系我们",
+                    formTitle: "联系表格",
+                    propertyPlaceholder: "选择物业ID",
+                    namePlaceholder: "您的姓名",
+                    emailPlaceholder: "电子邮件地址",
+                    phonePlaceholder: "电话号码",
+                    messagePlaceholder: "您的留言",
+                    submitButton: "提交",
+                    closeButton: "关闭",
+                    propertyIdLabel: "物业ID:",
+                    properties: [
+                        {id: "001", title: "东京的豪华公寓", location: "东京，涩谷", price: "¥120,000,000"},
+                        {id: "002", title: "大阪的高端公寓", location: "大阪，难波", price: "¥95,000,000"},
+                        {id: "003", title: "京都的优雅住宅", location: "京都，祇园", price: "¥75,000,000"}
+                    ]
+                },
+                ja: {
+                    logo: "高級不動産",
+                    description: "当社は高級不動産のオンライン仲介サービスを提供しています。物件ツアー、契約書の作成、支払いがすべてオンラインで完結します。",
+                    featuredPropertiesTitle: "おすすめ物件",
+                    contactButton: "問い合わせ",
+                    formTitle: "お問い合わせフォーム",
+                    propertyPlaceholder: "物件IDを選択",
+                    namePlaceholder: "お名前",
+                    emailPlaceholder: "メールアドレス",
+                    phonePlaceholder: "電話番号",
+                    messagePlaceholder: "お問い合わせ内容",
+                    submitButton: "送信",
+                    closeButton: "閉じる",
+                    propertyIdLabel: "物件ID:",
+                    properties: [
+                        {id: "001", title: "東京の高級マンション", location: "東京、渋谷", price: "¥120,000,000"},
+                        {id: "002", title: "大阪の高級コンドミニアム", location: "大阪、難波", price: "¥95,000,000"},
+                        {id: "003", title: "京都のエレガントな家", location: "京都、祇園", price: "¥75,000,000"}
+                    ]
+                }
+            };
+
+            function applyTranslation(lang) {
+                const translation = translations[lang];
+
+                document.getElementById("logo").textContent = translation.logo;
+                document.getElementById("description").textContent = translation.description;
+                document.getElementById("featured-properties-title").textContent = translation.featuredPropertiesTitle;
+                document.querySelectorAll(".contact-btn").forEach(btn => btn.textContent = translation.contactButton);
+                document.getElementById("form-title").textContent = translation.formTitle;
+                document.getElementById("property-id").options[0].textContent = translation.propertyPlaceholder;
+                document.getElementById("name").placeholder = translation.namePlaceholder;
+                document.getElementById("email").placeholder = translation.emailPlaceholder;
+                document.getElementById("phone").placeholder = translation.phonePlaceholder;
+                document.getElementById("message").placeholder = translation.messagePlaceholder;
+                document.getElementById("submit-form").textContent = translation.submitButton;
+                document.getElementById("close-form").textContent = translation.closeButton;
+
+                // 物件情報更新
+                propertyCards.forEach((card, index) => {
+                    const prop = translation.properties[index];
+                    const h3 = card.querySelector("h3");
+                    const pElements = card.querySelectorAll("p");
+                    h3.textContent = prop.title;
+                    pElements[0].textContent = prop.location;
+                    pElements[1].textContent = `${translation.propertyIdLabel} ${prop.id}`;
+                    pElements[2].textContent = prop.price;
+                });
+
+                // セレクトメニューの物件ID表示も更新
+                const propertyIdSelect = document.getElementById("property-id");
+                // 最初のoptionはplaceholderなのでindexは1から始める
+                for (let i = 0; i < translation.properties.length; i++) {
+                    propertyIdSelect.options[i + 1].textContent = `${translation.properties[i].id} - ${translation.properties[i].title}`;
+                }
+            }
+
+            // 言語切り替えボタンの動作
+            languageSwitchButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const lang = button.dataset.lang;
+                    applyTranslation(lang);
+                });
+            });
+
+            // 問い合わせボタンの動作
+            contactButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    formPopup.style.display = "block";
+                });
+            });
+
+            // フォームの閉じるボタン
+            closeFormButton.addEventListener("click", () => {
+                formPopup.style.display = "none";
+            });
+
+            // フォーム送信ボタンの動作
+            submitFormButton.addEventListener("click", () => {
+                const selectedProperty = document.getElementById("property-id").value;
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                const phone = document.getElementById("phone").value;
+                const message = document.getElementById("message").value;
+
+                if (selectedProperty && name && email && phone && message) {
+                    alert(`Inquiry submitted successfully!\n\nProperty ID: ${selectedProperty}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`);
+                    formPopup.style.display = "none";
+                } else {
+                    alert("Please fill in all required fields.");
+                }
+            });
+
+            // 初期言語を英語に設定
+            applyTranslation("en");
+        });
+    </script>
+</body>
+</html>
