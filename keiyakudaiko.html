@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今こそマイホーム - 賢い住宅購入の理由</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInUp 1s ease-out;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .reasons-section {
+            padding: 100px 20px;
+            background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .reason-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reason-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+        }
+        
+        .reason-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .reason-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .reason-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .reason-desc {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 80px 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #f39c12;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .frustration-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 100px 20px;
+            position: relative;
+        }
+        
+        .frustration-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .frustration-title {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+        
+        .frustration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+        
+        .frustration-card {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .frustration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .frustration-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+        
+        .frustration-card p {
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        
+        .solution-content {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solution-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #4ecdc4, #44a08d);
+        }
+        
+        .solution-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 2.5rem;
+            font-weight: 600;
+        }
+        
+        .solution-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+        
+        .solution-point {
+            padding: 1rem;
+        }
+        
+        .solution-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+        
+        .solution-point h4 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .solution-point p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        .urgency-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .urgency-title {
+            font-size: 2.2rem;
+            color: #e74c3c;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        
+        .urgency-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+        
+        .urgency-point {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: floatAnimation 15s infinite linear;
+        }
+        
+        @keyframes floatAnimation {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+            .section-title { font-size: 2rem; }
+            .reasons-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element" style="left: 10%; animation-delay: 0s;">🏠</div>
+        <div class="floating-element" style="left: 20%; animation-delay: 3s;">💴</div>
+        <div class="floating-element" style="left: 30%; animation-delay: 6s;">📈</div>
+        <div class="floating-element" style="left: 40%; animation-delay: 9s;">🔑</div>
+        <div class="floating-element" style="left: 50%; animation-delay: 12s;">🏠</div>
+        <div class="floating-element" style="left: 60%; animation-delay: 15s;">💴</div>
+        <div class="floating-element" style="left: 70%; animation-delay: 18s;">📈</div>
+        <div class="floating-element" style="left: 80%; animation-delay: 21s;">🔑</div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>今がマイホーム購入の<br>最適なタイミング</h1>
+            <p class="hero-subtitle">賢い投資判断で家族の未来を守る</p>
+        </div>
+    </section>
+
+    <section class="reasons-section">
+        <div class="container">
+            <h2 class="section-title">住宅購入を決断すべき8つの理由</h2>
+            <div class="reasons-grid">
+                <div class="reason-card">
+                    <span class="reason-icon">📈</span>
+                    <h3 class="reason-title">資産形成効果</h3>
+                    <p class="reason-desc">家賃を払い続けるより、住宅ローンで資産を築く方が長期的に有利。毎月の支払いが将来の財産になります。</p>
+                </div>
+                
+                <div class="reason-card">
+                    <span class="reason-icon">🏦</span>
+                    <h3 class="reason-title">低金利の恩恵</h3>
+                    <p class="reason-desc">史上最低水準の住宅ローン金利。この機会を逃すと、将来的に数百万円の差が生まれる可能性があります。</p>
+                </div>
+                
+                <div class="reason-card">
+                    <span class="reason-icon">💰</span>
+                    <h3 class="reason-title">税制優遇メリット</h3>
+                    <p class="reason-desc">住宅ローン控除で最大13年間、年末残高の0.7%が所得税から控除。実質的な金利負担を大幅に軽減できます。</p>
+                </div>
+                
+                <div class="reason-card">
+                    <span class="reason-icon">🛡️</span>
+                    <h3 class="reason-title">団体信用生命保険</h3>
+                    <p class="reason-desc">万が一の場合、住宅ローン残債がゼロに。家族に負担をかけずに住まいを残せる安心の保障制度です。</p>
+                </div>
+                
+                <div class="reason-card">
+                    <span class="reason-icon">🏠</span>
+                    <h3 class="reason-title">住環境の安定</h3>
+                    <p class="reason-desc">賃貸のような突然の立ち退きリスクがなく、子どもの教育環境も安定。長期的な生活設計が可能になります。</p>
+                </div>
+                
+                <div class="reason-card">
+                    <span class="reason-icon">⚡</span>
+                    <h3 class="reason-title">光熱費削減効果</h3>
+                    <p class="reason-desc">最新の省エネ住宅なら光熱費を大幅削減。ZEH住宅では年間20万円以上の節約も可能です。</p>
+                </div>
+                
+                <div class="reason-card">
+                    <span class="reason-icon">🎌</span>
+                    <h3 class="reason-title">政府支援制度</h3>
+                    <p class="reason-desc">こどもエコすまい支援事業など、購入時の補助金制度が充実。最大100万円の支援を受けられます。</p>
+                </div>
+                
+                <div class="reason-card">
+                    <span class="reason-icon">👨‍👩‍👧‍👦</span>
+                    <h3 class="reason-title">家族の絆深化</h3>
+                    <p class="reason-desc">自分の家だからこそ生まれる愛着と責任感。家族の結束が強まり、子どもの情緒も安定します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="section-title">データで見る住宅購入の価値</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">0.5%</div>
+                    <div class="stat-label">変動金利<br>史上最低水準</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">273万円</div>
+                    <div class="stat-label">住宅ローン控除<br>最大控除額</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">持ち家世帯の<br>満足度</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">30年</div>
+                    <div class="stat-label">住宅ローン<br>完済後の資産</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="urgency-section">
+        <div class="container">
+            <div class="urgency-content">
+                <h2 class="urgency-title">今すぐ行動すべき緊急な理由</h2>
+                <div class="urgency-points">
+                    <div class="urgency-point">
+                        <strong>金利上昇リスク</strong><br>
+                        日銀の金融政策変更で金利上昇の可能性
+                    </div>
+                    <div class="urgency-point">
+                        <strong>建築費高騰</strong><br>
+                        材料費・人件費上昇で住宅価格は右肩上がり
+                    </div>
+                    <div class="urgency-point">
+                        <strong>補助金終了</strong><br>
+                        政府支援制度は予算に限りがあり早期終了の可能性
+                    </div>
+                    <div class="urgency-point">
+                        <strong>優良物件競争</strong><br>
+                        立地の良い物件ほど早期に売約済みになる傾向
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="frustration-section">
+        <div class="container">
+            <div class="frustration-content">
+                <h2 class="frustration-title">こんな経験、ありませんか？</h2>
+                <div class="frustration-grid">
+                    <div class="frustration-card">
+                        <span class="frustration-icon">📞</span>
+                        <p>たくさんの不動産屋から<br>しつこい電話攻撃</p>
+                    </div>
+                    <div class="frustration-card">
+                        <span class="frustration-icon">🏠</span>
+                        <p>せっかく行ったのに<br>物件が売り切れていた</p>
+                    </div>
+                    <div class="frustration-card">
+                        <span class="frustration-icon">😔</span>
+                        <p>良い物件の提案がなく<br>時間だけが過ぎていく</p>
+                    </div>
+                    <div class="frustration-card">
+                        <span class="frustration-icon">😫</span>
+                        <p>軽く問い合わせただけなのに<br>すごく疲れてしまった</p>
+                    </div>
+                </div>
+                
+                <div class="solution-content">
+                    <h3 class="solution-title">私たちは違います</h3>
+                    <div class="solution-points">
+                        <div class="solution-point">
+                            <span class="solution-icon">⏰</span>
+                            <h4>お客様の貴重なお時間を尊重</h4>
+                            <p>無駄な営業電話は一切いたしません。お客様のペースに合わせてサポートします。</p>
+                        </div>
+                        <div class="solution-point">
+                            <span class="solution-icon">👂</span>
+                            <h4>徹底したヒアリング</h4>
+                            <p>本当にご希望に合う物件をご紹介するため、じっくりお話を伺います。</p>
+                        </div>
+                        <div class="solution-point">
+                            <span class="solution-icon">🤝</span>
+                            <h4>お家探しを親身にお手伝い</h4>
+                            <p>専門知識と豊富な経験で、理想の住まい探しを全力でサポートします。</p>
+                        </div>
+                        <div class="solution-point">
+                            <span class="solution-icon">📋</span>
+                            <h4>契約手続きの完全代行</h4>
+                            <p>複雑な契約書類の作成から金融機関との調整まで、すべてお任せください。安心・確実にお取引を進めます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="service-flow-section">
+        <div class="container">
+            <h2 class="section-title">契約代行サービスの流れ</h2>
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>初回ヒアリング</h3>
+                        <p>お客様のご希望条件、予算、ライフプランを詳しくお聞きします</p>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                
+                <div class="flow-step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>物件選定・提案</h3>
+                        <p>厳選した物件をご提案。現地案内もお任せください</p>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                
+                <div class="flow-step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>契約手続き代行</h3>
+                        <p>売買契約から住宅ローン申請まで、すべての手続きを代行</p>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                
+                <div class="flow-step">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>お引き渡し完了</h3>
+                        <p>最終確認からカギのお渡しまで、安心してお任せください</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="service-features">
+                <div class="feature-card">
+                    <span class="feature-icon">🏦</span>
+                    <h4>金融機関との交渉代行</h4>
+                    <p>複数の銀行から最適な住宅ローンを選定・交渉いたします</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📑</span>
+                    <h4>書類作成・提出代行</h4>
+                    <p>面倒な契約書類の作成から各種申請まで完全サポート</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔍</span>
+                    <h4>物件調査・査定</h4>
+                    <p>建物診断から価格査定まで、プロの目でしっかりチェック</p>
+                </div>
+            </div>
+        </div>
+    </section>
+        <div class="container">
+            <h2 style="font-size: 2.2rem; margin-bottom: 1rem;">ストレスフリーな住まい探しを始めませんか？</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;">
+                お客様第一の姿勢で、理想のマイホーム実現をサポートいたします。<br>
+                まずは気軽にご相談ください。
+            </p>
+            <a href="#" class="cta-button">無料相談を申し込む</a>
+            <a href="#" class="cta-button">物件検索を始める</a>
+        </div>
+    </section>
+
+    <script>
+        // スクロール時のアニメーション効果
+        const observeElements = document.querySelectorAll('.reason-card, .stat-item');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        // 初期状態を設定
+        observeElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+        
+        // 数字のカウントアップ効果
+        const countUpNumbers = () => {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(num => {
+                const target = parseFloat(num.textContent);
+                const suffix = num.textContent.replace(/[\d.]/g, '');
+                let current = 0;
+                const increment = target / 50;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    
+                    if (suffix.includes('%')) {
+                        num.textContent = Math.floor(current) + '%';
+                    } else if (suffix.includes('万円')) {
+                        num.textContent = Math.floor(current) + '万円';
+                    } else if (suffix.includes('年')) {
+                        num.textContent = Math.floor(current) + '年';
+                    } else {
+                        num.textContent = (current / 10).toFixed(1) + '%';
+                    }
+                }, 50);
+            });
+        };
+        
+        // 統計セクションが見えたときにカウントアップ開始
+        const statsSection = document.querySelector('.stats-section');
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    countUpNumbers();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        });
+        
+        statsObserver.observe(statsSection);
+        
+        // ホバー効果の強化
+        document.querySelectorAll('.reason-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // スクロール時の背景効果
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+    </script>
+</body>
+</html>
