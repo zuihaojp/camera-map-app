@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch - 映画で繋がる</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 400px;
+        margin: 0 auto;
+        background: white;
+        min-height: 100vh;
+        position: relative;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .header {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        color: white;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+    }
+
+    .header h1 {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+
+    .header p {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .nav-tabs {
+        display: flex;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .nav-tab {
+        flex: 1;
+        padding: 15px;
+        text-align: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        color: #666;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .nav-tab.active {
+        background: white;
+        color: #ff6b6b;
+        border-bottom: 2px solid #ff6b6b;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: 5px;
+        right: 15px;
+        background: #ff6b6b;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .content {
+        padding: 20px;
+        min-height: 400px;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .movie-card {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border: 1px solid #e9ecef;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .movie-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .movie-card.liked {
+        border-color: #ff6b6b;
+        background: linear-gradient(145deg, #fff, #ffe6e6);
+    }
+
+    .movie-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .movie-poster {
+        width: 60px;
+        height: 90px;
+        background: linear-gradient(45deg, #ddd, #eee);
+        border-radius: 8px;
+        margin-right: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #666;
+        text-align: center;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .movie-details h3 {
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .movie-details p {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 3px;
+    }
+
+    .movie-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.3s;
+        flex: 1;
+    }
+
+    .btn-like {
+        background: #ff6b6b;
+        color: white;
+    }
+
+    .btn-like:hover {
+        background: #ee5a24;
+        transform: scale(1.05);
+    }
+
+    .btn-pass {
+        background: #f1f3f4;
+        color: #666;
+    }
+
+    .btn-pass:hover {
+        background: #e9ecef;
+    }
+
+    .search-box {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .search-box:focus {
+        outline: none;
+        border-color: #ff6b6b;
+    }
+
+    .favorites-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .favorite-item {
+        background: white;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .favorite-item:hover {
+        transform: scale(1.05);
+    }
+
+    .favorite-poster {
+        width: 100%;
+        height: 120px;
+        background: linear-gradient(45deg, #ddd, #eee);
+        border-radius: 6px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: #666;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .favorite-title {
+        font-size: 12px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .match-notification {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        padding: 15px;
+        text-align: center;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        display: none;
+        animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .profile-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 36px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .empty-state {
+        text-align: center;
+        color: #666;
+        padding: 40px 20px;
+    }
+
+    .empty-state h3 {
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .match-card {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border: 1px solid #e9ecef;
+    }
+
+    .match-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .match-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        margin-right: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+    }
+
+    .match-info h4 {
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .match-info p {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .common-movies {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        overflow-x: auto;
+    }
+
+    .common-movie {
+        min-width: 60px;
+        height: 80px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        text-align: center;
+        color: #666;
+    }
+
+    .chat-btn {
+        width: 100%;
+        padding: 10px;
+        background: #4ecdc4;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .chat-btn:hover {
+        background: #44a08d;
+    }
+
+    .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #ff6b6b;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .genre-filter {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .genre-tag {
+        padding: 6px 12px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+    }
+
+    .genre-tag.active {
+        background: #ff6b6b;
+        color: white;
+    }
+
+    .compatibility-score {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 11px;
+        display: inline-block;
+        margin-left: auto;
+    }
+
+    .movie-stats {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+        font-size: 11px;
+        color: #666;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 CineMatch</h1>
+            <p>映画で繋がる新しい出会い</p>
+        </div>
+
+```
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="showTab('discover')">発見</button>
+        <button class="nav-tab" onclick="showTab('favorites')">
+            お気に入り
+            <span class="notification-badge hidden" id="favoritesBadge">0</span>
+        </button>
+        <button class="nav-tab" onclick="showTab('matches')">
+            マッチ
+            <span class="notification-badge hidden" id="matchesBadge">0</span>
+        </button>
+        <button class="nav-tab" onclick="showTab('profile')">プロフィール</button>
+    </div>
+
+    <div class="content">
+        <div class="match-notification" id="matchNotification">
+            🎉 新しいマッチが見つかりました！
+        </div>
+
+        <!-- 発見タブ -->
+        <div id="discover" class="tab-content">
+            <input type="text" class="search-box" placeholder="映画を検索..." onkeypress="handleSearch(event)" id="searchInput">
+            
+            <div class="genre-filter" id="genreFilter">
+                <div class="genre-tag active" onclick="filterByGenre('all')">すべて</div>
+                <div class="genre-tag" onclick="filterByGenre('animation')">アニメ</div>
+                <div class="genre-tag" onclick="filterByGenre('drama')">ドラマ</div>
+                <div class="genre-tag" onclick="filterByGenre('action')">アクション</div>
+                <div class="genre-tag" onclick="filterByGenre('comedy')">コメディ</div>
+                <div class="genre-tag" onclick="filterByGenre('horror')">ホラー</div>
+            </div>
+
+            <div id="moviesList">
+                <!-- 映画カードがここに動的に追加される -->
+            </div>
+
+            <div class="loading hidden" id="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- お気に入りタブ -->
+        <div id="favorites" class="tab-content hidden">
+            <div class="favorites-grid" id="favoritesGrid">
+                <div class="empty-state">
+                    <h3>まだお気に入りがありません</h3>
+                    <p>映画に「いいね！」してお気に入りを追加しましょう</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- マッチタブ -->
+        <div id="matches" class="tab-content hidden">
+            <div id="matchesList">
+                <div class="empty-state">
+                    <h3>まだマッチがありません</h3>
+                    <p>共通の映画の好みを持つ人が見つかったらここに表示されます</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- プロフィールタブ -->
+        <div id="profile" class="tab-content hidden">
+            <div class="profile-section">
+                <div class="profile-avatar">😊</div>
+                <h3>映画愛好家</h3>
+                <p>お気に入り映画: <span id="favoriteCount">0</span>本</p>
+                <p>マッチ数: <span id="matchCount">0</span>人</p>
+            </div>
+            
+            <div class="movie-card">
+                <h3>📊 統計情報</h3>
+                <div class="movie-stats">
+                    <div class="stat-item">
+                        <span>👀</span>
+                        <span>閲覧した映画: <span id="viewedCount">0</span>本</span>
+                    </div>
+                </div>
+                <div class="movie-stats">
+                    <div class="stat-item">
+                        <span>❤️</span>
+                        <span>いいね率: <span id="likeRate">0</span>%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="movie-card">
+                <h3>🎭 好きなジャンル</h3>
+                <div id="favoriteGenres">
+                    <p>まだデータがありません</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // アプリケーションの状態管理
+    const appState = {
+        currentUser: {
+            id: 'user1',
+            name: '映画愛好家',
+            avatar: '😊'
+        },
+        favorites: [],
+        matches: [],
+        viewedMovies: [],
+        currentGenre: 'all',
+        movies: [
+            {
+                id: 1,
+                title: '君の名は。',
+                year: 2016,
+                genre: 'animation',
+                director: '新海誠',
+                rating: 8.2,
+                description: '時空を超えた恋の物語',
+                poster: 'https://via.placeholder.com/60x90/ff6b6b/fff?text=君の名は'
+            },
+            {
+                id: 2,
+                title: '千と千尋の神隠し',
+                year: 2001,
+                genre: 'animation',
+                director: '宮崎駿',
+                rating: 9.3,
+                description: '神々の世界での冒険',
+                poster: 'https://via.placeholder.com/60x90/4ecdc4/fff?text=千と千尋'
+            },
+            {
+                id: 3,
+                title: '鬼滅の刃 無限列車編',
+                year: 2020,
+                genre: 'animation',
+                director: '外崎春雄',
+                rating: 8.7,
+                description: '鬼との壮絶な戦い',
+                poster: 'https://via.placeholder.com/60x90/ee5a24/fff?text=鬼滅'
+            },
+            {
+                id: 4,
+                title: 'パラサイト 半地下の家族',
+                year: 2019,
+                genre: 'drama',
+                director: 'ポン・ジュノ',
+                rating: 8.6,
+                description: '格差社会を描いたスリラー',
+                poster: 'https://via.placeholder.com/60x90/667eea/fff?text=パラサイト'
+            },
+            {
+                id: 5,
+                title: 'アベンジャーズ/エンドゲーム',
+                year: 2019,
+                genre: 'action',
+                director: 'ルッソ兄弟',
+                rating: 8.4,
+                description: '最終決戦',
+                poster: 'https://via.placeholder.com/60x90/764ba2/fff?text=アベンジャーズ'
+            },
+            {
+                id: 6,
+                title: 'ジョーカー',
+                year: 2019,
+                genre: 'drama',
+                director: 'トッド・フィリップス',
+                rating: 8.4,
+                description: 'ヴィランの誕生',
+                poster: 'https://via.placeholder.com/60x90/ff6b6b/fff?text=ジョーカー'
+            }
+        ],
+        potentialMatches: [
+            {
+                id: 'user2',
+                name: 'アニメ映画ファン',
+                avatar: '🎭',
+                commonMovies: [1, 2, 3],
+                compatibility: 85
+            },
+            {
+                id: 'user3',
+                name: '洋画好き',
+                avatar: '🍿',
+                commonMovies: [4, 5, 6],
+                compatibility: 72
+            }
+        ]
+    };
+
+    // 初期化
+    function initApp() {
+        renderMovies();
+        updateUI();
+    }
+
+    // 映画リストの表示
+    function renderMovies() {
+        const moviesList = document.getElementById('moviesList');
+        const filteredMovies = appState.currentGenre === 'all' 
+            ? appState.movies 
+            : appState.movies.filter(movie => movie.genre === appState.currentGenre);
+
+        moviesList.innerHTML = filteredMovies.map(movie => `
+            <div class="movie-card" data-movie-id="${movie.id}">
+                <div class="movie-info">
+                    <div class="movie-poster" style="background-image: url('${movie.poster}')">
+                        ${movie.poster ? '' : 'ポスター'}
+                    </div>
+                    <div class="movie-details">
+                        <h3>${movie.title}</h3>
+                        <p>${movie.year}年 • ${getGenreText(movie.genre)}</p>
+                        <p>監督: ${movie.director}</p>
+                        <p>⭐ ${movie.rating}/10</p>
+                    </div>
+                </div>
+                <p style="font-size: 12px; color: #666; margin-bottom: 10px;">${movie.description}</p>
+                <div class="movie-actions">
+                    <button class="btn btn-pass" onclick="passMovie(${movie.id})">パス</button>
+                    <button class="btn btn-like" onclick="likeMovie(${movie.id})">いいね！</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ジャンルテキストの取得
+    function getGenreText(genre) {
+        const genreMap = {
+            'animation': 'アニメーション',
+            'drama': 'ドラマ',
+            'action': 'アクション',
+            'comedy': 'コメディ',
+            'horror': 'ホラー'
+        };
+        return genreMap[genre] || genre;
+    }
+
+    // 映画にいいね
+    function likeMovie(movieId) {
+        const movie = appState.movies.find(m => m.id === movieId);
+        const movieCard = document.querySelector(`[data-movie-id="${movieId}"]`);
+        
+        if (movie && !appState.favorites.some(fav => fav.id === movieId)) {
+            appState.favorites.push(movie);
+            appState.viewedMovies.push(movieId);
+            
+            // UI更新
+            movieCard.classList.add('liked');
+            updateUI();
+            updateFavoritesDisplay();
+            
+            // マッチング処理
+            checkForMatches(movieId);
+            
+            // アニメーション
+            setTimeout(() => {
+                movieCard.style.opacity = '0';
+                movieCard.style.transform = 'translateX(100px) scale(0.8)';
+                setTimeout(() => {
+                    movieCard.remove();
+                }, 300);
+            }, 500);
+        }
+    }
+
+    // 映画をパス
+    function passMovie(movieId) {
+        const movieCard = document.querySelector(`[data-movie-id="${movieId}"]`);
+        appState.viewedMovies.push(movieId);
+        
+        movieCard.style.opacity = '0';
+        movieCard.style.transform = 'translateX(-100px) scale(0.8)';
+        
+        setTimeout(() => {
+            movieCard.remove();
+            updateUI();
+        }, 300);
+    }
+
+    // マッチング処理
+    function checkForMatches(likedMovieId) {
+        appState.potentialMatches.forEach(potentialMatch => {
+            if (potentialMatch.commonMovies.includes(likedMovieId) && 
+                !appState.matches.some(match => match.id === potentialMatch.id)) {
+                
+                // 共通映画数をチェック
+                const commonCount = potentialMatch.commonMovies.filter(movieId => 
+                    appState.favorites.some(fav => fav.id === movieId)
+                ).length;
+                
+                if (commonCount >= 2) { // 2本以上共通でマッチ
+                    appState.matches.push(potentialMatch);
+                    showMatchNotification();
+                    updateMatchesDisplay();
+                }
+            }
+    </script>
+```
+
+</body>
+</html>
+        }
+
+```
+    // マッチ通知表示
+    function showMatchNotification() {
+        const notification = document.getElementById('matchNotification');
+        notification.style.display = 'block';
+        
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+
+    // ジャンルフィルター
+    function filterByGenre(genre) {
+        appState.currentGenre = genre;
+        
+        // アクティブ状態の更新
+        document.querySelectorAll('.genre-tag').forEach(tag => {
+            tag.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // 映画リストの再描画
+        renderMovies();
+    }
+
+    // 検索処理
+    function handleSearch(event) {
+        if (event.key === 'Enter') {
+            const searchTerm = event.target.value.toLowerCase();
+            if (searchTerm.trim()) {
+                showLoading();
+                
+                setTimeout(() => {
+                    const searchResults = appState.movies.filter(movie => 
+                        movie.title.toLowerCase().includes(searchTerm) ||
+                        movie.director.toLowerCase().includes(searchTerm)
+                    );
+                    
+                    if (searchResults.length > 0) {
+                        displaySearchResults(searchResults);
+                    } else {
+                        alert('検索結果が見つかりませんでした');
+                    }
+                    hideLoading();
+                }, 1000);
+            }
+        }
+    }
+
+    // 検索結果表示
+    function displaySearchResults(results) {
+        const moviesList = document.getElementById('moviesList');
+        moviesList.innerHTML = results.map(movie => `
+            <div class="movie-card" data-movie-id="${movie.id}">
+                <div class="movie-info">
+                    <div class="movie-poster" style="background-image: url('${movie.poster}')">
+                        ${movie.poster ? '' : 'ポスター'}
+                    </div>
+                    <div class="movie-details">
+                        <h3>${movie.title}</h3>
+                        <p>${movie.year}年 • ${getGenreText(movie.genre)}</p>
+                        <p>監督: ${movie.director}</p>
+                        <p>⭐ ${movie.rating}/10</p>
+                    </div>
+                </div>
+                <p style="font-size: 12px; color: #666; margin-bottom: 10px;">${movie.description}</p>
+                <div class="movie-actions">
+                    <button class="btn btn-pass" onclick="passMovie(${movie.id})">パス</button>
+                    <button class="btn btn-like" onclick="likeMovie(${movie.id})">いいね！</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ローディング表示/非表示
+    function showLoading() {
+        document.getElementById('loading').classList.remove('hidden');
+    }
+
+    function hideLoading() {
+        document.getElementById('loading').classList.add('hidden');
+    }
+
+    // お気に入り表示更新
+    function updateFavoritesDisplay() {
+        const favoritesGrid = document.getElementById('favoritesGrid');
+        
+        if (appState.favorites.length === 0) {
+            favoritesGrid.innerHTML = `
+                <div class="empty-state">
+                    <h3>まだお気に入りがありません</h3>
+                    <p>映画に「いいね！」してお気に入りを追加しましょう</p>
+                </div>
+            `;
+        } else {
+            favoritesGrid.innerHTML = appState.favorites.map(movie => `
+                <div class="favorite-item" onclick="showMovieDetails(${movie.id})">
+                    <div class="favorite-poster" style="background-image: url('${movie.poster}')">
+                        ${movie.poster ? '' : 'ポスター'}
+                    </div>
+                    <div class="favorite-title">${movie.title}</div>
+                </div>
+            `).join('');
+        }
+    }
+
+    // マッチ表示更新
+    function updateMatchesDisplay() {
+        const matchesList = document.getElementById('matchesList');
+        
+        if (appState.matches.length === 0) {
+            matchesList.innerHTML = `
+                <div class="empty-state">
+                    <h3>まだマッチがありません</h3>
+                    <p>共通の映画の好みを持つ人が見つかったらここに表示されます</p>
+                </div>
+            `;
+        } else {
+            matchesList.innerHTML = appState.matches.map(match => {
+                const commonMovies = match.commonMovies
+                    .filter(movieId => appState.favorites.some(fav => fav.id === movieId))
+                    .map(movieId => appState.movies.find(m => m.id === movieId));
+                
+                return `
+                    <div class="match-card">
+                        <div class="match-header">
+                            <div class="match-avatar">${match.avatar}</div>
+                            <div class="match-info">
+                                <h4>${match.name}</h4>
+                                <p>共通の映画: ${commonMovies.length}本</p>
+                            </div>
+                            <div class="compatibility-score">${match.compatibility}% 相性</div>
+                        </div>
+                        <div class="common-movies">
+                            ${commonMovies.map(movie => `
+                                <div class="common-movie" title="${movie.title}">
+                                    ${movie.title.substring(0, 4)}...
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="chat-btn" onclick="startChat('${match.id}')">
+                            💬 チャットを始める
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    // チャット開始
+    function startChat(matchId) {
+        const match = appState.matches.find(m => m.id === matchId);
+        alert(`${match.name}さんとのチャットを開始します！\n（実装予定の機能です）`);
+    }
+
+    // 映画詳細表示
+    function showMovieDetails(movieId) {
+        const movie = appState.movies.find(m => m.id === movieId);
+        alert(`${movie.title}\n\n${movie.description}\n\n監督: ${movie.director}\n年: ${movie.year}\n評価: ${movie.rating}/10`);
+    }
+
+    // UI全体の更新
+    function updateUI() {
+        // カウンター更新
+        document.getElementById('favoriteCount').textContent = appState.favorites.length;
+        document.getElementById('matchCount').textContent = appState.matches.length;
+        document.getElementById('viewedCount').textContent = appState.viewedMovies.length;
+        
+        // いいね率計算
+        const likeRate = appState.viewedMovies.length > 0 
+            ? Math.round((appState.favorites.length / appState.viewedMovies.length) * 100)
+            : 0;
+        document.getElementById('likeRate').textContent = likeRate;
+        
+        // バッジ更新
+        const favoritesBadge = document.getElementById('favoritesBadge');
+        const matchesBadge = document.getElementById('matchesBadge');
+        
+        if (appState.favorites.length > 0) {
+            favoritesBadge.textContent = appState.favorites.length;
+            favoritesBadge.classList.remove('hidden');
+        }
+        
+        if (appState.matches.length > 0) {
+            matchesBadge.textContent = appState.matches.length;
+            matchesBadge.classList.remove('hidden');
+        }
+        
+        // お気に入りジャンル分析
+        updateFavoriteGenres();
+    }
+
+    // お気に入りジャンル分析
+    function updateFavoriteGenres() {
+        const genres = {};
+        appState.favorites.forEach(movie => {
+            genres[movie.genre] = (genres[movie.genre] || 0) + 1;
+        });
+        
+        const favoriteGenresElement = document.getElementById('favoriteGenres');
+        if (Object.keys(genres).length > 0) {
+            const sortedGenres = Object.entries(genres)
+                .sort((a, b) => b[1] - a[1])
+                .map(([genre, count]) => `${getGenreText(genre)}: ${count}本`);
+            
+            favoriteGenresElement.innerHTML = sortedGenres.join('<br>');
+        } else {
+            favoriteGenresElement.innerHTML = '<p>まだデータがありません</p>';
+        }
+    }
+
+    // タブ切り替え
+    function showTab(tabName) {
+        // すべてのタブを非表示
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.classList.add('hidden'));
+        
+        // すべてのタブボタンを非アクティブ
+        const tabButtons = document.querySelectorAll('.nav-tab');
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // 選択されたタブを表示
+        document.getElementById(tabName).classList.remove('hidden');
+        event.target.classList.add('active');
+        
+        // タブ固有の処理
+        if (tabName === 'favorites') {
+            updateFavoritesDisplay();
+        } else if (tabName === 'matches') {
+            updateMatchesDisplay();
+        }
+    }
+
+    function showLoading() {
+        document.getElementById('loading').classList.remove('hidden');
+    }
+
+    function hideLoading() {
+        document.getElementById('loading').classList.add('hidden');
+    }
+
+    // アプリ初期化
+    document.addEventListener('DOMContentLoaded', initApp);
+
+    // チャットオーバーレイのクリックで閉じる
+    document.getElementById('chatOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeChat();
+        }
+    });classList.remove('hidden');
+        event.target.classList.add('active');
+        
+        // タブ固有の処理
+        if (tabName === 'favorites') {
+            updateFavoritesDisplay();
+        } else if (tabName === 'matches') {
+            updateMatchesDisplay();
+        }
+    }
+
+    // アプリ初期化
+    initApp();
+</script>
+```
+
+</body>
+</html>
