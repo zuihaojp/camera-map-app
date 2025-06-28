@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -7,425 +6,435 @@
     <title>プレミアム不動産 - 理想の住まいを見つけよう</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-
-    body {
-        font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
-        line-height: 1.6;
-        color: #333;
-        overflow-x: hidden;
-        background: #ffffff;
-    }
-    
-    .header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 80px 20px 60px;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-        animation: float 20s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-    }
-    
-    .header-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        text-align: center;
-        position: relative;
-        z-index: 2;
-    }
-    
-    .header h1 {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        animation: slideInUp 1s ease-out;
-    }
-    
-    .header-subtitle {
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-        opacity: 0.9;
-        animation: slideInUp 1s ease-out 0.2s both;
-    }
-    
-    @keyframes slideInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .language-switcher {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        display: flex;
-        gap: 0.5rem;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 10px;
-        border-radius: 25px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        backdrop-filter: blur(10px);
-    }
-    
-    .lang-btn {
-        padding: 8px 15px;
-        border: 2px solid #e9ecef;
-        border-radius: 20px;
-        background: white;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 500;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        outline: none;
-    }
-    
-    .lang-btn.active, .lang-btn:hover {
-        border-color: #667eea;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        transform: translateY(-2px);
-    }
-    
-    .search-section {
-        background: linear-gradient(to bottom, #f8f9fa, #ffffff);
-        padding: 60px 20px;
-    }
-    
-    .search-container {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-    
-    .search-card {
-        background: white;
-        border-radius: 20px;
-        padding: 3rem;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .search-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 5px;
-        background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
-    }
-    
-    .search-title {
-        text-align: center;
-        font-size: 1.8rem;
-        color: #2c3e50;
-        margin-bottom: 2rem;
-        font-weight: 600;
-    }
-    
-    .search-form {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: #555;
-        font-weight: 500;
-    }
-    
-    .form-group select, .form-group input {
-        width: 100%;
-        padding: 12px 16px;
-        border: 2px solid #e9ecef;
-        border-radius: 10px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        background: white;
-    }
-    
-    .form-group select:focus, .form-group input:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-    
-    .search-button {
-        grid-column: 1 / -1;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        padding: 18px 40px;
-        border-radius: 50px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-    }
-    
-    .search-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-    }
-    
-    .listings-section {
-        padding: 80px 20px;
-        background: linear-gradient(to bottom, #ffffff, #f8f9fa);
-    }
-    
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-    
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 3rem;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-    
-    .section-title {
-        font-size: 2.2rem;
-        color: #2c3e50;
-        font-weight: 600;
-        position: relative;
-    }
-    
-    .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 0;
-        width: 60px;
-        height: 4px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        border-radius: 2px;
-    }
-    
-    .filter-tabs {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-    
-    .filter-tab {
-        padding: 10px 20px;
-        border: 2px solid #e9ecef;
-        border-radius: 25px;
-        background: white;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 500;
-    }
-    
-    .filter-tab.active, .filter-tab:hover {
-        border-color: #667eea;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        transform: translateY(-2px);
-    }
-    
-    .properties-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
-    }
-    
-    .property-card {
-        background: white;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-    }
-    
-    .property-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    }
-    
-    .property-image {
-        position: relative;
-        height: 240px;
-        background: linear-gradient(45deg, #667eea, #764ba2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 4rem;
-        opacity: 0.8;
-    }
-    
-    .image-badge {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        background: linear-gradient(135deg, #f39c12, #e67e22);
-        color: white;
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
-    }
-    
-    .property-info {
-        padding: 2rem;
-    }
-    
-    .property-price {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #e74c3c;
-        margin-bottom: 0.5rem;
-    }
-    
-    .property-title {
-        font-size: 1.3rem;
-        color: #2c3e50;
-        margin-bottom: 1rem;
-        font-weight: 600;
-        line-height: 1.4;
-    }
-    
-    .property-details {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.8rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .detail-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #666;
-        font-size: 0.95rem;
-    }
-    
-    .property-features {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .feature-tag {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
-        color: white;
-        padding: 4px 12px;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        font-weight: 500;
-    }
-    
-    .property-actions {
-        display: flex;
-        gap: 1rem;
-    }
-    
-    .btn-primary {
-        flex: 1;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 25px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-    }
-    
-    .btn-secondary {
-        background: transparent;
-        color: #667eea;
-        border: 2px solid #667eea;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-secondary:hover {
-        background: #667eea;
-        color: white;
-        transform: translateY(-2px);
-    }
-    
-    .load-more-section {
-        text-align: center;
-        margin-top: 4rem;
-    }
-    
-    .load-more-btn {
-        background: linear-gradient(135deg, #f39c12, #e67e22);
-        color: white;
-        border: none;
-        padding: 18px 40px;
-        border-radius: 50px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
-    }
-    
-    .load-more-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 40px rgba(243, 156, 18, 0.4);
-    }
-    
-    @media (max-width: 768px) {
-        .header h1 { font-size: 2.2rem; }
-        .search-form { grid-template-columns: 1fr; }
-        .properties-grid { grid-template-columns: 1fr; }
-        .section-header { flex-direction: column; align-items: flex-start; }
-        .filter-tabs { width: 100%; }
-        .language-switcher { 
-            position: relative; 
-            top: auto; 
-            right: auto; 
-            justify-content: center;
-            margin: 20px auto;
+        
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background: #ffffff;
         }
-    }
-</style>
-```
-
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInUp 1s ease-out;
+        }
+        
+        .header-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .lang-btn {
+            padding: 8px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            outline: none;
+        }
+        
+        .lang-btn.active, .lang-btn:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .search-section {
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+            padding: 60px 20px;
+        }
+        
+        .search-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .search-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .search-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+        }
+        
+        .search-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-group select:focus, .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .search-button {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .search-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .listings-section {
+            padding: 80px 20px;
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .filter-tab.active, .filter-tab:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .property-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            width: 100%;
+            height: fit-content;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        
+        .property-image {
+            position: relative;
+            height: 240px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            opacity: 0.8;
+        }
+        
+        .image-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+        }
+        
+        .property-info {
+            padding: 2rem;
+        }
+        
+        .property-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-bottom: 0.5rem;
+        }
+        
+        .property-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .property-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .property-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-tag {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .property-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-primary {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .load-more-section {
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .load-more-btn {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
+        }
+        
+        .load-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(243, 156, 18, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.2rem; }
+            .search-form { grid-template-columns: 1fr; }
+            .properties-grid { 
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .filter-tabs { width: 100%; }
+            .language-switcher { 
+                position: relative; 
+                top: auto; 
+                right: auto; 
+                justify-content: center;
+                margin: 20px auto;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .properties-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="language-switcher">
@@ -434,775 +443,792 @@
         <button class="lang-btn" data-lang="zh">🇨🇳 中文</button>
     </div>
 
-<header class="header">
-    <div class="header-content">
-        <h1>プレミアム不動産</h1>
-        <p class="header-subtitle">理想の住まいがきっと見つかる、厳選された物件をご紹介</p>
-    </div>
-</header>
-
-<section class="search-section">
-    <div class="search-container">
-        <div class="search-card">
-            <h2 class="search-title">物件を検索する</h2>
-            <form class="search-form">
-                <div class="form-group">
-                    <label for="area">エリア</label>
-                    <select id="area">
-                        <option value="">選択してください</option>
-                        <option value="tokyo">🇯🇵 東京都</option>
-                        <option value="osaka">🇯🇵 大阪府</option>
-                        <option value="singapore">🇸🇬 シンガポール</option>
-                        <option value="hongkong">🇭🇰 香港</option>
-                        <option value="seoul">🇰🇷 ソウル</option>
-                        <option value="bangkok">🇹🇭 バンコク</option>
-                        <option value="london">🇬🇧 ロンドン</option>
-                        <option value="paris">🇫🇷 パリ</option>
-                        <option value="barcelona">🇪🇸 バルセロナ</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="type">物件種別</label>
-                    <select id="type">
-                        <option value="">選択してください</option>
-                        <option value="mansion">マンション</option>
-                        <option value="house">一戸建て</option>
-                        <option value="penthouse">ペントハウス</option>
-                        <option value="loft">ロフト</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="price-min">価格帯（下限）</label>
-                    <select id="price-min">
-                        <option value="">選択してください</option>
-                        <option value="1000">¥1,000万円 / $100K / €90K</option>
-                        <option value="5000">¥5,000万円 / $500K / €450K</option>
-                        <option value="10000">¥1億円 / $1M / €900K</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="price-max">価格帯（上限）</label>
-                    <select id="price-max">
-                        <option value="">選択してください</option>
-                        <option value="10000">¥1億円 / $1M / €900K</option>
-                        <option value="20000">¥2億円 / $2M / €1.8M</option>
-                        <option value="unlimited">上限なし</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="rooms">間取り</label>
-                    <select id="rooms">
-                        <option value="">選択してください</option>
-                        <option value="1">1R・1K・Studio</option>
-                        <option value="2">2K・2LDK・2BR</option>
-                        <option value="3">3LDK・3BR</option>
-                        <option value="4">4LDK・4BR以上</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="station">最寄り駅・交通</label>
-                    <input type="text" id="station" placeholder="駅名・空港・主要エリアを入力">
-                </div>
-                
-                <button type="submit" class="search-button">🔍 検索する</button>
-            </form>
+    <header class="header">
+        <div class="header-content">
+            <h1>プレミアム不動産</h1>
+            <p class="header-subtitle">理想の住まいがきっと見つかる、厳選された物件をご紹介</p>
         </div>
-    </div>
-</section>
+    </header>
 
-<section class="listings-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">おすすめ物件</h2>
-            <div class="filter-tabs">
-                <div class="filter-tab active" data-filter="all">すべて</div>
-                <div class="filter-tab" data-filter="japan">🇯🇵 日本</div>
-                <div class="filter-tab" data-filter="asia">🌏 アジア</div>
-                <div class="filter-tab" data-filter="europe">🇪🇺 ヨーロッパ</div>
-                <div class="filter-tab" data-filter="new">新着</div>
-                <div class="filter-tab" data-filter="popular">人気</div>
+    <section class="search-section">
+        <div class="search-container">
+            <div class="search-card">
+                <h2 class="search-title">物件を検索する</h2>
+                <form class="search-form">
+                    <div class="form-group">
+                        <label for="area">エリア</label>
+                        <select id="area">
+                            <option value="">選択してください</option>
+                            <option value="tokyo">🇯🇵 東京都</option>
+                            <option value="osaka">🇯🇵 大阪府</option>
+                            <option value="singapore">🇸🇬 シンガポール</option>
+                            <option value="hongkong">🇭🇰 香港</option>
+                            <option value="seoul">🇰🇷 ソウル</option>
+                            <option value="bangkok">🇹🇭 バンコク</option>
+                            <option value="london">🇬🇧 ロンドン</option>
+                            <option value="paris">🇫🇷 パリ</option>
+                            <option value="barcelona">🇪🇸 バルセロナ</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="type">物件種別</label>
+                        <select id="type">
+                            <option value="">選択してください</option>
+                            <option value="mansion">マンション</option>
+                            <option value="house">一戸建て</option>
+                            <option value="penthouse">ペントハウス</option>
+                            <option value="loft">ロフト</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price-min">価格帯（下限）</label>
+                        <select id="price-min">
+                            <option value="">選択してください</option>
+                            <option value="1000">¥1,000万円 / $100K / €90K</option>
+                            <option value="5000">¥5,000万円 / $500K / €450K</option>
+                            <option value="10000">¥1億円 / $1M / €900K</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price-max">価格帯（上限）</label>
+                        <select id="price-max">
+                            <option value="">選択してください</option>
+                            <option value="10000">¥1億円 / $1M / €900K</option>
+                            <option value="20000">¥2億円 / $2M / €1.8M</option>
+                            <option value="unlimited">上限なし</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rooms">間取り</label>
+                        <select id="rooms">
+                            <option value="">選択してください</option>
+                            <option value="1">1R・1K・Studio</option>
+                            <option value="2">2K・2LDK・2BR</option>
+                            <option value="3">3LDK・3BR</option>
+                            <option value="4">4LDK・4BR以上</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="station">最寄り駅・交通</label>
+                        <input type="text" id="station" placeholder="駅名・空港・主要エリアを入力">
+                    </div>
+                    
+                    <button type="submit" class="search-button">🔍 検索する</button>
+                </form>
             </div>
         </div>
+    </section>
 
-        <div class="properties-grid">
-            <div class="property-card" data-category="japan new popular">
-                <div class="property-image">
-                    🏢
-                    <div class="image-badge" data-badge="new">新築</div>
+    <section class="listings-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">おすすめ物件</h2>
+                <div class="filter-tabs">
+                    <div class="filter-tab active" data-filter="all">すべて</div>
+                    <div class="filter-tab" data-filter="japan">🇯🇵 日本</div>
+                    <div class="filter-tab" data-filter="asia">🌏 アジア</div>
+                    <div class="filter-tab" data-filter="europe">🇪🇺 ヨーロッパ</div>
+                    <div class="filter-tab" data-filter="new">新着</div>
+                    <div class="filter-tab" data-filter="popular">人気</div>
                 </div>
-                <div class="property-info">
-                    <div class="property-price">6,980万円</div>
-                    <h3 class="property-title" data-property="property1">グランドメゾン青山レジデンス</h3>
-                    <div class="property-details">
-                        <div class="detail-item">
-                            <span>🏠</span>
-                            <span>3LDK</span>
+            </div>
+
+            <div class="properties-grid">
+                <div class="property-card" data-category="japan new popular">
+                    <div class="property-image">
+                        🏢
+                        <div class="image-badge" data-badge="new">新築</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">6,980万円</div>
+                        <h3 class="property-title" data-property="property1">グランドメゾン青山レジデンス</h3>
+                        <div class="property-details">
+                            <div class="detail-item">
+                                <span>🏠</span>
+                                <span>3LDK</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>📐</span>
+                                <span>75.6㎡</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🚇</span>
+                                <span>表参道駅 徒歩5分</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🌍</span>
+                                <span>東京, 日本</span>
+                            </div>
                         </div>
-                        <div class="detail-item">
-                            <span>📐</span>
-                            <span>75.6㎡</span>
+                        <div class="property-features">
+                            <span class="feature-tag">オートロック</span>
+                            <span class="feature-tag">ペット可</span>
+                            <span class="feature-tag">駐車場</span>
                         </div>
-                        <div class="detail-item">
-                            <span>🚇</span>
-                            <span>表参道駅 徒歩5分</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🌍</span>
-                            <span>東京, 日本</span>
+                        <div class="property-actions">
+                            <button class="btn-primary">詳細を見る</button>
+                            <button class="btn-secondary">♡</button>
                         </div>
                     </div>
-                    <div class="property-features">
-                        <span class="feature-tag">オートロック</span>
-                        <span class="feature-tag">ペット可</span>
-                        <span class="feature-tag">駐車場</span>
+                </div>
+
+                <div class="property-card" data-category="asia popular">
+                    <div class="property-image">
+                        🏙️
+                        <div class="image-badge" data-badge="popular">人気</div>
                     </div>
-                    <div class="property-actions">
-                        <button class="btn-primary">詳細を見る</button>
-                        <button class="btn-secondary">♡</button>
+                    <div class="property-info">
+                        <div class="property-price">$850,000</div>
+                        <h3 class="property-title" data-property="property2">Marina Bay Luxury Condos</h3>
+                        <div class="property-details">
+                            <div class="detail-item">
+                                <span>🏠</span>
+                                <span>2ベッドルーム</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>📐</span>
+                                <span>85㎡</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🚇</span>
+                                <span>MRTバヨナ駅 徒歩3分</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🌍</span>
+                                <span>シンガポール</span>
+                            </div>
+                        </div>
+                        <div class="property-features">
+                            <span class="feature-tag">海景色</span>
+                            <span class="feature-tag">プール</span>
+                            <span class="feature-tag">ジム</span>
+                        </div>
+                        <div class="property-actions">
+                            <button class="btn-primary">詳細を見る</button>
+                            <button class="btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card" data-category="europe new">
+                    <div class="property-image">
+                        🏛️
+                        <div class="image-badge" data-badge="featured">新着</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">€1,200,000</div>
+                        <h3 class="property-title" data-property="property3">Champs-Élysées Penthouse</h3>
+                        <div class="property-details">
+                            <div class="detail-item">
+                                <span>🏠</span>
+                                <span>4ベッドルーム</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>📐</span>
+                                <span>150㎡</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🚇</span>
+                                <span>シャンゼリゼ駅 徒歩2分</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🌍</span>
+                                <span>パリ, フランス</span>
+                            </div>
+                        </div>
+                        <div class="property-features">
+                            <span class="feature-tag">最上階</span>
+                            <span class="feature-tag">テラス</span>
+                            <span class="feature-tag">歴史的建物</span>
+                        </div>
+                        <div class="property-actions">
+                            <button class="btn-primary">詳細を見る</button>
+                            <button class="btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card" data-category="asia new">
+                    <div class="property-image">
+                        🌃
+                        <div class="image-badge" data-badge="priceReduced">価格改定</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">₩450,000,000</div>
+                        <h3 class="property-title" data-property="property4">Gangnam Sky Tower</h3>
+                        <div class="property-details">
+                            <div class="detail-item">
+                                <span>🏠</span>
+                                <span>3ベッドルーム</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>📐</span>
+                                <span>95㎡</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🚇</span>
+                                <span>江南駅 徒歩5分</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🌍</span>
+                                <span>ソウル, 韓国</span>
+                            </div>
+                        </div>
+                        <div class="property-features">
+                            <span class="feature-tag">高層階</span>
+                            <span class="feature-tag">コンシェルジュ</span>
+                            <span class="feature-tag">漢江ビュー</span>
+                        </div>
+                        <div class="property-actions">
+                            <button class="btn-primary">詳細を見る</button>
+                            <button class="btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card" data-category="europe popular">
+                    <div class="property-image">
+                        🏰
+                        <div class="image-badge" data-badge="limited">限定物件</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">£950,000</div>
+                        <h3 class="property-title" data-property="property5">Kensington Garden Apartment</h3>
+                        <div class="property-details">
+                            <div class="detail-item">
+                                <span>🏠</span>
+                                <span>2ベッドルーム</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>📐</span>
+                                <span>78㎡</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🚇</span>
+                                <span>High Street Ken駅 徒歩4分</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🌍</span>
+                                <span>ロンドン, イギリス</span>
+                            </div>
+                        </div>
+                        <div class="property-features">
+                            <span class="feature-tag">公園ビュー</span>
+                            <span class="feature-tag">ヴィンテージ</span>
+                            <span class="feature-tag">暖炉付き</span>
+                        </div>
+                        <div class="property-actions">
+                            <button class="btn-primary">詳細を見る</button>
+                            <button class="btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card" data-category="asia popular">
+                    <div class="property-image">
+                        🌺
+                        <div class="image-badge" data-badge="investment">投資物件</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">฿12,500,000</div>
+                        <h3 class="property-title" data-property="property6">Bangkok Elite Residence</h3>
+                        <div class="property-details">
+                            <div class="detail-item">
+                                <span>🏠</span>
+                                <span>2ベッドルーム</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>📐</span>
+                                <span>70㎡</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🚇</span>
+                                <span>BTSプロンポン駅 徒歩2分</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🌍</span>
+                                <span>バンコク, タイ</span>
+                            </div>
+                        </div>
+                        <div class="property-features">
+                            <span class="feature-tag">高収益</span>
+                            <span class="feature-tag">プール</span>
+                            <span class="feature-tag">日本人街</span>
+                        </div>
+                        <div class="property-actions">
+                            <button class="btn-primary">詳細を見る</button>
+                            <button class="btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card" data-category="europe new">
+                    <div class="property-image">
+                        🌊
+                        <div class="image-badge" data-badge="new">新築</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">€580,000</div>
+                        <h3 class="property-title" data-property="property7">Barcelona Beach Loft</h3>
+                        <div class="property-details">
+                            <div class="detail-item">
+                                <span>🏠</span>
+                                <span>1ベッドルーム</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>📐</span>
+                                <span>55㎡</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🏖️</span>
+                                <span>ビーチまで徒歩3分</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>🌍</span>
+                                <span>バルセロナ, スペイン</span>
+                            </div>
+                        </div>
+                        <div class="property-features">
+                            <span class="feature-tag">海景色</span>
+                            <span class="feature-tag">モダン</span>
+                            <span class="feature-tag">屋上テラス</span>
+                        </div>
+                        <div class="property-actions">
+                            <button class="btn-primary">詳細を見る</button>
+                            <button class="btn-secondary">♡</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="property-card" data-category="asia popular">
-                <div class="property-image">
-                    🏙️
-                    <div class="image-badge" data-badge="popular">人気</div>
-                </div>
-                <div class="property-info">
-                    <div class="property-price">$850,000</div>
-                    <h3 class="property-title" data-property="property2">Marina Bay Luxury Condos</h3>
-                    <div class="property-details">
-                        <div class="detail-item">
-                            <span>🏠</span>
-                            <span>2ベッドルーム</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>📐</span>
-                            <span>85㎡</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🚇</span>
-                            <span>MRTバヨナ駅 徒歩3分</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🌍</span>
-                            <span>シンガポール</span>
-                        </div>
-                    </div>
-                    <div class="property-features">
-                        <span class="feature-tag">海景色</span>
-                        <span class="feature-tag">プール</span>
-                        <span class="feature-tag">ジム</span>
-                    </div>
-                    <div class="property-actions">
-                        <button class="btn-primary">詳細を見る</button>
-                        <button class="btn-secondary">♡</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="property-card" data-category="europe new">
-                <div class="property-image">
-                    🏛️
-                    <div class="image-badge" data-badge="featured">新着</div>
-                </div>
-                <div class="property-info">
-                    <div class="property-price">€1,200,000</div>
-                    <h3 class="property-title" data-property="property3">Champs-Élysées Penthouse</h3>
-                    <div class="property-details">
-                        <div class="detail-item">
-                            <span>🏠</span>
-                            <span>4ベッドルーム</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>📐</span>
-                            <span>150㎡</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🚇</span>
-                            <span>シャンゼリゼ駅 徒歩2分</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🌍</span>
-                            <span>パリ, フランス</span>
-                        </div>
-                    </div>
-                    <div class="property-features">
-                        <span class="feature-tag">最上階</span>
-                        <span class="feature-tag">テラス</span>
-                        <span class="feature-tag">歴史的建物</span>
-                    </div>
-                    <div class="property-actions">
-                        <button class="btn-primary">詳細を見る</button>
-                        <button class="btn-secondary">♡</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="property-card" data-category="asia new">
-                <div class="property-image">
-                    🌃
-                    <div class="image-badge" data-badge="priceReduced">価格改定</div>
-                </div>
-                <div class="property-info">
-                    <div class="property-price">₩450,000,000</div>
-                    <h3 class="property-title" data-property="property4">Gangnam Sky Tower</h3>
-                    <div class="property-details">
-                        <div class="detail-item">
-                            <span>🏠</span>
-                            <span>3ベッドルーム</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>📐</span>
-                            <span>95㎡</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🚇</span>
-                            <span>江南駅 徒歩5分</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🌍</span>
-                            <span>ソウル, 韓国</span>
-                        </div>
-                    </div>
-                    <div class="property-features">
-                        <span class="feature-tag">高層階</span>
-                        <span class="feature-tag">コンシェルジュ</span>
-                        <span class="feature-tag">漢江ビュー</span>
-                    </div>
-                    <div class="property-actions">
-                        <button class="btn-primary">詳細を見る</button>
-                        <button class="btn-secondary">♡</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="property-card" data-category="europe popular">
-                <div class="property-image">
-                    🏰
-                    <div class="image-badge" data-badge="limited">限定物件</div>
-                </div>
-                <div class="property-info">
-                    <div class="property-price">£950,000</div>
-                    <h3 class="property-title" data-property="property5">Kensington Garden Apartment</h3>
-                    <div class="property-details">
-                        <div class="detail-item">
-                            <span>🏠</span>
-                            <span>2ベッドルーム</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>📐</span>
-                            <span>78㎡</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🚇</span>
-                            <span>High Street Ken駅 徒歩4分</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🌍</span>
-                            <span>ロンドン, イギリス</span>
-                        </div>
-                    </div>
-                    <div class="property-features">
-                        <span class="feature-tag">公園ビュー</span>
-                        <span class="feature-tag">ヴィンテージ</span>
-                        <span class="feature-tag">暖炉付き</span>
-                    </div>
-                    <div class="property-actions">
-                        <button class="btn-primary">詳細を見る</button>
-                        <button class="btn-secondary">♡</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="property-card" data-category="asia popular">
-                <div class="property-image">
-                    🌺
-                    <div class="image-badge" data-badge="investment">投資物件</div>
-                </div>
-                <div class="property-info">
-                    <div class="property-price">฿12,500,000</div>
-                    <h3 class="property-title" data-property="property6">Bangkok Elite Residence</h3>
-                    <div class="property-details">
-                        <div class="detail-item">
-                            <span>🏠</span>
-                            <span>2ベッドルーム</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>📐</span>
-                            <span>70㎡</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🚇</span>
-                            <span>BTSプロンポン駅 徒歩2分</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🌍</span>
-                            <span>バンコク, タイ</span>
-                        </div>
-                    </div>
-                    <div class="property-features">
-                        <span class="feature-tag">高収益</span>
-                        <span class="feature-tag">プール</span>
-                        <span class="feature-tag">日本人街</span>
-                    </div>
-                    <div class="property-actions">
-                        <button class="btn-primary">詳細を見る</button>
-                        <button class="btn-secondary">♡</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="property-card" data-category="europe new">
-                <div class="property-image">
-                    🌊
-                    <div class="image-badge" data-badge="new">新築</div>
-                </div>
-                <div class="property-info">
-                    <div class="property-price">€580,000</div>
-                    <h3 class="property-title" data-property="property7">Barcelona Beach Loft</h3></span>
-                    </div>
-                    <div class="property-actions">
-                        <button class="btn-primary">詳細を見る</button>
-                        <button class="btn-secondary">♡</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="property-card" data-category="europe new">
-                <div class="property-image">
-                    🌊
-                    <div class="image-badge">新築</div>
-                </div>
-                <div class="property-info">
-                    <div class="property-price">€580,000</div>
-                    <div class="property-details">
-                        <div class="detail-item">
-                            <span>🏠</span>
-                            <span>1ベッドルーム</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>📐</span>
-                            <span>55㎡</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🏖️</span>
-                            <span>ビーチまで徒歩3分</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🌍</span>
-                            <span>バルセロナ, スペイン</span>
-                        </div>
-                    </div>
-                    <div class="property-features">
-                        <span class="feature-tag">海景色</span>
-                        <span class="feature-tag">モダン</span>
-                        <span class="feature-tag">屋上テラス</span>
-                    </div>
-                    <div class="property-actions">
-                        <button class="btn-primary">詳細を見る</button>
-                        <button class="btn-secondary">♡</button>
-                    </div>
-                </div>
+            <div class="load-more-section">
+                <button class="load-more-btn">さらに物件を見る</button>
             </div>
         </div>
+    </section>
 
-        <div class="load-more-section">
-            <button class="load-more-btn">さらに物件を見る</button>
-        </div>
-    </div>
-</section>
+    <script>
+        // 翻訳データ
+        const translations = {
+            ja: {
+                headerTitle: "プレミアム不動産",
+                headerSubtitle: "理想の住まいがきっと見つかる、厳選された物件をご紹介",
+                searchTitle: "物件を検索する",
+                searchButton: "🔍 検索する",
+                listingsTitle: "おすすめ物件",
+                loadMore: "さらに物件を見る",
+                detailButton: "詳細を見る",
+                areaLabel: "エリア",
+                typeLabel: "物件種別",
+                priceMinLabel: "価格帯（下限）",
+                priceMaxLabel: "価格帯（上限）",
+                roomsLabel: "間取り",
+                stationLabel: "最寄り駅・交通",
+                selectPlaceholder: "選択してください",
+                stationPlaceholder: "駅名・空港・主要エリアを入力",
+                filterAll: "すべて",
+                filterJapan: "🇯🇵 日本",
+                filterAsia: "🌏 アジア",
+                filterEurope: "🇪🇺 ヨーロッパ",
+                filterNew: "新着",
+                filterPopular: "人気",
+                properties: {
+                    property1: "グランドメゾン青山レジデンス",
+                    property2: "マリーナベイ・ラグジュアリーコンドス",
+                    property3: "シャンゼリゼ・ペントハウス",
+                    property4: "江南スカイタワー",
+                    property5: "ケンジントン・ガーデン・アパートメント",
+                    property6: "バンコク・エリート・レジデンス",
+                    property7: "バルセロナ・ビーチロフト"
+                },
+                badges: {
+                    new: "新築",
+                    popular: "人気",
+                    featured: "新着",
+                    priceReduced: "価格改定",
+                    limited: "限定物件",
+                    investment: "投資物件"
+                }
+            },
+            en: {
+                headerTitle: "Premium Real Estate",
+                headerSubtitle: "Discover your ideal home with our carefully selected properties",
+                searchTitle: "Search Properties",
+                searchButton: "🔍 Search",
+                listingsTitle: "Featured Properties",
+                loadMore: "Load More Properties",
+                detailButton: "View Details",
+                areaLabel: "Area",
+                typeLabel: "Property Type",
+                priceMinLabel: "Price Range (Min)",
+                priceMaxLabel: "Price Range (Max)",
+                roomsLabel: "Layout",
+                stationLabel: "Nearest Station/Transport",
+                selectPlaceholder: "Please select",
+                stationPlaceholder: "Enter station, airport, or major area",
+                filterAll: "All",
+                filterJapan: "🇯🇵 Japan",
+                filterAsia: "🌏 Asia",
+                filterEurope: "🇪🇺 Europe",
+                filterNew: "New",
+                filterPopular: "Popular",
+                properties: {
+                    property1: "Grand Maison Aoyama Residence",
+                    property2: "Marina Bay Luxury Condos",
+                    property3: "Champs-Élysées Penthouse",
+                    property4: "Gangnam Sky Tower",
+                    property5: "Kensington Garden Apartment",
+                    property6: "Bangkok Elite Residence",
+                    property7: "Barcelona Beach Loft"
+                },
+                badges: {
+                    new: "New Construction",
+                    popular: "Popular",
+                    featured: "Featured",
+                    priceReduced: "Price Reduced",
+                    limited: "Limited Offer",
+                    investment: "Investment"
+                }
+            },
+            zh: {
+                headerTitle: "高端房地产",
+                headerSubtitle: "精选优质房产，助您找到理想家园",
+                searchTitle: "搜索房产",
+                searchButton: "🔍 搜索",
+                listingsTitle: "推荐房产",
+                loadMore: "查看更多房产",
+                detailButton: "查看详情",
+                areaLabel: "地区",
+                typeLabel: "房产类型",
+                priceMinLabel: "价格范围（最低）",
+                priceMaxLabel: "价格范围（最高）",
+                roomsLabel: "户型",
+                stationLabel: "最近车站/交通",
+                selectPlaceholder: "请选择",
+                stationPlaceholder: "输入车站、机场或主要地区",
+                filterAll: "全部",
+                filterJapan: "🇯🇵 日本",
+                filterAsia: "🌏 亚洲",
+                filterEurope: "🇪🇺 欧洲",
+                filterNew: "最新",
+                filterPopular: "热门",
+                properties: {
+                    property1: "青山豪华公馆",
+                    property2: "滨海湾豪华公寓",
+                    property3: "香榭丽舍顶层豪宅",
+                    property4: "江南天空塔",
+                    property5: "肯辛顿花园公寓",
+                    property6: "曼谷精英公馆",
+                    property7: "巴塞罗那海景阁楼"
+                },
+                badges: {
+                    new: "新建",
+                    popular: "热门",
+                    featured: "精选",
+                    priceReduced: "降价",
+                    limited: "限量",
+                    investment: "投资"
+                }
+            }
+        };
 
-<script>
-    // 翻訳データ
-    const translations = {
-        ja: {
-            headerTitle: "プレミアム不動産",
-            headerSubtitle: "理想の住まいがきっと見つかる、厳選された物件をご紹介",
-            searchTitle: "物件を検索する",
-            searchButton: "🔍 検索する",
-            listingsTitle: "おすすめ物件",
-            loadMore: "さらに物件を見る",
-            detailButton: "詳細を見る",
-            areaLabel: "エリア",
-            typeLabel: "物件種別",
-            priceMinLabel: "価格帯（下限）",
-            priceMaxLabel: "価格帯（上限）",
-            roomsLabel: "間取り",
-            stationLabel: "最寄り駅・交通",
-            selectPlaceholder: "選択してください",
-            stationPlaceholder: "駅名・空港・主要エリアを入力",
-            filterAll: "すべて",
-            filterJapan: "🇯🇵 日本",
-            filterAsia: "🌏 アジア",
-            filterEurope: "🇪🇺 ヨーロッパ",
-            filterNew: "新着",
-            filterPopular: "人気",
+        const optionTranslations = {
+            ja: {
+                areas: {
+                    "": "選択してください",
+                    "tokyo": "🇯🇵 東京都",
+                    "osaka": "🇯🇵 大阪府",
+                    "singapore": "🇸🇬 シンガポール",
+                    "hongkong": "🇭🇰 香港",
+                    "seoul": "🇰🇷 ソウル",
+                    "bangkok": "🇹🇭 バンコク",
+                    "london": "🇬🇧 ロンドン",
+                    "paris": "🇫🇷 パリ",
+                    "barcelona": "🇪🇸 バルセロナ"
+                },
+                types: {
+                    "": "選択してください",
+                    "mansion": "マンション",
+                    "house": "一戸建て",
+                    "penthouse": "ペントハウス",
+                    "loft": "ロフト"
+                },
+                prices: {
+                    "": "選択してください",
+                    "1000": "¥1,000万円 / $100K / €90K",
+                    "5000": "¥5,000万円 / $500K / €450K",
+                    "10000": "¥1億円 / $1M / €900K",
+                    "20000": "¥2億円 / $2M / €1.8M",
+                    "unlimited": "上限なし"
+                },
+                rooms: {
+                    "": "選択してください",
+                    "1": "1R・1K・Studio",
+                    "2": "2K・2LDK・2BR",
+                    "3": "3LDK・3BR",
+                    "4": "4LDK・4BR以上"
+                }
+            },
+            en: {
+                areas: {
+                    "": "Please select",
+                    "tokyo": "🇯🇵 Tokyo",
+                    "osaka": "🇯🇵 Osaka",
+                    "singapore": "🇸🇬 Singapore",
+                    "hongkong": "🇭🇰 Hong Kong",
+                    "seoul": "🇰🇷 Seoul",
+                    "bangkok": "🇹🇭 Bangkok",
+                    "london": "🇬🇧 London",
+                    "paris": "🇫🇷 Paris",
+                    "barcelona": "🇪🇸 Barcelona"
+                },
+                types: {
+                    "": "Please select",
+                    "mansion": "Apartment",
+                    "house": "House",
+                    "penthouse": "Penthouse",
+                    "loft": "Loft"
+                },
+                prices: {
+                    "": "Please select",
+                    "1000": "$100K / ¥1,000万円 / €90K",
+                    "5000": "$500K / ¥5,000万円 / €450K",
+                    "10000": "$1M / ¥1億円 / €900K",
+                    "20000": "$2M / ¥2億円 / €1.8M",
+                    "unlimited": "No limit"
+                },
+                rooms: {
+                    "": "Please select",
+                    "1": "Studio・1BR",
+                    "2": "2BR",
+                    "3": "3BR",
+                    "4": "4BR+"
+                }
+            },
+            zh: {
+                areas: {
+                    "": "请选择",
+                    "tokyo": "🇯🇵 东京",
+                    "osaka": "🇯🇵 大阪",
+                    "singapore": "🇸🇬 新加坡",
+                    "hongkong": "🇭🇰 香港",
+                    "seoul": "🇰🇷 首尔",
+                    "bangkok": "🇹🇭 曼谷",
+                    "london": "🇬🇧 伦敦",
+                    "paris": "🇫🇷 巴黎",
+                    "barcelona": "🇪🇸 巴塞罗那"
+                },
+                types: {
+                    "": "请选择",
+                    "mansion": "公寓",
+                    "house": "独栋别墅",
+                    "penthouse": "顶层豪宅",
+                    "loft": "阁楼"
+                },
+                prices: {
+                    "": "请选择",
+                    "1000": "€90K / ¥1,000万円 / $100K",
+                    "5000": "€450K / ¥5,000万円 / $500K",
+                    "10000": "€900K / ¥1億円 / $1M",
+                    "20000": "€1.8M / ¥2億円 / $2M",
+                    "unlimited": "无上限"
+                },
+                rooms: {
+                    "": "请选择",
+                    "1": "单间・1室",
+                    "2": "2室",
+                    "3": "3室",
+                    "4": "4室以上"
+                }
+            }
+        };
+
+        let currentLang = 'ja';
+
+        function translatePage(lang) {
+            currentLang = lang;
+            document.title = translations[lang].headerTitle + " - 理想の住まいを見つけよう";
+
+            // テキスト翻訳
+            document.querySelector('.header h1').textContent = translations[lang].headerTitle;
+            document.querySelector('.header-subtitle').textContent = translations[lang].headerSubtitle;
+            document.querySelector('.search-title').textContent = translations[lang].searchTitle;
+            document.querySelector('.search-button').textContent = translations[lang].searchButton;
+            document.querySelector('.section-title').textContent = translations[lang].listingsTitle;
+            document.querySelector('.load-more-btn').textContent = translations[lang].loadMore;
+
+            // フォームラベル翻訳
+            document.querySelector('label[for="area"]').textContent = translations[lang].areaLabel;
+            document.querySelector('label[for="type"]').textContent = translations[lang].typeLabel;
+            document.querySelector('label[for="price-min"]').textContent = translations[lang].priceMinLabel;
+            document.querySelector('label[for="price-max"]').textContent = translations[lang].priceMaxLabel;
+            document.querySelector('label[for="rooms"]').textContent = translations[lang].roomsLabel;
+            document.querySelector('label[for="station"]').textContent = translations[lang].stationLabel;
+            document.getElementById('station').placeholder = translations[lang].stationPlaceholder;
+
             // 物件名翻訳
-            properties: {
-                property1: "グランドメゾン青山レジデンス",
-                property2: "マリーナベイ・ラグジュアリーコンドス",
-                property3: "シャンゼリゼ・ペントハウス",
-                property4: "江南スカイタワー",
-                property5: "ケンジントン・ガーデン・アパートメント",
-                property6: "バンコク・エリート・レジデンス",
-                property7: "バルセロナ・ビーチロフト"
-            },
+            document.querySelectorAll('[data-property]').forEach(el => {
+                const propertyKey = el.dataset.property;
+                if (translations[lang].properties[propertyKey]) {
+                    el.textContent = translations[lang].properties[propertyKey];
+                }
+            });
+
             // バッジ翻訳
-            badges: {
-                new: "新築",
-                popular: "人気",
-                featured: "新着",
-                priceReduced: "価格改定",
-                limited: "限定物件",
-                investment: "投資物件"
-            }
-        },
-        en: {
-            headerTitle: "Premium Real Estate",
-            headerSubtitle: "Discover your ideal home with our carefully selected properties",
-            searchTitle: "Search Properties",
-            searchButton: "🔍 Search",
-            listingsTitle: "Featured Properties",
-            loadMore: "Load More Properties",
-            detailButton: "View Details",
-            areaLabel: "Area",
-            typeLabel: "Property Type",
-            priceMinLabel: "Price Range (Min)",
-            priceMaxLabel: "Price Range (Max)",
-            roomsLabel: "Layout",
-            stationLabel: "Nearest Station/Transport",
-            selectPlaceholder: "Please select",
-            stationPlaceholder: "Enter station, airport, or major area",
-            filterAll: "All",
-            filterJapan: "🇯🇵 Japan",
-            filterAsia: "🌏 Asia",
-            filterEurope: "🇪🇺 Europe",
-            filterNew: "New",
-            filterPopular: "Popular",
-            properties: {
-                property1: "Grand Maison Aoyama Residence",
-                property2: "Marina Bay Luxury Condos",
-                property3: "Champs-Élysées Penthouse",
-                property4: "Gangnam Sky Tower",
-                property5: "Kensington Garden Apartment",
-                property6: "Bangkok Elite Residence",
-                property7: "Barcelona Beach Loft"
-            },
-            badges: {
-                new: "New Construction",
-                popular: "Popular",
-                featured: "Featured",
-                priceReduced: "Price Reduced",
-                limited: "Limited Offer",
-                investment: "Investment"
-            }
-        },
-        zh: {
-            headerTitle: "高端房地产",
-            headerSubtitle: "精选优质房产，助您找到理想家园",
-            searchTitle: "搜索房产",
-            searchButton: "🔍 搜索",
-            listingsTitle: "推荐房产",
-            loadMore: "查看更多房产",
-            detailButton: "查看详情",
-            areaLabel: "地区",
-            typeLabel: "房产类型",
-            priceMinLabel: "价格范围（最低）",
-            priceMaxLabel: "价格范围（最高）",
-            roomsLabel: "户型",
-            stationLabel: "最近车站/交通",
-            selectPlaceholder: "请选择",
-            stationPlaceholder: "输入车站、机场或主要地区",
-            filterAll: "全部",
-            filterJapan: "🇯🇵 日本",
-            filterAsia: "🌏 亚洲",
-            filterEurope: "🇪🇺 欧洲",
-            filterNew: "最新",
-            filterPopular: "热门",
-            properties: {
-                property1: "青山豪华公馆",
-                property2: "滨海湾豪华公寓",
-                property3: "香榭丽舍顶层豪宅",
-                property4: "江南天空塔",
-                property5: "肯辛顿花园公寓",
-                property6: "曼谷精英公馆",
-                property7: "巴塞罗那海景阁楼"
-            },
-            badges: {
-                new: "新建",
-                popular: "热门",
-                featured: "精选",
-                priceReduced: "降价",
-                limited: "限量",
-                investment: "投资"
-            }
+            document.querySelectorAll('[data-badge]').forEach(el => {
+                const badgeKey = el.dataset.badge;
+                if (translations[lang].badges[badgeKey]) {
+                    el.textContent = translations[lang].badges[badgeKey];
+                }
+            });
+
+            // セレクトボックス翻訳
+            updateSelectOptions('area', optionTranslations[lang].areas);
+            updateSelectOptions('type', optionTranslations[lang].types);
+            updateSelectOptions('price-min', optionTranslations[lang].prices);
+            updateSelectOptions('price-max', optionTranslations[lang].prices);
+            updateSelectOptions('rooms', optionTranslations[lang].rooms);
+
+            // フィルタータブ翻訳
+            const filterTexts = [
+                translations[lang].filterAll,
+                translations[lang].filterJapan,
+                translations[lang].filterAsia,
+                translations[lang].filterEurope,
+                translations[lang].filterNew,
+                translations[lang].filterPopular
+            ];
+
+            document.querySelectorAll('.filter-tab').forEach((tab, index) => {
+                tab.textContent = filterTexts[index];
+            });
+
+            // ボタン翻訳
+            document.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.textContent = translations[lang].detailButton;
+            });
+
+            // 言語ボタンの状態更新
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                }
+            });
         }
-    };
 
-    const optionTranslations = {
-        ja: {
-            areas: {
-                "": "選択してください",
-                "tokyo": "🇯🇵 東京都",
-                "osaka": "🇯🇵 大阪府",
-                "singapore": "🇸🇬 シンガポール",
-                "hongkong": "🇭🇰 香港",
-                "seoul": "🇰🇷 ソウル",
-                "bangkok": "🇹🇭 バンコク",
-                "london": "🇬🇧 ロンドン",
-                "paris": "🇫🇷 パリ",
-                "barcelona": "🇪🇸 バルセロナ"
-            },
-            types: {
-                "": "選択してください",
-                "mansion": "マンション",
-                "house": "一戸建て",
-                "penthouse": "ペントハウス",
-                "loft": "ロフト"
-            },
-            prices: {
-                "": "選択してください",
-                "1000": "¥1,000万円 / $100K / €90K",
-                "5000": "¥5,000万円 / $500K / €450K",
-                "10000": "¥1億円 / $1M / €900K",
-                "20000": "¥2億円 / $2M / €1.8M",
-                "unlimited": "上限なし"
-            },
-            rooms: {
-                "": "選択してください",
-                "1": "1R・1K・Studio",
-                "2": "2K・2LDK・2BR",
-                "3": "3LDK・3BR",
-                "4": "4LDK・4BR以上"
-            }
-        },
-        en: {
-            areas: {
-                "": "Please select",
-                "tokyo": "🇯🇵 Tokyo",
-                "osaka": "🇯🇵 Osaka",
-                "singapore": "🇸🇬 Singapore",
-                "hongkong": "🇭🇰 Hong Kong",
-                "seoul": "🇰🇷 Seoul",
-                "bangkok": "🇹🇭 Bangkok",
-                "london": "🇬🇧 London",
-                "paris": "🇫🇷 Paris",
-                "barcelona": "🇪🇸 Barcelona"
-            },
-            types: {
-                "": "Please select",
-                "mansion": "Apartment",
-                "house": "House",
-                "penthouse": "Penthouse",
-                "loft": "Loft"
-            },
-            prices: {
-                "": "Please select",
-                "1000": "$100K / ¥1,000万円 / €90K",
-                "5000": "$500K / ¥5,000万円 / €450K",
-                "10000": "$1M / ¥1億円 / €900K",
-                "20000": "$2M / ¥2億円 / €1.8M",
-                "unlimited": "No limit"
-            },
-            rooms: {
-                "": "Please select",
-                "1": "Studio・1BR",
-                "2": "2BR",
-                "3": "3BR",
-                "4": "4BR+"
-            }
-        },
-        zh: {
-            areas: {
-                "": "请选择",
-                "tokyo": "🇯🇵 东京",
-                "osaka": "🇯🇵 大阪",
-                "singapore": "🇸🇬 新加坡",
-                "hongkong": "🇭🇰 香港",
-                "seoul": "🇰🇷 首尔",
-                "bangkok": "🇹🇭 曼谷",
-                "london": "🇬🇧 伦敦",
-                "paris": "🇫🇷 巴黎",
-                "barcelona": "🇪🇸 巴塞罗那"
-            },
-            types: {
-                "": "请选择",
-                "mansion": "公寓",
-                "house": "独栋别墅",
-                "penthouse": "顶层豪宅",
-                "loft": "阁楼"
-            },
-            prices: {
-                "": "请选择",
-                "1000": "€90K / ¥1,000万円 / $100K",
-                "5000": "€450K / ¥5,000万円 / $500K",
-                "10000": "€900K / ¥1億円 / $1M",
-                "20000": "€1.8M / ¥2億円 / $2M",
-                "unlimited": "无上限"
-            },
-            rooms: {
-                "": "请选择",
-                "1": "单间・1室",
-                "2": "2室",
-                "3": "3室",
-                "4": "4室以上"
-            }
+        function updateSelectOptions(selectId, options) {
+            const select = document.getElementById(selectId);
+            const currentValue = select.value;
+            select.innerHTML = '';
+            
+            Object.entries(options).forEach(([value, text]) => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = text;
+                if (value === currentValue) option.selected = true;
+                select.appendChild(option);
+            });
         }
-    };
 
-    let currentLang = 'ja';
-
-    // 翻訳関数
-    function translatePage(lang) {
-        currentLang = lang;
-        document.title = translations[lang].headerTitle + " - 理想の住まいを見つけよう";
-
-        // テキスト翻訳
-        document.querySelector('.header h1').textContent = translations[lang].headerTitle;
-        document.querySelector('.header-subtitle').textContent = translations[lang].headerSubtitle;
-        document.querySelector('.search-title').textContent = translations[lang].searchTitle;
-        document.querySelector('.search-button').textContent = translations[lang].searchButton;
-        document.querySelector('.section-title').textContent = translations[lang].listingsTitle;
-        document.querySelector('.load-more-btn').textContent = translations[lang].loadMore;
-
-        // フォームラベル翻訳
-        document.querySelector('label[for="area"]').textContent = translations[lang].areaLabel;
-        document.querySelector('label[for="type"]').textContent = translations[lang].typeLabel;
-        document.querySelector('label[for="price-min"]').textContent = translations[lang].priceMinLabel;
-        document.querySelector('label[for="price-max"]').textContent = translations[lang].priceMaxLabel;
-        document.querySelector('label[for="rooms"]').textContent = translations[lang].roomsLabel;
-        document.querySelector('label[for="station"]').textContent = translations[lang].stationLabel;
-        document.getElementById('station').placeholder = translations[lang].stationPlaceholder;
-
-        // セレクトボックス翻訳
-        updateSelectOptions('area', optionTranslations[lang].areas);
-        updateSelectOptions('type', optionTranslations[lang].types);
-        updateSelectOptions('price-min', optionTranslations[lang].prices);
-        updateSelectOptions('price-max', optionTranslations[lang].prices);
-        updateSelectOptions('rooms', optionTranslations[lang].rooms);
-
-        // フィルタータブ翻訳
-        const filterTexts = [
-            translations[lang].filterAll,
-            translations[lang].filterJapan,
-            translations[lang].filterAsia,
-            translations[lang].filterEurope,
-            translations[lang].filterNew,
-            translations[lang].filterPopular
-        ];
-
-        document.querySelectorAll('.filter-tab').forEach((tab, index) => {
-            tab.textContent = filterTexts[index];
-        });
-
-        // ボタン翻訳
-        document.querySelectorAll('.btn-primary').forEach(btn => {
-            btn.textContent = translations[lang].detailButton;
-        });
-
-        // 言語ボタンの状態更新
+        // 言語切り替えイベント
         document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.dataset.lang === lang) {
-                btn.classList.add('active');
-            }
-        });
-    }
-
-    function updateSelectOptions(selectId, options) {
-        const select = document.getElementById(selectId);
-        const currentValue = select.value;
-        select.innerHTML = '';
-        
-        Object.entries(options).forEach(([value, text]) => {
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = text;
-            if (value === currentValue) option.selected = true;
-            select.appendChild(option);
-        });
-    }
-
-    // 言語切り替えイベント
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const lang = btn.dataset.lang;
-            if (lang !== currentLang) {
-                document.body.style.transition = 'opacity 0.2s ease';
-                document.body.style.opacity = '0.8';
-                
-                setTimeout(() => {
-                    translatePage(lang);
-                    document.body.style.opacity = '1';
-                }, 100);
-            }
-        });
-    });
-
-    // フィルタータブ機能
-    const filterTabs = document.querySelectorAll('.filter-tab');
-    const propertyCards = document.querySelectorAll('.property-card');
-
-    filterTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            filterTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            const filter = tab.dataset.filter;
-            propertyCards.forEach(card => {
-                if (filter === 'all') {
-                    card.style.display = 'block';
-                } else {
-                    const categories = card.dataset.category || '';
-                    card.style.display = categories.includes(filter) ? 'block' : 'none';
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const lang = btn.dataset.lang;
+                if (lang !== currentLang) {
+                    document.body.style.transition = 'opacity 0.2s ease';
+                    document.body.style.opacity = '0.8';
+                    
+                    setTimeout(() => {
+                        translatePage(lang);
+                        document.body.style.opacity = '1';
+                    }, 100);
                 }
             });
         });
-    });
 
-    // 検索フォーム処理
-    document.querySelector('.search-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const searchButton = document.querySelector('.search-button');
-        const originalText = searchButton.textContent;
-        searchButton.textContent = translations[currentLang].searchButton.replace('🔍 ', '🔍 ') + '中...';
-        searchButton.style.background = 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
-        
-        setTimeout(() => {
-            searchButton.textContent = originalText;
-            searchButton.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-            alert(currentLang === 'ja' ? '検索結果を表示しました' : 
-                  currentLang === 'en' ? 'Search results displayed' : 
-                  '显示搜索结果');
-        }, 1500);
-    });
+        // フィルタータブ機能
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const propertyCards = document.querySelectorAll('.property-card');
 
-    // お気に入りボタン処理
-    document.querySelectorAll('.btn-secondary').forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (btn.style.background.includes('rgb(231, 76, 60)')) {
-                btn.style.background = 'transparent';
-                btn.style.color = '#667eea';
-                btn.innerHTML = '♡';
-            } else {
-                btn.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
-                btn.style.color = 'white';
-                btn.innerHTML = '♥';
-            }
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const filter = tab.dataset.filter;
+                propertyCards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const categories = card.dataset.category || '';
+                        card.style.display = categories.includes(filter) ? 'block' : 'none';
+                    }
+                });
+            });
         });
-    });
 
-    // 詳細ボタン処理
-    document.querySelectorAll('.btn-primary').forEach(btn => {
-        btn.addEventListener('click', () => {
+        // 検索フォーム処理
+        document.querySelector('.search-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const searchButton = document.querySelector('.search-button');
+            const originalText = searchButton.textContent;
+            searchButton.textContent = translations[currentLang].searchButton.replace('🔍 ', '🔍 ') + '中...';
+            searchButton.style.background = 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
+            
+            setTimeout(() => {
+                searchButton.textContent = originalText;
+                searchButton.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                alert(currentLang === 'ja' ? '検索結果を表示しました' : 
+                      currentLang === 'en' ? 'Search results displayed' : 
+                      '显示搜索结果');
+            }, 1500);
+        });
+
+        // お気に入りボタン処理
+        document.querySelectorAll('.btn-secondary').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.style.background.includes('rgb(231, 76, 60)')) {
+                    btn.style.background = 'transparent';
+                    btn.style.color = '#667eea';
+                    btn.innerHTML = '♡';
+                } else {
+                    btn.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+                    btn.style.color = 'white';
+                    btn.innerHTML = '♥';
+                }
+            });
+        });
+
+        // 詳細ボタン処理
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const originalText = btn.textContent;
+                btn.textContent = currentLang === 'ja' ? '読み込み中...' : 
+                                 currentLang === 'en' ? 'Loading...' : 
+                                 '加载中...';
+                btn.style.background = 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                    alert(currentLang === 'ja' ? '物件詳細ページに移動します' : 
+                          currentLang === 'en' ? 'Redirecting to property details' : 
+                          '跳转到房产详情页');
+                }, 800);
+            });
+        });
+
+        // もっと見るボタン処理
+        document.querySelector('.load-more-btn').addEventListener('click', () => {
+            const btn = document.querySelector('.load-more-btn');
             const originalText = btn.textContent;
             btn.textContent = currentLang === 'ja' ? '読み込み中...' : 
                              currentLang === 'en' ? 'Loading...' : 
@@ -1211,33 +1237,12 @@
             
             setTimeout(() => {
                 btn.textContent = originalText;
-                btn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-                alert(currentLang === 'ja' ? '物件詳細ページに移動します' : 
-                      currentLang === 'en' ? 'Redirecting to property details' : 
-                      '跳转到房产详情页');
-            }, 800);
+                btn.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
+                alert(currentLang === 'ja' ? '新しい物件を読み込みました' : 
+                      currentLang === 'en' ? 'New properties loaded' : 
+                      '加载了新房产');
+            }, 1000);
         });
-    });
-
-    // もっと見るボタン処理
-    document.querySelector('.load-more-btn').addEventListener('click', () => {
-        const btn = document.querySelector('.load-more-btn');
-        const originalText = btn.textContent;
-        btn.textContent = currentLang === 'ja' ? '読み込み中...' : 
-                         currentLang === 'en' ? 'Loading...' : 
-                         '加载中...';
-        btn.style.background = 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
-        
-        setTimeout(() => {
-            btn.textContent = originalText;
-            btn.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
-            alert(currentLang === 'ja' ? '新しい物件を読み込みました' : 
-                  currentLang === 'en' ? 'New properties loaded' : 
-                  '加载了新房产');
-        }, 1000);
-    });
-</script>
-
-
+    </script>
 </body>
 </html>
