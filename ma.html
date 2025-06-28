@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M&A取引プラットフォーム - ZUIHAO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        overflow-x: hidden;
+        background: #ffffff;
+    }
+    
+    /* ヘッダー */
+    .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 80px 20px 60px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M 15 0 L 0 0 0 15" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        animation: float 25s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+    }
+    
+    .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 15px 20px;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #2c3e50;
+    }
+    
+    .nav-menu {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+    }
+    
+    .nav-menu a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        padding: 8px 16px;
+        border-radius: 20px;
+    }
+    
+    .nav-menu a:hover {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+    }
+    
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .header h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: slideInUp 1s ease-out;
+    }
+    
+    .header-subtitle {
+        font-size: 1.4rem;
+        margin-bottom: 3rem;
+        opacity: 0.9;
+        animation: slideInUp 1s ease-out 0.2s both;
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .search-section {
+        background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+        padding: 80px 20px;
+        position: relative;
+    }
+    
+    .search-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .search-tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 3rem;
+    }
+    
+    .search-tab {
+        padding: 15px 40px;
+        border: none;
+        background: #e9ecef;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    .search-tab:first-child {
+        border-radius: 25px 0 0 25px;
+    }
+    
+    .search-tab:last-child {
+        border-radius: 0 25px 25px 0;
+    }
+    
+    .search-tab.active {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+    }
+    
+    .search-card {
+        background: white;
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .search-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, #e74c3c, #f39c12, #27ae60, #3498db);
+    }
+    
+    .search-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    
+    .form-group select,
+    .form-group input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .form-group select:focus,
+    .form-group input:focus {
+        outline: none;
+        border-color: #2c3e50;
+        box-shadow: 0 0 0 4px rgba(44, 62, 80, 0.1);
+    }
+    
+    .search-button {
+        grid-column: 1 / -1;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+        padding: 20px 50px;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 15px 40px rgba(231, 76, 60, 0.3);
+    }
+    
+    .search-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 50px rgba(231, 76, 60, 0.4);
+    }
+    
+    /* 案件一覧 */
+    .listings-section {
+        padding: 80px 20px;
+        background: white;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4rem;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        font-weight: 700;
+        position: relative;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 80px;
+        height: 5px;
+        background: linear-gradient(90deg, #e74c3c, #f39c12);
+        border-radius: 3px;
+    }
+    
+    .filter-controls {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+        padding: 12px 24px;
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        background: white;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+    
+    .filter-btn.active,
+    .filter-btn:hover {
+        border-color: #2c3e50;
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .deals-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 3rem;
+    }
+    
+    .deal-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .deal-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    }
+    
+    .deal-header {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+        padding: 2rem;
+        position: relative;
+    }
+    
+    .deal-status {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .deal-type {
+        font-size: 1rem;
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+    }
+    
+    .deal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .deal-price {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #f39c12;
+    }
+    
+    .deal-content {
+        padding: 2rem;
+    }
+    
+    .deal-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        color: #666;
+        font-size: 0.95rem;
+    }
+    
+    .detail-icon {
+        font-size: 1.2rem;
+        color: #2c3e50;
+    }
+    
+    .deal-description {
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+    
+    .deal-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .deal-tag {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .deal-actions {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .btn-primary {
+        flex: 1;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+    }
+    
+    .btn-secondary {
+        background: transparent;
+        color: #2c3e50;
+        border: 2px solid #2c3e50;
+        padding: 13px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background: #2c3e50;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    /* 統計セクション */
+    .stats-section {
+        padding: 80px 20px;
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 3rem;
+        text-align: center;
+    }
+    
+    .stat-item {
+        padding: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: #f39c12;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    .stat-label {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        font-weight: 600;
+    }
+    
+    /* サービス紹介 */
+    .services-section {
+        padding: 80px 20px;
+        background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+    }
+    
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 3rem;
+    }
+    
+    .service-card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #e74c3c, #f39c12, #27ae60);
+    }
+    
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    }
+    
+    .service-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        display: block;
+    }
+    
+    .service-title {
+        font-size: 1.8rem;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+    
+    .service-description {
+        color: #666;
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+    
+    /* お問い合わせセクション */
+    .contact-section {
+        padding: 80px 20px;
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        text-align: center;
+    }
+    
+    .contact-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .contact-title {
+        font-size: 2.8rem;
+        margin-bottom: 2rem;
+        font-weight: 700;
+    }
+    
+    .contact-description {
+        font-size: 1.3rem;
+        margin-bottom: 3rem;
+        opacity: 0.9;
+        line-height: 1.7;
+    }
+    
+    .contact-buttons {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .contact-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid white;
+        padding: 18px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .contact-btn:hover {
+        background: white;
+        color: #e74c3c;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+    }
+    
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+        .header h1 {
+            font-size: 2.5rem;
+        }
+        
+        .search-form {
+            grid-template-columns: 1fr;
+        }
+        
+        .deals-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .nav-menu {
+            display: none;
+        }
+        
+        .filter-controls {
+            justify-content: center;
+        }
+        
+        .section-header {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+    
+    /* アニメーション */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease-out;
+    }
+    
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+```
+
+</head>
+<body>
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="logo">ZUIHAO M&A</div>
+            <ul class="nav-menu">
+                <li><a href="#search">案件検索</a></li>
+                <li><a href="#deals">M&A案件</a></li>
+                <li><a href="#services">サービス</a></li>
+                <li><a href="#stats">実績</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+```
+<!-- ヘッダー -->
+<header class="header">
+    <div class="header-content">
+        <h1>M&A取引プラットフォーム</h1>
+        <p class="header-subtitle">
+            企業の売買・買収を専門家がサポート。理想のM&A取引を実現します。
+        </p>
+    </div>
+</header>
+
+<!-- 検索セクション -->
+<section id="search" class="search-section">
+    <div class="search-container">
+        <div class="search-tabs">
+            <button class="search-tab active" data-tab="buy">企業を買収したい</button>
+            <button class="search-tab" data-tab="sell">企業を売却したい</button>
+        </div>
+        
+        <div class="search-card">
+            <form class="search-form" id="buyForm">
+                <div class="form-group">
+                    <label for="industry">業界・業種</label>
+                    <select id="industry">
+                        <option value="">選択してください</option>
+                        <option value="it">IT・ソフトウェア</option>
+                        <option value="manufacturing">製造業</option>
+                        <option value="retail">小売・EC</option>
+                        <option value="food">飲食・食品</option>
+                        <option value="healthcare">ヘルスケア・医療</option>
+                        <option value="finance">金融・フィンテック</option>
+                        <option value="real-estate">不動産</option>
+                        <option value="logistics">物流・運輸</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="revenue">年商規模</label>
+                    <select id="revenue">
+                        <option value="">選択してください</option>
+                        <option value="under50">5,000万円未満</option>
+                        <option value="50-100">5,000万円〜1億円</option>
+                        <option value="100-500">1億円〜5億円</option>
+                        <option value="500-1000">5億円〜10億円</option>
+                        <option value="over1000">10億円以上</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">所在地</label>
+                    <select id="location">
+                        <option value="">選択してください</option>
+                        <option value="tokyo">東京都</option>
+                        <option value="osaka">大阪府</option>
+                        <option value="nagoya">愛知県</option>
+                        <option value="fukuoka">福岡県</option>
+                        <option value="other">その他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="price-range">希望価格帯</label>
+                    <select id="price-range">
+                        <option value="">選択してください</option>
+                        <option value="under100">1億円未満</option>
+                        <option value="100-500">1億円〜5億円</option>
+                        <option value="500-1000">5億円〜10億円</option>
+                        <option value="over1000">10億円以上</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="search-button">🔍 案件を検索する</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- M&A案件一覧 -->
+<section id="deals" class="listings-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title fade-in">M&A案件一覧</h2>
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">すべて</button>
+                <button class="filter-btn" data-filter="it">IT業界</button>
+                <button class="filter-btn" data-filter="manufacturing">製造業</button>
+                <button class="filter-btn" data-filter="retail">小売・EC</button>
+                <button class="filter-btn" data-filter="new">新着案件</button>
+            </div>
+        </div>
+
+        <div class="deals-grid">
+            <div class="deal-card fade-in" data-category="it new">
+                <div class="deal-header">
+                    <div class="deal-status">売却案件</div>
+                    <div class="deal-type">IT・ソフトウェア開発</div>
+                    <h3 class="deal-title">AI開発企業の株式譲渡</h3>
+                    <div class="deal-price">3.5億円</div>
+                </div>
+                <div class="deal-content">
+                    <div class="deal-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">📊</span>
+                            <span>年商: 2億円</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">👥</span>
+                            <span>従業員: 25名</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📅</span>
+                            <span>設立: 2019年</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>東京都渋谷区</span>
+                        </div>
+                    </div>
+                    <p class="deal-description">
+                        AI・機械学習技術を活用したソフトウェア開発企業。大手企業との長期契約を複数保有し、安定した収益基盤を持つ。
+                    </p>
+                    <div class="deal-tags">
+                        <span class="deal-tag">AI技術</span>
+                        <span class="deal-tag">長期契約</span>
+                        <span class="deal-tag">成長中</span>
+                    </div>
+                    <div class="deal-actions">
+                        <button class="btn-primary">詳細を見る</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deal-card fade-in" data-category="manufacturing">
+                <div class="deal-header">
+                    <div class="deal-status">売却案件</div>
+                    <div class="deal-type">製造業・精密機器</div>
+                    <h3 class="deal-title">精密部品製造業の事業承継</h3>
+                    <div class="deal-price">8.2億円</div>
+                </div>
+                <div class="deal-content">
+                    <div class="deal-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">📊</span>
+                            <span>年商: 12億円</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">👥</span>
+                            <span>従業員: 45名</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📅</span>
+                            <span>設立: 1985年</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>愛知県名古屋市</span>
+                        </div>
+                    </div>
+                    <p class="deal-description">
+                        自動車産業向け精密部品の製造を手がける老舗企業。独自の技術力と品質管理により、大手メーカーとの取引を継続。
+                    </p>
+                    <div class="deal-tags">
+                        <span class="deal-tag">老舗企業</span>
+                        <span class="deal-tag">独自技術</span>
+                        <span class="deal-tag">事業承継</span>
+                    </div>
+                    <div class="deal-actions">
+                        <button class="btn-primary">詳細を見る</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deal-card fade-in" data-category="retail new">
+                <div class="deal-header">
+                    <div class="deal-status">売却案件</div>
+                    <div class="deal-type">EC・小売業</div>
+                    <h3 class="deal-title">急成長ECサイトの株式売却</h3>
+                    <div class="deal-price">2.8億円</div>
+                </div>
+                <div class="deal-content">
+                    <div class="deal-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">📊</span>
+                            <span>年商: 5億円</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">👥</span>
+                            <span>従業員: 18名</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📅</span>
+                            <span>設立: 2020年</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>大阪府大阪市</span>
+                        </div>
+                    </div>
+                    <p class="deal-description">
+                        健康食品・サプリメント専門のECサイト。SNSマーケティングに強く、年商成長率200%を維持している急成長企業。
+                    </p>
+                    <div class="deal-tags">
+                        <span class="deal-tag">急成長</span>
+                        <span class="deal-tag">EC専門</span>
+                        <span class="deal-tag">健康市場</span>
+                    </div>
+                    <div class="deal-actions">
+                        <button class="btn-primary">詳細を見る</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deal-card fade-in" data-category="it">
+                <div class="deal-header">
+                    <div class="deal-status">買収案件</div>
+                    <div class="deal-type">IT・システム開発</div>
+                    <h3 class="deal-title">大手IT企業による買収案件</h3>
+                    <div class="deal-price">上限10億円</div>
+                </div>
+                <div class="deal-content">
+                    <div class="deal-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">🎯</span>
+                            <span>希望年商: 3億円以上</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">👥</span>
+                            <span>希望従業員: 20名以上</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🏢</span>
+                            <span>業種: SaaS・クラウド</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>エリア: 全国対応</span>
+                        </div>
+                    </div>
+                    <p class="deal-description">
+                        上場IT企業が事業拡大のためSaaS・クラウド分野での買収を希望。シナジー効果を重視し、技術力のある企業を探しています。
+                    </p>
+                    <div class="deal-tags">
+                        <span class="deal-tag">上場企業</span>
+                        <span class="deal-tag">SaaS</span>
+                        <span class="deal-tag">シナジー重視</span>
+                    </div>
+                    <div class="deal-actions">
+                        <button class="btn-primary">詳細を見る</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deal-card fade-in" data-category="manufacturing">
+                <div class="deal-header">
+                    <div class="deal-status">売却案件</div>
+                    <div class="deal-type">食品製造業</div>
+                    <h3 class="deal-title">地域密着型食品工場の事業譲渡</h3>
+                    <div class="deal-price">4.5億円</div>
+                </div>
+                <div class="deal-content">
+                    <div class="deal-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">📊</span>
+                            <span>年商: 7億円</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">👥</span>
+                            <span>従業員: 35名</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📅</span>
+                            <span>設立: 1975年</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>福岡県福岡市</span>
+                        </div>
+                    </div>
+                    <p class="deal-description">
+                        九州エリアで50年近く愛され続ける食品製造業。地元スーパーとの強固な関係と、伝統的な製法による安定した品質が強み。
+                    </p>
+                    <div class="deal-tags">
+                        <span class="deal-tag">老舗ブランド</span>
+                        <span class="deal-tag">地域密着</span>
+                        <span class="deal-tag">安定収益</span>
+                    </div>
+                    <div class="deal-actions">
+                        <button class="btn-primary">詳細を見る</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deal-card fade-in" data-category="retail new">
+                <div class="deal-header">
+                    <div class="deal-status">売却案件</div>
+                    <div class="deal-type">美容・エステサロン</div>
+                    <h3 class="deal-title">高級エステサロンチェーンの売却</h3>
+                    <div class="deal-price">6.8億円</div>
+                </div>
+                <div class="deal-content">
+                    <div class="deal-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">📊</span>
+                            <span>年商: 9億円</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🏪</span>
+                            <span>店舗数: 8店舗</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📅</span>
+                            <span>設立: 2010年</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>東京都・神奈川県</span>
+                        </div>
+                    </div>
+                    <p class="deal-description">
+                        首都圏で展開する高級エステサロンチェーン。富裕層顧客が多く、高い顧客満足度とリピート率を誇る。
+                    </p>
+                    <div class="deal-tags">
+                        <span class="deal-tag">高級市場</span>
+                        <span class="deal-tag">チェーン展開</span>
+                        <span class="deal-tag">富裕層顧客</span>
+                    </div>
+                    <div class="deal-actions">
+                        <button class="btn-primary">詳細を見る</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 実績統計 -->
+<section id="stats" class="stats-section">
+    <div class="container">
+        <h2 class="section-title fade-in">実績統計</h2>
+        <div class="stats-grid">
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="120">0</span>
+                <div class="stat-label">M&A成約実績</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="450">0</span>
+                <div class="stat-label">登録案件数</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="85">0</span>
+                <div class="stat-label">平均成約率（%）</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="95">0</span>
+                <div class="stat-label">顧客満足度（%）</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- サービス紹介 -->
+<section id="services" class="services-section">
+    <div class="container">
+        <h2 class="section-title fade-in">M&Aサポートサービス</h2>
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <span class="service-icon">🔍</span>
+                <h3 class="service-title">企業価値評価</h3>
+                <p class="service-description">
+                    専門家による詳細な企業価値評価を実施。財務分析から将来性まで総合的に評価し、適正な価格設定をサポートします。
+                </p>
+            </div>
+
+            <div class="service-card fade-in">
+                <span class="service-icon">🤝</span>
+                <h3 class="service-title">マッチング支援</h3>
+                <p class="service-description">
+                    豊富なネットワークを活用し、最適な買い手・売り手をマッチング。相互のニーズを的確に把握し、成功に導きます。
+                </p>
+            </div>
+
+            <div class="service-card fade-in">
+                <span class="service-icon">📋</span>
+                <h3 class="service-title">契約・手続き代行</h3>
+                <p class="service-description">
+                    複雑なM&A手続きを完全代行。契約書作成から登記手続きまで、専門家が安全・確実に進行させます。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- お問い合わせ -->
+<section id="contact" class="contact-section">
+    <div class="contact-content">
+        <h2 class="contact-title fade-in">M&A相談はお任せください</h2>
+        <p class="contact-description fade-in">
+            企業の売却・買収に関するご相談は無料で承ります。<br>
+            経験豊富な専門家が最適なソリューションをご提案いたします。
+        </p>
+        <div class="contact-buttons fade-in">
+            <a href="tel:03-1234-5678" class="contact-btn">
+                📞 電話で相談
+            </a>
+            <a href="mailto:ma@zuihao.com" class="contact-btn">
+                ✉️ メールで相談
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    // タブ切り替え
+    const searchTabs = document.querySelectorAll('.search-tab');
+    searchTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            searchTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // フォーム内容を切り替え（実装例）
+            const tabType = tab.dataset.tab;
+            const form = document.querySelector('.search-form');
+            if (tabType === 'sell') {
+                form.querySelector('.search-button').textContent = '🏢 売却相談する';
+            } else {
+                form.querySelector('.search-button').textContent = '🔍 案件を検索する';
+            }
+        });
+    });
+
+    // フィルター機能
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const dealCards = document.querySelectorAll('.deal-card');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.dataset.filter;
+            dealCards.forEach(card => {
+                if (filter === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    const categories = card.dataset.category || '';
+                    card.style.display = categories.includes(filter) ? 'block' : 'none';
+                }
+            });
+        });
+    });
+
+    // 検索フォーム
+    document.querySelector('.search-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchButton = document.querySelector('.search-button');
+        const originalText = searchButton.textContent;
+        searchButton.textContent = '🔍 検索中...';
+        searchButton.style.background = 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
+        
+        setTimeout(() => {
+            searchButton.textContent = originalText;
+            searchButton.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+            alert('検索結果を表示しました。実際の実装では、条件に合った案件が表示されます。');
+        }, 1500);
+    });
+
+    // 統計のカウントアップ
+    const countUpNumbers = () => {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(num => {
+            const target = parseInt(num.dataset.count);
+            let current = 0;
+            const increment = target / 100;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                num.textContent = Math.floor(current);
+            }, 30);
+        });
+    };
+
+    // 統計セクションが見えたときにカウントアップ開始
+    const statsSection = document.querySelector('.stats-section');
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                countUpNumbers();
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    });
+    
+    if (statsSection) {
+        statsObserver.observe(statsSection);
+    }
+
+    // スクロールアニメーション
+    const observeElements = document.querySelectorAll('.fade-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    observeElements.forEach(el => {
+        observer.observe(el);
+    });
+
+    // 案件カードのアクション
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('案件詳細ページに移動します。実際の実装では、詳細情報と問い合わせフォームが表示されます。');
+        });
+    });
+
+    document.querySelectorAll('.btn-secondary').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.style.background === 'rgb(44, 62, 80)') {
+                btn.style.background = 'transparent';
+                btn.style.color = '#2c3e50';
+                btn.innerHTML = '💾';
+                alert('お気に入りから削除しました');
+            } else {
+                btn.style.background = '#2c3e50';
+                btn.style.color = 'white';
+                btn.innerHTML = '❤️';
+                alert('お気に入りに追加しました');
+            }
+        });
+    });
+
+    // スムーススクロール
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // ナビゲーションバーの背景変更
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav');
+        if (window.scrollY > 100) {
+            nav.style.background = 'rgba(255, 255, 255, 0.98)';
+            nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+        } else {
+            nav.style.background = 'rgba(255, 255, 255, 0.95)';
+            nav.style.boxShadow = 'none';
+        }
+    });
+</script>
+```
+
+</body>
+</html>
