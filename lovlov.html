@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoveConnect - 最先端の結婚マッチングサイト</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+
+    header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px 50px;
+        margin-bottom: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .logo {
+        font-size: 3em;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff6b6b, #feca57);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .hero {
+        text-align: center;
+        padding: 80px 0;
+        color: white;
+    }
+
+    .hero h1 {
+        font-size: 5em;
+        margin-bottom: 30px;
+        background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        animation: glow 2s ease-in-out infinite alternate;
+        line-height: 1.2;
+    }
+
+    @keyframes glow {
+        from { filter: drop-shadow(0 0 20px rgba(255, 154, 158, 0.7)); }
+        to { filter: drop-shadow(0 0 30px rgba(254, 207, 239, 0.9)); }
+    }
+
+    .hero p {
+        font-size: 1.5em;
+        margin-bottom: 50px;
+        opacity: 0.9;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+    }
+
+    .cta-button {
+        background: linear-gradient(45deg, #ff6b6b, #feca57);
+        color: white;
+        padding: 20px 50px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.3em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+    }
+
+    .problem-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 60px;
+        margin: 60px 0;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .problem-section h2 {
+        color: white;
+        font-size: 2.5em;
+        margin-bottom: 40px;
+        background: linear-gradient(45deg, #ff9a9e, #fecfef);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .problem-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin: 40px 0;
+    }
+
+    .problem-card {
+        background: rgba(255, 107, 107, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        border: 1px solid rgba(255, 107, 107, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .problem-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
+    }
+
+    .problem-card .icon {
+        font-size: 3em;
+        margin-bottom: 15px;
+    }
+
+    .problem-card h3 {
+        color: white;
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+
+    .problem-card p {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+    }
+
+    .solution-box {
+        background: linear-gradient(45deg, rgba(79, 70, 229, 0.3), rgba(124, 58, 237, 0.3));
+        border-radius: 15px;
+        padding: 40px;
+        margin: 40px 0;
+    }
+
+    .solution-box h3 {
+        color: white;
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .solution-box p {
+        color: white;
+        font-size: 1.2em;
+        line-height: 1.8;
+        margin-bottom: 30px;
+    }
+
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        margin: 100px 0;
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 50px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .feature-card:hover::before {
+        left: 100%;
+    }
+
+    .feature-icon {
+        font-size: 4em;
+        margin-bottom: 25px;
+        background: linear-gradient(45deg, #ff9a9e, #fecfef);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .feature-card h3 {
+        color: white;
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+
+    .feature-card p {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        font-size: 1.1em;
+    }
+
+    .matching-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 60px;
+        margin: 60px 0;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .matching-section h2 {
+        color: white;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        background: linear-gradient(45deg, #ff9a9e, #fecfef);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .compatibility-meter {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .meter-bar {
+        background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+        height: 20px;
+        border-radius: 10px;
+        width: 85%;
+        margin: 20px auto;
+        position: relative;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .profiles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin: 50px 0;
+    }
+
+    .profile-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        cursor: pointer;
+    }
+
+    .profile-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff9a9e, #fecfef, #a8edea);
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5em;
+        color: white;
+    }
+
+    .profile-name {
+        color: white;
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+    }
+
+    .profile-info {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1em;
+        line-height: 1.4;
+    }
+
+    .chat-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin: 30px 0;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .pricing-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        transition: all 0.3s ease;
+    }
+
+    .pricing-card.popular {
+        background: linear-gradient(45deg, rgba(255, 107, 107, 0.3), rgba(254, 202, 87, 0.3));
+        border: 2px solid #feca57;
+        position: relative;
+    }
+
+    .pricing-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .popular-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #feca57;
+        color: #333;
+        padding: 8px 20px;
+        border-radius: 15px;
+        font-size: 0.9em;
+        font-weight: bold;
+    }
+
+    .price {
+        font-size: 3em;
+        color: #feca57;
+        font-weight: bold;
+        margin: 25px 0;
+    }
+
+    .line-button {
+        width: 100%;
+        padding: 18px;
+        background: rgba(0, 185, 0, 0.8);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .line-button:hover {
+        background: rgba(0, 155, 0, 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 185, 0, 0.3);
+    }
+
+    .chat-window {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        height: 300px;
+        padding: 20px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+    }
+
+    .message {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 10px 15px;
+        margin: 10px 0;
+        color: white;
+        max-width: 70%;
+    }
+
+    .message.sent {
+        background: linear-gradient(45deg, #ff6b6b, #feca57);
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .registration-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 60px;
+        margin: 60px 0;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .registration-section h2 {
+        color: white;
+        font-size: 2.5em;
+        margin-bottom: 40px;
+        background: linear-gradient(45deg, #ff9a9e, #fecfef);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .step-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .step-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(255, 154, 158, 0.3);
+    }
+
+    .step-card h3 {
+        color: white;
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    .step-card p {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+    }
+
+    footer {
+        text-align: center;
+        padding: 40px 0;
+        color: rgba(255, 255, 255, 0.8);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 50px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px;
+        }
+        
+        .hero h1 {
+            font-size: 2.5em;
+        }
+        
+        .hero p {
+            font-size: 1.2em;
+        }
+        
+        .logo {
+            font-size: 2em;
+        }
+        
+        .problem-section h2,
+        .matching-section h2 {
+            font-size: 2em;
+        }
+        
+        .problem-grid,
+        .features,
+        .profiles-grid,
+        .pricing-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .feature-card,
+        .problem-card,
+        .pricing-card {
+            padding: 30px 20px;
+        }
+        
+        .cta-button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+        }
+        
+        .step-card {
+            padding: 30px 20px;
+        }
+        
+        header {
+            padding: 20px 30px;
+        }
+    }
+
+    .floating-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .heart {
+        position: absolute;
+        font-size: 20px;
+        color: rgba(255, 182, 193, 0.3);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+</style>
+
+
+</head>
+<body>
+    <div class="floating-hearts" id="hearts"></div>
+
+
+<div class="container">
+    <header>
+        <div class="logo">💕 LoveConnect</div>
+    </header>
+
+    <section class="hero">
+        <h1>新しいお見合いの形を提供</h1>
+        <p>AIが導く最先端のマッチングで、運命の人を見つけませんか？</p>
+        <button class="cta-button" onclick="startLine()">LINEで相談してみる</button>
+    </section>
+
+    <section class="problem-section">
+        <h2>こんな経験ありませんか？</h2>
+        
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="icon">💸</div>
+                <h3>やり取りで沢山課金したのに、なかなか会えない</h3>
+                <p>メッセージ交換にお金をかけても、実際のデートまで進まずに終わってしまう...</p>
+            </div>
+            
+            <div class="problem-card">
+                <div class="icon">😰</div>
+                <h3>会ってみたら全然写真と違う💦</h3>
+                <p>プロフィール写真と実際の印象が大きく違って、ガッカリした経験...</p>
+            </div>
+            
+            <div class="problem-card">
+                <div class="icon">❌</div>
+                <h3>出会いたい目的が違う</h3>
+                <p>真剣な交際を求めているのに、相手は軽い出会いを探していた...</p>
+            </div>
+        </div>
+
+        <div class="solution-box">
+            <h3>✨ 弊社は、そのようなお悩みを解決する為のマッチング代行の会社です</h3>
+            <p>
+                🎯 <strong>事前の厳格な審査で本気度をチェック</strong><br>
+                📸 <strong>写真と実物の相違を最小限に</strong><br>
+                💑 <strong>目的の一致した相手のみをご紹介</strong><br>
+                💬 <strong>プロがメッセージ代行で確実にデートまで</strong>
+            </p>
+            <button class="cta-button" onclick="startLine()">今すぐ無料相談</button>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon">👥</div>
+            <h3>友達</h3>
+            <p>まずは気軽な友達関係から始めませんか？共通の趣味や価値観を持つ仲間と出会えます。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💒</div>
+            <h3>結婚</h3>
+            <p>真剣に結婚を考えている方同士をマッチング。将来を見据えた本格的な出会いをサポートします。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💕</div>
+            <h3>パートナー</h3>
+            <p>人生を共に歩むパートナー探し。お互いを支え合える理想的な関係を築ける相手を見つけましょう。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>マッチング代行</h3>
+            <p>あなたにあった相手を紹介。出会うまでのメッセージのやりとりは弊社が行います。プロが代わりに最適なコミュニケーションを取ります。</p>
+        </div>
+    </section>
+
+    <section class="matching-section">
+        <h2>🎯 相性診断システム</h2>
+        <div class="compatibility-meter">
+            <h3 style="color: white; margin-bottom: 20px;">あなたの相性度</h3>
+            <div class="meter-bar"></div>
+            <p style="color: white; font-size: 1.2em; font-weight: bold;">85% マッチ!</p>
+        </div>
+        
+        <div class="profiles-grid">
+            <div class="profile-card" onclick="viewProfile('佐藤美咲')">
+                <div class="profile-avatar">👩</div>
+                <div class="profile-name">佐藤 美咲</div>
+                <div class="profile-info">28歳 • 東京 • デザイナー</div>
+            </div>
+            <div class="profile-card" onclick="viewProfile('田中健太')">
+                <div class="profile-avatar">👨</div>
+                <div class="profile-name">田中 健太</div>
+                <div class="profile-info">32歳 • 大阪 • エンジニア</div>
+            </div>
+            <div class="profile-card" onclick="viewProfile('山田花子')">
+                <div class="profile-avatar">👩</div>
+                <div class="profile-name">山田 花子</div>
+                <div class="profile-info">26歳 • 横浜 • 看護師</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="chat-section">
+        <h2 style="color: white; text-align: center; margin-bottom: 30px;">💰 料金プラン</h2>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3 style="color: white; font-size: 1.8em; margin-bottom: 20px;">1ヶ月プラン</h3>
+                <div class="price">¥5,000</div>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 25px; font-size: 1.1em;">お試しでスタート</p>
+                <button class="line-button" onclick="addLine('1ヶ月', 5000)">
+                    <span style="font-size: 1.2em;">💬</span>
+                    LINEで気軽にお問い合わせ
+                </button>
+            </div>
+            
+            <div class="pricing-card popular">
+                <div class="popular-badge">人気</div>
+                <h3 style="color: white; font-size: 1.8em; margin-bottom: 20px;">3ヶ月プラン</h3>
+                <div class="price">¥20,000</div>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 25px; font-size: 1.1em;">しっかり活動したい方に</p>
+                <button class="line-button" onclick="addLine('3ヶ月', 20000)">
+                    <span style="font-size: 1.2em;">💬</span>
+                    LINEで気軽にお問い合わせ
+                </button>
+            </div>
+            
+            <div class="pricing-card">
+                <h3 style="color: white; font-size: 1.8em; margin-bottom: 20px;">6ヶ月プラン</h3>
+                <div class="price">¥35,000</div>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 25px; font-size: 1.1em;">じっくり理想の相手を探したい方に</p>
+                <button class="line-button" onclick="addLine('6ヶ月', 35000)">
+                    <span style="font-size: 1.2em;">💬</span>
+                    LINEで気軽にお問い合わせ
+                </button>
+            </div>
+        </div>
+
+        <h2 style="color: white; text-align: center; margin-bottom: 20px;">💬 代行メッセージサービス</h2>
+        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 30px; margin-bottom: 30px;">
+            <p style="color: white; text-align: center; font-size: 1.2em; line-height: 1.8;">
+                💼 <strong>プロのスタッフがあなたの代わりにメッセージ対応</strong><br>
+                ✨ 相手に好印象を与える会話術でマッチング成功率UP<br>
+                📱 実際にお会いするまでの面倒なやり取りはお任せください
+            </p>
+        </div>
+        <div class="chat-window">
+            <div class="message">【代行スタッフ】お疲れ様です！プロフィールを拝見させていただき、とても素敵な方だと思いました。</div>
+            <div class="message sent">【あなたの代わり】ありがとうございます！共通点も多そうですね😊</div>
+            <div class="message">【代行スタッフ】映画がお好きということでしたが、最近何かおすすめの作品はありますか？</div>
+            <div style="text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; margin: 15px 0;">
+                ↑ このようなやり取りを弊社スタッフが代行いたします
+            </div>
+        </div>
+    </section>
+
+    <section class="registration-section">
+        <h2>📋 簡単3ステップで始められます</h2>
+        
+        <div class="problem-grid">
+            <div class="step-card">
+                <div style="position: absolute; top: -15px; left: 20px; background: #ff6b6b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">1</div>
+                <div style="font-size: 3em; margin: 20px 0 15px;">💬</div>
+                <h3>LINEで会員登録</h3>
+                <p>LINEを追加して、簡単な質問にお答えいただくだけで登録完了！面倒な手続きは一切ありません。</p>
+            </div>
+            
+            <div class="step-card">
+                <div style="position: absolute; top: -15px; left: 20px; background: #ff6b6b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">2</div>
+                <div style="font-size: 3em; margin: 20px 0 15px;">💳</div>
+                <h3>お支払い</h3>
+                <p>ご希望のプランをお選びいただき、安全な決済システムでお支払い。クレジットカードや銀行振込に対応。</p>
+            </div>
+            
+            <div class="step-card">
+                <div style="position: absolute; top: -15px; left: 20px; background: #ff6b6b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">3</div>
+                <div style="font-size: 3em; margin: 20px 0 15px;">💕</div>
+                <h3>マッチング開始</h3>
+                <p>お支払い確認後、すぐにマッチング開始！プロがあなたの理想の相手を見つけて代行でアプローチします。</p>
+            </div>
+        </div>
+
+        <div class="solution-box">
+            <h3>✨ 登録から出会いまで最短1週間！</h3>
+            <p>
+                🎯 <strong>平均マッチング率 85%</strong><br>
+                📅 <strong>平均初回デート成功率 92%</strong><br>
+                💑 <strong>成功カップル数 1,200組突破！</strong>
+            </p>
+            <button class="cta-button" onclick="startRegistration()">今すぐLINE登録して始める</button>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2025 LoveConnect. すべての人に愛のある未来を。</p>
+</footer>
+
+<script>
+    // フローティングハート効果
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = '💕';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+        document.getElementById('hearts').appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 6000);
+    }
+
+    setInterval(createHeart, 2000);
+
+    // LINEで相談開始機能
+    function startLine() {
+        alert('💬 LINEでのご相談をありがとうございます！\n\n📱 まずはお友達追加をお願いします。\n\n✨ LINEでできること:\n• 無料カウンセリング\n• あなたにぴったりのプラン提案\n• 24時間いつでも相談OK\n• 成功事例のご紹介\n\nLINE ID: @loveconnect\n\n※実際のサービスではここからLINEアプリが開きます');
+        
+        // アニメーション効果
+        const button = event.target;
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            button.style.transform = 'scale(1)';
+        }, 150);
+    }
+
+    // 会員登録開始機能
+    function startRegistration() {
+        alert('🎉 会員登録をご希望いただきありがとうございます！\n\n📱 以下の手順で簡単に始められます：\n\n1️⃣ LINEを追加（@loveconnect）\n2️⃣ 簡単な質問にお答え（5分程度）\n3️⃣ プラン選択・お支払い\n4️⃣ マッチング開始！\n\n✨ 登録後すぐにプロのスタッフがサポート開始\n💕 最短1週間で理想の相手と出会えます\n\n※今すぐLINEアプリが開きます');
+        
+        // アニメーション効果
+        const button = event.target;
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            button.style.transform = 'scale(1)';
+        }, 150);
+    }
+
+    // プロフィール表示機能
+    function viewProfile(name) {
+        const profiles = {
+            '佐藤美咲': {
+                age: 28,
+                location: '東京',
+                job: 'グラフィックデザイナー',
+                hobbies: '写真撮影、カフェ巡り、映画鑑賞',
+                description: '自然と芸術を愛するクリエイティブな女性です。一緒に美しいものを見つけられる方と出会えたら嬉しいです。'
+            },
+            '田中健太': {
+                age: 32,
+                location: '大阪',
+                job: 'ソフトウェアエンジニア',
+                hobbies: 'プログラミング、ボルダリング、料理',
+                description: '技術と料理が好きな関西人です。一緒に新しいことにチャレンジできるパートナーを探しています。'
+            },
+            '山田花子': {
+                age: 26,
+                location: '横浜',
+                job: '看護師',
+                hobbies: 'ヨガ、読書、ガーデニング',
+                description: '人を支えることに喜びを感じる優しい心の持ち主です。穏やかで温かい家庭を築きたいと思っています。'
+            }
+        };
+
+        const profile = profiles[name];
+        if (profile) {
+            alert(`👤 ${name}のプロフィール\n\n年齢: ${profile.age}歳\n場所: ${profile.location}\n職業: ${profile.job}\n趣味: ${profile.hobbies}\n\n${profile.description}\n\n💌 メッセージを送ってみませんか？`);
+        }
+    }
+
+    // LINEお問い合わせ機能
+    function addLine(plan, price) {
+        alert(`💬 ${plan}プラン（¥${price.toLocaleString()}）についてお問い合わせいただきありがとうございます！\n\n📱 LINEを追加して、お気軽にご相談ください。\n\n✨ LINEでは以下のサポートを提供：\n• 詳しいサービス説明\n• 料金プランのご相談\n• 無料カウンセリング\n• よくある質問への回答\n\nLINE ID: @loveconnect\n\n※実際のサービスではここにLINE追加のリンクが表示されます`);
+        
+        // アニメーション効果
+        const button = event.target.closest('.line-button');
+        button.style.transform = 'scale(0.95)';
+        button.style.background = 'rgba(0, 155, 0, 0.9)';
+        setTimeout(() => {
+            button.style.transform = 'scale(1)';
+            button.style.background = 'rgba(0, 185, 0, 0.8)';
+        }, 150);
+    }
+
+    // ページ読み込み時のアニメーション
+    window.addEventListener('load', () => {
+        const cards = document.querySelectorAll('.feature-card, .profile-card, .problem-card, .step-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 200);
+        });
+    });
+
+    // スクロール効果
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector('.hero');
+        const speed = scrolled * 0.5;
+        parallax.style.transform = `translateY(${speed}px)`;
+    });
+</script>
+
+
+</body>
+</html>
