@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -17,6 +18,7 @@
         line-height: 1.6;
         color: #333;
         overflow-x: hidden;
+        background: #ffffff;
     }
     
     .header {
@@ -79,12 +81,14 @@
     .main-section {
         padding: 80px 20px;
         background: linear-gradient(to bottom, #f8f9fa, #ffffff);
-        min-height: 100vh;
+        min-height: calc(100vh - 200px);
     }
     
     .container {
         max-width: 1000px;
         margin: 0 auto;
+        position: relative;
+        z-index: 1;
     }
     
     .contact-grid {
@@ -92,6 +96,7 @@
         grid-template-columns: 1fr 2fr;
         gap: 3rem;
         margin-bottom: 3rem;
+        align-items: start;
     }
     
     .contact-info {
@@ -102,6 +107,7 @@
         position: relative;
         overflow: hidden;
         height: fit-content;
+        width: 100%;
     }
     
     .contact-info::before {
@@ -121,6 +127,7 @@
         box-shadow: 0 20px 60px rgba(0,0,0,0.1);
         position: relative;
         overflow: hidden;
+        width: 100%;
     }
     
     .contact-form-card::before {
@@ -493,6 +500,21 @@
         
         .property-options {
             grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+        
+        .contact-info {
+            max-width: 100%;
+        }
+        
+        .contact-form-card {
+            max-width: 100%;
         }
     }
 </style>
@@ -1188,5 +1210,7 @@
         }
     });
 </script>
+
+
 </body>
 </html>
