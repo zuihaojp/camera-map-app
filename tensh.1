@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>転職代行サービス - ZUIHAO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        overflow-x: hidden;
+        background: #ffffff;
+    }
+    
+    /* ヘッダー */
+    .header {
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        color: white;
+        padding: 80px 20px 60px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 L 0 0 0 12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        animation: float 25s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+    }
+    
+    .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 15px 20px;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #27ae60;
+    }
+    
+    .nav-menu {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+    }
+    
+    .nav-menu a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        padding: 8px 16px;
+        border-radius: 20px;
+    }
+    
+    .nav-menu a:hover {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+    }
+    
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .header h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: slideInUp 1s ease-out;
+    }
+    
+    .header-subtitle {
+        font-size: 1.4rem;
+        margin-bottom: 3rem;
+        opacity: 0.9;
+        animation: slideInUp 1s ease-out 0.2s both;
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* 検索セクション */
+    .search-section {
+        background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+        padding: 80px 20px;
+    }
+    
+    .search-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .search-tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 3rem;
+        gap: 0;
+    }
+    
+    .search-tab {
+        padding: 15px 40px;
+        border: none;
+        background: #e9ecef;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    .search-tab:first-child {
+        border-radius: 25px 0 0 25px;
+    }
+    
+    .search-tab:last-child {
+        border-radius: 0 25px 25px 0;
+    }
+    
+    .search-tab.active {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+    }
+    
+    .search-card {
+        background: white;
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .search-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, #27ae60, #2ecc71, #3498db, #9b59b6);
+    }
+    
+    .search-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: #27ae60;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    
+    .form-group select,
+    .form-group input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .form-group select:focus,
+    .form-group input:focus {
+        outline: none;
+        border-color: #27ae60;
+        box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1);
+    }
+    
+    .search-button {
+        grid-column: 1 / -1;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+        padding: 20px 50px;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 15px 40px rgba(231, 76, 60, 0.3);
+    }
+    
+    .search-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 50px rgba(231, 76, 60, 0.4);
+    }
+    
+    /* 求人一覧 */
+    .jobs-section {
+        padding: 80px 20px;
+        background: white;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4rem;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+        color: #27ae60;
+        font-weight: 700;
+        position: relative;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 80px;
+        height: 5px;
+        background: linear-gradient(90deg, #27ae60, #2ecc71);
+        border-radius: 3px;
+    }
+    
+    .filter-controls {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+        padding: 12px 24px;
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        background: white;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+    
+    .filter-btn.active,
+    .filter-btn:hover {
+        border-color: #27ae60;
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .jobs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 3rem;
+    }
+    
+    .job-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .job-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    }
+    
+    .job-header {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        padding: 2rem;
+        position: relative;
+    }
+    
+    .job-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .job-company {
+        font-size: 1rem;
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+    }
+    
+    .job-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .job-salary {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #f39c12;
+    }
+    
+    .job-content {
+        padding: 2rem;
+    }
+    
+    .job-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        color: #666;
+        font-size: 0.95rem;
+    }
+    
+    .detail-icon {
+        font-size: 1.2rem;
+        color: #27ae60;
+    }
+    
+    .job-description {
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+    
+    .job-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .job-tag {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .job-actions {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .btn-primary {
+        flex: 1;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+    }
+    
+    .btn-secondary {
+        background: transparent;
+        color: #27ae60;
+        border: 2px solid #27ae60;
+        padding: 13px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background: #27ae60;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    /* 統計セクション */
+    .stats-section {
+        padding: 80px 20px;
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        color: white;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 3rem;
+        text-align: center;
+    }
+    
+    .stat-item {
+        padding: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: #f39c12;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    .stat-label {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        font-weight: 600;
+    }
+    
+    /* サービス紹介 */
+    .services-section {
+        padding: 80px 20px;
+        background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+    }
+    
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 3rem;
+    }
+    
+    .service-card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #27ae60, #2ecc71, #3498db);
+    }
+    
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    }
+    
+    .service-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        display: block;
+    }
+    
+    .service-title {
+        font-size: 1.8rem;
+        color: #27ae60;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+    
+    .service-description {
+        color: #666;
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+    
+    /* お問い合わせセクション */
+    .contact-section {
+        padding: 80px 20px;
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        text-align: center;
+    }
+    
+    .contact-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .contact-title {
+        font-size: 2.8rem;
+        margin-bottom: 2rem;
+        font-weight: 700;
+    }
+    
+    .contact-description {
+        font-size: 1.3rem;
+        margin-bottom: 3rem;
+        opacity: 0.9;
+        line-height: 1.7;
+    }
+    
+    .contact-buttons {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .contact-btn {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        border: none;
+        padding: 18px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .contact-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(39, 174, 96, 0.4);
+    }
+    
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+        .header h1 {
+            font-size: 2.5rem;
+        }
+        
+        .search-form {
+            grid-template-columns: 1fr;
+        }
+        
+        .jobs-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .nav-menu {
+            display: none;
+        }
+        
+        .filter-controls {
+            justify-content: center;
+        }
+        
+        .section-header {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+    
+    /* アニメーション */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease-out;
+    }
+    
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+```
+
+</head>
+<body>
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="logo">ZUIHAO 転職</div>
+            <ul class="nav-menu">
+                <li><a href="#search">求人検索</a></li>
+                <li><a href="#jobs">求人一覧</a></li>
+                <li><a href="#services">サービス</a></li>
+                <li><a href="#stats">実績</a></li>
+                <li><a href="#contact">転職相談</a></li>
+            </ul>
+        </div>
+    </nav>
+
+```
+<!-- ヘッダー -->
+<header class="header">
+    <div class="header-content">
+        <h1>転職代行サービス</h1>
+        <p class="header-subtitle">
+            プロフェッショナルが完全サポート。理想のキャリアを実現します。
+        </p>
+    </div>
+</header>
+
+<!-- 検索セクション -->
+<section id="search" class="search-section">
+    <div class="search-container">
+        <div class="search-tabs">
+            <button class="search-tab active" data-tab="job">求人を探す</button>
+            <button class="search-tab" data-tab="career">転職相談</button>
+        </div>
+        
+        <div class="search-card">
+            <form class="search-form" id="jobSearchForm">
+                <div class="form-group">
+                    <label for="keyword">キーワード</label>
+                    <input type="text" id="keyword" placeholder="職種、会社名、スキルなど">
+                </div>
+                
+                <div class="form-group">
+                    <label for="industry">業界</label>
+                    <select id="industry">
+                        <option value="">選択してください</option>
+                        <option value="it">IT・インターネット</option>
+                        <option value="finance">金融・保険</option>
+                        <option value="consulting">コンサルティング</option>
+                        <option value="manufacturing">製造業</option>
+                        <option value="retail">小売・流通</option>
+                        <option value="healthcare">ヘルスケア・医療</option>
+                        <option value="education">教育</option>
+                        <option value="media">メディア・広告</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">勤務地</label>
+                    <select id="location">
+                        <option value="">選択してください</option>
+                        <option value="tokyo">東京都</option>
+                        <option value="osaka">大阪府</option>
+                        <option value="nagoya">愛知県</option>
+                        <option value="fukuoka">福岡県</option>
+                        <option value="remote">リモートワーク</option>
+                        <option value="other">その他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="salary">希望年収</label>
+                    <select id="salary">
+                        <option value="">選択してください</option>
+                        <option value="300-400">300万円〜400万円</option>
+                        <option value="400-500">400万円〜500万円</option>
+                        <option value="500-600">500万円〜600万円</option>
+                        <option value="600-800">600万円〜800万円</option>
+                        <option value="800-1000">800万円〜1000万円</option>
+                        <option value="over1000">1000万円以上</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="experience">経験年数</label>
+                    <select id="experience">
+                        <option value="">選択してください</option>
+                        <option value="fresh">新卒・第二新卒</option>
+                        <option value="1-3">1年〜3年</option>
+                        <option value="3-5">3年〜5年</option>
+                        <option value="5-10">5年〜10年</option>
+                        <option value="over10">10年以上</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="workstyle">働き方</label>
+                    <select id="workstyle">
+                        <option value="">選択してください</option>
+                        <option value="fulltime">正社員</option>
+                        <option value="contract">契約社員</option>
+                        <option value="freelance">フリーランス</option>
+                        <option value="parttime">パートタイム</option>
+                        <option value="remote">リモートワーク</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="search-button">🔍 求人を検索する</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- 求人一覧 -->
+<section id="jobs" class="jobs-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title fade-in">おすすめ求人</h2>
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">すべて</button>
+                <button class="filter-btn" data-filter="it">IT</button>
+                <button class="filter-btn" data-filter="finance">金融</button>
+                <button class="filter-btn" data-filter="consulting">コンサル</button>
+                <button class="filter-btn" data-filter="new">新着</button>
+                <button class="filter-btn" data-filter="remote">リモート</button>
+            </div>
+        </div>
+
+        <div class="jobs-grid">
+            <div class="job-card fade-in" data-category="it new">
+                <div class="job-header">
+                    <div class="job-badge">急募</div>
+                    <div class="job-company">株式会社テックイノベーション</div>
+                    <h3 class="job-title">シニアソフトウェアエンジニア</h3>
+                    <div class="job-salary">年収800万円〜1200万円</div>
+                </div>
+                <div class="job-content">
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">💼</span>
+                            <span>正社員</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>東京都渋谷区</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">⏰</span>
+                            <span>フレックス制</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🏠</span>
+                            <span>リモート可</span>
+                        </div>
+                    </div>
+                    <p class="job-description">
+                        最先端のAI・機械学習プロダクトの開発をリードするシニアエンジニアを募集。Python、TensorFlowでの開発経験が必要です。
+                    </p>
+                    <div class="job-tags">
+                        <span class="job-tag">Python</span>
+                        <span class="job-tag">AI・ML</span>
+                        <span class="job-tag">チームリード</span>
+                        <span class="job-tag">株式上場予定</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-primary">応募する</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-card fade-in" data-category="finance">
+                <div class="job-header">
+                    <div class="job-badge">人気</div>
+                    <div class="job-company">グローバル投資銀行</div>
+                    <h3 class="job-title">投資銀行アナリスト</h3>
+                    <div class="job-salary">年収600万円〜900万円</div>
+                </div>
+                <div class="job-content">
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">💼</span>
+                            <span>正社員</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>東京都千代田区</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🎓</span>
+                            <span>MBA歓迎</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🌍</span>
+                            <span>英語必須</span>
+                        </div>
+                    </div>
+                    <p class="job-description">
+                        M&A案件やIPOプロジェクトに携わる投資銀行業務。財務分析、企業価値評価、資金調達支援などを担当いただきます。
+                    </p>
+                    <div class="job-tags">
+                        <span class="job-tag">M&A</span>
+                        <span class="job-tag">財務分析</span>
+                        <span class="job-tag">英語</span>
+                        <span class="job-tag">グローバル</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-primary">応募する</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-card fade-in" data-category="consulting new">
+                <div class="job-header">
+                    <div class="job-badge">新着</div>
+                    <div class="job-company">戦略コンサルティングファーム</div>
+                    <h3 class="job-title">経営コンサルタント</h3>
+                    <div class="job-salary">年収700万円〜1500万円</div>
+                </div>
+                <div class="job-content">
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">💼</span>
+                            <span>正社員</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>東京都港区</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📈</span>
+                            <span>成果報酬あり</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">✈️</span>
+                            <span>出張あり</span>
+                        </div>
+                    </div>
+                    <p class="job-description">
+                        大手企業の経営戦略立案、組織改革、デジタル変革プロジェクトを主導。論理的思考力とコミュニケーション能力を重視します。
+                    </p>
+                    <div class="job-tags">
+                        <span class="job-tag">戦略策定</span>
+                        <span class="job-tag">DX支援</span>
+                        <span class="job-tag">組織改革</span>
+                        <span class="job-tag">トップファーム</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-primary">応募する</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-card fade-in" data-category="it remote">
+                <div class="job-header">
+                    <div class="job-badge">リモート</div>
+                    <div class="job-company">スタートアップ企業</div>
+                    <h3 class="job-title">フルスタックエンジニア</h3>
+                    <div class="job-salary">年収500万円〜800万円</div>
+                </div>
+                <div class="job-content">
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">💼</span>
+                            <span>正社員</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🏠</span>
+                            <span>完全リモート</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">⏰</span>
+                            <span>フレックス制</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📈</span>
+                            <span>ストックオプション</span>
+                        </div>
+                    </div>
+                    <p class="job-description">
+                        急成長中のフィンテックスタートアップでWebアプリケーション開発。React、Node.js、AWSでの開発経験を活かせます。
+                    </p>
+                    <div class="job-tags">
+                        <span class="job-tag">React</span>
+                        <span class="job-tag">Node.js</span>
+                        <span class="job-tag">AWS</span>
+                        <span class="job-tag">フィンテック</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-primary">応募する</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-card fade-in" data-category="finance new">
+                <div class="job-header">
+                    <div class="job-badge">高年収</div>
+                    <div class="job-company">外資系資産運用会社</div>
+                    <h3 class="job-title">ポートフォリオマネージャー</h3>
+                    <div class="job-salary">年収1000万円〜2000万円</div>
+                </div>
+                <div class="job-content">
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">💼</span>
+                            <span>正社員</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>東京都中央区</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🏆</span>
+                            <span>CFA歓迎</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">💰</span>
+                            <span>高額賞与</span>
+                        </div>
+                    </div>
+                    <p class="job-description">
+                        機関投資家向けファンドの運用を担当。株式・債券・オルタナティブ投資の豊富な経験とクオンツ分析スキルが必要です。
+                    </p>
+                    <div class="job-tags">
+                        <span class="job-tag">資産運用</span>
+                        <span class="job-tag">クオンツ</span>
+                        <span class="job-tag">外資系</span>
+                        <span class="job-tag">機関投資家</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-primary">応募する</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-card fade-in" data-category="consulting">
+                <div class="job-header">
+                    <div class="job-badge">おすすめ</div>
+                    <div class="job-company">デジタルコンサルティング</div>
+                    <h3 class="job-title">DXコンサルタント</h3>
+                    <div class="job-salary">年収650万円〜1200万円</div>
+                </div>
+                <div class="job-content">
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">💼</span>
+                            <span>正社員</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>東京都新宿区</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">🎯</span>
+                            <span>プロジェクト制</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📚</span>
+                            <span>研修充実</span>
+                        </div>
+                    </div>
+                    <p class="job-description">
+                        企業のデジタル変革をサポートするコンサルタント。ITとビジネスの知識を活かし、クライアントの課題解決に取り組みます。
+                    </p>
+                    <div class="job-tags">
+                        <span class="job-tag">DX</span>
+                        <span class="job-tag">IT戦略</span>
+                        <span class="job-tag">業務改革</span>
+                        <span class="job-tag">成長企業</span>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-primary">応募する</button>
+                        <button class="btn-secondary">💾</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 実績統計 -->
+<section id="stats" class="stats-section">
+    <div class="container">
+        <h2 class="section-title fade-in">転職成功実績</h2>
+        <div class="stats-grid">
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="2800">0</span>
+                <div class="stat-label">転職成功者数</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="5000">0</span>
+                <div class="stat-label">求人案件数</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="92">0</span>
+                <div class="stat-label">内定獲得率（%）</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <span class="stat-number" data-count="98">0</span>
+                <div class="stat-label">満足度（%）</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- サービス紹介 -->
+<section id="services" class="services-section">
+    <div class="container">
+        <h2 class="section-title fade-in">転職代行サービス</h2>
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <span class="service-icon">📝</span>
+                <h3 class="service-title">履歴書・職務経歴書作成</h3>
+                <p class="service-description">
+                    プロのキャリアカウンセラーが、あなたの経験とスキルを最大限にアピールする書類を作成します。
+                </p>
+            </div>
+
+            <div class="service-card fade-in">
+                <span class="service-icon">🎯</span>
+                <h3 class="service-title">面接対策・代行</h3>
+                <p class="service-description">
+                    模擬面接から企業研究まで、内定獲得に向けた徹底的な面接対策を提供します。
+                </p>
+            </div>
+
+            <div class="service-card fade-in">
+                <span class="service-icon">🤝</span>
+                <h3 class="service-title">条件交渉代行</h3>
+                <p class="service-description">
+                    年収交渉、入社日調整、労働条件の確認など、デリケートな交渉を代行いたします。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- お問い合わせ -->
+<section id="contact" class="contact-section">
+    <div class="contact-content">
+        <h2 class="contact-title fade-in">転職成功をサポートします</h2>
+        <p class="contact-description fade-in">
+            キャリアアップを実現したい方は、まずは無料相談から。<br>
+            経験豊富なコンサルタントが最適なキャリアプランをご提案します。
+        </p>
+        <div class="contact-buttons fade-in">
+            <a href="tel:03-1234-5678" class="contact-btn">
+                📞 電話で相談
+            </a>
+            <a href="mailto:career@zuihao.com" class="contact-btn">
+                ✉️ メールで相談
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    // タブ切り替え
+    const searchTabs = document.querySelectorAll('.search-tab');
+    searchTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            searchTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            const tabType = tab.dataset.tab;
+            const searchButton = document.querySelector('.search-button');
+            if (tabType === 'career') {
+                searchButton.textContent = '💼 転職相談を申し込む';
+            } else {
+                searchButton.textContent = '🔍 求人を検索する';
+            }
+        });
+    });
+
+    // フィルター機能
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const jobCards = document.querySelectorAll('.job-card');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.dataset.filter;
+            jobCards.forEach(card => {
+                if (filter === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    const categories = card.dataset.category || '';
+                    card.style.display = categories.includes(filter) ? 'block' : 'none';
+                }
+            });
+        });
+    });
+
+    // 検索フォーム
+    document.querySelector('.search-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchButton = document.querySelector('.search-button');
+        const originalText = searchButton.textContent;
+        searchButton.textContent = '🔍 検索中...';
+        searchButton.style.background = 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
+        
+        setTimeout(() => {
+            searchButton.textContent = originalText;
+            searchButton.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+            alert('検索結果を表示しました。実際の実装では、条件に合った求人が表示されます。');
+        }, 1500);
+    });
+
+    // 統計のカウントアップ
+    const countUpNumbers = () => {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(num => {
+            const target = parseInt(num.dataset.count);
+            let current = 0;
+            const increment = target / 100;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                num.textContent = Math.floor(current);
+            }, 30);
+        });
+    };
+
+    // 統計セクションが見えたときにカウントアップ開始
+    const statsSection = document.querySelector('.stats-section');
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                countUpNumbers();
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    });
+    
+    if (statsSection) {
+        statsObserver.observe(statsSection);
+    }
+
+    // スクロールアニメーション
+    const observeElements = document.querySelectorAll('.fade-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    observeElements.forEach(el => {
+        observer.observe(el);
+    });
+
+    // 求人カードのアクション
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('応募フォームに移動します。実際の実装では、応募手続きページが表示されます。');
+        });
+    });
+
+    document.querySelectorAll('.btn-secondary').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.style.background === 'rgb(39, 174, 96)') {
+                btn.style.background = 'transparent';
+                btn.style.color = '#27ae60';
+                btn.innerHTML = '💾';
+                alert('お気に入りから削除しました');
+            } else {
+                btn.style.background = '#27ae60';
+                btn.style.color = 'white';
+                btn.innerHTML = '❤️';
+                alert('お気に入りに追加しました');
+            }
+        });
+    });
+
+    // スムーススクロール
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // ナビゲーションバーの背景変更
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav');
+        if (window.scrollY > 100) {
+            nav.style.background = 'rgba(255, 255, 255, 0.98)';
+            nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+        } else {
+            nav.style.background = 'rgba(255, 255, 255, 0.95)';
+            nav.style.boxShadow = 'none';
+        }
+    });
+</script>
+```
+
+</body>
+</html>
