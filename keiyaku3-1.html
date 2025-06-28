@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ - プレミアム不動産</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        overflow-x: hidden;
+    }
+    
+    .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 20px 40px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        animation: float 20s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: slideInUp 1s ease-out;
+    }
+    
+    .header-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        animation: slideInUp 1s ease-out 0.2s both;
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .main-section {
+        padding: 80px 20px;
+        background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+        min-height: 100vh;
+    }
+    
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+    }
+    
+    .contact-info {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+        height: fit-content;
+    }
+    
+    .contact-info::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #4ecdc4, #44a08d);
+    }
+    
+    .contact-form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-form-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+        font-weight: 600;
+        position: relative;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 2px;
+    }
+    
+    .info-item {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        transition: all 0.3s ease;
+    }
+    
+    .info-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .info-icon {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+        display: block;
+    }
+    
+    .info-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-text {
+        color: #666;
+        line-height: 1.6;
+    }
+    
+    .contact-form {
+        display: grid;
+        gap: 1.5rem;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+    
+    .form-group {
+        position: relative;
+    }
+    
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: #555;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    
+    .required {
+        color: #e74c3c;
+        margin-left: 3px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+        font-family: inherit;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+        transform: scale(1.2);
+    }
+    
+    .checkbox-label {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .submit-section {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .submit-button {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 18px 50px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        min-width: 200px;
+    }
+    
+    .submit-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+    }
+    
+    .submit-button:active {
+        transform: translateY(-1px);
+    }
+    
+    .property-interest {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+    
+    .property-interest h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .property-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    
+    .property-option {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        border-radius: 10px;
+        background: white;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .property-option:hover {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .property-option input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+    }
+    
+    .floating-elements {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+    }
+    
+    .floating-element {
+        position: absolute;
+        opacity: 0.03;
+        animation: floatAnimation 25s infinite linear;
+    }
+    
+    @keyframes floatAnimation {
+        0% { transform: translateY(100vh) rotate(0deg); }
+        100% { transform: translateY(-100px) rotate(360deg); }
+    }
+    
+    .success-message {
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        margin: 2rem 0;
+        display: none;
+        animation: slideInUp 0.6s ease-out;
+    }
+    
+    .success-message.show {
+        display: block;
+    }
+    
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        color: white;
+        text-decoration: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+        margin-bottom: 2rem;
+    }
+    
+    .back-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(243, 156, 18, 0.4);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .language-switcher {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        display: flex;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 10px;
+        border-radius: 25px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+    }
+    
+    .lang-btn {
+        padding: 8px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 20px;
+        background: white;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        outline: none;
+    }
+    
+    .lang-btn.active,
+    .lang-btn:hover {
+        border-color: #667eea;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .translate-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(102, 126, 234, 0.95);
+        z-index: 9999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+    }
+    
+    .translate-message {
+        background: white;
+        padding: 3rem;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        max-width: 400px;
+        margin: 20px;
+    }
+    
+    .translate-message h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+    
+    .translate-message p {
+        color: #666;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+    
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e9ecef;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+        }
+        
+        .property-options {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="ja">🇯🇵 日本語</button>
+        <button class="lang-btn" data-lang="en">🇺🇸 English</button>
+        <button class="lang-btn" data-lang="zh">🇨🇳 中文</button>
+    </div>
+    <div class="floating-elements">
+        <div class="floating-element" style="left: 10%; animation-delay: 0s; font-size: 3rem;">📧</div>
+        <div class="floating-element" style="left: 20%; animation-delay: 5s; font-size: 2rem;">📞</div>
+        <div class="floating-element" style="left: 30%; animation-delay: 10s; font-size: 3rem;">🏠</div>
+        <div class="floating-element" style="left: 40%; animation-delay: 15s; font-size: 2rem;">💬</div>
+        <div class="floating-element" style="left: 50%; animation-delay: 20s; font-size: 3rem;">📋</div>
+        <div class="floating-element" style="left: 60%; animation-delay: 25s; font-size: 2rem;">🔑</div>
+        <div class="floating-element" style="left: 70%; animation-delay: 30s; font-size: 3rem;">📧</div>
+        <div class="floating-element" style="left: 80%; animation-delay: 35s; font-size: 2rem;">📞</div>
+        <div class="floating-element" style="left: 90%; animation-delay: 40s; font-size: 3rem;">🏠</div>
+    </div>
+
+```
+<header class="header">
+    <div class="header-content">
+        <h1>お問い合わせ</h1>
+        <p class="header-subtitle">お気軽にご相談ください。専門スタッフが丁寧にサポートいたします。</p>
+    </div>
+</header>
+
+<section class="main-section">
+    <div class="container">
+        <a href="#" class="back-link" onclick="history.back()">
+            ← 物件一覧に戻る
+        </a>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h2 class="section-title">お問い合わせ先</h2>
+                
+                <div class="info-item">
+                    <span class="info-icon">📞</span>
+                    <div class="info-title">お電話でのお問い合わせ</div>
+                    <div class="info-text">
+                        <strong>0120-123-456</strong><br>
+                        営業時間：9:00〜19:00（年中無休）<br>
+                        お急ぎの場合はお電話が確実です
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-icon">📧</span>
+                    <div class="info-title">メールでのお問い合わせ</div>
+                    <div class="info-text">
+                        <strong>info@premium-realestate.jp</strong><br>
+                        24時間受付<br>
+                        営業日48時間以内にご返信いたします
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-icon">🏢</span>
+                    <div class="info-title">直接ご来店</div>
+                    <div class="info-text">
+                        <strong>東京本店</strong><br>
+                        〒107-0052<br>
+                        東京都港区赤坂1-2-3<br>
+                        赤坂駅より徒歩3分<br>
+                        <small>※ご来店前にお電話でご予約ください</small>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-icon">💬</span>
+                    <div class="info-title">LINE相談</div>
+                    <div class="info-text">
+                        <strong>@premium-real</strong><br>
+                        友だち追加で気軽にご相談<br>
+                        写真付きでご質問いただけます
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-card">
+                <h2 class="section-title">お問い合わせフォーム</h2>
+                
+                <div class="success-message" id="successMessage">
+                    <h3>📧 お問い合わせを受け付けました</h3>
+                    <p>ご連絡いただきありがとうございます。担当者より2営業日以内にご連絡させていただきます。</p>
+                </div>
+                
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lastName">お名前（姓）<span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">お名前（名）<span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">メールアドレス<span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">電話番号<span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inquiryType">お問い合わせ種別<span class="required">*</span></label>
+                            <select id="inquiryType" name="inquiryType" required>
+                                <option value="">選択してください</option>
+                                <option value="purchase">物件購入について</option>
+                                <option value="sell">物件売却について</option>
+                                <option value="investment">投資相談</option>
+                                <option value="viewing">内見予約</option>
+                                <option value="loan">住宅ローン相談</option>
+                                <option value="other">その他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="budget">ご予算</label>
+                            <select id="budget" name="budget">
+                                <option value="">選択してください</option>
+                                <option value="under3000">3,000万円未満</option>
+                                <option value="3000-5000">3,000〜5,000万円</option>
+                                <option value="5000-8000">5,000〜8,000万円</option>
+                                <option value="8000-12000">8,000万円〜1.2億円</option>
+                                <option value="over12000">1.2億円以上</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="property-interest">
+                        <h3>興味のある物件タイプ（複数選択可）</h3>
+                        <div class="property-options">
+                            <label class="property-option">
+                                <input type="checkbox" name="propertyType" value="mansion">
+                                <span>🏢 マンション</span>
+                            </label>
+                            <label class="property-option">
+                                <input type="checkbox" name="propertyType" value="house">
+                                <span>🏠 一戸建て</span>
+                            </label>
+                            <label class="property-option">
+                                <input type="checkbox" name="propertyType" value="penthouse">
+                                <span>🏙️ ペントハウス</span>
+                            </label>
+                            <label class="property-option">
+                                <input type="checkbox" name="propertyType" value="investment">
+                                <span>💰 投資物件</span>
+                            </label>
+                            <label class="property-option">
+                                <input type="checkbox" name="propertyType" value="overseas">
+                                <span>🌍 海外不動産</span>
+                            </label>
+                            <label class="property-option">
+                                <input type="checkbox" name="propertyType" value="land">
+                                <span>🏞️ 土地</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="preferredArea">希望エリア</label>
+                        <input type="text" id="preferredArea" name="preferredArea" placeholder="例：東京都港区、シンガポール・マリーナベイ など">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="message">お問い合わせ内容<span class="required">*</span></label>
+                        <textarea id="message" name="message" placeholder="具体的なご質問やご要望をお聞かせください。物件の詳細、内見希望日時、資金計画のご相談など、お気軽にご記入ください。" required></textarea>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="privacy" name="privacy" required>
+                        <label for="privacy" class="checkbox-label">
+                            <a href="#" style="color: #667eea;">プライバシーポリシー</a>に同意します<span class="required">*</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter" name="newsletter">
+                        <label for="newsletter" class="checkbox-label">
+                            新着物件情報やお得なキャンペーン情報の配信を希望します
+                        </label>
+                    </div>
+                    
+                    <div class="submit-section">
+                        <button type="submit" class="submit-button">
+                            📧 送信する
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // 多言語翻訳データ
+    const translations = {
+        ja: {
+            // ヘッダー
+            pageTitle: "お問い合わせ - プレミアム不動産",
+            headerTitle: "お問い合わせ",
+            headerSubtitle: "お気軽にご相談ください。専門スタッフが丁寧にサポートいたします。",
+            backLink: "← 物件一覧に戻る",
+            
+            // 連絡先情報
+            contactInfoTitle: "お問い合わせ先",
+            phoneTitle: "お電話でのお問い合わせ",
+            phoneText: "営業時間：9:00〜19:00（年中無休）<br>お急ぎの場合はお電話が確実です",
+            emailTitle: "メールでのお問い合わせ",
+            emailText: "24時間受付<br>営業日48時間以内にご返信いたします",
+            visitTitle: "直接ご来店",
+            visitText: "東京本店<br>〒107-0052<br>東京都港区赤坂1-2-3<br>赤坂駅より徒歩3分<br><small>※ご来店前にお電話でご予約ください</small>",
+            lineTitle: "LINE相談",
+            lineText: "友だち追加で気軽にご相談<br>写真付きでご質問いただけます",
+            
+            // フォーム
+            formTitle: "お問い合わせフォーム",
+            successTitle: "📧 お問い合わせを受け付けました",
+            successText: "ご連絡いただきありがとうございます。担当者より2営業日以内にご連絡させていただきます。",
+            lastName: "お名前（姓）",
+            firstName: "お名前（名）",
+            email: "メールアドレス",
+            phone: "電話番号",
+            inquiryType: "お問い合わせ種別",
+            budget: "ご予算",
+            propertyInterest: "興味のある物件タイプ（複数選択可）",
+            preferredArea: "希望エリア",
+            message: "お問い合わせ内容",
+            messagePlaceholder: "具体的なご質問やご要望をお聞かせください。物件の詳細、内見希望日時、資金計画のご相談など、お気軽にご記入ください。",
+            privacyText: "プライバシーポリシーに同意します",
+            newsletterText: "新着物件情報やお得なキャンペーン情報の配信を希望します",
+            submitButton: "📧 送信する",
+            
+            // 翻訳メッセージ
+            translating: "翻訳中...",
+            translateDesc: "ページを翻訳しています。しばらくお待ちください。"
+        },
+        en: {
+            pageTitle: "Contact Us - Premium Real Estate",
+            headerTitle: "Contact Us",
+            headerSubtitle: "Feel free to contact us. Our professional staff will provide you with careful support.",
+            backLink: "← Back to Property Listings",
+            
+            contactInfoTitle: "Contact Information",
+            phoneTitle: "Phone Inquiry",
+            phoneText: "Business Hours: 9:00-19:00 (Open all year)<br>Phone calls are reliable for urgent matters",
+            emailTitle: "Email Inquiry",
+            emailText: "24-hour reception<br>We will reply within 48 hours on business days",
+            visitTitle: "Visit Our Office",
+            visitText: "Tokyo Main Office<br>〒107-0052<br>1-2-3 Akasaka, Minato-ku, Tokyo<br>3 minutes walk from Akasaka Station<br><small>*Please call ahead to make an appointment</small>",
+            lineTitle: "LINE Consultation",
+            lineText: "Add us as a friend for easy consultation<br>You can ask questions with photos",
+            
+            formTitle: "Contact Form",
+            successTitle: "📧 Your inquiry has been received",
+            successText: "Thank you for contacting us. Our staff will contact you within 2 business days.",
+            lastName: "Last Name",
+            firstName: "First Name",
+            email: "Email Address",
+            phone: "Phone Number",
+            inquiryType: "Inquiry Type",
+            budget: "Budget",
+            propertyInterest: "Property Types of Interest (Multiple selections allowed)",
+            preferredArea: "Preferred Area",
+            message: "Inquiry Details",
+            messagePlaceholder: "Please let us know your specific questions or requests. Feel free to write about property details, viewing appointments, financial planning consultations, etc.",
+            privacyText: "I agree to the Privacy Policy",
+            newsletterText: "I would like to receive information about new properties and special campaigns",
+            submitButton: "📧 Send",
+            
+            translating: "Translating...",
+            translateDesc: "Translating the page. Please wait a moment."
+        },
+        zh: {
+            pageTitle: "联系我们 - 高端房地产",
+            headerTitle: "联系我们",
+            headerSubtitle: "请随时咨询。专业工作人员将为您提供细致的支持。",
+            backLink: "← 返回房产列表",
+            
+            contactInfoTitle: "联系方式",
+            phoneTitle: "电话咨询",
+            phoneText: "营业时间：9:00-19:00（全年无休）<br>紧急情况下电话咨询最可靠",
+            emailTitle: "邮件咨询",
+            emailText: "24小时受理<br>营业日48小时内回复",
+            visitTitle: "直接到店",
+            visitText: "东京本店<br>〒107-0052<br>东京都港区赤坂1-2-3<br>距离赤坂站步行3分钟<br><small>※到店前请提前电话预约</small>",
+            lineTitle: "LINE咨询",
+            lineText: "添加好友轻松咨询<br>可以发送照片提问",
+            
+            formTitle: "咨询表单",
+            successTitle: "📧 已收到您的咨询",
+            successText: "感谢您的联系。工作人员将在2个工作日内与您联系。",
+            lastName: "姓氏",
+            firstName: "名字",
+            email: "邮箱地址",
+            phone: "电话号码",
+            inquiryType: "咨询类型",
+            budget: "预算",
+            propertyInterest: "感兴趣的房产类型（可多选）",
+            preferredArea: "希望区域",
+            message: "咨询内容",
+            messagePlaceholder: "请告诉我们您的具体问题或要求。房产详情、看房预约、资金规划咨询等，请随时填写。",
+            privacyText: "同意隐私政策",
+            newsletterText: "希望接收新房产信息和优惠活动信息",
+            submitButton: "📧 发送",
+            
+            translating: "翻译中...",
+            translateDesc: "正在翻译页面，请稍等。"
+        }
+    };
+    
+    // 選択肢の翻訳データ
+    const optionTranslations = {
+        ja: {
+            selectPlaceholder: "選択してください",
+            inquiryOptions: {
+                purchase: "物件購入について",
+                sell: "物件売却について",
+                investment: "投資相談",
+                viewing: "内見予約",
+                loan: "住宅ローン相談",
+                other: "その他"
+            },
+            budgetOptions: {
+                "under3000": "3,000万円未満",
+                "3000-5000": "3,000〜5,000万円",
+                "5000-8000": "5,000〜8,000万円",
+                "8000-12000": "8,000万円〜1.2億円",
+                "over12000": "1.2億円以上"
+            },
+            propertyTypes: {
+                mansion: "🏢 マンション",
+                house: "🏠 一戸建て",
+                penthouse: "🏙️ ペントハウス",
+                investment: "💰 投資物件",
+                overseas: "🌍 海外不動産",
+                land: "🏞️ 土地"
+            },
+            areaPlaceholder: "例：東京都港区、シンガポール・マリーナベイ など"
+        },
+        en: {
+            selectPlaceholder: "Please select",
+            inquiryOptions: {
+                purchase: "Property Purchase",
+                sell: "Property Sale",
+                investment: "Investment Consultation",
+                viewing: "Viewing Appointment",
+                loan: "Mortgage Consultation",
+                other: "Other"
+            },
+            budgetOptions: {
+                "under3000": "Under $300K",
+                "3000-5000": "$300K - $500K",
+                "5000-8000": "$500K - $800K",
+                "8000-12000": "$800K - $1.2M",
+                "over12000": "Over $1.2M"
+            },
+            propertyTypes: {
+                mansion: "🏢 Apartment",
+                house: "🏠 House",
+                penthouse: "🏙️ Penthouse",
+                investment: "💰 Investment Property",
+                overseas: "🌍 Overseas Property",
+                land: "🏞️ Land"
+            },
+            areaPlaceholder: "e.g., Tokyo Minato-ku, Singapore Marina Bay, etc."
+        },
+        zh: {
+            selectPlaceholder: "请选择",
+            inquiryOptions: {
+                purchase: "房产购买",
+                sell: "房产出售",
+                investment: "投资咨询",
+                viewing: "看房预约",
+                loan: "房贷咨询",
+                other: "其他"
+            },
+            budgetOptions: {
+                "under3000": "30万美元以下",
+                "3000-5000": "30万-50万美元",
+                "5000-8000": "50万-80万美元",
+                "8000-12000": "80万-120万美元",
+                "over12000": "120万美元以上"
+            },
+            propertyTypes: {
+                mansion: "🏢 公寓",
+                house: "🏠 独栋别墅",
+                penthouse: "🏙️ 顶层豪宅",
+                investment: "💰 投资物业",
+                overseas: "🌍 海外房产",
+                land: "🏞️ 土地"
+            },
+            areaPlaceholder: "例：东京港区、新加坡滨海湾等"
+        }
+    };
+    
+    let currentLang = 'ja';
+    
+    // 翻訳関数
+    function translatePage(lang) {
+        currentLang = lang;
+        
+        // ページタイトル
+        document.title = translations[lang].pageTitle;
+        
+        // テキスト翻訳
+        const elements = {
+            '.header h1': 'headerTitle',
+            '.header-subtitle': 'headerSubtitle',
+            '.back-link': 'backLink',
+            '.contact-info .section-title': 'contactInfoTitle',
+            '.contact-form-card .section-title': 'formTitle',
+            '#successMessage h3': 'successTitle',
+            '#successMessage p': 'successText',
+            'label[for="lastName"]': 'lastName',
+            'label[for="firstName"]': 'firstName',
+            'label[for="email"]': 'email',
+            'label[for="phone"]': 'phone',
+            'label[for="inquiryType"]': 'inquiryType',
+            'label[for="budget"]': 'budget',
+            'label[for="preferredArea"]': 'preferredArea',
+            'label[for="message"]': 'message',
+            '#message': 'messagePlaceholder',
+            '.checkbox-label:first-of-type': 'privacyText',
+            '.checkbox-label:last-of-type': 'newsletterText',
+            '.submit-button': 'submitButton'
+        };
+        
+        // 基本テキストの翻訳
+        Object.entries(elements).forEach(([selector, key]) => {
+            const element = document.querySelector(selector);
+            if (element) {
+                if (selector === '#message') {
+                    element.placeholder = translations[lang][key];
+                } else if (selector === 'label[for="preferredArea"]') {
+                    element.innerHTML = translations[lang][key];
+                    document.getElementById('preferredArea').placeholder = optionTranslations[lang].areaPlaceholder;
+                } else {
+                    element.innerHTML = translations[lang][key] + (key.includes('Name') || key.includes('email') || key.includes('phone') || key.includes('Type') || key.includes('message') ? '<span class="required">*</span>' : '');
+                }
+            }
+        });
+        
+        // 連絡先情報の翻訳
+        const infoItems = document.querySelectorAll('.info-item');
+        const infoData = [
+            { title: 'phoneTitle', text: 'phoneText' },
+            { title: 'emailTitle', text: 'emailText' },
+            { title: 'visitTitle', text: 'visitText' },
+            { title: 'lineTitle', text: 'lineText' }
+        ];
+        
+        infoItems.forEach((item, index) => {
+            if (infoData[index]) {
+                const titleEl = item.querySelector('.info-title');
+                const textEl = item.querySelector('.info-text');
+                if (titleEl) titleEl.textContent = translations[lang][infoData[index].title];
+                if (textEl) {
+                    if (index === 0) {
+                        textEl.innerHTML = '<strong>0120-123-456</strong><br>' + translations[lang][infoData[index].text];
+                    } else if (index === 1) {
+                        textEl.innerHTML = '<strong>info@premium-realestate.jp</strong><br>' + translations[lang][infoData[index].text];
+                    } else if (index === 2) {
+                        textEl.innerHTML = translations[lang][infoData[index].text];
+                    } else if (index === 3) {
+                        textEl.innerHTML = '<strong>@premium-real</strong><br>' + translations[lang][infoData[index].text];
+                    }
+                }
+            }
+        });
+        
+        // プロパティインタレストの翻訳
+        const propertyTitle = document.querySelector('.property-interest h3');
+        if (propertyTitle) {
+            propertyTitle.textContent = translations[lang].propertyInterest;
+        }
+        
+        // セレクトボックスの翻訳
+        const inquirySelect = document.getElementById('inquiryType');
+        if (inquirySelect) {
+            inquirySelect.innerHTML = `<option value="">${optionTranslations[lang].selectPlaceholder}</option>`;
+            Object.entries(optionTranslations[lang].inquiryOptions).forEach(([value, text]) => {
+                inquirySelect.innerHTML += `<option value="${value}">${text}</option>`;
+            });
+        }
+        
+        const budgetSelect = document.getElementById('budget');
+        if (budgetSelect) {
+            budgetSelect.innerHTML = `<option value="">${optionTranslations[lang].selectPlaceholder}</option>`;
+            Object.entries(optionTranslations[lang].budgetOptions).forEach(([value, text]) => {
+                budgetSelect.innerHTML += `<option value="${value}">${text}</option>`;
+            });
+        }
+        
+        // プロパティタイプチェックボックスの翻訳
+        const propertyOptions = document.querySelectorAll('.property-option span');
+        const propertyValues = ['mansion', 'house', 'penthouse', 'investment', 'overseas', 'land'];
+        propertyOptions.forEach((option, index) => {
+            if (propertyValues[index]) {
+                option.textContent = optionTranslations[lang].propertyTypes[propertyValues[index]];
+            }
+        });
+        
+        // 言語ボタンの状態更新
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.lang === lang) {
+                btn.classList.add('active');
+            }
+        });
+    }
+    
+    // 言語切り替えイベント
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const lang = btn.dataset.lang;
+            if (lang !== currentLang) {
+                // 軽やかなアニメーション効果
+                document.body.style.transition = 'opacity 0.2s ease';
+                document.body.style.opacity = '0.8';
+                
+                setTimeout(() => {
+                    translatePage(lang);
+                    document.body.style.opacity = '1';
+                }, 100);
+            }
+        });
+    });
+    
+    // 既存のスクリプト（フォーム送信処理など）
+    const contactForm = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+    
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // 送信ボタンの状態変更
+        const submitButton = document.querySelector('.submit-button');
+        const originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '📤 送信中...';
+        submitButton.style.background = 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
+        submitButton.disabled = true;
+        
+        // 送信シミュレーション
+        setTimeout(() => {
+            // 成功メッセージ表示
+            successMessage.classList.add('show');
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // フォームリセット
+            contactForm.reset();
+            
+            // ボタンを元に戻す
+            submitButton.innerHTML = originalText;
+            submitButton.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+            submitButton.disabled = false;
+            
+            // 3秒後に成功メッセージを非表示
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 5000);
+            
+        }, 2000);
+    });
+    
+    // プロパティオプションのホバー効果
+    const propertyOptions = document.querySelectorAll('.property-option');
+    propertyOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const checkbox = option.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                option.style.background = 'linear-gradient(135deg, #4ecdc4, #44a08d)';
+                option.style.color = 'white';
+            } else {
+                option.style.background = 'white';
+                option.style.color = '#333';
+            }
+        });
+    });
+    
+    // フォーム入力時のリアルタイムバリデーション
+    const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+    requiredFields.forEach(field => {
+        field.addEventListener('blur', () => {
+            if (field.value.trim() === '') {
+                field.style.borderColor = '#e74c3c';
+                field.style.background = '#fdf2f2';
+            } else {
+                field.style.borderColor = '#4ecdc4';
+                field.style.background = '#f0fdf4';
+            }
+        });
+        
+        field.addEventListener('input', () => {
+            if (field.value.trim() !== '') {
+                field.style.borderColor = '#4ecdc4';
+                field.style.background = '#f0fdf4';
+            }
+        });
+    });
+    
+    // お問い合わせ種別に応じたフォーム調整
+    const inquiryType = document.getElementById('inquiryType');
+    const budgetGroup = document.querySelector('#budget').closest('.form-group');
+    
+    inquiryType.addEventListener('change', () => {
+        if (inquiryType.value === 'sell' || inquiryType.value === 'other') {
+            budgetGroup.style.opacity = '0.5';
+            budgetGroup.querySelector('select').disabled = true;
+        } else {
+            budgetGroup.style.opacity = '1';
+            budgetGroup.querySelector('select').disabled = false;
+        }
+    });
+    
+    // スクロール時のアニメーション効果
+    const observeElements = document.querySelectorAll('.contact-info, .contact-form-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    // 初期状態を設定
+    observeElements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = `all 0.6s ease-out ${index * 0.2}s`;
+        observer.observe(el);
+    });
+    
+    // 電話番号の自動フォーマット
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 6) {
+            value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+        } else if (value.length >= 3) {
+            value = value.slice(0, 3) + '-' + value.slice(3);
+        }
+        e.target.value = value;
+    });
+    
+    // メールアドレスのリアルタイムバリデーション
+    const emailInput = document.getElementById('email');
+    emailInput.addEventListener('blur', () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailInput.value && !emailRegex.test(emailInput.value)) {
+            emailInput.style.borderColor = '#e74c3c';
+            emailInput.style.background = '#fdf2f2';
+            
+            // エラーメッセージ表示
+            let errorMsg = emailInput.nextElementSibling;
+            if (!errorMsg || !errorMsg.classList.contains('error-message')) {
+                errorMsg = document.createElement('div');
+                errorMsg.className = 'error-message';
+                errorMsg.style.color = '#e74c3c';
+                errorMsg.style.fontSize = '0.85rem';
+                errorMsg.style.marginTop = '0.3rem';
+                emailInput.parentNode.appendChild(errorMsg);
+            }
+            errorMsg.textContent = '有効なメールアドレスを入力してください';
+        } else if (emailInput.value) {
+            emailInput.style.borderColor = '#4ecdc4';
+            emailInput.style.background = '#f0fdf4';
+            
+            // エラーメッセージ削除
+            const errorMsg = emailInput.nextElementSibling;
+            if (errorMsg && errorMsg.classList.contains('error-message')) {
+                errorMsg.remove();
+            }
+        }
+    });
+</script>
+```
+
+</body>
+</html>
