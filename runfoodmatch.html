@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康記録 - Running & Meal Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+        color: white;
+    }
+
+    .header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+        gap: 10px;
+    }
+
+    .tab-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .tab-btn.active {
+        background: rgba(255, 255, 255, 0.9);
+        color: #667eea;
+        border-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .tab-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .main-content {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        backdrop-filter: blur(10px);
+    }
+
+    .form-section h2 {
+        color: #4a5568;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+        font-family: inherit;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        width: 100%;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn.meal-btn {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+    }
+
+    .btn.meal-btn:hover {
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .stat-card.meal-stat {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+    }
+
+    .stat-card h3 {
+        font-size: 2rem;
+        margin-bottom: 5px;
+    }
+
+    .stat-card p {
+        opacity: 0.9;
+        font-size: 0.9rem;
+    }
+
+    .records-section h2 {
+        color: #4a5568;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .record-item {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s ease;
+    }
+
+    .record-item:hover {
+        background: #edf2f7;
+        border-color: #cbd5e0;
+        transform: translateX(5px);
+    }
+
+    .record-item.meal-record {
+        border-left: 4px solid #ff6b6b;
+    }
+
+    .record-info {
+        flex: 1;
+    }
+
+    .record-date {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 5px;
+    }
+
+    .record-details {
+        color: #718096;
+        font-size: 0.9rem;
+    }
+
+    .record-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .record-badge.meal-badge {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+    }
+
+    .delete-btn {
+        background: #e53e3e;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        margin-left: 10px;
+        transition: background-color 0.2s ease;
+    }
+
+    .delete-btn:hover {
+        background: #c53030;
+    }
+
+    .empty-state {
+        text-align: center;
+        color: #718096;
+        padding: 40px;
+        font-style: italic;
+    }
+
+    .matching-card {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-left: 5px solid #667eea;
+        transition: all 0.3s ease;
+    }
+
+    .matching-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .user-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .user-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #2d3748;
+    }
+
+    .user-badges {
+        display: flex;
+        gap: 8px;
+    }
+
+    .user-badge {
+        background: rgba(102, 126, 234, 0.2);
+        color: #667eea;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .user-details {
+        color: #4a5568;
+        margin-bottom: 10px;
+    }
+
+    .match-score {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .contact-btn {
+        background: #48bb78;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        margin-left: 10px;
+    }
+
+    .contact-btn:hover {
+        background: #38a169;
+    }
+
+    .event-card {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-left: 5px solid #ff6b6b;
+        transition: all 0.3s ease;
+    }
+
+    .event-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .event-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .event-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #2d3748;
+    }
+
+    .event-date {
+        background: #ff6b6b;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .event-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .event-detail {
+        background: rgba(255, 255, 255, 0.7);
+        padding: 8px 12px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .event-detail strong {
+        display: block;
+        color: #2d3748;
+        margin-bottom: 2px;
+    }
+
+    .event-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .register-btn {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .register-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .info-btn {
+        background: #e2e8f0;
+        color: #4a5568;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .info-btn:hover {
+        background: #cbd5e0;
+    }
+
+    .event-filters {
+        margin-bottom: 20px;
+    }
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-right: 8px;
+    }
+
+    .breakfast { background: #ffd93d; color: #7c2d12; }
+    .lunch { background: #34d399; color: #065f46; }
+    .dinner { background: #f472b6; color: #831843; }
+    .snack { background: #a78bfa; color: #3730a3; }
+
+    @media (max-width: 768px) {
+        .main-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+        }
+        
+        .stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .tabs {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏃‍♂️🍽️ 健康記録</h1>
+            <p>ランニングと食事で健康的なライフスタイルを</p>
+        </div>
+
+```
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('running')">🏃‍♂️ ランニング</button>
+        <button class="tab-btn" onclick="switchTab('matching')">👥 マッチング</button>
+        <button class="tab-btn" onclick="switchTab('events')">🏆 大会情報</button>
+        <button class="tab-btn" onclick="switchTab('meal')">🍽️ 食事記録</button>
+    </div>
+
+    <!-- ランニングタブ -->
+    <div id="running-tab" class="tab-content active">
+        <div class="main-content">
+            <div class="card form-section">
+                <h2>🏃‍♂️ 新しい記録を追加</h2>
+                <form id="runningForm">
+                    <div class="form-group">
+                        <label for="run-date">日付</label>
+                        <input type="date" id="run-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="distance">距離 (km)</label>
+                        <input type="number" id="distance" step="0.1" min="0" placeholder="5.0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">時間 (分)</label>
+                        <input type="number" id="time" min="1" placeholder="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="run-notes">メモ（任意）</label>
+                        <input type="text" id="run-notes" placeholder="今日の調子や感想など...">
+                    </div>
+                    <button type="submit" class="btn">記録を追加</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3 id="totalRuns">0</h3>
+                        <p>総回数</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalDistance">0.0</h3>
+                        <p>総距離 (km)</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="avgPace">-</h3>
+                        <p>平均ペース</p>
+                    </div>
+                </div>
+
+                <div class="records-section">
+                    <h2>🏃‍♂️ ランニング記録</h2>
+                    <div id="runningRecordsList">
+                        <div class="empty-state">
+                            まだ記録がありません。<br>
+                            最初の記録を追加してみましょう！
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- マッチングタブ -->
+    <div id="matching-tab" class="tab-content">
+        <div class="main-content">
+            <div class="card form-section">
+                <h2>👥 ランニング仲間を見つけよう</h2>
+                <form id="matchingForm">
+                    <div class="form-group">
+                        <label for="user-name">ニックネーム</label>
+                        <input type="text" id="user-name" placeholder="例: ランナー太郎" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="user-age">年代</label>
+                            <select id="user-age" required>
+                                <option value="">選択してください</option>
+                                <option value="20s">20代</option>
+                                <option value="30s">30代</option>
+                                <option value="40s">40代</option>
+                                <option value="50s">50代</option>
+                                <option value="60s">60代以上</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-level">レベル</label>
+                            <select id="user-level" required>
+                                <option value="">選択してください</option>
+                                <option value="beginner">初心者</option>
+                                <option value="intermediate">中級者</option>
+                                <option value="advanced">上級者</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="user-pace">目標ペース (分/km)</label>
+                            <input type="text" id="user-pace" placeholder="例: 5:30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-area">エリア</label>
+                            <input type="text" id="user-area" placeholder="例: 東京都渋谷区" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-goals">ランニング目標</label>
+                        <textarea id="user-goals" placeholder="例: フルマラソン完走、健康維持、ダイエットなど"></textarea>
+                    </div>
+                    <button type="submit" class="btn">マッチング開始</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="records-section">
+                    <h2>👥 マッチング結果</h2>
+                    <div id="matchingResults">
+                        <div class="empty-state">
+                            プロフィールを登録してマッチングを開始しましょう！
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 大会情報タブ -->
+    <div id="events-tab" class="tab-content">
+        <div class="main-content">
+            <div class="card form-section">
+                <h2>🏆 おすすめマラソン大会</h2>
+                <div class="event-filters">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="event-distance">距離</label>
+                            <select id="event-distance" onchange="filterEvents()">
+                                <option value="all">すべて</option>
+                                <option value="5k">5K</option>
+                                <option value="10k">10K</option>
+                                <option value="half">ハーフマラソン</option>
+                                <option value="full">フルマラソン</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-region">地域</label>
+                            <select id="event-region" onchange="filterEvents()">
+                                <option value="all">すべて</option>
+                                <option value="kanto">関東</option>
+                                <option value="kansai">関西</option>
+                                <option value="chubu">中部</option>
+                                <option value="other">その他</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="records-section">
+                    <h2>🏆 大会一覧</h2>
+                    <div id="eventsList">
+                        <!-- 大会情報がここに表示される -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="meal-tab" class="tab-content">
+        <div class="main-content">
+            <div class="card form-section">
+                <h2>🍽️ 新しい食事記録を追加</h2>
+                <form id="mealForm">
+                    <div class="form-group">
+                        <label for="meal-date">日付</label>
+                        <input type="date" id="meal-date" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="meal-type">食事の種類</label>
+                            <select id="meal-type" required>
+                                <option value="">選択してください</option>
+                                <option value="breakfast">朝食</option>
+                                <option value="lunch">昼食</option>
+                                <option value="dinner">夕食</option>
+                                <option value="snack">間食</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">カロリー（任意）</label>
+                            <input type="number" id="calories" min="0" placeholder="500">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="meal-name">料理名</label>
+                        <input type="text" id="meal-name" placeholder="例: チキンサラダ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="meal-notes">メモ（任意）</label>
+                        <textarea id="meal-notes" placeholder="材料、感想、栄養バランスなど..."></textarea>
+                    </div>
+                    <button type="submit" class="btn meal-btn">記録を追加</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="stats">
+                    <div class="stat-card meal-stat">
+                        <h3 id="totalMeals">0</h3>
+                        <p>総食事数</p>
+                    </div>
+                    <div class="stat-card meal-stat">
+                        <h3 id="avgCalories">-</h3>
+                        <p>平均カロリー</p>
+                    </div>
+                    <div class="stat-card meal-stat">
+                        <h3 id="todayMeals">0</h3>
+                        <p>今日の食事数</p>
+                    </div>
+                </div>
+
+                <div class="records-section">
+                    <h2>🍽️ 食事記録</h2>
+                    <div id="mealRecordsList">
+                        <div class="empty-state">
+                            まだ記録がありません。<br>
+                            最初の食事記録を追加してみましょう！
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    class HealthTracker {
+        constructor() {
+            this.runningRecords = this.loadRecords('runningRecords');
+            this.mealRecords = this.loadRecords('mealRecords');
+            this.userProfile = this.loadRecords('userProfile');
+            this.marathonEvents = this.getMarathonEvents();
+            this.init();
+        }
+
+        init() {
+            // 今日の日付をデフォルトに設定
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('run-date').value = today;
+            document.getElementById('meal-date').value = today;
+            
+            // フォーム送信イベント
+            document.getElementById('runningForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.addRunningRecord();
+            });
+
+            document.getElementById('mealForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.addMealRecord();
+            });
+
+            document.getElementById('matchingForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveUserProfile();
+            });
+
+            this.updateDisplay();
+            this.displayMarathonEvents();
+        }
+
+        getMarathonEvents() {
+            return [
+                {
+                    id: 1,
+                    title: "東京マラソン2025",
+                    date: "2025-03-02",
+                    location: "東京都",
+                    distance: "full",
+                    region: "kanto",
+                    entryFee: "16,200円",
+                    participants: "38,000人",
+                    description: "日本最大級のマラソン大会！東京の名所を駆け抜けよう"
+                },
+                {
+                    id: 2,
+                    title: "大阪マラソン2025",
+                    date: "2025-02-23",
+                    location: "大阪府",
+                    distance: "full",
+                    region: "kansai",
+                    entryFee: "14,000円",
+                    participants: "32,000人",
+                    description: "関西最大のマラソンイベント"
+                },
+                {
+                    id: 3,
+                    title: "皇居ランニング大会",
+                    date: "2025-08-15",
+                    location: "東京都千代田区",
+                    distance: "10k",
+                    region: "kanto",
+                    entryFee: "3,500円",
+                    participants: "1,500人",
+                    description: "皇居周辺を走る人気の10K大会"
+                },
+                {
+                    id: 4,
+                    title: "富士山マラソン",
+                    date: "2025-04-20",
+                    location: "山梨県",
+                    distance: "half",
+                    region: "chubu",
+                    entryFee: "8,000円",
+                    participants: "12,000人",
+                    description: "富士山を望む絶景ハーフマラソン"
+                },
+                {
+                    id: 5,
+                    title: "横浜マラソン2025",
+                    date: "2025-10-26",
+                    location: "神奈川県横浜市",
+                    distance: "full",
+                    region: "kanto",
+                    entryFee: "15,000円",
+                    participants: "28,000人",
+                    description: "みなとみらいを駆け抜ける都市型マラソン"
+                },
+                {
+                    id: 6,
+                    title: "初心者向け5Kファンラン",
+                    date: "2025-09-12",
+                    location: "東京都江東区",
+                    distance: "5k",
+                    region: "kanto",
+                    entryFee: "2,000円",
+                    participants: "800人",
+                    description: "初心者歓迎！楽しく走る5K大会"
+                }
+            ];
+        }
+
+        getMatchingUsers() {
+            return [
+                {
+                    id: 1,
+                    name: "ランナー花子",
+                    age: "30代",
+                    level: "中級者",
+                    pace: "5:20",
+                    area: "東京都新宿区",
+                    goals: "サブ4達成、健康維持",
+                    matchScore: 95
+                },
+                {
+                    id: 2,
+                    name: "マラソン太郎",
+                    age: "40代",
+                    level: "上級者",
+                    pace: "4:30",
+                    area: "東京都世田谷区",
+                    goals: "サブ3.5、大会出場",
+                    matchScore: 88
+                },
+                {
+                    id: 3,
+                    name: "ジョギング次郎",
+                    age: "20代",
+                    level: "初心者",
+                    pace: "6:30",
+                    area: "東京都渋谷区",
+                    goals: "ダイエット、体力向上",
+                    matchScore: 82
+                },
+                {
+                    id: 4,
+                    name: "健康ランナー",
+                    age: "50代",
+                    level: "中級者",
+                    pace: "5:45",
+                    area: "東京都杉並区",
+                    goals: "健康維持、ストレス解消",
+                    matchScore: 79
+                }
+            ];
+        }
+
+        saveUserProfile() {
+            const profile = {
+                name: document.getElementById('user-name').value,
+                age: document.getElementById('user-age').value,
+                level: document.getElementById('user-level').value,
+                pace: document.getElementById('user-pace').value,
+                area: document.getElementById('user-area').value,
+                goals: document.getElementById('user-goals').value
+            };
+
+            this.userProfile = profile;
+            this.saveRecords('userProfile', profile);
+            this.updateMatchingResults();
+            this.showNotification('プロフィールが保存され、マッチングを開始しました！');
+        }
+
+        updateMatchingResults() {
+            const container = document.getElementById('matchingResults');
+            const users = this.getMatchingUsers();
+
+            if (!this.userProfile.name) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        プロフィールを登録してマッチングを開始しましょう！
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = users.map(user => `
+                <div class="matching-card fade-in">
+                    <div class="user-info">
+                        <div class="user-name">${user.name}</div>
+                        <div class="user-badges">
+                            <span class="user-badge">${user.age}</span>
+                            <span class="user-badge">${user.level}</span>
+                        </div>
+                    </div>
+                    <div class="user-details">
+                        📍 ${user.area} • 🏃‍♂️ ${user.pace}/km<br>
+                        🎯 ${user.goals}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="match-score">マッチ度: ${user.matchScore}%</span>
+                        <button class="contact-btn" onclick="tracker.contactUser(${user.id})">連絡する</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        displayMarathonEvents() {
+            const container = document.getElementById('eventsList');
+            
+            container.innerHTML = this.marathonEvents.map(event => `
+                <div class="event-card fade-in" data-distance="${event.distance}" data-region="${event.region}">
+                    <div class="event-header">
+                        <div class="event-title">${event.title}</div>
+                        <div class="event-date">${this.formatEventDate(event.date)}</div>
+                    </div>
+                    <div class="event-info">
+                        <div class="event-detail">
+                            <strong>📍 開催地</strong>
+                            ${event.location}
+                        </div>
+                        <div class="event-detail">
+                            <strong>🏃‍♂️ 距離</strong>
+                            ${this.getDistanceText(event.distance)}
+                        </div>
+                        <div class="event-detail">
+                            <strong>💰 参加費</strong>
+                            ${event.entryFee}
+                        </div>
+                        <div class="event-detail">
+                            <strong>👥 定員</strong>
+                            ${event.participants}
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 15px; color: #4a5568;">${event.description}</p>
+                    <div class="event-actions">
+                        <button class="register-btn" onclick="tracker.registerEvent(${event.id})">エントリー</button>
+                        <button class="info-btn" onclick="tracker.showEventInfo(${event.id})">詳細情報</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        getDistanceText(distance) {
+            const distances = {
+                '5k': '5K',
+                '10k': '10K',
+                'half': 'ハーフマラソン',
+                'full': 'フルマラソン'
+            };
+            return distances[distance] || distance;
+        }
+
+        formatEventDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getMonth() + 1}/${date.getDate()}`;
+        }
+
+        contactUser(userId) {
+            this.showNotification(`ユーザーへの連絡機能は開発中です。ID: ${userId}`);
+        }
+
+        registerEvent(eventId) {
+            const event = this.marathonEvents.find(e => e.id === eventId);
+            this.showNotification(`${event.title}へのエントリー画面に移動します（開発中）`);
+        }
+
+        showEventInfo(eventId) {
+            const event = this.marathonEvents.find(e => e.id === eventId);
+            alert(`${event.title}\n\n📅 開催日: ${event.date}\n📍 場所: ${event.location}\n💰 参加費: ${event.entryFee}\n👥 定員: ${event.participants}\n\n${event.description}`);
+        }
+
+        loadRecords(key) {
+            const saved = JSON.parse(localStorage.getItem(key) || '[]');
+            return saved.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        saveRecords(key, records) {
+            localStorage.setItem(key, JSON.stringify(records));
+        }
+
+        addRunningRecord() {
+            const date = document.getElementById('run-date').value;
+            const distance = parseFloat(document.getElementById('distance').value);
+            const time = parseInt(document.getElementById('time').value);
+            const notes = document.getElementById('run-notes').value;
+
+            if (!date || !distance || !time) {
+                alert('日付、距離、時間は必須項目です。');
+                return;
+            }
+
+            const pace = this.calculatePace(distance, time);
+            const record = {
+                id: Date.now(),
+                type: 'running',
+                date,
+                distance,
+                time,
+                notes,
+                pace
+            };
+
+            this.runningRecords.unshift(record);
+            this.saveRecords('runningRecords', this.runningRecords);
+            this.updateDisplay();
+            this.clearRunningForm();
+            this.showNotification('ランニング記録が追加されました！');
+        }
+
+        addMealRecord() {
+            const date = document.getElementById('meal-date').value;
+            const mealType = document.getElementById('meal-type').value;
+            const mealName = document.getElementById('meal-name').value;
+            const calories = document.getElementById('calories').value;
+            const notes = document.getElementById('meal-notes').value;
+
+            if (!date || !mealType || !mealName) {
+                alert('日付、食事の種類、料理名は必須項目です。');
+                return;
+            }
+
+            const record = {
+                id: Date.now(),
+                type: 'meal',
+                date,
+                mealType,
+                mealName,
+                calories: calories ? parseInt(calories) : null,
+                notes
+            };
+
+            this.mealRecords.unshift(record);
+            this.saveRecords('mealRecords', this.mealRecords);
+            this.updateDisplay();
+            this.clearMealForm();
+            this.showNotification('食事記録が追加されました！');
+        }
+
+        calculatePace(distance, time) {
+            const paceMinutes = time / distance;
+            const minutes = Math.floor(paceMinutes);
+            const seconds = Math.round((paceMinutes - minutes) * 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        deleteRecord(id, type) {
+            if (confirm('この記録を削除しますか？')) {
+                if (type === 'running') {
+                    this.runningRecords = this.runningRecords.filter(record => record.id !== id);
+                    this.saveRecords('runningRecords', this.runningRecords);
+                } else {
+                    this.mealRecords = this.mealRecords.filter(record => record.id !== id);
+                    this.saveRecords('mealRecords', this.mealRecords);
+                }
+                this.updateDisplay();
+                this.showNotification('記録が削除されました。');
+            }
+        }
+
+        updateDisplay() {
+            this.updateRunningStats();
+            this.updateMealStats();
+            this.updateRunningRecordsList();
+            this.updateMealRecordsList();
+        }
+
+        updateRunningStats() {
+            const totalRuns = this.runningRecords.length;
+            const totalDistance = this.runningRecords.reduce((sum, record) => sum + record.distance, 0);
+            const avgPace = totalRuns > 0 ? this.calculateAveragePace() : '-';
+
+            document.getElementById('totalRuns').textContent = totalRuns;
+            document.getElementById('totalDistance').textContent = totalDistance.toFixed(1);
+            document.getElementById('avgPace').textContent = avgPace;
+        }
+
+        updateMealStats() {
+            const totalMeals = this.mealRecords.length;
+            const calorieRecords = this.mealRecords.filter(record => record.calories);
+            const avgCalories = calorieRecords.length > 0 ? 
+                Math.round(calorieRecords.reduce((sum, record) => sum + record.calories, 0) / calorieRecords.length) : '-';
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayMeals = this.mealRecords.filter(record => record.date === today).length;
+
+            document.getElementById('totalMeals').textContent = totalMeals;
+            document.getElementById('avgCalories').textContent = avgCalories === '-' ? '-' : avgCalories + 'kcal';
+            document.getElementById('todayMeals').textContent = todayMeals;
+        }
+
+        calculateAveragePace() {
+            const totalTime = this.runningRecords.reduce((sum, record) => sum + record.time, 0);
+            const totalDistance = this.runningRecords.reduce((sum, record) => sum + record.distance, 0);
+            
+            if (totalDistance === 0) return '-';
+            
+            const avgPaceMinutes = totalTime / totalDistance;
+            const minutes = Math.floor(avgPaceMinutes);
+            const seconds = Math.round((avgPaceMinutes - minutes) * 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        updateRunningRecordsList() {
+            const container = document.getElementById('runningRecordsList');
+            
+            if (this.runningRecords.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        まだ記録がありません。<br>
+                        最初の記録を追加してみましょう！
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = this.runningRecords.map(record => `
+                <div class="record-item fade-in">
+                    <div class="record-info">
+                        <div class="record-date">${this.formatDate(record.date)}</div>
+                        <div class="record-details">
+                            ${record.distance}km • ${record.time}分
+                            ${record.notes ? ` • ${record.notes}` : ''}
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div class="record-badge">${record.pace}/km</div>
+                        <button class="delete-btn" onclick="tracker.deleteRecord(${record.id}, 'running')">削除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        updateMealRecordsList() {
+            const container = document.getElementById('mealRecordsList');
+            
+            if (this.mealRecords.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        まだ記録がありません。<br>
+                        最初の食事記録を追加してみましょう！
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = this.mealRecords.map(record => `
+                <div class="record-item meal-record fade-in">
+                    <div class="record-info">
+                        <div class="record-date">${this.formatDate(record.date)}</div>
+                        <div class="record-details">
+                            <span class="meal-type-badge ${record.mealType}">${this.getMealTypeText(record.mealType)}</span>
+                            ${record.mealName}
+                            ${record.calories ? ` • ${record.calories}kcal` : ''}
+                            ${record.notes ? ` • ${record.notes}` : ''}
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div class="record-badge meal-badge">🍽️</div>
+                        <button class="delete-btn" onclick="tracker.deleteRecord(${record.id}, 'meal')">削除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        getMealTypeText(type) {
+            const types = {
+                breakfast: '朝食',
+                lunch: '昼食',
+                dinner: '夕食',
+                snack: '間食'
+            };
+            return types[type] || type;
+        }
+
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return '今日';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return '昨日';
+            } else {
+                return `${date.getMonth() + 1}月${date.getDate()}日`;
+            }
+        }
+
+        clearRunningForm() {
+            document.getElementById('distance').value = '';
+            document.getElementById('time').value = '';
+            document.getElementById('run-notes').value = '';
+        }
+
+        clearMealForm() {
+            document.getElementById('meal-type').value = '';
+            document.getElementById('meal-name').value = '';
+            document.getElementById('calories').value = '';
+            document.getElementById('meal-notes').value = '';
+        }
+
+        showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #48bb78;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    }
+
+    function switchTab(tabName) {
+        // タブボタンの更新
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // タブコンテンツの更新
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName + '-tab').classList.add('active');
+    }
+
+    function filterEvents() {
+        const distanceFilter = document.getElementById('event-distance').value;
+        const regionFilter = document.getElementById('event-region').value;
+        const eventCards = document.querySelectorAll('.event-card');
+
+        eventCards.forEach(card => {
+            const eventDistance = card.getAttribute('data-distance');
+            const eventRegion = card.getAttribute('data-region');
+
+            const distanceMatch = distanceFilter === 'all' || eventDistance === distanceFilter;
+            const regionMatch = regionFilter === 'all' || eventRegion === regionFilter;
+
+            if (distanceMatch && regionMatch) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // アプリケーション開始
+    const tracker = new HealthTracker();
+</script>
+```
+
+</body>
+</html>
