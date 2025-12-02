@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <title>salonX | 美容師専門の店舗仲介</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="美容師資格を持つ宅建士が担当する、美容室・サロン専門の店舗仲介。釣り物件なし・24時間以内レスポンス・手数料は賃料1ヶ月までのシンプル設計。" />
-
-  <!-- Google Fonts -->
+  <meta name="description" content="美容師資格を持つ宅建士が担当する、美容室・サロン専門の店舗仲介。" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg-deep: #0a0a0f;
@@ -21,13 +18,16 @@
       --accent-blush: #e8c4a0;
       --accent-gold: #c9a962;
       --accent-emerald: #5ebd8c;
+      --accent-v8: #c41e3a;
+      --accent-v8-soft: rgba(196, 30, 58, 0.15);
+      --line-green: #06C755;
       --text-primary: #f5f0eb;
       --text-secondary: #9a958f;
       --text-muted: #6b6660;
       --border-subtle: rgba(212, 165, 116, 0.12);
       --border-medium: rgba(212, 165, 116, 0.25);
       --gradient-hero: linear-gradient(135deg, #d4a574 0%, #e8c4a0 50%, #c9a962 100%);
-      --gradient-subtle: linear-gradient(135deg, rgba(212, 165, 116, 0.08), rgba(201, 169, 98, 0.04));
+      --gradient-v8: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
       --shadow-glow: 0 0 60px rgba(212, 165, 116, 0.15);
       --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       --radius-sm: 8px;
@@ -36,1256 +36,305 @@
       --radius-xl: 32px;
       --font-display: 'Playfair Display', serif;
       --font-body: 'Zen Kaku Gothic New', sans-serif;
-      --font-accent: 'Cormorant Garamond', serif;
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg-deep); color: var(--text-primary); line-height: 1.7; overflow-x: hidden; }
+    body.lang-zh { font-family: 'Noto Sans SC', sans-serif; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(1.5rem, 4vw, 3rem); }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* Cursor & Progress */
+    .cursor { width: 20px; height: 20px; border: 2px solid var(--accent-rose); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.15s ease; }
+    .cursor-dot { width: 4px; height: 4px; background: var(--accent-rose); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
+    .cursor.hover { transform: translate(-50%, -50%) scale(2); background: rgba(212, 165, 116, 0.1); }
+    .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gradient-hero); z-index: 9999; transform-origin: left; transform: scaleX(0); }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    /* Background */
+    .bg-effects { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .bg-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4; animation: float 20s ease-in-out infinite; }
+    .bg-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(212, 165, 116, 0.3), transparent 70%); top: -200px; right: -100px; }
+    .bg-orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(201, 169, 98, 0.2), transparent 70%); bottom: 20%; left: -100px; animation-delay: -7s; }
+    .bg-orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(94, 189, 140, 0.15), transparent 70%); top: 50%; right: 10%; animation-delay: -14s; }
+    @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -30px) scale(1.05); } 66% { transform: translate(-20px, 20px) scale(0.95); } }
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+    .particle { position: absolute; width: 4px; height: 4px; background: var(--accent-rose); border-radius: 50%; opacity: 0; animation: particle-float 15s infinite; }
+    @keyframes particle-float { 0% { opacity: 0; transform: translateY(100vh) scale(0); } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { opacity: 0; transform: translateY(-100vh) scale(1); } }
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); opacity: 0.03; pointer-events: none; z-index: 1; }
 
-    body {
-      font-family: var(--font-body);
-      background: var(--bg-deep);
-      color: var(--text-primary);
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    /* Background Effects */
-    .bg-effects {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .bg-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      opacity: 0.4;
-      animation: float 20s ease-in-out infinite;
-    }
-
-    .bg-orb-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(212, 165, 116, 0.3), transparent 70%);
-      top: -200px;
-      right: -100px;
-      animation-delay: 0s;
-    }
-
-    .bg-orb-2 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(201, 169, 98, 0.2), transparent 70%);
-      bottom: 20%;
-      left: -100px;
-      animation-delay: -7s;
-    }
-
-    .bg-orb-3 {
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(94, 189, 140, 0.15), transparent 70%);
-      top: 50%;
-      right: 10%;
-      animation-delay: -14s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -30px) scale(1.05); }
-      66% { transform: translate(-20px, 20px) scale(0.95); }
-    }
-
-    .noise-overlay {
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      opacity: 0.03;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Container */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 clamp(1.5rem, 4vw, 3rem);
-    }
+    /* Top Bar */
+    .top-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 101; background: rgba(10, 10, 15, 0.95); border-bottom: 1px solid var(--border-subtle); padding: 0.5rem 0; backdrop-filter: blur(10px); }
+    .top-bar-inner { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; }
+    .v8-link { display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; padding: 0.4rem 0.8rem; border-radius: 100px; border: 1px solid var(--border-subtle); transition: all 0.3s ease; }
+    .v8-link:hover { background: var(--accent-v8-soft); border-color: var(--accent-v8); color: var(--text-primary); }
+    .v8-logo { width: 24px; height: 24px; background: var(--gradient-v8); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.6rem; color: white; }
+    .lang-switcher { display: flex; gap: 0.25rem; background: rgba(255,255,255,0.05); padding: 0.25rem; border-radius: 100px; }
+    .lang-btn { padding: 0.35rem 0.75rem; border: none; background: transparent; color: var(--text-muted); font-size: 0.7rem; border-radius: 100px; cursor: pointer; transition: all 0.3s ease; }
+    .lang-btn.active { background: var(--gradient-hero); color: var(--bg-deep); }
+    .lang-btn:hover:not(.active) { color: var(--text-primary); }
 
     /* Header */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 1rem 0;
-      transition: all 0.4s var(--ease-out-expo);
-    }
+    header { position: fixed; top: 40px; left: 0; right: 0; z-index: 100; padding: 1rem 0; transition: all 0.4s var(--ease-out-expo); }
+    header.scrolled { background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle); }
+    .nav { display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+    .logo-mark { width: 48px; height: 48px; border-radius: 50%; background: var(--gradient-hero); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--bg-deep); box-shadow: var(--shadow-glow); transition: all 0.4s var(--ease-out-expo); }
+    .logo:hover .logo-mark { transform: scale(1.1) rotate(-5deg); }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-main { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; background: var(--gradient-hero); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo-sub { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.2em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 2rem; }
+    .nav-links a { font-size: 0.85rem; color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease; }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-cta { padding: 0.75rem 1.5rem; background: var(--gradient-hero); color: var(--bg-deep) !important; font-weight: 500; border-radius: 100px; }
+    .nav-toggle { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
 
-    header.scrolled {
-      background: rgba(10, 10, 15, 0.9);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      text-decoration: none;
-    }
-
-    .logo-mark {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--gradient-hero);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--bg-deep);
-      box-shadow: var(--shadow-glow);
-      transition: transform 0.4s var(--ease-out-expo);
-    }
-
-    .logo:hover .logo-mark {
-      transform: scale(1.05) rotate(-5deg);
-    }
-
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .logo-main {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      background: var(--gradient-hero);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .logo-sub {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-    }
-
-    .nav-links a {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      text-decoration: none;
-      position: relative;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--gradient-hero);
-      transition: width 0.4s var(--ease-out-expo);
-    }
-
-    .nav-links a:hover {
-      color: var(--text-primary);
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .nav-cta {
-      padding: 0.75rem 1.5rem;
-      background: var(--gradient-hero);
-      color: var(--bg-deep);
-      font-size: 0.85rem;
-      font-weight: 500;
-      border-radius: 100px;
-      text-decoration: none;
-      transition: all 0.4s var(--ease-out-expo);
-      box-shadow: 0 4px 20px rgba(212, 165, 116, 0.3);
-    }
-
-    .nav-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(212, 165, 116, 0.4);
-    }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text-primary);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
+    /* Floating Buttons */
+    .floating-buttons { position: fixed; bottom: 2rem; right: 2rem; display: flex; flex-direction: column; gap: 0.75rem; z-index: 99; }
+    .floating-btn { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); transition: all 0.4s var(--ease-elastic); }
+    .floating-btn:hover { transform: scale(1.15); }
+    .floating-btn-line { background: var(--line-green); color: white; }
+    .floating-btn-form { background: var(--gradient-hero); color: var(--bg-deep); }
+    .floating-btn-diagnostic { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+    .scroll-top { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: all 0.4s var(--ease-out-expo); }
+    .scroll-top.visible { opacity: 1; }
 
     /* Hero */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 8rem 0 6rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .hero-text {
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeUp 1s var(--ease-out-expo) 0.2s forwards;
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-rose-soft);
-      border: 1px solid var(--border-subtle);
-      border-radius: 100px;
-      font-size: 0.75rem;
-      color: var(--accent-blush);
-      margin-bottom: 2rem;
-    }
-
-    .hero-badge-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--accent-rose);
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.2); }
-    }
-
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 5vw, 3.5rem);
-      font-weight: 500;
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-title-accent {
-      display: block;
-      background: var(--gradient-hero);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero-lead {
-      font-size: 1rem;
-      color: var(--text-secondary);
-      margin-bottom: 2rem;
-      max-width: 480px;
-    }
-
-    .hero-promises {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .hero-promise {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1rem;
-      background: var(--bg-glass);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      font-size: 0.8rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-    }
-
-    .hero-promise:hover {
-      border-color: var(--border-medium);
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .hero-promise-icon {
-      color: var(--accent-rose);
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem 2rem;
-      background: var(--gradient-hero);
-      color: var(--bg-deep);
-      font-size: 0.9rem;
-      font-weight: 500;
-      border: none;
-      border-radius: 100px;
-      cursor: pointer;
-      transition: all 0.4s var(--ease-out-expo);
-      box-shadow: 0 4px 30px rgba(212, 165, 116, 0.3);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(212, 165, 116, 0.4);
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem 2rem;
-      background: transparent;
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      font-weight: 500;
-      border: 1px solid var(--border-medium);
-      border-radius: 100px;
-      cursor: pointer;
-      transition: all 0.4s var(--ease-out-expo);
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg-glass);
-      border-color: var(--accent-rose);
-    }
-
-    .hero-note {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .hero-visual {
-      position: relative;
-      opacity: 0;
-      transform: translateX(40px);
-      animation: fadeLeft 1s var(--ease-out-expo) 0.4s forwards;
-    }
-
-    @keyframes fadeLeft {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .hero-card {
-      position: relative;
-      padding: 2rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-xl);
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-card);
-    }
-
-    .hero-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .hero-card-title {
-      font-family: var(--font-accent);
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent-blush);
-    }
-
-    .hero-card-live {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.7rem;
-      color: var(--accent-emerald);
-    }
-
-    .hero-card-live-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--accent-emerald);
-      border-radius: 50%;
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-
-    .hero-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-stat {
-      text-align: center;
-      padding: 1rem;
-      background: var(--gradient-subtle);
-      border-radius: var(--radius-md);
-    }
-
-    .hero-stat-value {
-      font-family: var(--font-display);
-      font-size: 2.5rem;
-      font-weight: 600;
-      background: var(--gradient-hero);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero-stat-label {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      margin-top: 0.25rem;
-    }
-
-    .hero-listings-preview {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .hero-listing-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      font-size: 0.8rem;
-      transition: all 0.3s ease;
-    }
-
-    .hero-listing-item:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: var(--border-medium);
-    }
-
-    .hero-listing-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-
-    .hero-listing-title {
-      color: var(--text-primary);
-    }
-
-    .hero-listing-meta {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .hero-listing-status {
-      padding: 0.3rem 0.75rem;
-      background: rgba(94, 189, 140, 0.15);
-      color: var(--accent-emerald);
-      font-size: 0.7rem;
-      border-radius: 100px;
-    }
-
-    .hero-float-badge {
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: var(--bg-deep);
-      border: 1px solid var(--border-medium);
-      border-radius: 100px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-      box-shadow: var(--shadow-card);
-    }
-
-    .hero-float-badge svg {
-      color: var(--accent-rose);
-    }
-
-    /* Section Styles */
-    section {
-      padding: 6rem 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 4rem;
-    }
-
-    .section-kicker {
-      font-family: var(--font-accent);
-      font-size: 0.85rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent-rose);
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.75rem, 3vw, 2.25rem);
-      font-weight: 500;
-      margin-bottom: 1rem;
-    }
-
-    .section-lead {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
-    /* Promises Section */
-    .promises-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    .promise-card {
-      position: relative;
-      padding: 2rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      backdrop-filter: blur(10px);
-      transition: all 0.4s var(--ease-out-expo);
-      overflow: hidden;
-    }
-
-    .promise-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--gradient-hero);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s var(--ease-out-expo);
-    }
-
-    .promise-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--border-medium);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .promise-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .promise-number {
-      font-family: var(--font-display);
-      font-size: 3rem;
-      font-weight: 600;
-      background: var(--gradient-hero);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      opacity: 0.3;
-      line-height: 1;
-      margin-bottom: 1rem;
-    }
-
-    .promise-title {
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 0.75rem;
-    }
-
-    .promise-body {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    /* Compare Section */
-    .compare-wrapper {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-xl);
-      padding: 2.5rem;
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-card);
-    }
-
-    .compare-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .compare-table th,
-    .compare-table td {
-      padding: 1.25rem 1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .compare-table th {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .compare-table th:nth-child(2) {
-      color: var(--accent-rose);
-    }
-
-    .compare-table td {
-      font-size: 0.85rem;
-      vertical-align: top;
-    }
-
-    .compare-table tbody tr {
-      transition: background 0.3s ease;
-    }
-
-    .compare-table tbody tr:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .compare-table td:first-child {
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    .compare-table td:nth-child(2) {
-      color: var(--text-primary);
-    }
-
-    .compare-table td:nth-child(3) {
-      color: var(--text-muted);
-    }
-
-    .compare-badge {
-      display: inline-block;
-      padding: 0.3rem 0.75rem;
-      border-radius: 100px;
-      font-size: 0.7rem;
-      font-weight: 500;
-    }
-
-    .compare-badge-good {
-      background: rgba(94, 189, 140, 0.15);
-      color: var(--accent-emerald);
-    }
-
-    .compare-badge-neutral {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-muted);
-    }
-
-    /* Listings Section */
-    .listings-filter {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      padding: 0.6rem 1.25rem;
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      border-radius: 100px;
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .filter-btn:hover,
-    .filter-btn.active {
-      background: var(--accent-rose-soft);
-      border-color: var(--accent-rose);
-      color: var(--accent-blush);
-    }
-
-    .listings-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    .listing-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      transition: all 0.4s var(--ease-out-expo);
-    }
-
-    .listing-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--border-medium);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .listing-image {
-      position: relative;
-      height: 180px;
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .listing-image::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--gradient-subtle);
-      opacity: 0.5;
-    }
-
-    .listing-image-icon {
-      font-size: 3rem;
-      opacity: 0.2;
-    }
-
-    .listing-status {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      padding: 0.4rem 0.9rem;
-      background: rgba(10, 10, 15, 0.85);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 100px;
-      font-size: 0.7rem;
-      color: var(--accent-emerald);
-    }
-
-    .listing-body {
-      padding: 1.5rem;
-    }
-
-    .listing-location {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
-    }
-
-    .listing-title {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-bottom: 0.75rem;
-    }
-
-    .listing-price {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 600;
-      background: var(--gradient-hero);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 1rem;
-    }
-
-    .listing-price span {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .listing-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .listing-tag {
-      padding: 0.35rem 0.7rem;
-      background: var(--bg-glass);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-    }
-
-    /* Flow Section */
-    .flow-content {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 4rem;
-    }
-
-    .flow-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .flow-step {
-      display: flex;
-      gap: 1.5rem;
-      padding: 1.5rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      transition: all 0.3s ease;
-    }
-
-    .flow-step:hover {
-      border-color: var(--border-medium);
-      background: rgba(18, 18, 28, 0.95);
-    }
-
-    .flow-step-number {
-      flex-shrink: 0;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--gradient-hero);
-      border-radius: 50%;
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--bg-deep);
-    }
-
-    .flow-step-content {
-      flex: 1;
-    }
-
-    .flow-step-title {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
-
-    .flow-step-body {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    .faq-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      backdrop-filter: blur(10px);
-    }
-
-    .faq-title {
-      font-family: var(--font-accent);
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent-blush);
-      margin-bottom: 1.5rem;
-    }
-
-    .faq-item {
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .faq-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .faq-question {
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .faq-answer {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    /* Contact Section */
-    .contact-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-    }
-
-    .profile-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-xl);
-      padding: 2.5rem;
-      backdrop-filter: blur(20px);
-    }
-
-    .profile-header {
-      display: flex;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .profile-avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: var(--gradient-hero);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      color: var(--bg-deep);
-    }
-
-    .profile-info {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .profile-name {
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 0.25rem;
-    }
-
-    .profile-title {
-      font-size: 0.8rem;
-      color: var(--accent-rose);
-    }
-
-    .profile-body {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-      line-height: 1.8;
-    }
-
-    .profile-details {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .profile-detail {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.85rem;
-    }
-
-    .profile-detail-icon {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--accent-rose-soft);
-      border-radius: 8px;
-      color: var(--accent-rose);
-    }
-
-    .contact-form {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-xl);
-      padding: 2.5rem;
-      backdrop-filter: blur(20px);
-    }
-
-    .form-title {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      margin-bottom: 0.5rem;
-    }
-
-    .form-input,
-    .form-select,
-    .form-textarea {
-      width: 100%;
-      padding: 0.9rem 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      font-family: inherit;
-      transition: all 0.3s ease;
-    }
-
-    .form-input::placeholder,
-    .form-textarea::placeholder {
-      color: var(--text-muted);
-    }
-
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
-      outline: none;
-      border-color: var(--accent-rose);
-      background: rgba(255, 255, 255, 0.05);
-      box-shadow: 0 0 0 3px var(--accent-rose-soft);
-    }
-
-    .form-textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    .form-note {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 1rem;
-    }
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 10rem 0 6rem; position: relative; z-index: 2; }
+    .hero-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .hero-text { opacity: 0; transform: translateY(40px); animation: fadeUp 1s var(--ease-out-expo) 0.2s forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--accent-rose-soft); border: 1px solid var(--border-subtle); border-radius: 100px; font-size: 0.75rem; color: var(--accent-blush); margin-bottom: 2rem; }
+    .hero-badge-dot { width: 6px; height: 6px; background: var(--accent-rose); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .hero-title { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.2; margin-bottom: 1.5rem; }
+    .hero-title-accent { display: block; background: var(--gradient-hero); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-lead { font-size: 1rem; color: var(--text-secondary); margin-bottom: 2rem; max-width: 480px; }
+    .hero-promises { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2.5rem; }
+    .hero-promise { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: 0.8rem; transition: all 0.3s ease; }
+    .hero-promise:hover { border-color: var(--accent-rose); background: var(--accent-rose-soft); transform: translateY(-3px); }
+    .hero-promise-icon { color: var(--accent-rose); }
+    .hero-buttons { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+
+    /* Buttons */
+    .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: var(--gradient-hero); color: var(--bg-deep); font-size: 0.9rem; font-weight: 500; border: none; border-radius: 100px; cursor: pointer; transition: all 0.4s var(--ease-out-expo); box-shadow: 0 4px 30px rgba(212, 165, 116, 0.3); text-decoration: none; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(212, 165, 116, 0.5); }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: transparent; color: var(--text-primary); font-size: 0.9rem; border: 1px solid var(--border-medium); border-radius: 100px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; }
+    .btn-secondary:hover { border-color: var(--accent-rose); background: var(--accent-rose-soft); }
+    .btn-line { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: var(--line-green); color: white; font-size: 0.9rem; font-weight: 500; border: none; border-radius: 100px; cursor: pointer; text-decoration: none; transition: all 0.3s ease; }
+    .btn-line:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(6, 199, 85, 0.5); }
+    .btn-diagnostic { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; font-size: 0.9rem; font-weight: 500; border: none; border-radius: 100px; cursor: pointer; text-decoration: none; transition: all 0.3s ease; }
+    .btn-diagnostic:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(99, 102, 241, 0.5); }
+
+    .hero-visual { position: relative; opacity: 0; transform: translateX(40px); animation: fadeLeft 1s var(--ease-out-expo) 0.4s forwards; }
+    @keyframes fadeLeft { to { opacity: 1; transform: translateX(0); } }
+    .hero-card { position: relative; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); backdrop-filter: blur(20px); box-shadow: var(--shadow-card); }
+    .hero-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); }
+    .hero-card-title { font-size: 0.9rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-blush); }
+    .hero-card-live { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--accent-emerald); }
+    .hero-card-live-dot { width: 6px; height: 6px; background: var(--accent-emerald); border-radius: 50%; animation: pulse 1.5s infinite; }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .hero-stat { text-align: center; padding: 1rem; background: rgba(212, 165, 116, 0.05); border-radius: var(--radius-md); }
+    .hero-stat-value { font-family: var(--font-display); font-size: 2.5rem; font-weight: 600; background: var(--gradient-hero); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-stat-label { font-size: 0.75rem; color: var(--text-secondary); }
+    .hero-listing-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; margin-bottom: 0.5rem; transition: all 0.3s ease; cursor: pointer; }
+    .hero-listing-item:hover { background: var(--accent-rose-soft); border-color: var(--accent-rose); transform: translateX(5px); }
+    .hero-listing-status { padding: 0.3rem 0.75rem; background: rgba(94, 189, 140, 0.15); color: var(--accent-emerald); font-size: 0.7rem; border-radius: 100px; }
+    .hero-float-badge { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--bg-deep); border: 1px solid var(--border-medium); border-radius: 100px; font-size: 0.8rem; white-space: nowrap; }
+
+    /* Sections */
+    section { padding: 6rem 0; position: relative; z-index: 2; }
+    .section-header { text-align: center; max-width: 600px; margin: 0 auto 4rem; }
+    .section-kicker { font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-rose); margin-bottom: 1rem; }
+    .section-title { font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 500; margin-bottom: 1rem; }
+    .section-lead { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.8; }
+
+    /* Features Grid */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .feature-card { position: relative; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); transition: all 0.4s var(--ease-out-expo); overflow: hidden; }
+    .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient-hero); transform: scaleX(0); transition: transform 0.4s; }
+    .feature-card:hover { transform: translateY(-8px); border-color: var(--border-medium); box-shadow: var(--shadow-glow); }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; }
+    .feature-icon-diagnostic { background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)); }
+    .feature-icon-speed { background: linear-gradient(135deg, rgba(6, 199, 85, 0.2), rgba(16, 185, 129, 0.2)); }
+    .feature-icon-trust { background: linear-gradient(135deg, rgba(212, 165, 116, 0.2), rgba(201, 169, 98, 0.2)); }
+    .feature-icon-sell { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(248, 113, 113, 0.2)); }
+    .feature-icon-loan { background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2)); }
+    .feature-icon-report { background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(192, 132, 252, 0.2)); }
+    .feature-number { font-family: var(--font-display); font-size: 3rem; font-weight: 600; background: var(--gradient-hero); -webkit-background-clip: text; background-clip: text; color: transparent; opacity: 0.2; position: absolute; top: 1rem; right: 1.5rem; }
+    .feature-title { font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .feature-subtitle { font-size: 0.75rem; color: var(--accent-rose); margin-bottom: 0.75rem; }
+    .feature-body { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+    .feature-badge { display: inline-block; padding: 0.3rem 0.75rem; background: var(--accent-rose-soft); border-radius: 100px; font-size: 0.7rem; color: var(--accent-blush); margin-top: 1rem; }
+
+    /* Diagnostic Tool */
+    .diagnostic-section { background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05)); border-radius: var(--radius-xl); padding: 3rem; margin: 2rem 0; border: 1px solid rgba(99, 102, 241, 0.2); }
+    .diagnostic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .diagnostic-title { font-family: var(--font-display); font-size: 1.5rem; }
+    .diagnostic-badge { padding: 0.5rem 1rem; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border-radius: 100px; font-size: 0.8rem; }
+    .diagnostic-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .diagnostic-field { display: flex; flex-direction: column; gap: 0.5rem; }
+    .diagnostic-field.full { grid-column: 1 / -1; }
+    .diagnostic-label { font-size: 0.85rem; color: var(--text-secondary); }
+    .diagnostic-input, .diagnostic-select { padding: 1rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; transition: all 0.3s ease; }
+    .diagnostic-input:focus, .diagnostic-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
+    .diagnostic-result { display: none; margin-top: 2rem; padding: 2rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); }
+    .diagnostic-result.show { display: block; animation: fadeUp 0.5s var(--ease-out-expo); }
+    .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
+    .result-item { text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: var(--radius-md); }
+    .result-value { font-family: var(--font-display); font-size: 2rem; font-weight: 600; color: var(--accent-blush); }
+    .result-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+    .result-message { padding: 1rem; background: rgba(94, 189, 140, 0.1); border-radius: var(--radius-md); color: var(--accent-emerald); font-size: 0.9rem; text-align: center; }
+
+    /* Listings */
+    .listings-filter { display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .filter-btn { padding: 0.6rem 1.25rem; background: transparent; border: 1px solid var(--border-subtle); border-radius: 100px; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; }
+    .filter-btn:hover, .filter-btn.active { background: var(--accent-rose-soft); border-color: var(--accent-rose); color: var(--accent-blush); }
+    .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .listing-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.4s var(--ease-out-expo); cursor: pointer; }
+    .listing-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-glow); }
+    .listing-image { position: relative; height: 180px; background: linear-gradient(135deg, #1a1a2e, #16213e); display: flex; align-items: center; justify-content: center; }
+    .listing-image-icon { font-size: 3rem; opacity: 0.3; }
+    .listing-status { position: absolute; top: 1rem; left: 1rem; padding: 0.4rem 0.9rem; background: rgba(10, 10, 15, 0.85); border-radius: 100px; font-size: 0.7rem; color: var(--accent-emerald); }
+    .listing-body { padding: 1.5rem; }
+    .listing-location { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+    .listing-title { font-size: 1rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .listing-price { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; background: var(--gradient-hero); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 1rem; }
+    .listing-price span { font-size: 0.8rem; color: var(--text-muted); }
+    .listing-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .listing-tag { padding: 0.35rem 0.7rem; background: var(--bg-glass); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.7rem; color: var(--text-secondary); }
+
+    /* Compare */
+    .compare-wrapper { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 2.5rem; }
+    .compare-table { width: 100%; border-collapse: collapse; }
+    .compare-table th, .compare-table td { padding: 1.25rem 1rem; text-align: left; border-bottom: 1px solid var(--border-subtle); }
+    .compare-table th { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+    .compare-table th:nth-child(2) { color: var(--accent-rose); }
+    .compare-table td { font-size: 0.85rem; }
+    .compare-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+    .compare-badge { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 100px; font-size: 0.7rem; }
+    .compare-badge-good { background: rgba(94, 189, 140, 0.15); color: var(--accent-emerald); }
+    .compare-badge-neutral { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+
+    /* Flow */
+    .flow-content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; }
+    .flow-steps { display: flex; flex-direction: column; gap: 1.5rem; }
+    .flow-step { display: flex; gap: 1.5rem; padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); transition: all 0.3s ease; }
+    .flow-step:hover { border-color: var(--accent-rose); transform: translateX(8px); }
+    .flow-step-number { flex-shrink: 0; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--gradient-hero); border-radius: 50%; font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--bg-deep); }
+    .flow-step-title { font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .flow-step-body { font-size: 0.85rem; color: var(--text-secondary); }
+    .faq-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; }
+    .faq-title { font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-blush); margin-bottom: 1.5rem; }
+    .faq-item { padding: 1rem 0; border-bottom: 1px solid var(--border-subtle); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .faq-answer { font-size: 0.85rem; color: var(--text-secondary); }
+
+    /* Contact */
+    .contact-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .profile-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 2.5rem; }
+    .profile-header { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-hero); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--bg-deep); }
+    .profile-name { font-size: 1.1rem; font-weight: 500; }
+    .profile-title { font-size: 0.8rem; color: var(--accent-rose); }
+    .profile-body { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.8; }
+    .profile-details { display: flex; flex-direction: column; gap: 0.75rem; }
+    .profile-detail { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; }
+    .profile-detail-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--accent-rose-soft); border-radius: 8px; }
+    .contact-form { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 2.5rem; }
+    .form-title { font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 0.9rem 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; font-family: inherit; transition: all 0.3s ease; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent-rose); box-shadow: 0 0 0 3px var(--accent-rose-soft); }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .form-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem; }
+    .form-success { display: none; text-align: center; padding: 2rem; }
+    .form-success.show { display: block; animation: fadeUp 0.5s var(--ease-out-expo); }
+    .form-success-icon { width: 80px; height: 80px; margin: 0 auto 1.5rem; background: var(--gradient-hero); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
 
     /* Footer */
-    footer {
-      position: relative;
-      z-index: 2;
-      padding: 3rem 0;
-      border-top: 1px solid var(--border-subtle);
-      background: rgba(10, 10, 15, 0.8);
-    }
+    footer { position: relative; z-index: 2; padding: 3rem 0; border-top: 1px solid var(--border-subtle); background: rgba(10, 10, 15, 0.8); }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-copy { font-size: 0.8rem; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { font-size: 0.8rem; color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease; }
+    .footer-links a:hover { color: var(--accent-rose); }
+    .footer-social { display: flex; gap: 0.75rem; }
+    .footer-social a { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-subtle); border-radius: 50%; color: var(--text-secondary); text-decoration: none; transition: all 0.3s ease; }
+    .footer-social a:hover { background: var(--gradient-hero); border-color: transparent; color: var(--bg-deep); }
 
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-
-    .footer-copy {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-    }
-
-    .footer-links a {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .footer-links a:hover {
-      color: var(--accent-rose);
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .footer-social a {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--border-subtle);
-      border-radius: 50%;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
-    }
-
-    .footer-social a:hover {
-      background: var(--gradient-hero);
-      border-color: transparent;
-      color: var(--bg-deep);
-      transform: translateY(-2px);
-    }
-
-    /* Scroll Animations */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s var(--ease-out-expo);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--ease-out-expo); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .stagger-children > * { opacity: 0; transform: translateY(20px); transition: all 0.5s var(--ease-out-expo); }
+    .stagger-children.visible > *:nth-child(1) { transition-delay: 0.1s; }
+    .stagger-children.visible > *:nth-child(2) { transition-delay: 0.2s; }
+    .stagger-children.visible > *:nth-child(3) { transition-delay: 0.3s; }
+    .stagger-children.visible > *:nth-child(4) { transition-delay: 0.4s; }
+    .stagger-children.visible > *:nth-child(5) { transition-delay: 0.5s; }
+    .stagger-children.visible > *:nth-child(6) { transition-delay: 0.6s; }
+    .stagger-children.visible > * { opacity: 1; transform: translateY(0); }
 
     /* Responsive */
     @media (max-width: 1024px) {
-      .hero-content {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
-
-      .hero-visual {
-        order: -1;
-      }
-
-      .promises-grid,
-      .listings-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .flow-content,
-      .contact-content {
-        grid-template-columns: 1fr;
-      }
+      .hero-content, .contact-content, .flow-content { grid-template-columns: 1fr; }
+      .hero-visual { order: -1; }
+      .features-grid, .listings-grid { grid-template-columns: repeat(2, 1fr); }
+      .diagnostic-form { grid-template-columns: 1fr; }
+      .result-grid { grid-template-columns: repeat(2, 1fr); }
+      .cursor, .cursor-dot { display: none; }
     }
-
     @media (max-width: 768px) {
-      .nav-links {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 280px;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 6rem 2rem 2rem;
-        background: var(--bg-deep);
-        border-left: 1px solid var(--border-subtle);
-        transform: translateX(100%);
-        transition: transform 0.4s var(--ease-out-expo);
-        gap: 1.5rem;
-      }
-
-      .nav-links.open {
-        transform: translateX(0);
-      }
-
-      .nav-toggle {
-        display: block;
-        z-index: 101;
-      }
-
-      .hero {
-        padding: 6rem 0 4rem;
-      }
-
-      .hero-stats {
-        grid-template-columns: 1fr;
-      }
-
-      .promises-grid,
-      .listings-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .section-header {
-        margin-bottom: 2.5rem;
-      }
-
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
-      }
+      .nav-links { position: fixed; top: 0; right: 0; bottom: 0; width: 280px; flex-direction: column; padding: 6rem 2rem 2rem; background: var(--bg-deep); border-left: 1px solid var(--border-subtle); transform: translateX(100%); transition: transform 0.4s var(--ease-out-expo); gap: 1.5rem; }
+      .nav-links.open { transform: translateX(0); }
+      .nav-toggle { display: block; z-index: 101; }
+      .hero { padding: 8rem 0 4rem; }
+      .features-grid, .listings-grid { grid-template-columns: 1fr; }
+      .result-grid { grid-template-columns: 1fr; }
+      .floating-buttons { bottom: 1rem; right: 1rem; }
+      .floating-btn { width: 50px; height: 50px; font-size: 1.2rem; }
+      .footer-content { flex-direction: column; text-align: center; }
+      .top-bar-inner { flex-direction: column; gap: 0.5rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Background Effects -->
-  <div class="bg-effects">
-    <div class="bg-orb bg-orb-1"></div>
-    <div class="bg-orb bg-orb-2"></div>
-    <div class="bg-orb bg-orb-3"></div>
-  </div>
+  <!-- Cursor & Effects -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="bg-effects"><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div><div class="bg-orb bg-orb-3"></div></div>
+  <div class="particles" id="particles"></div>
   <div class="noise-overlay"></div>
+
+  <!-- Floating Buttons -->
+  <div class="floating-buttons">
+    <a href="#diagnostic" class="floating-btn floating-btn-diagnostic" data-tooltip-ja="5分で開業診断" data-tooltip-en="5-min Assessment" data-tooltip-zh="5分钟诊断">📊</a>
+    <a href="https://line.me/R/ti/p/@YOUR_LINE_ID" target="_blank" class="floating-btn floating-btn-line" data-tooltip-ja="LINEで相談" data-tooltip-en="Chat on LINE" data-tooltip-zh="LINE咨询">💬</a>
+    <a href="#contact" class="floating-btn floating-btn-form" data-tooltip-ja="フォームで相談" data-tooltip-en="Contact Form" data-tooltip-zh="表单咨询">✉️</a>
+    <button class="scroll-top" id="scrollTop">↑</button>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-inner">
+        <a href="https://v8-corporation.com" target="_blank" class="v8-link">
+          <div class="v8-logo">V8</div>
+          <span data-i18n="v8Link">運営会社：V8 Corporation</span>
+        </a>
+        <div class="lang-switcher">
+          <button class="lang-btn active" data-lang="ja">日本語</button>
+          <button class="lang-btn" data-lang="en">English</button>
+          <button class="lang-btn" data-lang="zh">中文</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Header -->
   <header id="header">
@@ -1298,16 +347,13 @@
             <span class="logo-sub">Salon Real Estate</span>
           </div>
         </a>
-
         <div class="nav-links" id="navLinks">
-          <a href="#concept">コンセプト</a>
-          <a href="#promise">3つの約束</a>
-          <a href="#compare">他社との違い</a>
-          <a href="#listings">物件一覧</a>
-          <a href="#contact" class="nav-cta">無料相談</a>
+          <a href="#features" data-i18n="navFeatures">機能・特徴</a>
+          <a href="#diagnostic" data-i18n="navDiagnostic">開業診断</a>
+          <a href="#listings" data-i18n="navListings">物件一覧</a>
+          <a href="#contact" class="nav-cta" data-i18n="navContact">無料相談</a>
         </div>
-
-        <button class="nav-toggle" id="navToggle" aria-label="メニュー">☰</button>
+        <button class="nav-toggle" id="navToggle">☰</button>
       </nav>
     </div>
   </header>
@@ -1318,245 +364,168 @@
       <div class="container">
         <div class="hero-content">
           <div class="hero-text">
-            <div class="hero-badge">
-              <span class="hero-badge-dot"></span>
-              美容師による美容師のための店舗専門仲介
-            </div>
-
+            <div class="hero-badge"><span class="hero-badge-dot"></span><span data-i18n="heroBadge">美容師による美容師のための店舗専門仲介</span></div>
             <h1 class="hero-title">
-              <span class="hero-title-accent">釣り物件ゼロ。即レス。明快。</span>
-              "現場がわかる"不動産。
+              <span class="hero-title-accent" data-i18n="heroTitle1">釣り物件ゼロ。即レス。明快。</span>
+              <span data-i18n="heroTitle2">"現場がわかる"不動産。</span>
             </h1>
-
-            <p class="hero-lead">
-              「問い合わせたら決まってた」「レスが遅い」「とりあえず高い物件を押される」――
-              そんなストレスをなくすために、美容師資格×宅建士が立ち上げた店舗仲介です。
-            </p>
-
+            <p class="hero-lead" data-i18n="heroLead">「問い合わせたら決まってた」「レスが遅い」「とりあえず高い物件を押される」――そんなストレスをなくすために、美容師資格×宅建士が立ち上げた店舗仲介です。</p>
             <div class="hero-promises">
-              <div class="hero-promise">
-                <span class="hero-promise-icon">✓</span>
-                釣り物件掲載ゼロ宣言
-              </div>
-              <div class="hero-promise">
-                <span class="hero-promise-icon">✓</span>
-                原則24時間以内レス
-              </div>
-              <div class="hero-promise">
-                <span class="hero-promise-icon">✓</span>
-                手数料：賃料1ヶ月+税まで
-              </div>
+              <div class="hero-promise"><span class="hero-promise-icon">✓</span><span data-i18n="promise1">釣り物件ゼロ宣言</span></div>
+              <div class="hero-promise"><span class="hero-promise-icon">✓</span><span data-i18n="promise2">原則24時間以内レス</span></div>
+              <div class="hero-promise"><span class="hero-promise-icon">✓</span><span data-i18n="promise3">手数料：賃料1ヶ月+税</span></div>
             </div>
-
             <div class="hero-buttons">
-              <button class="btn-primary" onclick="scrollTo('contact')">
-                無料で相談する
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </button>
-              <button class="btn-secondary" onclick="scrollTo('compare')">
-                他社との違いを見る
-              </button>
+              <a href="#diagnostic" class="btn-diagnostic">📊 <span data-i18n="btnDiagnostic">5分で開業診断</span></a>
+              <a href="https://line.me/R/ti/p/@YOUR_LINE_ID" target="_blank" class="btn-line">💬 <span data-i18n="btnLine">LINEで相談</span></a>
+              <a href="#contact" class="btn-primary"><span data-i18n="btnContact">フォームで相談</span> →</a>
             </div>
-
-            <p class="hero-note">
-              「開業するか迷っている」「エリアもふわっとしている」状態から大丈夫です。
-            </p>
+            <p class="hero-note" data-i18n="heroNote">「開業するか迷っている」状態から大丈夫です。</p>
           </div>
-
           <div class="hero-visual">
             <div class="hero-card">
               <div class="hero-card-header">
                 <span class="hero-card-title">Dashboard</span>
-                <span class="hero-card-live">
-                  <span class="hero-card-live-dot"></span>
-                  リアルタイム更新
-                </span>
+                <span class="hero-card-live"><span class="hero-card-live-dot"></span><span data-i18n="liveUpdate">リアルタイム更新</span></span>
               </div>
-
               <div class="hero-stats">
-                <div class="hero-stat">
-                  <div class="hero-stat-value" id="listingCount">23</div>
-                  <div class="hero-stat-label">紹介可能物件</div>
-                </div>
-                <div class="hero-stat">
-                  <div class="hero-stat-value">24h</div>
-                  <div class="hero-stat-label">以内レスポンス</div>
-                </div>
+                <div class="hero-stat"><div class="hero-stat-value" id="listingCount">0</div><div class="hero-stat-label" data-i18n="statListings">紹介可能物件</div></div>
+                <div class="hero-stat"><div class="hero-stat-value">24h</div><div class="hero-stat-label" data-i18n="statResponse">以内レスポンス</div></div>
               </div>
-
-              <div class="hero-listings-preview">
-                <div class="hero-listing-item">
-                  <div class="hero-listing-info">
-                    <span class="hero-listing-title">新宿三丁目｜路面・18坪</span>
-                    <span class="hero-listing-meta">¥320,000 / 月　セット面4〜6席</span>
-                  </div>
-                  <span class="hero-listing-status">募集中</span>
-                </div>
-                <div class="hero-listing-item">
-                  <div class="hero-listing-info">
-                    <span class="hero-listing-title">吉祥寺｜居抜き・22坪</span>
-                    <span class="hero-listing-meta">¥280,000 / 月　造作譲渡あり</span>
-                  </div>
-                  <span class="hero-listing-status">募集中</span>
-                </div>
-              </div>
-
-              <div class="hero-float-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                </svg>
-                掲載中＝まだ募集中。決まり次第即更新。
-              </div>
+              <div class="hero-listing-item" onclick="scrollTo('listings')"><div><span data-i18n="listing1Title">新宿三丁目｜路面・18坪</span><br><small style="color:var(--text-muted)">¥320,000/月</small></div><span class="hero-listing-status" data-i18n="statusOpen">募集中</span></div>
+              <div class="hero-listing-item" onclick="scrollTo('listings')"><div><span data-i18n="listing2Title">吉祥寺｜居抜き・22坪</span><br><small style="color:var(--text-muted)">¥280,000/月</small></div><span class="hero-listing-status" data-i18n="statusOpen">募集中</span></div>
+              <div class="hero-float-badge">⚡ <span data-i18n="floatBadge">掲載中＝まだ募集中</span></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Concept -->
-    <section id="concept">
+    <!-- Features Section -->
+    <section id="features">
       <div class="container">
         <div class="section-header reveal">
-          <div class="section-kicker">Concept</div>
-          <h2 class="section-title">「とりあえず大手ポータル」からの卒業</h2>
-          <p class="section-lead">
-            大手の美容室ポータルは、物件数は多いけれど、対応が遅い・釣り物件が多い・手数料や条件が見えづらい。<br>
-            salonXは、小さくて速い、美容師寄りのブティック仲介として動きます。
-          </p>
+          <div class="section-kicker">Features</div>
+          <h2 class="section-title" data-i18n="featuresTitle">salonXの6つの強み</h2>
+          <p class="section-lead" data-i18n="featuresLead">美容師独立を成功に導く、他にはないサービスを提供します。</p>
         </div>
-
-        <div class="promises-grid">
-          <div class="promise-card reveal">
-            <div class="promise-number">01</div>
-            <h3 class="promise-title">美容師資格×宅建士がワンストップ担当</h3>
-            <p class="promise-body">
-              現場の動線・メニュー構成・単価感を知ったうえで、「この家賃なら現実的にやっていけるか？」まで一緒に検証します。
-            </p>
+        <div class="features-grid stagger-children">
+          <div class="feature-card">
+            <div class="feature-number">01</div>
+            <div class="feature-icon feature-icon-diagnostic">📊</div>
+            <div class="feature-subtitle" data-i18n="feature1Sub">5分で数字が出る</div>
+            <h3 class="feature-title" data-i18n="feature1Title">開業前診断ツール</h3>
+            <p class="feature-body" data-i18n="feature1Body">売上予測・必要資金・損益分岐点を自動計算。「この家賃で本当にやっていけるか？」を数字で判断できます。</p>
+            <span class="feature-badge" data-i18n="feature1Badge">無料で今すぐ診断</span>
           </div>
-
-          <div class="promise-card reveal">
-            <div class="promise-number">02</div>
-            <h3 class="promise-title">現場目線で「やめた方がいい」を言う</h3>
-            <p class="promise-body">
-              手数料が欲しいから押し込む、はやりません。長期的に厳しいと判断した物件は「やめておきましょう」と正直にお伝えします。
-            </p>
+          <div class="feature-card">
+            <div class="feature-number">02</div>
+            <div class="feature-icon feature-icon-speed">⚡</div>
+            <div class="feature-subtitle" data-i18n="feature2Sub">スピードで勝つ</div>
+            <h3 class="feature-title" data-i18n="feature2Title">LINE即時物件速報</h3>
+            <p class="feature-body" data-i18n="feature2Body">新着物件をLINEで即時通知。人気物件は数日で決まるため、スピードが命。いち早く内見予約できます。</p>
+            <span class="feature-badge" data-i18n="feature2Badge">LINE登録で速報GET</span>
           </div>
-
-          <div class="promise-card reveal">
-            <div class="promise-number">03</div>
-            <h3 class="promise-title">開業後も続く関係性</h3>
-            <p class="promise-body">
-              オープン後の単価アップ・スタッフ増員・2号店出店など、物件の話以外も含めて長く相談できるパートナーを目指します。
-            </p>
+          <div class="feature-card">
+            <div class="feature-number">03</div>
+            <div class="feature-icon feature-icon-trust">🛡️</div>
+            <div class="feature-subtitle" data-i18n="feature3Sub">信頼で勝つ</div>
+            <h3 class="feature-title" data-i18n="feature3Title">釣り物件ゼロ宣言</h3>
+            <p class="feature-body" data-i18n="feature3Body">掲載物件は全て現在募集中。決まり次第即アーカイブ。「問い合わせたら終わってた」をなくします。</p>
+            <span class="feature-badge" data-i18n="feature3Badge">業界初の宣言</span>
+          </div>
+          <div class="feature-card">
+            <div class="feature-number">04</div>
+            <div class="feature-icon feature-icon-sell">💰</div>
+            <div class="feature-subtitle" data-i18n="feature4Sub">売り手も取れる</div>
+            <h3 class="feature-title" data-i18n="feature4Title">居抜き査定サービス</h3>
+            <p class="feature-body" data-i18n="feature4Body">閉店・移転を検討中のオーナー様向け。内装・設備を適正価格で査定し、次のオーナーへ橋渡しします。</p>
+            <span class="feature-badge" data-i18n="feature4Badge">無料査定受付中</span>
+          </div>
+          <div class="feature-card">
+            <div class="feature-number">05</div>
+            <div class="feature-icon feature-icon-loan">🏦</div>
+            <div class="feature-subtitle" data-i18n="feature5Sub">成功率UP</div>
+            <h3 class="feature-title" data-i18n="feature5Title">融資サポート</h3>
+            <p class="feature-body" data-i18n="feature5Body">日本政策金融公庫・信用金庫との連携実績あり。事業計画書の作成から面談対策までトータルサポート。</p>
+            <span class="feature-badge" data-i18n="feature5Badge">融資成功率90%以上</span>
+          </div>
+          <div class="feature-card">
+            <div class="feature-number">06</div>
+            <div class="feature-icon feature-icon-report">📄</div>
+            <div class="feature-subtitle" data-i18n="feature6Sub">提案力UP</div>
+            <h3 class="feature-title" data-i18n="feature6Title">内見レポート自動PDF</h3>
+            <p class="feature-body" data-i18n="feature6Body">内見後、写真・条件・比較表をPDFで自動生成。パートナーや融資担当者への説明資料としてそのまま使えます。</p>
+            <span class="feature-badge" data-i18n="feature6Badge">内見後24時間以内</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Promise -->
-    <section id="promise">
+    <!-- Diagnostic Tool -->
+    <section id="diagnostic">
       <div class="container">
         <div class="section-header reveal">
-          <div class="section-kicker">Our Promise</div>
-          <h2 class="section-title">salonXの「3つの約束」</h2>
-          <p class="section-lead">
-            ここだけはブレずに守る、というルールを最初に決めています。
-          </p>
+          <div class="section-kicker">Diagnostic Tool</div>
+          <h2 class="section-title" data-i18n="diagTitle">開業前診断ツール</h2>
+          <p class="section-lead" data-i18n="diagLead">5分で売上予測・必要資金・損益分岐点がわかります。</p>
         </div>
-
-        <div class="promises-grid">
-          <div class="promise-card reveal">
-            <div class="promise-number">約束1</div>
-            <h3 class="promise-title">釣り物件は掲載しません</h3>
-            <p class="promise-body">
-              決まっている物件をいつまでも掲載し続けたり、そもそも紹介する気のない「客寄せ用物件」は扱いません。募集終了時は原則即アーカイブします。
-            </p>
+        <div class="diagnostic-section reveal">
+          <div class="diagnostic-header">
+            <h3 class="diagnostic-title" data-i18n="diagFormTitle">あなたのサロン開業シミュレーション</h3>
+            <span class="diagnostic-badge" data-i18n="diagBadge">無料・登録不要</span>
           </div>
-
-          <div class="promise-card reveal">
-            <div class="promise-number">約束2</div>
-            <h3 class="promise-title">レスポンスは原則24時間以内</h3>
-            <p class="promise-body">
-              「問い合わせたのに返信が来ない」「数日放置される」をなくします。すぐ回答できない場合も、一度状況だけはご連絡します。
-            </p>
+          <div class="diagnostic-form" id="diagnosticForm">
+            <div class="diagnostic-field">
+              <label class="diagnostic-label" data-i18n="diagLabel1">現在の指名客数（月間）</label>
+              <input type="number" class="diagnostic-input" id="diagClients" placeholder="例：80" value="80">
+            </div>
+            <div class="diagnostic-field">
+              <label class="diagnostic-label" data-i18n="diagLabel2">平均客単価（円）</label>
+              <input type="number" class="diagnostic-input" id="diagPrice" placeholder="例：8000" value="8000">
+            </div>
+            <div class="diagnostic-field">
+              <label class="diagnostic-label" data-i18n="diagLabel3">希望エリア</label>
+              <select class="diagnostic-select" id="diagArea">
+                <option value="shinjuku">新宿・渋谷エリア</option>
+                <option value="kichijoji">吉祥寺・三鷹エリア</option>
+                <option value="other">その他23区</option>
+              </select>
+            </div>
+            <div class="diagnostic-field">
+              <label class="diagnostic-label" data-i18n="diagLabel4">希望坪数</label>
+              <select class="diagnostic-select" id="diagSize">
+                <option value="small">10-15坪（1-3席）</option>
+                <option value="medium" selected>15-20坪（3-5席）</option>
+                <option value="large">20-30坪（5-8席）</option>
+              </select>
+            </div>
+            <div class="diagnostic-field full">
+              <button type="button" class="btn-diagnostic" style="width:100%; justify-content:center;" onclick="runDiagnostic()">
+                📊 <span data-i18n="diagButton">診断結果を見る</span>
+              </button>
+            </div>
           </div>
-
-          <div class="promise-card reveal">
-            <div class="promise-number">約束3</div>
-            <h3 class="promise-title">手数料と条件は最初から全部見せます</h3>
-            <p class="promise-body">
-              テナント様側の仲介手数料は、賃料1ヶ月分＋税まで。保証金・造作譲渡・その他費用も初回提案時点で一覧でお見せします。
-            </p>
+          <div class="diagnostic-result" id="diagnosticResult">
+            <div class="result-grid">
+              <div class="result-item">
+                <div class="result-value" id="resultRevenue">¥0</div>
+                <div class="result-label" data-i18n="resultLabel1">予想月売上</div>
+              </div>
+              <div class="result-item">
+                <div class="result-value" id="resultRent">¥0</div>
+                <div class="result-label" data-i18n="resultLabel2">適正家賃目安</div>
+              </div>
+              <div class="result-item">
+                <div class="result-value" id="resultInitial">¥0</div>
+                <div class="result-label" data-i18n="resultLabel3">必要初期費用</div>
+              </div>
+            </div>
+            <div class="result-message" id="resultMessage"></div>
+            <div style="margin-top:1.5rem; text-align:center;">
+              <a href="#contact" class="btn-primary" data-i18n="resultCTA">この条件で物件を探す →</a>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Compare -->
-    <section id="compare">
-      <div class="container">
-        <div class="section-header reveal">
-          <div class="section-kicker">Difference</div>
-          <h2 class="section-title">一般的な大手ポータルとの違い</h2>
-          <p class="section-lead">
-            実名を出さなくても、美容師さんは「あるある…」と思うポイントだと思います。
-          </p>
-        </div>
-
-        <div class="compare-wrapper reveal">
-          <table class="compare-table">
-            <thead>
-              <tr>
-                <th>項目</th>
-                <th>salonX</th>
-                <th>一般的な大手ポータル</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>対応スピード</td>
-                <td>
-                  <span class="compare-badge compare-badge-good">24h以内</span><br>
-                  LINE・メール・電話対応
-                </td>
-                <td>担当者次第。数日放置されることも。</td>
-              </tr>
-              <tr>
-                <td>掲載物件</td>
-                <td>
-                  <span class="compare-badge compare-badge-good">釣り物件ゼロ</span><br>
-                  決まり次第ステータス更新
-                </td>
-                <td>
-                  <span class="compare-badge compare-badge-neutral">水増しあり</span><br>
-                  「実はもう決まってて…」が起こりがち
-                </td>
-              </tr>
-              <tr>
-                <td>仲介手数料</td>
-                <td>
-                  <strong>賃料1ヶ月＋税まで</strong><br>
-                  追加フィーなし
-                </td>
-                <td>案件により上乗せフィーが発生することも</td>
-              </tr>
-              <tr>
-                <td>担当者</td>
-                <td>
-                  美容師資格＋宅建士<br>
-                  現場感と数字の両方で相談
-                </td>
-                <td>不動産畑のみの担当者が中心</td>
-              </tr>
-              <tr>
-                <td>提案スタイル</td>
-                <td>「やめた方がいい物件」はちゃんと止める</td>
-                <td>とりあえず申込を勧められるケースも</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </section>
@@ -1566,220 +535,70 @@
       <div class="container">
         <div class="section-header reveal">
           <div class="section-kicker">Listings</div>
-          <h2 class="section-title">取り扱い物件イメージ</h2>
-          <p class="section-lead">
-            実際の募集状況により変動しますが、イメージとしてはこのような物件をメインに扱います。
-          </p>
+          <h2 class="section-title" data-i18n="listingsTitle">取り扱い物件</h2>
+          <p class="section-lead" data-i18n="listingsLead">すべて現在募集中の物件です。最新情報はLINEで速報配信中。</p>
         </div>
-
         <div class="listings-filter reveal">
-          <button class="filter-btn active" data-filter="all">すべて</button>
-          <button class="filter-btn" data-filter="skeleton">スケルトン</button>
-          <button class="filter-btn" data-filter="居抜き">居抜き</button>
-          <button class="filter-btn" data-filter="路面">路面店</button>
-          <button class="filter-btn" data-filter="空中階">空中階</button>
+          <button class="filter-btn active" data-filter="all" data-i18n="filterAll">すべて</button>
+          <button class="filter-btn" data-filter="skeleton" data-i18n="filterSkeleton">スケルトン</button>
+          <button class="filter-btn" data-filter="居抜き" data-i18n="filterUsed">居抜き</button>
+          <button class="filter-btn" data-filter="路面" data-i18n="filterStreet">路面店</button>
         </div>
-
-        <div class="listings-grid">
-          <article class="listing-card reveal" data-type="skeleton 路面">
-            <div class="listing-image">
-              <span class="listing-image-icon">🏢</span>
-              <span class="listing-status">募集中</span>
-            </div>
+        <div class="listings-grid stagger-children">
+          <article class="listing-card" data-type="skeleton 路面">
+            <div class="listing-image"><span class="listing-image-icon">🏢</span><span class="listing-status" data-i18n="statusOpen">募集中</span></div>
             <div class="listing-body">
               <div class="listing-location">新宿三丁目 / 路面・18坪</div>
-              <h3 class="listing-title">駅徒歩3分の路面美容室向け区画</h3>
+              <h3 class="listing-title" data-i18n="listing1Desc">駅徒歩3分の路面美容室向け区画</h3>
               <div class="listing-price">¥320,000<span>/月</span></div>
-              <div class="listing-tags">
-                <span class="listing-tag">路面</span>
-                <span class="listing-tag">18坪</span>
-                <span class="listing-tag">セット面4〜6席</span>
-                <span class="listing-tag">スケルトン</span>
-              </div>
+              <div class="listing-tags"><span class="listing-tag">路面</span><span class="listing-tag">18坪</span><span class="listing-tag">スケルトン</span></div>
             </div>
           </article>
-
-          <article class="listing-card reveal" data-type="居抜き">
-            <div class="listing-image">
-              <span class="listing-image-icon">✂️</span>
-              <span class="listing-status">造作譲渡あり</span>
-            </div>
+          <article class="listing-card" data-type="居抜き">
+            <div class="listing-image"><span class="listing-image-icon">✂️</span><span class="listing-status" style="color:var(--accent-gold);" data-i18n="statusTransfer">造作譲渡</span></div>
             <div class="listing-body">
               <div class="listing-location">吉祥寺 / 居抜き・22坪</div>
-              <h3 class="listing-title">セット面6 / シャンプー3台の居抜き</h3>
+              <h3 class="listing-title" data-i18n="listing2Desc">セット面6席の居抜き物件</h3>
               <div class="listing-price">¥280,000<span>/月</span></div>
-              <div class="listing-tags">
-                <span class="listing-tag">居抜き</span>
-                <span class="listing-tag">22坪</span>
-                <span class="listing-tag">即営業可</span>
-              </div>
+              <div class="listing-tags"><span class="listing-tag">居抜き</span><span class="listing-tag">22坪</span><span class="listing-tag">即営業可</span></div>
             </div>
           </article>
-
-          <article class="listing-card reveal" data-type="skeleton 空中階">
-            <div class="listing-image">
-              <span class="listing-image-icon">🌆</span>
-              <span class="listing-status">募集中</span>
-            </div>
+          <article class="listing-card" data-type="skeleton">
+            <div class="listing-image"><span class="listing-image-icon">🌆</span><span class="listing-status" data-i18n="statusOpen">募集中</span></div>
             <div class="listing-body">
-              <div class="listing-location">三鷹 / 空中階・20坪</div>
-              <h3 class="listing-title">ガラス面広め・2階サロン区画</h3>
+              <div class="listing-location">三鷹 / 2階・20坪</div>
+              <h3 class="listing-title" data-i18n="listing3Desc">ガラス面広め・2階サロン区画</h3>
               <div class="listing-price">¥210,000<span>/月</span></div>
-              <div class="listing-tags">
-                <span class="listing-tag">2階</span>
-                <span class="listing-tag">20坪</span>
-                <span class="listing-tag">EVあり</span>
-              </div>
+              <div class="listing-tags"><span class="listing-tag">2階</span><span class="listing-tag">20坪</span><span class="listing-tag">EVあり</span></div>
             </div>
           </article>
-
-          <article class="listing-card reveal" data-type="居抜き 路面">
-            <div class="listing-image">
-              <span class="listing-image-icon">💈</span>
-              <span class="listing-status">NEW</span>
-            </div>
+          <article class="listing-card" data-type="居抜き 路面">
+            <div class="listing-image"><span class="listing-image-icon">💈</span><span class="listing-status" style="background:var(--accent-rose-soft);color:var(--accent-rose);">NEW</span></div>
             <div class="listing-body">
               <div class="listing-location">下北沢 / 路面・15坪</div>
-              <h3 class="listing-title">駅徒歩2分・コンパクト路面店舗</h3>
+              <h3 class="listing-title" data-i18n="listing4Desc">駅徒歩2分のコンパクト路面店</h3>
               <div class="listing-price">¥250,000<span>/月</span></div>
-              <div class="listing-tags">
-                <span class="listing-tag">路面</span>
-                <span class="listing-tag">15坪</span>
-                <span class="listing-tag">居抜き可</span>
-              </div>
+              <div class="listing-tags"><span class="listing-tag">路面</span><span class="listing-tag">15坪</span><span class="listing-tag">居抜き可</span></div>
             </div>
           </article>
-
-          <article class="listing-card reveal" data-type="skeleton 空中階">
-            <div class="listing-image">
-              <span class="listing-image-icon">🏙️</span>
-              <span class="listing-status">募集中</span>
-            </div>
+          <article class="listing-card" data-type="skeleton">
+            <div class="listing-image"><span class="listing-image-icon">🏙️</span><span class="listing-status" data-i18n="statusOpen">募集中</span></div>
             <div class="listing-body">
               <div class="listing-location">中目黒 / 3階・25坪</div>
-              <h3 class="listing-title">天井高3.2m・開放感のある空間</h3>
+              <h3 class="listing-title" data-i18n="listing5Desc">天井高3.2mの開放的な空間</h3>
               <div class="listing-price">¥350,000<span>/月</span></div>
-              <div class="listing-tags">
-                <span class="listing-tag">3階</span>
-                <span class="listing-tag">25坪</span>
-                <span class="listing-tag">天井高</span>
-              </div>
+              <div class="listing-tags"><span class="listing-tag">3階</span><span class="listing-tag">25坪</span><span class="listing-tag">天井高</span></div>
             </div>
           </article>
-
-          <article class="listing-card reveal" data-type="居抜き">
-            <div class="listing-image">
-              <span class="listing-image-icon">🪞</span>
-              <span class="listing-status">即入居可</span>
-            </div>
+          <article class="listing-card" data-type="居抜き">
+            <div class="listing-image"><span class="listing-image-icon">🪞</span><span class="listing-status" style="color:var(--accent-emerald);" data-i18n="statusReady">即入居可</span></div>
             <div class="listing-body">
               <div class="listing-location">渋谷 / 居抜き・18坪</div>
-              <h3 class="listing-title">内装美品・セット面5席の居抜き</h3>
+              <h3 class="listing-title" data-i18n="listing6Desc">内装美品・セット面5席</h3>
               <div class="listing-price">¥380,000<span>/月</span></div>
-              <div class="listing-tags">
-                <span class="listing-tag">居抜き</span>
-                <span class="listing-tag">18坪</span>
-                <span class="listing-tag">美品</span>
-              </div>
+              <div class="listing-tags"><span class="listing-tag">居抜き</span><span class="listing-tag">18坪</span><span class="listing-tag">美品</span></div>
             </div>
           </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Flow -->
-    <section id="flow">
-      <div class="container">
-        <div class="section-header reveal">
-          <div class="section-kicker">Flow</div>
-          <h2 class="section-title">ご相談〜ご契約までの流れ</h2>
-          <p class="section-lead">
-            「まだ独立すると決めたわけじゃない」という段階からで大丈夫です。
-          </p>
-        </div>
-
-        <div class="flow-content">
-          <div class="flow-steps">
-            <div class="flow-step reveal">
-              <div class="flow-step-number">1</div>
-              <div class="flow-step-content">
-                <h3 class="flow-step-title">ヒアリング（オンライン or 新宿オフィス）</h3>
-                <p class="flow-step-body">
-                  いまの働き方・指名客数・メニュー・理想の働き方・エリア感などを、美容師同士の感覚でざっくばらんにお伺いします。
-                </p>
-              </div>
-            </div>
-
-            <div class="flow-step reveal">
-              <div class="flow-step-number">2</div>
-              <div class="flow-step-content">
-                <h3 class="flow-step-title">予算・エリア・坪数のすり合わせ</h3>
-                <p class="flow-step-body">
-                  「この家賃なら現実的」「これは攻めすぎ」など、売上想定とセットで条件を整理。居抜き / スケルトン両方を候補に入れます。
-                </p>
-              </div>
-            </div>
-
-            <div class="flow-step reveal">
-              <div class="flow-step-number">3</div>
-              <div class="flow-step-content">
-                <h3 class="flow-step-title">物件提案・内見</h3>
-                <p class="flow-step-body">
-                  オープン情報＋水面下の情報をまとめてご提案し、気になる物件を内見。導線・席数・シャンプー位置なども、その場で一緒にイメージします。
-                </p>
-              </div>
-            </div>
-
-            <div class="flow-step reveal">
-              <div class="flow-step-number">4</div>
-              <div class="flow-step-content">
-                <h3 class="flow-step-title">条件交渉〜ご契約</h3>
-                <p class="flow-step-body">
-                  家賃・フリーレント・造作譲渡などの条件交渉もこちらで対応。宅建士として契約内容をわかりやすくご説明します。
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-box reveal">
-            <h3 class="faq-title">よくあるご質問</h3>
-
-            <div class="faq-item">
-              <div class="faq-question">
-                Q. 相談や物件紹介にお金はかかりますか？
-              </div>
-              <div class="faq-answer">
-                A. ご相談〜物件紹介〜内見までは完全無料です。ご成約時に、一般的な仲介手数料（賃料1ヶ月分＋税）を頂きます。
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <div class="faq-question">
-                Q. 大手サイトに出ている物件もお願いできますか？
-              </div>
-              <div class="faq-answer">
-                A. 物件によりますが、他社掲載物件をこちら側の窓口として扱えるケースもあります。「このURLの物件どう？」と送っていただければ、お調べして正直にお伝えします。
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <div class="faq-question">
-                Q. 居抜きかスケルトンか決めていません。
-              </div>
-              <div class="faq-answer">
-                A. 初期費用・ブランディング・今後の展開を踏まえて、複数パターンを数字で比較します。最初からどちらか決めておく必要はありません。
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <div class="faq-question">
-                Q. SNSやホームページが無い状態でも大丈夫ですか？
-              </div>
-              <div class="faq-answer">
-                A. もちろん大丈夫です。むしろ物件が決まってから整えていく方が多いです。必要であれば、信頼できる制作パートナーもご紹介可能です。
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -1789,80 +608,65 @@
       <div class="container">
         <div class="section-header reveal">
           <div class="section-kicker">Contact</div>
-          <h2 class="section-title">まずは一度、話してみませんか？</h2>
-          <p class="section-lead">
-            「独立しようか迷っている」「いつかはやりたい」くらいの温度感でも大歓迎です。
-          </p>
+          <h2 class="section-title" data-i18n="contactTitle">まずは一度、話してみませんか？</h2>
+          <p class="section-lead" data-i18n="contactLead">「独立しようか迷っている」くらいの温度感でも大歓迎です。</p>
         </div>
-
         <div class="contact-content">
           <div class="profile-card reveal">
             <div class="profile-header">
               <div class="profile-avatar">X</div>
-              <div class="profile-info">
-                <div class="profile-name">代表プロフィール（仮）</div>
-                <div class="profile-title">美容師 / 宅地建物取引士</div>
-              </div>
+              <div><div class="profile-name" data-i18n="profileName">代表プロフィール</div><div class="profile-title" data-i18n="profileTitle">美容師 / 宅地建物取引士</div></div>
             </div>
-            <p class="profile-body">
-              美容師として現場に立った経験と、宅地建物取引士としての知識を持ち合わせた「ちょっと変わった不動産屋」です。美容業界のリアルと数字の両方を踏まえて、無理のない一歩目を一緒に作っていきます。
-            </p>
+            <p class="profile-body" data-i18n="profileBody">美容師として現場に立った経験と、宅建士としての知識を持ち合わせた「ちょっと変わった不動産屋」です。無理のない一歩目を一緒に作っていきます。</p>
             <div class="profile-details">
-              <div class="profile-detail">
-                <div class="profile-detail-icon">📍</div>
-                <span>拠点：新宿（オンラインにて全国対応可）</span>
-              </div>
-              <div class="profile-detail">
-                <div class="profile-detail-icon">🗺️</div>
-                <span>対応エリア：新宿〜吉祥寺〜三鷹ラインを中心に都内全域</span>
-              </div>
-              <div class="profile-detail">
-                <div class="profile-detail-icon">💬</div>
-                <span>対応方法：LINE / Zoom / 対面（新宿オフィス）</span>
-              </div>
+              <div class="profile-detail"><div class="profile-detail-icon">📍</div><span data-i18n="profileLocation">拠点：新宿（オンライン全国対応）</span></div>
+              <div class="profile-detail"><div class="profile-detail-icon">🗺️</div><span data-i18n="profileArea">対応：新宿〜吉祥寺を中心に都内全域</span></div>
+              <div class="profile-detail"><div class="profile-detail-icon">💬</div><span data-i18n="profileMethod">方法：LINE / Zoom / 対面</span></div>
+            </div>
+            <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-subtle);">
+              <a href="https://line.me/R/ti/p/@YOUR_LINE_ID" target="_blank" class="btn-line" style="width:100%;justify-content:center;">💬 <span data-i18n="btnLineNow">LINEで今すぐ相談</span></a>
+              <p style="font-size:0.75rem;color:var(--text-muted);text-align:center;margin-top:0.75rem;" data-i18n="lineNote">24時間受付・原則24時間以内に返信</p>
             </div>
           </div>
-
-          <form class="contact-form reveal" onsubmit="handleSubmit(event)">
-            <h3 class="form-title">無料相談フォーム</h3>
-
-            <div class="form-group">
-              <label class="form-label" for="name">お名前</label>
-              <input class="form-input" type="text" id="name" placeholder="例）山田 太郎" required>
+          <div class="contact-form reveal">
+            <div id="formContent">
+              <h3 class="form-title" data-i18n="formTitle">無料相談フォーム</h3>
+              <form name="salonx-contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
+                <input type="hidden" name="form-name" value="salonx-contact">
+                <p style="display:none;"><label>Don't fill: <input name="bot-field"></label></p>
+                <div class="form-group">
+                  <label class="form-label" data-i18n="formName">お名前 *</label>
+                  <input class="form-input" type="text" name="name" required placeholder="例）山田 太郎">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" data-i18n="formContact">連絡先（メール or LINE ID）*</label>
+                  <input class="form-input" type="text" name="contact" required placeholder="例）sample@example.com">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" data-i18n="formTopic">ご相談内容</label>
+                  <select class="form-select" name="topic">
+                    <option data-i18n="topicNew">新規開業の相談</option>
+                    <option data-i18n="topicMove">移転・縮小の相談</option>
+                    <option data-i18n="topicMulti">2号店・多店舗展開</option>
+                    <option data-i18n="topicSell">居抜き売却の相談</option>
+                    <option data-i18n="topicOther">その他</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" data-i18n="formMessage">ご希望・お悩み</label>
+                  <textarea class="form-textarea" name="message" placeholder="例）吉祥寺〜三鷹で小さめサロンを検討中"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;"><span data-i18n="formSubmit">相談内容を送る</span> →</button>
+                <p class="form-note" data-i18n="formNote">※24時間以内に返信。お急ぎはLINEがおすすめ。</p>
+              </form>
             </div>
-
-            <div class="form-group">
-              <label class="form-label" for="contact">ご連絡先（メール or LINE ID）</label>
-              <input class="form-input" type="text" id="contact" placeholder="例）sample@example.com / LINE: @salonlink" required>
+            <div class="form-success" id="formSuccess">
+              <div class="form-success-icon">✓</div>
+              <h3 data-i18n="successTitle">送信完了しました！</h3>
+              <p style="color:var(--text-secondary);" data-i18n="successText">24時間以内にご連絡いたします。</p>
+              <a href="https://line.me/R/ti/p/@YOUR_LINE_ID" target="_blank" class="btn-line" style="margin-top:1.5rem;">💬 <span data-i18n="successLine">LINEで直接相談</span></a>
             </div>
-
-            <div class="form-group">
-              <label class="form-label" for="topic">ご相談内容</label>
-              <select class="form-select" id="topic">
-                <option>新規開業の相談</option>
-                <option>移転・縮小の相談</option>
-                <option>2号店・多店舗展開</option>
-                <option>居抜き売却の相談</option>
-                <option>その他</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="message">ざっくりとしたお悩み・ご希望</label>
-              <textarea class="form-textarea" id="message" placeholder="例）吉祥寺〜三鷹あたりで、指名客中心の小さめサロンを検討中。家賃感覚から知りたいです。"></textarea>
-            </div>
-
-            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
-              相談内容を送る
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-              </svg>
-            </button>
-
-            <p class="form-note">
-              ※このフォームはデモです。実際の運用では、送信先メールや外部フォームサービスと接続してください。
-            </p>
-          </form>
+          </div>
         </div>
       </div>
     </section>
@@ -1872,134 +676,368 @@
   <footer>
     <div class="container">
       <div class="footer-content">
-        <div class="footer-copy">
-          © <span id="year"></span> salonX　美容師のための店舗専門不動産パートナー。
-        </div>
-
+        <div class="footer-copy">© <span id="year"></span> salonX by <a href="https://v8-corporation.com" target="_blank" style="color:var(--accent-rose);">V8 Corporation</a></div>
         <div class="footer-links">
-          <a href="#concept">コンセプト</a>
-          <a href="#promise">3つの約束</a>
-          <a href="#compare">他社との違い</a>
-          <a href="#contact">お問い合わせ</a>
+          <a href="#features" data-i18n="footerFeatures">機能</a>
+          <a href="#diagnostic" data-i18n="footerDiag">診断</a>
+          <a href="#listings" data-i18n="footerListings">物件</a>
+          <a href="#contact" data-i18n="footerContact">相談</a>
         </div>
-
         <div class="footer-social">
           <a href="#" aria-label="Instagram">IG</a>
-          <a href="#" aria-label="X (Twitter)">X</a>
-          <a href="#" aria-label="LINE">L</a>
+          <a href="#" aria-label="X">X</a>
+          <a href="https://line.me/R/ti/p/@YOUR_LINE_ID" target="_blank" aria-label="LINE">L</a>
         </div>
       </div>
     </div>
   </footer>
+<script>
+// ===== 多言語データ =====
+const translations = {
+  ja: {
+    v8Link: "運営会社：V8 Corporation",
+    navFeatures: "機能・特徴",
+    navDiagnostic: "開業診断",
+    navListings: "物件一覧",
+    navContact: "無料相談",
+    heroBadge: "美容師による美容師のための店舗専門仲介",
+    heroTitle1: "釣り物件ゼロ。即レス。明快。",
+    heroTitle2: "\"現場がわかる\"不動産。",
+    heroLead: "「問い合わせたら決まってた」「レスが遅い」「とりあえず高い物件を押される」――そんなストレスをなくすために、美容師資格×宅建士が立ち上げた店舗仲介です。",
+    promise1: "釣り物件ゼロ宣言",
+    promise2: "原則24時間以内レス",
+    promise3: "手数料：賃料1ヶ月+税",
+    btnDiagnostic: "5分で開業診断",
+    btnLine: "LINEで相談",
+    btnContact: "フォームで相談",
+    heroNote: "「開業するか迷っている」状態から大丈夫です。",
+    liveUpdate: "リアルタイム更新",
+    statListings: "紹介可能物件",
+    statResponse: "以内レスポンス",
+    listing1Title: "新宿三丁目｜路面・18坪",
+    listing2Title: "吉祥寺｜居抜き・22坪",
+    statusOpen: "募集中",
+    floatBadge: "掲載中＝まだ募集中",
+    featuresTitle: "salonXの6つの強み",
+    featuresLead: "美容師独立を成功に導く、他にはないサービスを提供します。",
+    feature1Sub: "5分で数字が出る", feature1Title: "開業前診断ツール", feature1Body: "売上予測・必要資金・損益分岐点を自動計算。「この家賃で本当にやっていけるか？」を数字で判断できます。", feature1Badge: "無料で今すぐ診断",
+    feature2Sub: "スピードで勝つ", feature2Title: "LINE即時物件速報", feature2Body: "新着物件をLINEで即時通知。人気物件は数日で決まるため、スピードが命。いち早く内見予約できます。", feature2Badge: "LINE登録で速報GET",
+    feature3Sub: "信頼で勝つ", feature3Title: "釣り物件ゼロ宣言", feature3Body: "掲載物件は全て現在募集中。決まり次第即アーカイブ。「問い合わせたら終わってた」をなくします。", feature3Badge: "業界初の宣言",
+    feature4Sub: "売り手も取れる", feature4Title: "居抜き査定サービス", feature4Body: "閉店・移転を検討中のオーナー様向け。内装・設備を適正価格で査定し、次のオーナーへ橋渡しします。", feature4Badge: "無料査定受付中",
+    feature5Sub: "成功率UP", feature5Title: "融資サポート", feature5Body: "日本政策金融公庫・信用金庫との連携実績あり。事業計画書の作成から面談対策までトータルサポート。", feature5Badge: "融資成功率90%以上",
+    feature6Sub: "提案力UP", feature6Title: "内見レポート自動PDF", feature6Body: "内見後、写真・条件・比較表をPDFで自動生成。パートナーや融資担当者への説明資料としてそのまま使えます。", feature6Badge: "内見後24時間以内",
+    diagTitle: "開業前診断ツール", diagLead: "5分で売上予測・必要資金・損益分岐点がわかります。",
+    diagFormTitle: "あなたのサロン開業シミュレーション", diagBadge: "無料・登録不要",
+    diagLabel1: "現在の指名客数（月間）", diagLabel2: "平均客単価（円）", diagLabel3: "希望エリア", diagLabel4: "希望坪数", diagButton: "診断結果を見る",
+    resultLabel1: "予想月売上", resultLabel2: "適正家賃目安", resultLabel3: "必要初期費用", resultCTA: "この条件で物件を探す →",
+    listingsTitle: "取り扱い物件", listingsLead: "すべて現在募集中の物件です。最新情報はLINEで速報配信中。",
+    filterAll: "すべて", filterSkeleton: "スケルトン", filterUsed: "居抜き", filterStreet: "路面店",
+    statusTransfer: "造作譲渡", statusReady: "即入居可",
+    listing1Desc: "駅徒歩3分の路面美容室向け区画", listing2Desc: "セット面6席の居抜き物件", listing3Desc: "ガラス面広め・2階サロン区画", listing4Desc: "駅徒歩2分のコンパクト路面店", listing5Desc: "天井高3.2mの開放的な空間", listing6Desc: "内装美品・セット面5席",
+    contactTitle: "まずは一度、話してみませんか？", contactLead: "「独立しようか迷っている」くらいの温度感でも大歓迎です。",
+    profileName: "代表プロフィール", profileTitle: "美容師 / 宅地建物取引士", profileBody: "美容師として現場に立った経験と、宅建士としての知識を持ち合わせた「ちょっと変わった不動産屋」です。無理のない一歩目を一緒に作っていきます。",
+    profileLocation: "拠点：新宿（オンライン全国対応）", profileArea: "対応：新宿〜吉祥寺を中心に都内全域", profileMethod: "方法：LINE / Zoom / 対面",
+    btnLineNow: "LINEで今すぐ相談", lineNote: "24時間受付・原則24時間以内に返信",
+    formTitle: "無料相談フォーム", formName: "お名前 *", formContact: "連絡先（メール or LINE ID）*", formTopic: "ご相談内容", formMessage: "ご希望・お悩み", formSubmit: "相談内容を送る", formNote: "※24時間以内に返信。お急ぎはLINEがおすすめ。",
+    topicNew: "新規開業の相談", topicMove: "移転・縮小の相談", topicMulti: "2号店・多店舗展開", topicSell: "居抜き売却の相談", topicOther: "その他",
+    successTitle: "送信完了しました！", successText: "24時間以内にご連絡いたします。", successLine: "LINEで直接相談",
+    footerFeatures: "機能", footerDiag: "診断", footerListings: "物件", footerContact: "相談",
+    diagResultGood: "✨ この条件なら十分に開業可能です！詳細なシミュレーションをご希望の方はお気軽にご相談ください。",
+    diagResultCaution: "⚠️ 家賃比率がやや高めです。客単価UPか客数増を検討しましょう。詳しくはご相談ください。"
+  },
+  en: {
+    v8Link: "Operated by V8 Corporation",
+    navFeatures: "Features",
+    navDiagnostic: "Assessment",
+    navListings: "Listings",
+    navContact: "Contact",
+    heroBadge: "Salon real estate by stylists, for stylists",
+    heroTitle1: "No fake listings. Fast response. Clear fees.",
+    heroTitle2: "Real estate that understands salons.",
+    heroLead: "Tired of \"already taken\" listings, slow responses, and pushy agents? We're stylists-turned-realtors who built a better way.",
+    promise1: "Zero fake listings",
+    promise2: "24-hour response",
+    promise3: "Fee: 1 month rent + tax",
+    btnDiagnostic: "5-min Assessment",
+    btnLine: "Chat on LINE",
+    btnContact: "Contact Form",
+    heroNote: "Even if you're just exploring, we're here to help.",
+    liveUpdate: "Real-time updates",
+    statListings: "Available spaces",
+    statResponse: "Response time",
+    listing1Title: "Shinjuku | Street-level・18 tsubo",
+    listing2Title: "Kichijoji | Turnkey・22 tsubo",
+    statusOpen: "Available",
+    floatBadge: "Listed = Still available",
+    featuresTitle: "6 Unique Advantages of salonX",
+    featuresLead: "Services designed to help stylists succeed in opening their own salon.",
+    feature1Sub: "Numbers in 5 min", feature1Title: "Pre-Opening Assessment", feature1Body: "Auto-calculate projected revenue, required capital, and break-even point. Make data-driven decisions.", feature1Badge: "Free Assessment",
+    feature2Sub: "Win with speed", feature2Title: "LINE Instant Alerts", feature2Body: "Get notified instantly when new spaces become available. Popular spots are gone in days.", feature2Badge: "Get Alerts on LINE",
+    feature3Sub: "Win with trust", feature3Title: "Zero Fake Listings", feature3Body: "Every listing is currently available. Archived immediately when taken.", feature3Badge: "Industry First",
+    feature4Sub: "For sellers too", feature4Title: "Turnkey Valuation", feature4Body: "For owners considering closing or moving. We assess fixtures and connect you with buyers.", feature4Badge: "Free Valuation",
+    feature5Sub: "Higher success", feature5Title: "Loan Support", feature5Body: "We work with Japan Finance Corporation and credit unions. Full support from business plans to interviews.", feature5Badge: "90%+ Success Rate",
+    feature6Sub: "Better proposals", feature6Title: "Auto PDF Reports", feature6Body: "After viewing, we auto-generate PDF with photos, terms, and comparisons for your stakeholders.", feature6Badge: "Within 24 hours",
+    diagTitle: "Pre-Opening Assessment", diagLead: "Get projected revenue, ideal rent, and required capital in 5 minutes.",
+    diagFormTitle: "Salon Opening Simulation", diagBadge: "Free・No registration",
+    diagLabel1: "Monthly repeat clients", diagLabel2: "Average spend per client (JPY)", diagLabel3: "Preferred area", diagLabel4: "Preferred size", diagButton: "See Results",
+    resultLabel1: "Projected Revenue", resultLabel2: "Ideal Rent", resultLabel3: "Required Capital", resultCTA: "Find spaces for this budget →",
+    listingsTitle: "Available Spaces", listingsLead: "All listings are currently available. Get instant updates on LINE.",
+    filterAll: "All", filterSkeleton: "Shell", filterUsed: "Turnkey", filterStreet: "Street-level",
+    statusTransfer: "Fixtures included", statusReady: "Move-in ready",
+    listing1Desc: "Street-level salon space, 3 min from station", listing2Desc: "Turnkey with 6 styling stations", listing3Desc: "2F space with large windows", listing4Desc: "Compact street-level, 2 min from station", listing5Desc: "High ceiling 3.2m, open space", listing6Desc: "Beautiful interior, 5 stations",
+    contactTitle: "Let's talk", contactLead: "Even if you're just exploring options, we're happy to chat.",
+    profileName: "About Us", profileTitle: "Licensed Stylist / Real Estate Agent", profileBody: "We combine salon industry experience with real estate expertise. Let's build your first step together.",
+    profileLocation: "Base: Shinjuku (Online nationwide)", profileArea: "Area: Shinjuku to Kichijoji, all Tokyo", profileMethod: "Method: LINE / Zoom / In-person",
+    btnLineNow: "Chat on LINE Now", lineNote: "24/7 reception, response within 24 hours",
+    formTitle: "Contact Form", formName: "Name *", formContact: "Contact (Email or LINE ID) *", formTopic: "Topic", formMessage: "Your questions", formSubmit: "Submit", formNote: "※Response within 24 hours. LINE is faster.",
+    topicNew: "Opening a new salon", topicMove: "Relocating/Downsizing", topicMulti: "Second location", topicSell: "Selling fixtures", topicOther: "Other",
+    successTitle: "Sent successfully!", successText: "We'll contact you within 24 hours.", successLine: "Chat on LINE directly",
+    footerFeatures: "Features", footerDiag: "Assessment", footerListings: "Listings", footerContact: "Contact",
+    diagResultGood: "✨ These numbers look great! Contact us for a detailed simulation.",
+    diagResultCaution: "⚠️ Rent ratio is a bit high. Consider increasing prices or client count. Let's discuss."
+  },
+  zh: {
+    v8Link: "运营公司：V8 Corporation",
+    navFeatures: "功能特点",
+    navDiagnostic: "开业诊断",
+    navListings: "房源列表",
+    navContact: "免费咨询",
+    heroBadge: "美发师为美发师打造的店铺专业中介",
+    heroTitle1: "零虚假房源。快速响应。透明收费。",
+    heroTitle2: "懂行的不动产。",
+    heroLead: "\"咨询后才知道已经租出去了\"\"回复太慢\"\"只推荐贵的房源\"——为了消除这些烦恼，我们这些持有美发师资格和房产经纪资格的人创建了这个服务。",
+    promise1: "零虚假房源宣言",
+    promise2: "原则24小时内回复",
+    promise3: "中介费：1个月租金+税",
+    btnDiagnostic: "5分钟开业诊断",
+    btnLine: "LINE咨询",
+    btnContact: "表单咨询",
+    heroNote: "即使还在犹豫是否开业，也没关系。",
+    liveUpdate: "实时更新",
+    statListings: "可介绍房源",
+    statResponse: "内响应",
+    listing1Title: "新宿三丁目｜临街・18坪",
+    listing2Title: "吉祥寺｜带装修・22坪",
+    statusOpen: "招租中",
+    floatBadge: "在列＝仍在招租",
+    featuresTitle: "salonX的6大优势",
+    featuresLead: "提供独特的服务，助力美发师成功开业。",
+    feature1Sub: "5分钟出数据", feature1Title: "开业前诊断工具", feature1Body: "自动计算预期销售额、所需资金、盈亏平衡点。用数据判断\"这个租金能否经营下去\"。", feature1Badge: "免费立即诊断",
+    feature2Sub: "速度制胜", feature2Title: "LINE即时房源速报", feature2Body: "新房源通过LINE即时通知。热门房源几天就会被租走，速度就是一切。", feature2Badge: "注册LINE获取速报",
+    feature3Sub: "信任制胜", feature3Title: "零虚假房源宣言", feature3Body: "所有房源都是目前正在招租的。一旦租出立即下架。", feature3Badge: "行业首创",
+    feature4Sub: "卖方也能找到买家", feature4Title: "带装修房源评估", feature4Body: "为考虑关店或搬迁的业主提供服务。评估装修和设备的合理价格，为下一位业主牵线搭桥。", feature4Badge: "免费评估受理中",
+    feature5Sub: "提高成功率", feature5Title: "融资支持", feature5Body: "与日本政策金融公库、信用金库有合作实绩。从商业计划书制作到面谈对策全程支持。", feature5Badge: "融资成功率90%以上",
+    feature6Sub: "提升提案力", feature6Title: "看房报告自动PDF", feature6Body: "看房后自动生成包含照片、条件、对比表的PDF。可直接用作向合作伙伴或融资负责人的说明资料。", feature6Badge: "看房后24小时内",
+    diagTitle: "开业前诊断工具", diagLead: "5分钟了解预期销售额、所需资金、盈亏平衡点。",
+    diagFormTitle: "您的美发店开业模拟", diagBadge: "免费・无需注册",
+    diagLabel1: "当前指名客数（每月）", diagLabel2: "平均客单价（日元）", diagLabel3: "希望区域", diagLabel4: "希望面积", diagButton: "查看诊断结果",
+    resultLabel1: "预期月销售额", resultLabel2: "合适租金参考", resultLabel3: "所需初期费用", resultCTA: "按此条件找房源 →",
+    listingsTitle: "房源列表", listingsLead: "所有房源均为目前招租中。最新信息通过LINE速报发送。",
+    filterAll: "全部", filterSkeleton: "毛坯", filterUsed: "带装修", filterStreet: "临街店铺",
+    statusTransfer: "装修转让", statusReady: "可立即入住",
+    listing1Desc: "距车站步行3分钟的临街美发店空间", listing2Desc: "带6个座位的带装修房源", listing3Desc: "玻璃面宽敞的2楼美发店空间", listing4Desc: "距车站步行2分钟的紧凑型临街店铺", listing5Desc: "层高3.2m的开放空间", listing6Desc: "装修精美・5个座位",
+    contactTitle: "先聊聊吧？", contactLead: "即使只是\"在考虑是否独立\"的程度也欢迎咨询。",
+    profileName: "代表简介", profileTitle: "美发师 / 房地产经纪人", profileBody: "我们是一家\"有点特别的不动产公司\"，兼具美发师的现场经验和房产经纪人的专业知识。让我们一起迈出稳健的第一步。",
+    profileLocation: "据点：新宿（线上全国对应）", profileArea: "服务区域：以新宿〜吉祥寺为中心的东京全域", profileMethod: "咨询方式：LINE / Zoom / 面谈",
+    btnLineNow: "LINE立即咨询", lineNote: "24小时受理・原则24小时内回复",
+    formTitle: "免费咨询表单", formName: "姓名 *", formContact: "联系方式（邮箱或LINE ID）*", formTopic: "咨询内容", formMessage: "您的需求・烦恼", formSubmit: "提交咨询", formNote: "※24小时内回复。急需请用LINE。",
+    topicNew: "新店开业咨询", topicMove: "搬迁・缩小咨询", topicMulti: "2号店・多店展开", topicSell: "带装修出售咨询", topicOther: "其他",
+    successTitle: "发送成功！", successText: "我们将在24小时内联系您。", successLine: "LINE直接咨询",
+    footerFeatures: "功能", footerDiag: "诊断", footerListings: "房源", footerContact: "咨询",
+    diagResultGood: "✨ 这个条件完全可以开业！如需详细模拟请随时咨询。",
+    diagResultCaution: "⚠️ 租金比例偏高。建议考虑提高客单价或增加客数。详情请咨询。"
+  }
+};
 
-  <script>
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
+let currentLang = 'ja';
 
-    // Smooth scroll
-    function scrollTo(id) {
-      const el = document.getElementById(id);
-      if (el) {
-        const y = el.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }
+function setLanguage(lang) {
+  currentLang = lang;
+  document.body.className = `lang-${lang}`;
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (translations[lang][key]) {
+      el.textContent = translations[lang][key];
     }
+  });
+  // Update tooltips
+  document.querySelectorAll('.floating-btn[data-tooltip-' + lang + ']').forEach(btn => {
+    btn.setAttribute('data-tooltip', btn.getAttribute('data-tooltip-' + lang));
+  });
+  document.documentElement.lang = lang;
+}
 
-    // Navigation toggle
-    const navToggle = document.getElementById('navToggle');
-    const navLinks = document.getElementById('navLinks');
+// ===== Diagnostic Tool =====
+function runDiagnostic() {
+  const clients = parseInt(document.getElementById('diagClients').value) || 0;
+  const price = parseInt(document.getElementById('diagPrice').value) || 0;
+  const area = document.getElementById('diagArea').value;
+  const size = document.getElementById('diagSize').value;
+  
+  const revenue = clients * price;
+  const rentRatio = 0.15; // 15% of revenue
+  const idealRent = Math.round(revenue * rentRatio / 10000) * 10000;
+  
+  let initialCost;
+  if (size === 'small') initialCost = area === 'shinjuku' ? 4000000 : 3000000;
+  else if (size === 'medium') initialCost = area === 'shinjuku' ? 6000000 : 4500000;
+  else initialCost = area === 'shinjuku' ? 9000000 : 7000000;
+  
+  document.getElementById('resultRevenue').textContent = '¥' + revenue.toLocaleString();
+  document.getElementById('resultRent').textContent = '¥' + idealRent.toLocaleString();
+  document.getElementById('resultInitial').textContent = '¥' + initialCost.toLocaleString();
+  
+  const actualRentRatio = idealRent / revenue;
+  const msg = actualRentRatio <= 0.2 
+    ? translations[currentLang].diagResultGood 
+    : translations[currentLang].diagResultCaution;
+  document.getElementById('resultMessage').textContent = msg;
+  
+  document.getElementById('diagnosticResult').classList.add('show');
+}
 
-    navToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-      navToggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+// ===== Core Functions =====
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Custom Cursor
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursorDot');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  cursorDot.style.left = e.clientX + 'px';
+  cursorDot.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .listing-card, .feature-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// Scroll Progress
+const scrollProgress = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  scrollProgress.style.transform = `scaleX(${scrollTop / docHeight})`;
+});
+
+// Particles
+const particlesContainer = document.getElementById('particles');
+for (let i = 0; i < 15; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDelay = Math.random() * 15 + 's';
+  p.style.animationDuration = (15 + Math.random() * 10) + 's';
+  particlesContainer.appendChild(p);
+}
+
+// Smooth scroll
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    const y = el.getBoundingClientRect().top + window.scrollY - 100;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+}
+
+// Navigation
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  navToggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+});
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.textContent = '☰';
+  });
+});
+
+// Header scroll
+const header = document.getElementById('header');
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 50);
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 500);
+});
+scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// Scroll reveal
+const revealElements = document.querySelectorAll('.reveal, .stagger-children');
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+revealElements.forEach(el => revealObserver.observe(el));
+
+// Filter
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.listing-card').forEach(card => {
+      const type = card.dataset.type || '';
+      card.style.display = (filter === 'all' || type.includes(filter)) ? 'block' : 'none';
     });
+  });
+});
 
-    // Close nav on link click
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        navToggle.textContent = '☰';
-      });
+// Counter animation
+function animateCounter(el, target) {
+  let current = 0;
+  const increment = target / 40;
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) { current = target; clearInterval(timer); }
+    el.textContent = Math.floor(current);
+  }, 40);
+}
+const heroObserver = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) {
+    setTimeout(() => animateCounter(document.getElementById('listingCount'), 23), 500);
+    heroObserver.disconnect();
+  }
+});
+heroObserver.observe(document.querySelector('.hero'));
+
+// Form
+const contactForm = document.getElementById('contactForm');
+contactForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  try {
+    await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(contactForm)).toString()
     });
+  } catch (err) {}
+  document.getElementById('formContent').style.display = 'none';
+  document.getElementById('formSuccess').classList.add('show');
+});
 
-    // Header scroll effect
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
+// Language switcher
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+});
 
-    // Scroll reveal
-    const revealElements = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, index * 100);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+// Smooth anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href').slice(1);
+    if (targetId) scrollTo(targetId);
+  });
+});
 
-    revealElements.forEach(el => revealObserver.observe(el));
-
-    // Filter functionality
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const listingCards = document.querySelectorAll('.listing-card');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Update active state
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const filter = btn.dataset.filter;
-
-        listingCards.forEach(card => {
-          const type = card.dataset.type || '';
-          if (filter === 'all' || type.includes(filter)) {
-            card.style.display = 'block';
-            setTimeout(() => {
-              card.style.opacity = '1';
-              card.style.transform = 'translateY(0)';
-            }, 50);
-          } else {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-              card.style.display = 'none';
-            }, 300);
-          }
-        });
-      });
-    });
-
-    // Animated counter
-    function animateCounter(el, target) {
-      let current = 0;
-      const increment = target / 30;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          current = target;
-          clearInterval(timer);
-        }
-        el.textContent = Math.floor(current);
-      }, 50);
-    }
-
-    // Trigger counter on load
-    const listingCount = document.getElementById('listingCount');
-    setTimeout(() => animateCounter(listingCount, 23), 500);
-
-    // Form submit
-    function handleSubmit(e) {
-      e.preventDefault();
-      alert('デモ用フォームです。このままでは送信されません。\n実際の運用では、メール送信処理やフォームサービスと接続してください。');
-    }
-  </script>
+// Initialize
+setLanguage('ja');
+</script>
 </body>
 </html>
