@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>SALON LINK不動産 | 美容師専門の店舗仲介</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="美容師資格を持つ宅建士が担当する、美容室・サロン専門の店舗仲介。釣り物件なし・24時間以内レスポンス・手数料は賃料1ヶ月までのシンプル設計。" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --bg-card: #020617;
+      --accent: #ec4899;
+      --accent-soft: rgba(236, 72, 153, 0.12);
+      --accent-strong: #f472b6;
+      --accent-alt: #38bdf8;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius-lg: 18px;
+      --radius-xl: 22px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+      --shadow-subtle: 0 12px 30px rgba(15, 23, 42, 0.6);
+      --max-width: 1100px;
+      --transition-fast: 0.18s ease-out;
+      --transition-med: 0.26s ease-out;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #111827 0, #020617 52%, #020617 100%);
+      color: var(--text);
+      scroll-behavior: smooth;
+    }
+
+    body { line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .page { min-height: 100vh; display: flex; flex-direction: column; }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.6rem;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to bottom,
+        rgba(2, 6, 23, 0.9),
+        rgba(2, 6, 23, 0.6),
+        transparent
+      );
+      border-bottom: 1px solid rgba(31, 41, 55, 0.8);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 0, #f9a8d4, #ec4899 40%, #22d3ee 80%);
+      box-shadow: 0 0 22px rgba(236, 72, 153, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Poppins", system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #020617;
+    }
+
+    .logo-main {
+      font-family: "Poppins", system-ui, sans-serif;
+      font-size: 1.02rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+
+    .logo-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      font-size: 0.88rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      position: relative;
+      padding: 0.1rem 0;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.2rem;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+      border-radius: 999px;
+      transition: width var(--transition-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.24);
+      padding: 0.4rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.12), transparent 55%);
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .nav-cta span.icon { font-size: 1rem; transform: translateY(1px); }
+
+    .nav-cta:hover {
+      border-color: rgba(248, 250, 252, 0.36);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.18), transparent 60%);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.8);
+      transform: translateY(-1px);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 3.2rem 0 3rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 2.4rem;
+      align-items: center;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .hero-pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #f9a8d4, #ec4899 45%, #22d3ee 90%);
+      box-shadow: 0 0 12px rgba(236, 72, 153, 0.8);
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 2.4vw + 1.4rem, 2.7rem);
+      line-height: 1.2;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-title span.accent {
+      background: linear-gradient(120deg, #f472b6, #22d3ee);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-lead {
+      font-size: 0.96rem;
+      color: var(--muted);
+      margin-bottom: 1.3rem;
+    }
+
+    .hero-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-point {
+      font-size: 0.78rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 0.25rem 0.7rem;
+      background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.18), transparent 60%);
+      color: var(--muted);
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      padding: 0.7rem 1.4rem;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      background: linear-gradient(120deg, #ec4899, #22d3ee);
+      color: #020617;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
+      transition: transform var(--transition-med), box-shadow var(--transition-med), filter var(--transition-med);
+    }
+
+    .btn-primary span.icon {
+      font-size: 1rem;
+      transform: translateY(1px);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+      box-shadow: 0 22px 50px rgba(15, 23, 42, 0.99);
+    }
+
+    .btn-primary:active { transform: translateY(0); box-shadow: none; }
+
+    .btn-outline {
+      border-radius: 999px;
+      padding: 0.7rem 1.2rem;
+      font-size: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-outline span.icon {
+      font-size: 1rem;
+      transform: translateY(1px);
+    }
+
+    .btn-outline:hover {
+      background: rgba(15, 23, 42, 1);
+      color: var(--text);
+      border-color: rgba(209, 213, 219, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .hero-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .hero-vis {
+      position: relative;
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.08), transparent 60%),
+        linear-gradient(150deg, #020617, #020617 55%, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      padding: 1.3rem 1.3rem 1.1rem;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .hero-card-title {
+      font-size: 0.86rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .hero-card-label {
+      font-size: 0.7rem;
+      padding: 0.24rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--muted);
+    }
+
+    .hero-card-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 1.1rem;
+      align-items: center;
+    }
+
+    .hero-metric-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .hero-metric-value {
+      font-size: 1.5rem;
+      margin-top: 0.2rem;
+      font-weight: 600;
+    }
+
+    .hero-metric-sub {
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .hero-pill-mini {
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.22rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.95);
+      margin-top: 0.5rem;
+      color: var(--muted);
+    }
+
+    .hero-pill-mini-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
+    }
+
+    .hero-listing {
+      font-size: 0.8rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.92);
+      padding: 0.6rem 0.8rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-listing-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 0.22rem;
+    }
+
+    .hero-listing-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .hero-badge-ribbon {
+      position: absolute;
+      right: -50px;
+      top: 18px;
+      transform: rotate(32deg);
+      background: linear-gradient(120deg, #22c55e, #a3e635);
+      color: #052e16;
+      font-size: 0.7rem;
+      padding: 0.24rem 2.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: center;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
+    }
+
+    .hero-card-foot {
+      margin-top: 0.8rem;
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-card-foot span.highlight {
+      color: var(--accent-strong);
+    }
+
+    .hero-float {
+      position: absolute;
+      left: 0.5rem;
+      bottom: -0.3rem;
+      padding: 0.42rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.98);
+      font-size: 0.74rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .hero-float span.icon { font-size: 0.85rem; }
+
+    /* Sections */
+    section { padding: 2.6rem 0; }
+
+    .section-head {
+      margin-bottom: 1.7rem;
+    }
+
+    .section-kicker {
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-lead {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* 3 promises */
+    .promise-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .promise-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.04), transparent 60%);
+      padding: 1rem;
+      box-shadow: var(--shadow-subtle);
+      position: relative;
+    }
+
+    .promise-label {
+      font-size: 0.7rem;
+      color: var(--accent-strong);
+      margin-bottom: 0.4rem;
+    }
+
+    .promise-title {
+      font-size: 0.96rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .promise-body {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    /* Compare */
+    .compare {
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: radial-gradient(circle at 0 0, rgba(236, 72, 153, 0.16), transparent 65%);
+      padding: 1.1rem 1.1rem 1rem;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.82rem;
+    }
+
+    .compare-title {
+      font-size: 0.96rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 0.5rem;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      border-bottom: 1px solid rgba(31, 41, 55, 0.85);
+      padding: 0.55rem 0.4rem;
+      text-align: left;
+    }
+
+    .compare-table th {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .compare-table td strong {
+      font-weight: 600;
+    }
+
+    .compare-tag-me {
+      font-size: 0.7rem;
+      border-radius: 999px;
+      padding: 0.16rem 0.6rem;
+      background: rgba(34, 197, 94, 0.32);
+      color: #bbf7d0;
+    }
+
+    .compare-tag-other {
+      font-size: 0.7rem;
+      border-radius: 999px;
+      padding: 0.16rem 0.6rem;
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--muted);
+    }
+
+    /* Listing */
+    .listing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .listing-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.06), transparent 60%);
+      overflow: hidden;
+      box-shadow: var(--shadow-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .listing-img {
+      height: 145px;
+      background: linear-gradient(135deg, #0f172a, #1f2937);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 0.8rem;
+    }
+
+    .listing-img-label {
+      font-size: 0.76rem;
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.22rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.85);
+    }
+
+    .listing-body {
+      padding: 0.9rem 0.9rem 0.8rem;
+      font-size: 0.82rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .listing-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .listing-title { font-size: 0.88rem; }
+    .listing-price { font-size: 0.9rem; font-weight: 600; color: var(--accent-alt); }
+
+    .listing-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    .listing-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.3rem;
+    }
+
+    .listing-tag {
+      font-size: 0.7rem;
+      padding: 0.18rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--muted);
+    }
+
+    /* Flow & FAQ */
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.4rem;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 0.8rem;
+      align-items: flex-start;
+      font-size: 0.83rem;
+    }
+
+    .step-index {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #f472b6, #22d3ee);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #020617;
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.85);
+    }
+
+    .step-title { font-size: 0.9rem; margin-bottom: 0.1rem; }
+    .step-body { color: var(--muted); }
+
+    .faq-box {
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: radial-gradient(circle at 0 0, rgba(15, 23, 42, 0.9), transparent 65%);
+      padding: 1rem 1rem 0.9rem;
+      box-shadow: var(--shadow-subtle);
+      font-size: 0.82rem;
+    }
+
+    .faq-item {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.85);
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-q {
+      font-size: 0.82rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .faq-a {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* Contact */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.4rem;
+    }
+
+    .profile-card {
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.06), transparent 60%);
+      padding: 1.1rem 1.1rem 1rem;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.84rem;
+    }
+
+    .profile-title { font-size: 0.98rem; margin-bottom: 0.3rem; }
+    .profile-body { color: var(--muted); margin-bottom: 0.6rem; }
+    .profile-meta { display: flex; flex-direction: column; gap: 0.1rem; }
+    .profile-meta strong { color: var(--text); }
+
+    .contact-form {
+      font-size: 0.82rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.23rem;
+    }
+
+    .field label { font-size: 0.8rem; }
+
+    .field input,
+    .field textarea,
+    .field select {
+      border-radius: 0.85rem;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text);
+      padding: 0.55rem 0.7rem;
+      font-size: 0.82rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+      resize: vertical;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #6b7280;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: rgba(236, 72, 153, 0.95);
+      box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.45);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .contact-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(31, 41, 55, 0.95);
+      margin-top: 1.6rem;
+      padding: 1.4rem 0 1.6rem;
+      background: radial-gradient(circle at 50% -40px, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.96));
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.9rem;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .footer-links a { transition: color var(--transition-fast); }
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-social {
+      display: flex;
+      gap: 0.55rem;
+    }
+
+    .footer-social a {
+      width: 23px;
+      height: 23px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+    }
+
+    .footer-social a:hover {
+      background: linear-gradient(120deg, #ec4899, #22d3ee);
+      border-color: transparent;
+      color: #020617;
+      transform: translateY(-1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: minmax(0, 1fr); }
+      .hero-vis { order: -1; }
+
+      .promise-grid,
+      .listing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .two-col,
+      .contact-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-float {
+        position: static;
+        margin-top: 0.7rem;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-toggle { display: block; }
+
+      .nav-links {
+        position: absolute;
+        inset: 100% 0 auto 0;
+        flex-direction: column;
+        background: rgba(2, 6, 23, 0.97);
+        border-bottom: 1px solid rgba(31, 41, 55, 0.95);
+        padding: 0.7rem 1.6rem 0.9rem;
+        transform-origin: top;
+        transform: scaleY(0.8);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-fast), transform var(--transition-fast);
+      }
+
+      .nav-links.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: scaleY(1);
+      }
+
+      .hero { padding-top: 2.4rem; }
+      .hero-card-main { grid-template-columns: minmax(0, 1fr); }
+
+      .promise-grid,
+      .listing-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a href="#top" class="logo">
+          <div class="logo-mark">SL</div>
+          <div>
+            <div class="logo-main">SALON LINK</div>
+            <div class="logo-sub">SALON REAL ESTATE</div>
+          </div>
+        </a>
+
+        <button class="nav-toggle" id="navToggle" aria-label="メニュー">
+          ☰
+        </button>
+
+        <nav class="nav-links" id="navLinks">
+          <a href="#concept">コンセプト</a>
+          <a href="#promise">3つの約束</a>
+          <a href="#compare">他社との違い</a>
+          <a href="#listings">物件例</a>
+          <a href="#contact" class="nav-cta">
+            <span>無料相談</span><span class="icon">→</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-pill">
+            <span class="hero-pill-dot"></span>
+            美容師のための店舗専門仲介
+          </div>
+          <h1 class="hero-title">
+            <span class="accent">釣り物件なし / 即レス / 手数料明快</span><br />
+            “ちゃんと現場が分かる”美容室専門不動産。
+          </h1>
+          <p class="hero-lead">
+            「問い合わせたら決まってた」「レスが遅い」「とりあえず高い物件を押される」――<br />
+            そんなストレスをなくすために作った、美容師による美容師のための店舗仲介です。
+          </p>
+
+          <div class="hero-points">
+            <div class="hero-point">釣り物件掲載<span style="font-weight:600;">ゼロ宣言</span></div>
+            <div class="hero-point">原則<span style="font-weight:600;">24時間以内レス</span></div>
+            <div class="hero-point">テナント側手数料：<span style="font-weight:600;">賃料1ヶ月分＋税まで</span></div>
+          </div>
+
+          <div class="hero-cta-row">
+            <button class="btn-primary" onclick="scrollToId('contact')">
+              無料で相談してみる <span class="icon">✉️</span>
+            </button>
+            <button class="btn-outline" onclick="scrollToId('compare')">
+              他社との違いを見る <span class="icon">→</span>
+            </button>
+          </div>
+
+          <p class="hero-note">
+            「開業するかまだ決めていない」「エリアもふわっとしている」状態からで大丈夫です。
+          </p>
+        </div>
+
+        <div class="hero-vis">
+          <div class="hero-card">
+            <div class="hero-card-header">
+              <div class="hero-card-title">SALON LINK DASHBOARD</div>
+              <div class="hero-card-label">リアルタイムで空き状況を確認</div>
+            </div>
+
+            <div class="hero-card-main">
+              <div>
+                <div class="hero-metric-label">いまご紹介可能なサロン区画（新宿〜吉祥寺）</div>
+                <div class="hero-metric-value">23件</div>
+                <div class="hero-metric-sub">15〜30坪 / 家賃〜35万円帯が中心</div>
+                <div class="hero-pill-mini">
+                  <span class="hero-pill-mini-dot"></span>
+                  掲載中＝原則まだ募集中。決まり次第ステータス更新。
+                </div>
+              </div>
+              <div>
+                <div class="hero-listing">
+                  <div class="hero-listing-head">
+                    <span>新宿三丁目｜路面・18坪</span>
+                    <span style="font-size:0.72rem;color:#a5b4fc;">募集中</span>
+                  </div>
+                  <div class="hero-listing-meta">
+                    <span>家賃：¥320,000</span>
+                    <span>セット面：4〜6席</span>
+                  </div>
+                </div>
+                <div class="hero-listing">
+                  <div class="hero-listing-head">
+                    <span>吉祥寺｜居抜き・22坪</span>
+                    <span style="font-size:0.72rem;color:#6ee7b7;">造作譲渡あり</span>
+                  </div>
+                  <div class="hero-listing-meta">
+                    <span>家賃：¥280,000</span>
+                    <span>即営業可</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-badge-ribbon">NO BAIT LISTINGS</div>
+
+            <div class="hero-card-foot">
+              <span>紹介前に<span class="highlight">必ず募集中か確認</span>します。</span>
+              <span>「興味あり」だけの段階でも下見OK。</span>
+            </div>
+          </div>
+
+          <div class="hero-float">
+            <span class="icon">⚡</span>
+            平日・土日問わず、原則24時間以内に必ず1回は返信します。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Concept -->
+    <section id="concept">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">CONCEPT</div>
+          <h2 class="section-title">「とりあえず大手ポータル」からの卒業</h2>
+          <p class="section-lead">
+            大手の美容室ポータルは、物件数は多いけれど、<br />
+            対応が遅い・釣り物件が多い・手数料や条件が見えづらい――そんな声も多く聞きます。<br />
+            SALON LINKは、<strong>小さくて速い、美容師寄りのブティック仲介</strong>として動きます。
+          </p>
+        </div>
+
+        <div class="promise-grid">
+          <div class="promise-card">
+            <div class="promise-label">POINT 01</div>
+            <div class="promise-title">美容師資格×宅建士がワンストップ担当</div>
+            <p class="promise-body">
+              現場の動線・メニュー構成・単価感を知ったうえで、<br />
+              「この家賃なら現実的にやっていけるか？」まで一緒に検証します。
+            </p>
+          </div>
+          <div class="promise-card">
+            <div class="promise-label">POINT 02</div>
+            <div class="promise-title">現場目線で「やめた方がいい」を言う</div>
+            <p class="promise-body">
+              手数料が欲しいから押し込む、はやりません。<br />
+              条件は良さそうでも、長期的に厳しいと判断した物件は<br />
+              <strong>「やめておきましょう」</strong> と正直にお伝えします。
+            </p>
+          </div>
+          <div class="promise-card">
+            <div class="promise-label">POINT 03</div>
+            <div class="promise-title">開業後も続く関係性</div>
+            <p class="promise-body">
+              オープン後の単価アップ・スタッフ増員・2号店出店など、<br />
+              物件の話以外も含めて長く相談できるパートナーを目指します。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 promises (明文化) -->
+    <section id="promise">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">OUR PROMISE</div>
+          <h2 class="section-title">SALON LINKの「3つの約束」</h2>
+          <p class="section-lead">
+            ここだけはブレずに守る、というルールを最初に決めています。
+          </p>
+        </div>
+
+        <div class="promise-grid">
+          <div class="promise-card">
+            <div class="promise-label">約束 01</div>
+            <div class="promise-title">釣り物件は掲載しません。</div>
+            <p class="promise-body">
+              決まっている物件をいつまでも掲載し続けたり、<br />
+              そもそも紹介する気のない「客寄せ用物件」は扱いません。<br />
+              募集終了時は原則即アーカイブします。
+            </p>
+          </div>
+          <div class="promise-card">
+            <div class="promise-label">約束 02</div>
+            <div class="promise-title">レスポンスは原則24時間以内。</div>
+            <p class="promise-body">
+              「問い合わせたのに返信が来ない」「数日放置される」をなくします。<br />
+              すぐ回答できない場合も、<strong>一度状況だけはご連絡</strong>します。
+            </p>
+          </div>
+          <div class="promise-card">
+            <div class="promise-label">約束 03</div>
+            <div class="promise-title">手数料と条件は最初から全部見せます。</div>
+            <p class="promise-body">
+              テナント様側の仲介手数料は、<strong>賃料1ヶ月分＋税まで</strong>。<br />
+              それ以上を頂く場合はありません。保証金・造作譲渡・その他費用も<br />
+              初回提案時点で一覧でお見せします。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compare -->
+    <section id="compare">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">DIFFERENCE</div>
+          <h2 class="section-title">一般的な大手ポータルとのちがい</h2>
+          <p class="section-lead">
+            実名を出さなくても、美容師さんは「あるある…」と思うポイントだと思います。<br />
+            SALON LINKは、あえて真逆に振っています。
+          </p>
+        </div>
+
+        <div class="compare">
+          <div class="compare-title">SALON LINK不動産 vs 一般的な大手サイト</div>
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>項目</th>
+                <th>SALON LINK</th>
+                <th>一般的な大手ポータル</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>対応スピード</td>
+                <td><strong>原則24時間以内に1度は返信</strong><br />LINE・メール・電話対応</td>
+                <td>担当者次第。<br />数日放置されることも。</td>
+              </tr>
+              <tr>
+                <td>掲載物件</td>
+                <td><span class="compare-tag-me">釣り物件なし宣言</span><br />決まり次第ステータス更新</td>
+                <td><span class="compare-tag-other">水増し・終了物件が混じる</span><br />「実はもう決まってて…」が起こりがち</td>
+              </tr>
+              <tr>
+                <td>仲介手数料</td>
+                <td><strong>テナント側：賃料1ヶ月＋税まで</strong><br />追加フィーなし</td>
+                <td>案件により上乗せフィーが発生することも</td>
+              </tr>
+              <tr>
+                <td>担当者のバックグラウンド</td>
+                <td>美容師資格＋宅建士<br />現場感と数字の両方で相談</td>
+                <td>不動産畑のみの担当者が中心</td>
+              </tr>
+              <tr>
+                <td>提案のスタイル</td>
+                <td>「やめた方がいい物件」はちゃんと止める</td>
+                <td>とりあえず申込を勧められるケースも</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size:0.8rem;color:var(--muted);margin:0.3rem 0 0;">
+            ※あくまで一般的な傾向の比較です。特定の企業を批判する意図はありません。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Listings -->
+    <section id="listings">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">LISTINGS SAMPLE</div>
+          <h2 class="section-title">取り扱い物件イメージ</h2>
+          <p class="section-lead">
+            実際の募集状況により変動しますが、イメージとしてはこのような物件をメインに扱います。<br />
+            最新情報は無料相談で個別にご案内します。
+          </p>
+        </div>
+
+        <div class="listing-grid">
+          <article class="listing-card">
+            <div class="listing-img">
+              <div class="listing-img-label">新宿三丁目 / 路面・18坪</div>
+            </div>
+            <div class="listing-body">
+              <div class="listing-head">
+                <div class="listing-title">駅徒歩3分の路面美容室向け区画</div>
+                <div class="listing-price">¥320,000</div>
+              </div>
+              <div class="listing-meta">
+                <span>保証金：8ヶ月</span>
+                <span>スケルトン</span>
+              </div>
+              <div class="listing-tags">
+                <span class="listing-tag">路面</span>
+                <span class="listing-tag">18坪</span>
+                <span class="listing-tag">セット面4〜6席想定</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="listing-card">
+            <div class="listing-img">
+              <div class="listing-img-label">吉祥寺 / 居抜き・22坪</div>
+            </div>
+            <div class="listing-body">
+              <div class="listing-head">
+                <div class="listing-title">セット面6 / シャンプー3台の居抜き</div>
+                <div class="listing-price">¥280,000</div>
+              </div>
+              <div class="listing-meta">
+                <span>造作譲渡：¥1,200,000</span>
+                <span>即営業可</span>
+              </div>
+              <div class="listing-tags">
+                <span class="listing-tag">居抜き</span>
+                <span class="listing-tag">22坪</span>
+                <span class="listing-tag">内装綺麗め</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="listing-card">
+            <div class="listing-img">
+              <div class="listing-img-label">三鷹 / 空中階・20坪</div>
+            </div>
+            <div class="listing-body">
+              <div class="listing-head">
+                <div class="listing-title">ガラス面広め・2階サロン区画</div>
+                <div class="listing-price">¥210,000</div>
+              </div>
+              <div class="listing-meta">
+                <span>保証金：6ヶ月</span>
+                <span>EVあり</span>
+              </div>
+              <div class="listing-tags">
+                <span class="listing-tag">2階</span>
+                <span class="listing-tag">20坪</span>
+                <span class="listing-tag">指名客メイン向け</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flow & FAQ -->
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">FLOW</div>
+          <h2 class="section-title">ご相談〜ご契約までの流れ</h2>
+          <p class="section-lead">
+            「まだ独立すると決めたわけじゃない」という段階からで大丈夫です。
+          </p>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="steps">
+              <div class="step">
+                <div class="step-index">1</div>
+                <div>
+                  <div class="step-title">ヒアリング（オンライン or 新宿オフィス）</div>
+                  <div class="step-body">
+                    いまの働き方・指名客数・メニュー・理想の働き方・エリア感などを、<br />
+                    美容師同士の感覚でざっくばらんにお伺いします。
+                  </div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-index">2</div>
+                <div>
+                  <div class="step-title">予算・エリア・坪数のすり合わせ</div>
+                  <div class="step-body">
+                    「この家賃なら現実的」「これは攻めすぎ」など、売上想定とセットで条件を整理。<br />
+                    居抜き / スケルトン両方を候補に入れます。
+                  </div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-index">3</div>
+                <div>
+                  <div class="step-title">物件提案・内見</div>
+                  <div class="step-body">
+                    オープン情報＋水面下の情報をまとめてご提案し、気になる物件を内見。<br />
+                    導線・席数・シャンプー位置なども、その場で一緒にイメージします。
+                  </div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-index">4</div>
+                <div>
+                  <div class="step-title">条件交渉〜ご契約</div>
+                  <div class="step-body">
+                    家賃・フリーレント・造作譲渡などの条件交渉もこちらで対応。<br />
+                    宅建士として契約内容をわかりやすくご説明します。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="faq-box">
+              <div style="font-size:0.9rem;margin-bottom:0.4rem;">よくあるご質問</div>
+
+              <div class="faq-item">
+                <div class="faq-q">Q. 相談や物件紹介にお金はかかりますか？</div>
+                <div class="faq-a">
+                  A. ご相談〜物件紹介〜内見までは<strong>完全無料</strong>です。<br />
+                  ご成約時に、一般的な仲介手数料（賃料1ヶ月分＋税）を頂きます。
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q">Q. 大手サイトに出ている物件もお願いできますか？</div>
+                <div class="faq-a">
+                  A. 物件によりますが、他社掲載物件をこちら側の窓口として扱えるケースもあります。<br />
+                  「このURLの物件どう？」と送っていただければ、お調べして正直にお伝えします。
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q">Q. 居抜きかスケルトンか決めていません。</div>
+                <div class="faq-a">
+                  A. 初期費用・ブランディング・今後の展開を踏まえて、複数パターンを数字で比較します。<br />
+                  最初からどちらか決めておく必要はありません。
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-q">Q. SNSやホームページが無い状態でも大丈夫ですか？</div>
+                <div class="faq-a">
+                  A. もちろん大丈夫です。むしろ物件が決まってから整えていく方が多いです。<br />
+                  必要であれば、信頼できる制作パートナーもご紹介可能です。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">CONTACT</div>
+          <h2 class="section-title">まずは一度、話してみませんか？</h2>
+          <p class="section-lead">
+            「独立しようか迷っている」「いつかはやりたい」くらいの温度感でも大歓迎です。<br />
+            まだ何も決まっていない段階から、一緒に整理していきましょう。
+          </p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="profile-card">
+            <div class="profile-title">代表プロフィール（仮）</div>
+            <p class="profile-body">
+              美容師として現場に立った経験と、宅地建物取引士としての知識を持ち合わせた<br />
+              「ちょっと変わった不動産屋」です。美容業界のリアルと数字の両方を踏まえて、<br />
+              <strong>無理のない一歩目</strong> を一緒に作っていきます。
+            </p>
+            <div class="profile-meta">
+              <div><strong>資格：</strong> 美容師 / 宅地建物取引士</div>
+              <div><strong>拠点：</strong> 新宿（オンラインにて全国対応可）</div>
+              <div><strong>対応エリア：</strong> 新宿〜吉祥寺〜三鷹ラインを中心に都内全域</div>
+              <div><strong>対応方法：</strong> LINE / Zoom / 対面（新宿オフィス）</div>
+            </div>
+          </div>
+
+          <div>
+            <form class="contact-form" onsubmit="handleFakeSubmit(event)">
+              <div class="field">
+                <label for="name">お名前</label>
+                <input id="name" type="text" placeholder="例）山田 太郎" required />
+              </div>
+              <div class="field">
+                <label for="contactMethod">ご連絡先（メール or LINE ID）</label>
+                <input id="contactMethod" type="text" placeholder="例）sample@example.com / LINE: @salonlink" required />
+              </div>
+              <div class="field">
+                <label for="topic">ご相談内容</label>
+                <select id="topic">
+                  <option>新規開業の相談</option>
+                  <option>移転・縮小の相談</option>
+                  <option>2号店・多店舗展開</option>
+                  <option>居抜き売却の相談</option>
+                  <option>その他</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="message">ざっくりとしたお悩み・ご希望</label>
+                <textarea id="message" rows="4" placeholder="例）吉祥寺〜三鷹あたりで、指名客中心の小さめサロンを検討中。家賃感覚から知りたいです。"></textarea>
+              </div>
+              <div>
+                <button type="submit" class="btn-primary">
+                  相談内容を送る <span class="icon">✉️</span>
+                </button>
+                <p class="contact-note">
+                  ※このフォームはデモです。実際の運用では、送信先メールや外部フォームサービスと接続してください。
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        <div style="margin-bottom:0.2rem;">&copy; <span id="year"></span> SALON LINK不動産（仮）</div>
+        <div>美容師のための店舗専門不動産パートナー。</div>
+      </div>
+      <div class="footer-links">
+        <a href="#top">TOP</a>
+        <a href="#concept">コンセプト</a>
+        <a href="#promise">3つの約束</a>
+        <a href="#compare">他社との違い</a>
+        <a href="#contact">お問い合わせ</a>
+      </div>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="X (Twitter)">X</a>
+        <a href="#" aria-label="LINE">L</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // 年表示
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // スムーススクロール
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
+
+  // SP用ナビ
+  const navToggle = document.getElementById("navToggle");
+  const navLinks = document.getElementById("navLinks");
+
+  navToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
+  });
+
+  navLinks.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+    });
+  });
+
+  // デモ用フォーム
+  function handleFakeSubmit(e) {
+    e.preventDefault();
+    alert("デモ用フォームです。このままでは送信されません。\nGitHubにアップ後、実際のメール送信処理やフォームサービスと接続してください。");
+  }
+</script>
+</body>
+</html>
