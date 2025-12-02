@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>BEAUTY BASE不動産 | 美容師専門の店舗仲介</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="美容室・サロンに特化した店舗専門不動産。新規開業・移転・居抜き売却まで、美容師資格を持つ宅建士がトータルサポートします。" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-soft: #0b1020;
+      --bg-card: #111827;
+      --accent: #ec4899;
+      --accent-soft: rgba(236, 72, 153, 0.12);
+      --accent-strong: #f472b6;
+      --accent-alt: #38bdf8;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.35);
+      --shadow-subtle: 0 12px 30px rgba(15, 23, 42, 0.35);
+      --max-width: 1120px;
+      --transition-fast: 0.18s ease-out;
+      --transition-med: 0.24s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 50%, #020617 100%);
+      color: var(--text);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* Layout */
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.6rem;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to bottom, rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.4), transparent);
+      border-bottom: 1px solid rgba(31, 41, 55, 0.7);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 16px;
+      background: radial-gradient(circle at 30% 0, #f9a8d4, #ec4899 35%, #22d3ee 75%);
+      box-shadow: 0 0 24px rgba(236, 72, 153, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #020617;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .logo-text-main {
+      font-family: "Poppins", system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+    }
+
+    .logo-text-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      padding: 0.2rem 0;
+      position: relative;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.2rem;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+      transition: width var(--transition-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.2);
+      padding: 0.45rem 1.1rem;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.12), transparent 52%);
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .nav-cta-btn span {
+      font-size: 1rem;
+      transform: translateY(1px);
+    }
+
+    .nav-cta-btn:hover {
+      border-color: rgba(248, 250, 252, 0.32);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.18), transparent 60%);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.8);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    /* Hero */
+
+    .hero {
+      padding: 3.4rem 0 3.2rem;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 2.4rem;
+      align-items: center;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #f9a8d4, #ec4899 45%, #22d3ee 90%);
+      box-shadow: 0 0 12px rgba(236, 72, 153, 0.8);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 2.3rem, 2.7rem);
+      line-height: 1.2;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-title span.accent {
+      background: linear-gradient(120deg, #f472b6, #22d3ee);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-lead {
+      color: var(--muted);
+      font-size: 0.96rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-badge {
+      font-size: 0.75rem;
+      padding: 0.26rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+      background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.15), transparent 55%);
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      padding: 0.7rem 1.3rem;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      background: linear-gradient(120deg, #ec4899, #22d3ee);
+      color: #020617;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
+      transition: transform var(--transition-med), box-shadow var(--transition-med), filter var(--transition-med);
+    }
+
+    .btn-primary span.icon {
+      font-size: 1rem;
+      transform: translateY(1px);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 22px 50px rgba(15, 23, 42, 0.95);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      padding: 0.7rem 1.2rem;
+      font-size: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.8);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-secondary span.icon {
+      font-size: 1rem;
+      transform: translateY(1px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(15, 23, 42, 1);
+      border-color: rgba(209, 213, 219, 0.9);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .hero-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .hero-media {
+      position: relative;
+    }
+
+    .hero-card {
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.08), transparent 65%), linear-gradient(145deg, #020617, #020617 50%, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 1.4rem 1.3rem;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .hero-card-title {
+      font-size: 0.86rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .hero-card-tag {
+      font-size: 0.68rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+    }
+
+    .hero-card-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 1.1rem;
+      align-items: center;
+    }
+
+    .hero-card-metric-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .hero-card-metric-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 0.1rem;
+    }
+
+    .hero-card-metric-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .hero-card-pill {
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-card-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .hero-card-listing {
+      font-size: 0.78rem;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: var(--radius-lg);
+      padding: 0.6rem 0.8rem;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-card-listing-title {
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+    }
+
+    .hero-card-listing-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .hero-card-ribbon {
+      position: absolute;
+      right: -52px;
+      top: 16px;
+      transform: rotate(38deg);
+      background: linear-gradient(120deg, #f97316, #facc15);
+      color: #111827;
+      font-size: 0.7rem;
+      padding: 0.2rem 2.5rem;
+      text-align: center;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
+    }
+
+    .hero-card-glow {
+      position: absolute;
+      inset: -80%;
+      background: radial-gradient(circle at 10% 0, rgba(236, 72, 153, 0.22), transparent 50%), radial-gradient(circle at 90% 0, rgba(56, 189, 248, 0.17), transparent 55%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .hero-floating-pill {
+      position: absolute;
+      bottom: -0.6rem;
+      left: 0.6rem;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .hero-floating-pill span.icon {
+      font-size: 0.9rem;
+    }
+
+    /* Sections */
+
+    section {
+      padding: 2.6rem 0;
+    }
+
+    .section-header {
+      margin-bottom: 1.8rem;
+    }
+
+    .section-kicker {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-lead {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.04), transparent 60%);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 1rem;
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-tag {
+      font-size: 0.7rem;
+      color: var(--accent-strong);
+      background: rgba(236, 72, 153, 0.08);
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-title {
+      font-size: 0.96rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .card-body {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .card-badge {
+      position: absolute;
+      right: 0.8rem;
+      top: 0.8rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    /* Listing section */
+
+    .listing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .listing-card {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.06), transparent 60%);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+      box-shadow: var(--shadow-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .listing-img {
+      height: 150px;
+      background: linear-gradient(135deg, #0f172a, #1f2937);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 0.8rem;
+      overflow: hidden;
+    }
+
+    .listing-img::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 10% 0, rgba(248, 250, 252, 0.12), transparent 65%);
+      opacity: 0.8;
+    }
+
+    .listing-img-label {
+      position: relative;
+      z-index: 2;
+      font-size: 0.78rem;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.72);
+      padding: 0.26rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+    }
+
+    .listing-body {
+      padding: 0.9rem 0.9rem 0.85rem;
+      font-size: 0.82rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .listing-title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .listing-title {
+      font-size: 0.88rem;
+    }
+
+    .listing-price {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent-alt);
+    }
+
+    .listing-meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.2rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .listing-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.3rem;
+    }
+
+    .listing-tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: var(--muted);
+    }
+
+    /* Flow */
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.4rem;
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 0.8rem;
+      align-items: flex-start;
+    }
+
+    .flow-step-index {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #f472b6, #22d3ee);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #020617;
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.8);
+    }
+
+    .flow-step-title {
+      font-size: 0.9rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .flow-step-body {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .flow-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+    }
+
+    .flow-highlight {
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at 0 0, rgba(236, 72, 153, 0.18), transparent 60%), radial-gradient(circle at 100% 0, rgba(56, 189, 248, 0.12), transparent 60%);
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      padding: 1rem;
+      font-size: 0.82rem;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .flow-highlight-title {
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+
+    /* FAQ */
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .faq-item {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.7rem 0.9rem;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .faq-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .faq-question {
+      font-size: 0.86rem;
+    }
+
+    .faq-toggle {
+      font-size: 1rem;
+      color: var(--muted);
+      transition: transform var(--transition-fast), color var(--transition-fast);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out, opacity 0.2s ease-out;
+      opacity: 0;
+      margin-top: 0.3rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .faq-item.open {
+      border-color: rgba(236, 72, 153, 0.8);
+      background: radial-gradient(circle at 0 0, rgba(236, 72, 153, 0.15), transparent 60%);
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      opacity: 1;
+    }
+
+    .faq-item.open .faq-toggle {
+      transform: rotate(90deg);
+      color: var(--accent-strong);
+    }
+
+    /* Contact */
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.4rem;
+    }
+
+    .contact-card {
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.06), transparent 60%);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 1.1rem 1.1rem 1rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .contact-card-title {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-card-body {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .contact-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .contact-meta strong {
+      color: var(--text);
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      font-size: 0.82rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .field label {
+      font-size: 0.8rem;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      border-radius: 0.8rem;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text);
+      padding: 0.55rem 0.7rem;
+      font-family: inherit;
+      font-size: 0.82rem;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+      resize: vertical;
+      min-height: 0;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #6b7280;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: rgba(236, 72, 153, 0.9);
+      box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.4);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .contact-submit {
+      margin-top: 0.3rem;
+      display: inline-flex;
+    }
+
+    .contact-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    /* Footer */
+
+    footer {
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 1.4rem 0 1.6rem;
+      margin-top: 1.4rem;
+      background: radial-gradient(circle at 50% -30px, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.95));
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      transition: color var(--transition-fast);
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .footer-social a {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .footer-social a:hover {
+      background: linear-gradient(120deg, #ec4899, #22d3ee);
+      border-color: transparent;
+      color: #020617;
+      transform: translateY(-1px);
+    }
+
+    /* Responsive */
+
+    @media (max-width: 960px) {
+      .hero-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-media {
+        order: -1;
+      }
+      .card-grid,
+      .listing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .flow-grid,
+      .contact-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        position: absolute;
+        inset: 100% 0 auto 0;
+        padding: 0.7rem 1.6rem 1rem;
+        flex-direction: column;
+        background: rgba(2, 6, 23, 0.96);
+        border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+        transform-origin: top;
+        transform: scaleY(0.8);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-fast), transform var(--transition-fast);
+      }
+
+      .nav-links.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: scaleY(1);
+      }
+
+      .hero {
+        padding-top: 2.4rem;
+      }
+
+      .hero-card-main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-floating-pill {
+        position: static;
+        margin-top: 0.8rem;
+      }
+
+      .card-grid,
+      .listing-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a href="#top" class="logo">
+          <div class="logo-mark">BB</div>
+          <div>
+            <div class="logo-text-main">BEAUTY BASE</div>
+            <div class="logo-text-sub">SALON REAL ESTATE</div>
+          </div>
+        </a>
+
+        <button class="nav-toggle" aria-label="メニューを開く" id="navToggle">
+          ☰
+        </button>
+
+        <nav class="nav-links" id="navLinks">
+          <a href="#concept">コンセプト</a>
+          <a href="#strength">選ばれる理由</a>
+          <a href="#listings">物件例</a>
+          <a href="#flow">ご相談の流れ</a>
+          <a href="#contact" class="nav-cta-btn">
+            無料相談 <span>→</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <div class="hero-pill">
+            <span class="hero-pill-dot"></span>
+            美容師のための店舗専門不動産
+          </div>
+          <h1 class="hero-title">
+            <span class="accent">美容師資格を持つ宅建士</span>が<br />
+            あなたのサロン物件を本気で探します。
+          </h1>
+          <p class="hero-lead">
+            新規開業・移転・縮小・二号店出店まで。<br />
+            美容師のリアルを知るパートナーが、
+            <strong>居抜き・路面・空中階</strong> まで最適な一件をご提案します。
+          </p>
+
+          <div class="hero-badges">
+            <div class="hero-badge">美容室・サロン特化</div>
+            <div class="hero-badge">完全無料相談</div>
+            <div class="hero-badge">テナント×不動産 両方の視点</div>
+          </div>
+
+          <div class="hero-cta-group">
+            <button class="btn-primary" onclick="scrollToId('contact')">
+              無料相談する <span class="icon">✉️</span>
+            </button>
+            <button class="btn-secondary" onclick="scrollToId('listings')">
+              物件例を見る <span class="icon">→</span>
+            </button>
+          </div>
+
+          <p class="hero-note">
+            LINE・Zoom・対面、すべてOK。まだイメージだけでもお気軽にご相談ください。
+          </p>
+        </div>
+
+        <div class="hero-media">
+          <div class="hero-card">
+            <div class="hero-card-header">
+              <div class="hero-card-title">SALON MATCH DASHBOARD</div>
+              <div class="hero-card-tag">BEAUTY BASE 専用</div>
+            </div>
+
+            <div class="hero-card-main">
+              <div>
+                <div class="hero-card-metric-label">平均家賃コントロール</div>
+                <div class="hero-card-metric-value">¥248,000</div>
+                <div class="hero-card-metric-sub">新宿・渋谷・吉祥寺エリア / 15〜25坪</div>
+
+                <div style="margin-top: 0.8rem;">
+                  <div class="hero-card-pill">
+                    <span class="hero-card-pill-dot"></span>
+                    居抜き×スケルトン 並行提案
+                  </div>
+                  <div class="hero-card-metric-sub">
+                    家賃・導線・内装コストをトータルで最適化。
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="hero-card-listing">
+                  <div class="hero-card-listing-title">
+                    <span>新宿三丁目｜路面・18坪</span>
+                    <span style="font-size:0.72rem;color:#a5b4fc;">募集中</span>
+                  </div>
+                  <div class="hero-card-listing-meta">
+                    <span>家賃：¥320,000</span>
+                    <span>セット面：4〜6席</span>
+                  </div>
+                </div>
+                <div class="hero-card-listing">
+                  <div class="hero-card-listing-title">
+                    <span>吉祥寺｜居抜き・22坪</span>
+                    <span style="font-size:0.72rem;color:#6ee7b7;">造作譲渡あり</span>
+                  </div>
+                  <div class="hero-card-listing-meta">
+                    <span>家賃：¥280,000</span>
+                    <span>セット面：5〜8席</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-card-glow"></div>
+            <div class="hero-card-ribbon">SALON SPECIALIZED</div>
+
+            <div class="hero-floating-pill">
+              <span class="icon">💡</span>
+              美容師さん側の「言いにくい条件」まで全部ヒアリングします。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Concept -->
+    <section id="concept">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">CONCEPT</div>
+          <h2 class="section-title">美容師のキャリアに寄り添う店舗パートナー</h2>
+          <p class="section-lead">
+            「とりあえず不動産屋で…」ではなく、<br />
+            美容師の動線・メニュー・スタッフ構成まで理解した上で物件選びをする。<br />
+            BEAUTY BASEは、そんな “業界目線の店舗仲介” を目指しています。
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <div class="card">
+            <span class="card-badge">POINT 01</span>
+            <div class="card-tag">美容師資格 × 宅建士</div>
+            <div class="card-title">「この物件で本当にやっていける？」を一緒に考える</div>
+            <p class="card-body">
+              美容室勤務経験＋宅建資格の視点で、
+              <strong>家賃・席数・回転率・単価</strong> をセットで設計。
+              ただ「決まればOK」ではなく、長く続くサロンづくりを前提にご提案します。
+            </p>
+          </div>
+
+          <div class="card">
+            <span class="card-badge">POINT 02</span>
+            <div class="card-tag">エリア特化</div>
+            <div class="card-title">新宿〜吉祥寺ラインにフォーカス</div>
+            <p class="card-body">
+              新宿・代々木・高田馬場・中野・吉祥寺・三鷹など、
+              美容室が密集するエリアに絞って情報収集。
+              地場のオーナー様や管理会社とのネットワークを活かした “水面下物件” もお探しします。
+            </p>
+          </div>
+
+          <div class="card">
+            <span class="card-badge">POINT 03</span>
+            <div class="card-tag">居抜き・スケルトン両対応</div>
+            <div class="card-title">内装コストも含めてトータルで比較</div>
+            <p class="card-body">
+              「最初は居抜きでコストを抑える」「フルリノベでブランドを作る」など、
+              複数パターンをシミュレーション。
+              内装会社の紹介も含めて、総予算からの逆算で物件を絞り込みます。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strength -->
+    <section id="strength">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">WHY BEAUTY BASE</div>
+          <h2 class="section-title">BEAUTY BASEが選ばれる理由</h2>
+          <p class="section-lead">
+            一般的な不動産会社との違いを、シンプルに3つにまとめました。
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">01｜数字と感覚の両方で判断</div>
+            <p class="card-body">
+              家賃・保証金・内装費などの「数字」と、
+              日々の営業動線・空気感・光・音などの「感覚」。
+              どちらも大事だからこそ、数字だけ・雰囲気だけで決めません。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title">02｜「断る勇気」を持った仲介</div>
+            <p class="card-body">
+              条件は良く見えるけれど、長期的には厳しいと判断した物件は、
+              こちらから「やめておきましょう」とお伝えします。
+              短期の手数料よりも、あなたのキャリアが最優先です。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title">03｜開業後もつながる関係性</div>
+            <p class="card-body">
+              空き時間の活用・単価アップ・2号店のタイミングなど、
+              開業してからのご相談こそ歓迎です。
+              美容師として・経営者としてのステージに合わせて伴走します。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Listing examples -->
+    <section id="listings">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">LISTINGS SAMPLE</div>
+          <h2 class="section-title">取り扱い物件イメージ</h2>
+          <p class="section-lead">
+            実際の募集状況に応じて変動しますが、イメージとしてはこのような物件をメインに扱っています。<br />
+            実際の最新情報は、無料相談にて個別にご案内します。
+          </p>
+        </div>
+
+        <div class="listing-grid">
+          <article class="listing-card">
+            <div class="listing-img">
+              <div class="listing-img-label">新宿三丁目 / 路面・18坪</div>
+            </div>
+            <div class="listing-body">
+              <div class="listing-title-row">
+                <div class="listing-title">駅徒歩3分の路面美容室向け区画</div>
+                <div class="listing-price">¥320,000</div>
+              </div>
+              <div class="listing-meta-row">
+                <span>保証金：8ヶ月</span>
+                <span>スケルトン</span>
+              </div>
+              <div class="listing-tags">
+                <span class="listing-tag">路面</span>
+                <span class="listing-tag">18坪</span>
+                <span class="listing-tag">セット面4〜6席</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="listing-card">
+            <div class="listing-img">
+              <div class="listing-img-label">吉祥寺 / 居抜き・22坪</div>
+            </div>
+            <div class="listing-body">
+              <div class="listing-title-row">
+                <div class="listing-title">セット面6・シャンプー3台の居抜き</div>
+                <div class="listing-price">¥280,000</div>
+              </div>
+              <div class="listing-meta-row">
+                <span>造作譲渡：¥1,200,000</span>
+                <span>即営業可</span>
+              </div>
+              <div class="listing-tags">
+                <span class="listing-tag">居抜き</span>
+                <span class="listing-tag">22坪</span>
+                <span class="listing-tag">内装美</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="listing-card">
+            <div class="listing-img">
+              <div class="listing-img-label">三鷹 / 空中階・20坪</div>
+            </div>
+            <div class="listing-body">
+              <div class="listing-title-row">
+                <div class="listing-title">二階・ガラス面広めのサロン区画</div>
+                <div class="listing-price">¥210,000</div>
+              </div>
+              <div class="listing-meta-row">
+                <span>保証金：6ヶ月</span>
+                <span>エレベーター有</span>
+              </div>
+              <div class="listing-tags">
+                <span class="listing-tag">2階</span>
+                <span class="listing-tag">20坪</span>
+                <span class="listing-tag">指名客メイン向け</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flow & FAQ -->
+    <section id="flow">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">FLOW</div>
+          <h2 class="section-title">ご相談〜ご契約までの流れ</h2>
+          <p class="section-lead">
+            「まだ何も決まっていない…」という段階からで問題ありません。
+          </p>
+        </div>
+
+        <div class="flow-grid">
+          <div>
+            <div class="flow-steps">
+              <div class="flow-step">
+                <div class="flow-step-index">1</div>
+                <div>
+                  <div class="flow-step-title">ヒアリング（オンライン or 対面）</div>
+                  <div class="flow-step-body">
+                    現在の働き方・エリア・メニュー・単価・スタッフ人数・理想の働き方などを、
+                    美容師同士の感覚でざっくばらんにお伺いします。
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-step">
+                <div class="flow-step-index">2</div>
+                <div>
+                  <div class="flow-step-title">エリア・予算のすり合わせ</div>
+                  <div class="flow-step-body">
+                    家賃だけでなく、想定売上・回転率・内装費なども踏まえて、
+                    「現実的に戦える条件」を一緒に整理します。
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-step">
+                <div class="flow-step-index">3</div>
+                <div>
+                  <div class="flow-step-title">物件のご提案・内見</div>
+                  <div class="flow-step-body">
+                    オープン情報＋水面下情報をまとめてご提案し、気になる物件を内見。
+                    導線やセット面配置などもその場で相談しながら確認します。
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-step">
+                <div class="flow-step-index">4</div>
+                <div>
+                  <div class="flow-step-title">条件交渉〜ご契約</div>
+                  <div class="flow-step-body">
+                    家賃・フリーレント・造作譲渡などの条件交渉もお任せください。
+                    宅建士として、契約内容も丁寧にご説明します。
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="flow-note">
+              ※オープン後も、増席・移転・2号店出店など、継続的なご相談が可能です。
+            </p>
+          </div>
+
+          <div>
+            <div class="flow-highlight">
+              <div class="flow-highlight-title">よくあるご質問</div>
+              <div class="faq-list">
+                <div class="faq-item">
+                  <div class="faq-item-header">
+                    <div class="faq-question">Q. 相談や物件紹介に費用はかかりますか？</div>
+                    <div class="faq-toggle">›</div>
+                  </div>
+                  <div class="faq-answer">
+                    A. テナント様からのご相談・物件紹介は<strong>完全無料</strong>です。<br />
+                    ご成約時にのみ、一般的な仲介手数料（賃料1ヶ月分＋税）を頂いております。
+                  </div>
+                </div>
+
+                <div class="faq-item">
+                  <div class="faq-item-header">
+                    <div class="faq-question">Q. まだ開業時期もエリアも決まっていません…</div>
+                    <div class="faq-toggle">›</div>
+                  </div>
+                  <div class="faq-answer">
+                    A. その段階からのご相談のほうが、むしろ歓迎です。<br />
+                    キャリアプランや働き方のイメージから、一緒に整理していきましょう。
+                  </div>
+                </div>
+
+                <div class="faq-item">
+                  <div class="faq-item-header">
+                    <div class="faq-question">Q. 居抜きかスケルトンか迷っています。</div>
+                    <div class="faq-toggle">›</div>
+                  </div>
+                  <div class="faq-answer">
+                    A. 初期費用・内装の自由度・ブランド戦略などを踏まえて、
+                    複数パターンを数字で比較しながらご提案します。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">CONTACT</div>
+          <h2 class="section-title">まずは「話してみる」ところから</h2>
+          <p class="section-lead">
+            いきなり物件を決める必要はありません。<br />
+            開業・移転についての「モヤモヤ」を言語化するところから、一緒に始めましょう。
+          </p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3 class="contact-card-title">代表プロフィール</h3>
+            <p class="contact-card-body">
+              美容師としての現場経験と、宅地建物取引士としての専門知識を掛け合わせて、<br />
+              「美容師のキャリアが続きやすい物件選び」をサポートします。
+            </p>
+            <div class="contact-meta">
+              <div><strong>資格：</strong> 美容師 / 宅地建物取引士</div>
+              <div><strong>対応エリア：</strong> 新宿〜吉祥寺〜三鷹ラインを中心に都内全域</div>
+              <div><strong>対応方法：</strong> オンライン（Zoom・LINE） / 新宿オフィス / 現地待ち合わせ</div>
+            </div>
+          </div>
+
+          <div>
+            <form class="contact-form" onsubmit="handleFakeSubmit(event)">
+              <div class="field">
+                <label for="name">お名前</label>
+                <input id="name" type="text" placeholder="例）山田 太郎" required />
+              </div>
+
+              <div class="field">
+                <label for="contactMethod">ご連絡先（メール or LINE ID）</label>
+                <input id="contactMethod" type="text" placeholder="例）sample@example.com / LINE: @salonbase" required />
+              </div>
+
+              <div class="field">
+                <label for="topic">ご相談内容の種類</label>
+                <select id="topic">
+                  <option>新規開業の相談</option>
+                  <option>移転・縮小の相談</option>
+                  <option>2号店・多店舗展開</option>
+                  <option>居抜き売却の相談</option>
+                  <option>その他</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="message">ご相談内容（ざっくりでOKです）</label>
+                <textarea id="message" rows="4" placeholder="例）吉祥寺〜三鷹あたりで、指名客メインの小さめサロンを考えています。家賃の目安から相談したいです。"></textarea>
+              </div>
+
+              <div class="contact-submit">
+                <button type="submit" class="btn-primary">
+                  送信する <span class="icon">✉️</span>
+                </button>
+              </div>
+              <p class="contact-note">
+                ※このフォームはデモです。実際の運用では、フォーム送信先（メール・外部サービス）を設定してください。
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        <div style="font-size:0.8rem;margin-bottom:0.2rem;">&copy; <span id="year"></span> BEAUTY BASE不動産（仮）</div>
+        <div>美容師のための店舗専門不動産パートナー。</div>
+      </div>
+      <div class="footer-links">
+        <a href="#top">TOP</a>
+        <a href="#concept">コンセプト</a>
+        <a href="#strength">選ばれる理由</a>
+        <a href="#listings">物件例</a>
+        <a href="#contact">お問い合わせ</a>
+      </div>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="X (Twitter)">X</a>
+        <a href="#" aria-label="LINE">L</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // 年表示
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // スムーススクロール
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 72;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
+
+  // ナビゲーション（SP）
+  const navToggle = document.getElementById("navToggle");
+  const navLinks = document.getElementById("navLinks");
+
+  navToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
+  });
+
+  navLinks.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+    });
+  });
+
+  // FAQ開閉
+  document.querySelectorAll(".faq-item").forEach((item) => {
+    item.addEventListener("click", () => {
+      const isOpen = item.classList.contains("open");
+      document.querySelectorAll(".faq-item").forEach((i) => i.classList.remove("open"));
+      if (!isOpen) item.classList.add("open");
+    });
+  });
+
+  // デモ用：送信イベント
+  function handleFakeSubmit(e) {
+    e.preventDefault();
+    alert("デモ用フォームのため、このままでは送信されません。\nGitHubにアップ後、実際のメール送信処理を接続してください。");
+  }
+</script>
+</body>
+</html>
