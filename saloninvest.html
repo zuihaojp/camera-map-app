@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>INVESTOR | SALON LINK不動産 投資家向けご案内</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="美容師専門の店舗仲介『SALON LINK不動産』投資家向けLP。美容室マーケットに特化した総合不動産モデルと、出資1500万円・利益配当15%の投資条件について。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --accent: #ec4899;
+      --accent-alt: #22d3ee;
+      --accent-soft: rgba(236, 72, 153, 0.14);
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius-lg: 18px;
+      --radius-xl: 22px;
+      --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.55);
+      --shadow-subtle: 0 14px 32px rgba(15, 23, 42, 0.6);
+      --max-width: 1040px;
+      --transition-fast: 0.18s ease-out;
+      --transition-med: 0.25s ease-out;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #111827 0, #020617 52%, #020617 100%);
+      color: var(--text);
+      scroll-behavior: smooth;
+    }
+
+    body { line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .page { min-height: 100vh; display: flex; flex-direction: column; }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.6rem;
+    }
+
+    /* Header */
+    header {
+      padding: 1rem 0 0.6rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 0, #f9a8d4, #ec4899 40%, #22d3ee 80%);
+      box-shadow: 0 0 22px rgba(236, 72, 153, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Poppins", system-ui, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #020617;
+    }
+
+    .logo-main {
+      font-family: "Poppins", system-ui, sans-serif;
+      font-size: 1.02rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+
+    .logo-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .header-pill {
+      font-size: 0.75rem;
+      padding: 0.32rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .header-link {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-underline-offset: 4px;
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+
+    .header-link:hover { color: var(--text); }
+
+    /* Hero */
+
+    .hero {
+      padding: 1rem 0 2.4rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 2.2rem;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.9rem, 2.2vw + 1.3rem, 2.3rem);
+      line-height: 1.25;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-title span.accent {
+      background: linear-gradient(120deg, #f472b6, #22d3ee);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    .hero-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-highlight {
+      font-size: 0.78rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.15), transparent 60%);
+      color: var(--muted);
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      background: linear-gradient(120deg, #ec4899, #22d3ee);
+      color: #020617;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+      transition: transform var(--transition-med), box-shadow var(--transition-med), filter var(--transition-med);
+    }
+
+    .btn-primary span.icon {
+      font-size: 1rem;
+      transform: translateY(1px);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+      box-shadow: 0 22px 52px rgba(15, 23, 42, 1);
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      padding: 0.7rem 1.2rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--muted);
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-secondary span.icon {
+      font-size: 1rem;
+      transform: translateY(1px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(15, 23, 42, 1);
+      color: var(--text);
+      border-color: rgba(209, 213, 219, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .hero-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .hero-card {
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background:
+        radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.08), transparent 65%),
+        linear-gradient(150deg, #020617, #020617 60%, #020617);
+      padding: 1.2rem 1.1rem 1rem;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.82rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .hero-card-title {
+      font-size: 0.88rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .hero-card-tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.75);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--muted);
+    }
+
+    .hero-card-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+    }
+
+    .metric-label {
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .metric-main {
+      font-size: 1.4rem;
+      margin-top: 0.1rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .metric-main strong { font-weight: 600; }
+
+    .metric-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .metric-pill {
+      margin-top: 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 0.22rem 0.65rem;
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--muted);
+    }
+
+    .metric-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.2rem;
+    }
+
+    .mini-table td {
+      padding: 0.25rem 0;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.85);
+      font-size: 0.78rem;
+    }
+
+    .mini-table td:first-child {
+      color: var(--muted);
+      width: 56%;
+    }
+
+    .mini-table td:last-child {
+      text-align: right;
+      font-weight: 500;
+    }
+
+    .hero-card-foot {
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .hero-card-foot span.highlight {
+      color: var(--accent);
+    }
+
+    .hero-ribbon {
+      position: absolute;
+      right: -52px;
+      top: 16px;
+      transform: rotate(32deg);
+      background: linear-gradient(120deg, #22c55e, #a3e635);
+      color: #052e16;
+      font-size: 0.7rem;
+      padding: 0.22rem 2.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.95);
+      text-align: center;
+    }
+
+    /* Sections */
+
+    section { padding: 2.4rem 0; }
+
+    .section-head {
+      margin-bottom: 1.3rem;
+    }
+
+    .section-kicker {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.3rem;
+    }
+
+    .section-lead {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    /* 2column sections */
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.4rem;
+    }
+
+    /* Business model */
+
+    .box {
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.06), transparent 60%);
+      padding: 1.1rem 1.1rem 1rem;
+      box-shadow: var(--shadow-subtle);
+      font-size: 0.82rem;
+    }
+
+    .box-title {
+      font-size: 0.94rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .box-body {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .list {
+      margin: 0.4rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .list li { margin-bottom: 0.2rem; }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--muted);
+    }
+
+    /* Use of funds / returns */
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+    }
+
+    .table th,
+    .table td {
+      padding: 0.4rem 0.2rem;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      text-align: left;
+    }
+
+    .table th {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.78rem;
+    }
+
+    .table td:last-child {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .badge-soft {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--muted);
+      margin-top: 0.45rem;
+    }
+
+    .badge-soft span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    /* Risks & FAQ */
+
+    .list-number {
+      margin: 0.4rem 0 0;
+      padding-left: 1.2rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .list-number li { margin-bottom: 0.3rem; }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      font-size: 0.82rem;
+    }
+
+    .faq-item {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: rgba(15, 23, 42, 0.96);
+      padding: 0.6rem 0.8rem;
+    }
+
+    .faq-q { font-size: 0.84rem; margin-bottom: 0.2rem; }
+    .faq-a { font-size: 0.8rem; color: var(--muted); }
+
+    /* Contact for investor */
+
+    .contact-box {
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: radial-gradient(circle at 0 0, rgba(236, 72, 153, 0.17), transparent 65%);
+      padding: 1.1rem 1.1rem 1rem;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.82rem;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      align-items: center;
+      margin-top: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .contact-tag {
+      font-size: 0.78rem;
+      padding: 0.24rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.75);
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .contact-note {
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    /* Footer */
+
+    footer {
+      border-top: 1px solid rgba(31, 41, 55, 0.95);
+      margin-top: 1.8rem;
+      padding: 1.2rem 0 1.4rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .footer-links a { transition: color var(--transition-fast); }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: minmax(0, 1fr); }
+      .hero-card { margin-top: 0.8rem; }
+      .two-col { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding-top: 0.6rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="nav">
+        <div class="logo">
+          <div class="logo-mark">SL</div>
+          <div>
+            <div class="logo-main">SALON LINK</div>
+            <div class="logo-sub">INVESTOR BRIEF</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.25rem;">
+          <div class="header-pill">投資家様向け 概要資料（ドラフト）</div>
+          <a href="../" class="header-link">← サービスサイトへ戻る（美容師向け）</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-kicker">INVESTMENT OUTLINE</div>
+          <h1 class="hero-title">
+            <span class="accent">美容室 × 不動産</span> に特化した<br />
+            小さくて速い“ブティック仲介”への出資のご案内。
+          </h1>
+          <p class="hero-sub">
+            美容師資格＋宅建士を持つ代表が新宿に構える、<br />
+            美容室・サロン特化の小さな総合不動産事業。<br />
+            初期出資<span style="font-weight:600;">1,500万円</span>を起点に、銀行・公庫融資をレバレッジし、<br />
+            年間利益800〜1,500万円規模を目指します。
+          </p>
+
+          <div class="hero-highlights">
+            <div class="hero-highlight">出資額：1,500万円（予定）</div>
+            <div class="hero-highlight">配当：当期純利益の<span style="font-weight:600;">15%</span>（配当型）</div>
+            <div class="hero-highlight">モデル：仲介＋管理＋自社賃貸のストック型</div>
+          </div>
+
+          <div class="hero-cta">
+            <button class="btn-primary" onclick="scrollToId('model')">
+              事業モデルを見る <span class="icon">↓</span>
+            </button>
+            <button class="btn-secondary" onclick="scrollToId('returns')">
+              収益・リターン前提を見る <span class="icon">→</span>
+            </button>
+          </div>
+
+          <p class="hero-note">
+            ※本ページはドラフトです。実際の条件・数値は個別面談のうえ調整いたします。
+          </p>
+        </div>
+
+        <div>
+          <div class="hero-card">
+            <div class="hero-card-header">
+              <div class="hero-card-title">INVESTMENT SNAPSHOT</div>
+              <div class="hero-card-tag">概要イメージ</div>
+            </div>
+
+            <div class="hero-card-grid">
+              <div>
+                <div class="metric-label">想定初期出資額</div>
+                <div class="metric-main"><strong>¥15,000,000</strong></div>
+                <div class="metric-sub">主に新宿オフィス・広告・運転資金に充当</div>
+
+                <div style="margin-top:0.7rem;">
+                  <div class="metric-label">想定レバレッジ</div>
+                  <div class="metric-main" style="font-size:1.1rem;margin-bottom:0;">
+                    出資＋銀行・公庫融資で<span style="font-weight:600;">〜6,000万円規模</span>の事業へ
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <table class="mini-table">
+                  <tr>
+                    <td>投資スキーム</td>
+                    <td>配当型（疑似エクイティ）</td>
+                  </tr>
+                  <tr>
+                    <td>配当ポリシー</td>
+                    <td>当期純利益の<span style="font-weight:600;">15%</span></td>
+                  </tr>
+                  <tr>
+                    <td>事業ステージ</td>
+                    <td>立ち上げ〜初期拡大</td>
+                  </tr>
+                  <tr>
+                    <td>領域</td>
+                    <td>美容室・サロン × 不動産</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="hero-card-foot">
+              <span>出資金は<strong class="highlight">赤字補填や生活費には一切使用せず</strong>、</span>
+              <span>すべて売上に直結する投資（オフィス・広告・人件費）に限定します。</span>
+            </div>
+
+            <div class="hero-ribbon">NO DEBT REPAYMENT / DIVIDEND ONLY</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Model & Market -->
+    <section id="model">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">BUSINESS MODEL</div>
+          <h2 class="section-title">なぜ「美容師専門の店舗仲介」か</h2>
+          <p class="section-lead">
+            物件の数だけで勝負するのではなく、<br />
+            美容業界への深い理解と、不動産の専門性を掛け合わせた“ニッチ特化”型のモデルです。
+          </p>
+        </div>
+
+        <div class="two-col" style="margin-bottom:1.4rem;">
+          <div class="box">
+            <div class="box-title">① 収益の柱：5つのストリーム</div>
+            <div class="box-body">
+              <ol class="list-number">
+                <li><strong>賃貸仲介：</strong> 新宿〜吉祥寺〜三鷹の住宅＋店舗仲介（月5件想定）</li>
+                <li><strong>美容室専門仲介：</strong> 居抜き・移転・M&A手前の店舗仲介（月1件〜）</li>
+                <li><strong>売買仲介：</strong> 5,000万〜1億クラスの区分・一棟・店舗の売買仲介</li>
+                <li><strong>管理：</strong> 管理物件の家賃5%前後をストック収入として積み上げ</li>
+                <li><strong>自社賃貸：</strong> 代表実家等の不動産を活用した自社保有物件の家賃収入</li>
+              </ol>
+              <div class="pill-row">
+                <span class="pill">フィー型（仲介）＋ ストック型（管理・自社賃貸）のハイブリッド</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="box">
+            <div class="box-title">② 差別化要素：美容師資格＋宅建士</div>
+            <div class="box-body">
+              一般的な不動産会社は「不動産の目線」しか持たない一方で、<br />
+              当社は代表が<strong>美容師免許＋宅地建物取引士</strong>を保有し、美容室の現場感と不動産の数字の両方から意思決定が可能です。
+              <ul class="list">
+                <li>セット面数・単価・回転率から見た「現実的な家賃ライン」の提案</li>
+                <li>居抜き・スケルトン・造作譲渡など、美容室ならではの論点整理</li>
+                <li>美容師コミュニティ・ディーラー・既存オーナーからの紹介が期待できる構造</li>
+              </ul>
+              <div class="pill-row">
+                <span class="pill">“サロン不動産にモヤモヤした人”の受け皿になるポジション</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">③ 市場感とポジショニング</div>
+          <div class="box-body">
+            <ul class="list">
+              <li>全国の美容室軒数はコンビニの約2倍と言われ、開業・移転・閉店が常時発生するマーケット。</li>
+              <li>既存の大手サロンポータルは「物件ポータル」としては強い一方、
+                <br />・レスポンスが遅い / 釣り物件が多い / 条件が不透明 という不満が美容師側に蓄積。</li>
+              <li>当社は「あえて小規模」を維持し、<strong>レスポンスの速さ・情報の正直さ・手数料のシンプルさ</strong>で勝負。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use of funds & Returns -->
+    <section id="returns">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">CAPITAL & RETURNS</div>
+          <h2 class="section-title">資金使途とリターンのイメージ</h2>
+          <p class="section-lead">
+            「何にいくら使うのか」「どのようにリターンを設計するのか」をシンプルに整理します。
+          </p>
+        </div>
+
+        <div class="two-col">
+          <div class="box">
+            <div class="box-title">① 出資1,500万円の使途イメージ</div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>項目</th>
+                  <th>金額（概算）</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>新宿オフィス初期費用（保証金・内装・備品）</td>
+                  <td>¥1,500,000〜2,500,000</td>
+                </tr>
+                <tr>
+                  <td>宅建協会加入・各種登録費</td>
+                  <td>¥1,000,000〜1,500,000</td>
+                </tr>
+                <tr>
+                  <td>ポータル・広告投資（SUUMO等 / 半年〜1年分）</td>
+                  <td>¥2,000,000〜3,000,000</td>
+                </tr>
+                <tr>
+                  <td>HP・ブランド・SNS運用基盤</td>
+                  <td>¥500,000〜1,000,000</td>
+                </tr>
+                <tr>
+                  <td>営業交通費・雑費</td>
+                  <td>¥300,000〜500,000</td>
+                </tr>
+                <tr>
+                  <td><strong>運転資金（家賃・人件費など）</strong></td>
+                  <td><strong>¥6,000,000〜7,000,000</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="badge-soft">
+              <span class="dot"></span>
+              出資金は「初期投資＋半年〜1年分の安全運転資金」に充当し、<br />
+              キャッシュアウトリスクを極力下げます。
+            </div>
+          </div>
+
+          <div class="box">
+            <div class="box-title">② 年間収益・配当のシンプルな前提</div>
+            <div class="box-body">
+              あくまで概算ですが、下記のようなレンジをイメージしています（税引前ベースのラフな試算）。
+              <table class="table" style="margin-top:0.4rem;">
+                <thead>
+                  <tr>
+                    <th>ケース</th>
+                    <th>当期純利益</th>
+                    <th>投資家配当（15%）</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>ベースケース</td>
+                    <td>¥8,000,000</td>
+                    <td>¥1,200,000</td>
+                  </tr>
+                  <tr>
+                    <td>ターゲットケース</td>
+                    <td>¥12,000,000</td>
+                    <td>¥1,800,000</td>
+                  </tr>
+                  <tr>
+                    <td>ハイケース</td>
+                    <td>¥15,000,000</td>
+                    <td>¥2,250,000</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p style="font-size:0.8rem;color:var(--muted);margin-top:0.4rem;">
+                ※実際の数値は年度ごとの実績に基づき変動します。<br />
+                ※配当は、設備投資・事業拡大に必要な内部留保とのバランスを見ながら、毎期協議の上決定。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Risks & FAQ -->
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">RISK & FAQ</div>
+          <h2 class="section-title">リスクと、事前にお伝えしておきたいこと</h2>
+          <p class="section-lead">
+            小さく始めるとはいえ、もちろんリスクはゼロではありません。<br />
+            想定している主なリスクと、その考え方を共有します。
+          </p>
+        </div>
+
+        <div class="two-col">
+          <div class="box">
+            <div class="box-title">① 想定している主なリスク</div>
+            <ol class="list-number">
+              <li><strong>仲介件数が想定より伸びないリスク</strong><br />
+                → 広告チャネルをSUUMO等のポータルに限定せず、SNS・紹介・既存オーナー経由など複線化することで平準化を狙います。
+              </li>
+              <li><strong>美容室マーケット自体の縮小リスク</strong><br />
+                → 美容室に限らず、アイラッシュ・ネイル・整体・パーソナルジムなど、同じフォーマットで取り扱える業種への横展開も検討します。
+              </li>
+              <li><strong>代表一人に依存するリスク</strong><br />
+                → 初期は代表ドリブンで進めつつも、早期に「事務・物件管理」を任せられるアシスタントを採用し、属人性を下げていきます。
+              </li>
+            </ol>
+            <p style="font-size:0.8rem;color:var(--muted);margin-top:0.4rem;">
+              上記に限らず、実際の投資判断の際には財務モデルと合わせて、より詳細なリスク整理を行います。
+            </p>
+          </div>
+
+          <div class="box">
+            <div class="box-title">② 投資家様からよくいただきそうなご質問（想定）</div>
+            <div class="faq-list">
+              <div class="faq-item">
+                <div class="faq-q">Q. 倒産した場合、元本はどうなりますか？</div>
+                <div class="faq-a">
+                  A. 本スキームはあくまで<strong>出資・配当型</strong>であり、元本保証はありません。<br />
+                  その一方で、過度な設備投資・在庫を持たないビジネスモデルのため、<br />
+                  倒産リスクを抑えつつ、一定のリターンを取りに行く設計としています。
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-q">Q. 銀行・公庫からの借入は、投資家のリスクになりませんか？</div>
+                <div class="faq-a">
+                  A. 借入はあくまで法人として負います。投資家個人が保証人になることはありません。<br />
+                  借入も、赤字補填ではなく、売上に直結する投資（広告・人件費・将来の物件取得等）に限定します。
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-q">Q. いつまでにどのレベルの数字を目指していますか？</div>
+                <div class="faq-a">
+                  A. 1〜2年目は黒字定着＋年間利益800〜1,000万円、<br />
+                  3年目以降に1,500万円以上のレンジを狙うイメージです。<br />
+                  実績に応じて、追加出店・アパート建築等のオプションも検討します。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact investor -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">NEXT STEP</div>
+          <h2 class="section-title">ご興味をお持ちいただけた方へ</h2>
+          <p class="section-lead">
+            ここまでお読みいただきありがとうございます。<br />
+            詳細な数字・条件は、個別にお会いしてすり合わせできればと考えています。
+          </p>
+        </div>
+
+        <div class="contact-box">
+          <div class="box-title">まずはカジュアル面談から（30〜45分程度）</div>
+          <p class="box-body">
+            - オンライン（Zoom） / 新宿周辺での対面、どちらでも対応可能です。<br />
+            - ロールプレイングで「実際の案件の流れ」「具体的な数値前提」などもお話しできます。<br />
+            - このページに書いていない、率直な懸念点・リスクの仮説もすべてお話しします。
+          </p>
+          <div class="contact-row">
+            <div class="contact-tag">ご連絡方法の一例：</div>
+            <div class="contact-tag">メール：sample@example.com（仮）</div>
+            <div class="contact-tag">LINE ID：@salonlink-invest</div>
+          </div>
+          <p class="contact-note">
+            ※実運用時には、上記を実際の連絡先に差し替えてください。<br />
+            「投資検討の件」という一言と、面談可能な曜日・時間帯を添えてご連絡いただけるとスムーズです。
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        &copy; <span id="year"></span> SALON LINK不動産（仮）｜Investor Draft
+      </div>
+      <div class="footer-links">
+        <a href="#top">TOP</a>
+        <a href="#model">事業モデル</a>
+        <a href="#returns">収益・リターン</a>
+        <a href="#contact">お問い合わせ</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
+</script>
+</body>
+</html>
